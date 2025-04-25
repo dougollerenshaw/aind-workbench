@@ -16,3 +16,6 @@ ENV/
 *.key
 *credentials*
 *secret*
+
+# Data
+data/
