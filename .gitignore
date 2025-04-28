@@ -19,3 +19,6 @@ ENV/
 
 # Data
 data/
+
+# ds_store
+.DS_Store
