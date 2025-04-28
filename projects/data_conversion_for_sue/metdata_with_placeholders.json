@@ -1321,7 +1321,7 @@
             "notes": null,
             "other_targeted_structure": null,
             "primary_targeted_structure": "LC",
-            "rotation_angle": "-90",
+            "rotation_angle": null,
             "surface_z": null,
             "surface_z_unit": "micrometer",
             "targeted_ccf_coordinates": []
@@ -1332,51 +1332,13 @@
         "light_sources": [],
         "manipulator_modules": [],
         "mri_scans": [],
-        "notes": "None;Ephys modality: recording type: Behavior; file name:758017_2025-02-04_11-57-33;  experiment number:1;  recording number:0",
+        "notes": SESSION_NOTES,
         "ophys_fovs": [],
         "slap_fovs": [],
-        "software": [
-          {
-            "name": "dynamic-foraging-task",
-            "parameters": {},
-            "url": "https://github.com/AllenNeuralDynamics/dynamic-foraging-task.git",
-            "version": "behavior branch:main   commit ID:3f3950d9b2ea76bac8fd2e8fb1be3343c7fe96af    version:1.6.24; metadata branch: main   commit ID:3f3950d9b2ea76bac8fd2e8fb1be3343c7fe96af   version:1.6.24"
-          }
-        ],
+        "software": [],
         "stack_parameters": null,
-        "stick_microscopes": [
-          {
-            "angle_unit": "degrees",
-            "arc_angle": "-25",
-            "assembly_name": "Probe Camera 1",
-            "calibration_date": null,
-            "coordinate_transform": null,
-            "module_angle": "0",
-            "notes": "Did not calibrate.",
-            "rotation_angle": "0"
-          },
-          {
-            "angle_unit": "degrees",
-            "arc_angle": "9",
-            "assembly_name": "Probe Camera 2",
-            "calibration_date": null,
-            "coordinate_transform": null,
-            "module_angle": "25",
-            "notes": "Did not calibrate.",
-            "rotation_angle": "0"
-          },
-          {
-            "angle_unit": "degrees",
-            "arc_angle": "35",
-            "assembly_name": "Probe Camera 3",
-            "calibration_date": null,
-            "coordinate_transform": null,
-            "module_angle": "0",
-            "notes": "Did not calibrate.",
-            "rotation_angle": "0"
-          }
-        ],
-        "stream_end_time": "2025-02-04T13:01:22.812857-08:00",
+        "stick_microscopes": null,
+        "stream_end_time": DATA_STREAM_END_TIME,
         "stream_modalities": [
           {
             "abbreviation": "behavior-videos",
@@ -1387,147 +1349,45 @@
             "name": "Extracellular electrophysiology"
           }
         ],
-        "stream_start_time": "2025-02-04T11:57:33.306106-08:00"
+        "stream_start_time": DATA_STREAM_START_TIME
       }
     ],
     "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/session.py",
-    "experimenter_full_name": [
-      "Kanghoon Jung"
-    ],
+    "experimenter_full_name": [EXPERIMENTER_FULL_NAME_LIST],
     "headframe_registration": null,
-    "iacuc_protocol": "2414",
+    "iacuc_protocol": IACUC_PROTOCOL,
     "maintenance": [],
     "mouse_platform_name": "Tube",
-    "notes": "30min baseline before behavior\n",
+    "notes": SESSION_NOTES,
     "protocol_id": [
       ""
     ],
-    "reward_consumed_total": "348.0",
+    "reward_consumed_total": REWARD_CONSUMED_TOTAL_MICROLITER,
     "reward_consumed_unit": "microliter",
     "reward_delivery": null,
-    "rig_id": "322_EPHYS4_20241105",
+    "rig_id": RIG_ID,
     "schema_version": "1.0.1",
-    "session_end_time": "2025-02-04T13:01:22.812857-08:00",
-    "session_start_time": "2025-02-04T11:57:33.306106-08:00",
+    "session_end_time": SESSION_END_TIME,
+    "session_start_time": SESSION_START_TIME,
     "session_type": "Uncoupled Without Baiting",
-    "stimulus_epochs": [
-      {
-        "light_source_config": [],
-        "notes": "The duration of go cue is 100ms. The frequency is 7500Hz. Decibel is 72.5dB. The total reward consumed in the session is 348.0 microliter. The total reward indcluding consumed in the session and supplementary water is 1.0 millimeters.",
-        "output_parameters": {
-          "meta": {
-            "box": "322_EPHYS4",
-            "session_run_time_in_min": 44
-          },
-          "performance": {
-            "foraging_efficiency": 0.6752037252619324,
-            "foraging_efficiency_with_actual_random_seed": 0.6692307692307692
-          },
-          "task_parameters": {
-            "BlockBeta": "10",
-            "BlockMax": "35",
-            "BlockMin": "20",
-            "DelayBeta": "0.0",
-            "DelayMax": "1.0",
-            "DelayMin": "1.0",
-            "ITIBeta": "3.0",
-            "ITIMax": "15.0",
-            "ITIMin": "2.0",
-            "LeftValue_volume": "2.00",
-            "RightValue_volume": "2.00",
-            "Task": "Uncoupled Without Baiting",
-            "reward_probability": "0.1, 0.5, 0.9"
-          },
-          "water": {
-            "water_after_session": 0.652,
-            "water_day_total": 1,
-            "water_in_session_foraging": 0.348,
-            "water_in_session_manual": 0,
-            "water_in_session_total": 0.348
-          }
-        },
-        "reward_consumed_during_epoch": "348.0",
-        "reward_consumed_unit": "microliter",
-        "script": null,
-        "session_number": null,
-        "software": [
-          {
-            "name": "dynamic-foraging-task",
-            "parameters": {},
-            "url": "https://github.com/AllenNeuralDynamics/dynamic-foraging-task.git",
-            "version": "behavior branch:main   commit ID:3f3950d9b2ea76bac8fd2e8fb1be3343c7fe96af    version:1.6.24; metadata branch: main   commit ID:3f3950d9b2ea76bac8fd2e8fb1be3343c7fe96af   version:1.6.24"
-          }
-        ],
-        "speaker_config": {
-          "name": "Stimulus Speaker",
-          "volume": "72.5",
-          "volume_unit": "decibels"
-        },
-        "stimulus_device_names": [
-          "Speaker"
-        ],
-        "stimulus_end_time": "2025-02-04T12:47:49.129477-08:00",
-        "stimulus_modalities": [
-          "Auditory"
-        ],
-        "stimulus_name": "The behavior auditory go cue",
-        "stimulus_parameters": [
-          {
-            "amplitude_modulation_frequency": 7500,
-            "bandpass_filter_type": null,
-            "bandpass_high_frequency": null,
-            "bandpass_low_frequency": null,
-            "bandpass_order": null,
-            "frequency_unit": "hertz",
-            "notes": null,
-            "sample_frequency": "96000",
-            "stimulus_name": "auditory go cue",
-            "stimulus_type": "Auditory Stimulation"
-          }
-        ],
-        "stimulus_start_time": "2025-02-04T12:03:35.171446-08:00",
-        "trials_finished": 312,
-        "trials_rewarded": 174,
-        "trials_total": 341
-      }
-    ],
-    "subject_id": "758017",
+    "stimulus_epochs": STIMULUS_EPOCHS,
+    "subject_id": SUBJECT_ID,
     "weight_unit": "gram"
   },
   "subject": {
     "alleles": [],
     "background_strain": null,
-    "breeding_info": {
-      "breeding_group": "Dbh-Cre-KI(ND)",
-      "maternal_genotype": "Dbh-Cre-KI/wt",
-      "maternal_id": "724175",
-      "paternal_genotype": "wt/wt",
-      "paternal_id": "722266"
-    },
-    "date_of_birth": "2024-08-04",
+    "breeding_info": BREEDING_INFO,
+    "date_of_birth": DATE_OF_BIRTH,
     "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/subject.py",
-    "genotype": "Dbh-Cre-KI/wt",
-    "housing": {
-      "cage_id": "8277895",
-      "cohoused_subjects": [],
-      "home_cage_enrichment": [],
-      "light_cycle": null,
-      "room_id": "217"
-    },
+    "genotype": GENOTYPE,
+    "housing": null,
     "notes": null,
     "restrictions": null,
     "rrid": null,
     "schema_version": "1.0.2",
-    "sex": "Male",
-    "source": {
-      "abbreviation": "AI",
-      "name": "Allen Institute",
-      "registry": {
-        "abbreviation": "ROR",
-        "name": "Research Organization Registry"
-      },
-      "registry_identifier": "03cpe7c52"
-    },
+    "sex": SUBJECT_SEX,
+    "source": null,
     "species": {
       "name": "Mus musculus",
       "registry": {
@@ -1536,7 +1396,7 @@
       },
       "registry_identifier": "NCBI:txid10090"
     },
-    "subject_id": "758017",
+    "subject_id": SUBJECT_ID,
     "wellness_reports": []
   }
 }]
