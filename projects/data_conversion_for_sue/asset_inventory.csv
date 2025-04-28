@@ -1,4 +1,4 @@
-session_name,physiology_modality,subject_id,collection_date,collection_site,investigators,rig_id,funding_source
+session_name,physiology_modality,subject_id,collection_date,collection_site,investigators,rig_id,funding_source,ASSET_NAME,DATA_LOCATION_URI,INSTITUTION,FUNDING_SOURCES,PROCEDURES_DICT,PROCESSING_DICT,SESSION_NOTES,SESSION_TYPE,SESSION_START_TIME,SESSION_END_TIME,DATA_STREAM_START_TIME,DATA_STREAM_END_TIME,STIMULUS_EPOCHS,IACUC_PROTOCOL,EXPERIMENTER_FULL_NAME_LIST,REWARD_CONSUMED_TOTAL_MICROLITER,SUBJECT_WEIGHT_PRIOR,SUBJECT_WEIGHT_POST,DATE_OF_BIRTH,BREEDING_INFO,GENOTYPE,SUBJECT_SEX
 mKJ005d20230624,fiber_photometry,KJ005,2023-06-24,hopkins,"Sue Su, Jeremiah Cohen",hopkins_fiber,
 mKJ005d20230626,fiber_photometry,KJ005,2023-06-26,hopkins,"Sue Su, Jeremiah Cohen",hopkins_fiber,
 mKJ005d20230627,fiber_photometry,KJ005,2023-06-27,hopkins,"Sue Su, Jeremiah Cohen",hopkins_fiber,

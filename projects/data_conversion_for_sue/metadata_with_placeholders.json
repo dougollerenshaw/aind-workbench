@@ -1285,8 +1285,8 @@
   "session": {
     "active_mouse_platform": false,
     "anaesthesia": null,
-    "animal_weight_post": "23.6",
-    "animal_weight_prior": "27.39",
+    "animal_weight_post": SUBJECT_WEIGHT_POST,
+    "animal_weight_prior": SUBJECT_WEIGHT_PRIOR,
     "calibrations": [],
     "data_streams": [
       {
