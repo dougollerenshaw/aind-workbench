@@ -39,6 +39,7 @@ def fill_behavioral_metrics(row, base_path: str):
         # Check if file exists
         if not os.path.exists(mat_path):
             print(f"  WARNING: File not found: {mat_path}")
+            updated_values["ISSUE_DESCRIPTION"] = "File not found"
             return updated_values
 
         # Load behavioral data
@@ -46,6 +47,7 @@ def fill_behavioral_metrics(row, base_path: str):
 
         if beh_df.empty:
             print(f"  WARNING: No behavioral data loaded for {session_name}")
+            updated_values["ISSUE_DESCRIPTION"] = "No behavioral data loaded"
             return updated_values
 
         # Extract behavioral metrics with default reward volume
@@ -57,6 +59,7 @@ def fill_behavioral_metrics(row, base_path: str):
                 "REWARD_CONSUMED_TOTAL_MICROLITER": metrics[
                     "reward_volume_microliters"
                 ],
+                "ISSUE_DESCRIPTION": "Success",  # Mark successful processing
             }
         )
 
@@ -97,6 +100,7 @@ def fill_behavioral_metrics(row, base_path: str):
 
     except Exception as e:
         print(f"  ERROR processing {session_name}: {str(e)}")
+        updated_values["ISSUE_DESCRIPTION"] = f"Error: {str(e)}"
 
     return updated_values
 
@@ -149,14 +153,33 @@ def process_asset_inventory(
                         updated_df[column] = np.nan
                     updated_df.at[idx, column] = value
 
-                success_count += 1
-                print(f"  ✓ Successfully processed {row['session_name']}")
+                # Check the issue description to categorize the result
+                issue_desc = updated_values.get("ISSUE_DESCRIPTION", "Unknown")
+                if issue_desc == "Success":
+                    success_count += 1
+                    print(f"  ✓ Successfully processed {row['session_name']}")
+                elif "File not found" in issue_desc:
+                    file_not_found_count += 1
+                    print(f"  ⚠ File not found for {row['session_name']}")
+                else:
+                    error_count += 1
+                    print(
+                        f"  ⚠ Issue with {row['session_name']}: {issue_desc}"
+                    )
             else:
-                file_not_found_count += 1
-                print(f"  ⚠ No data extracted for {row['session_name']}")
+                # This shouldn't happen now, but just in case
+                error_count += 1
+                updated_df.at[idx, "ISSUE_DESCRIPTION"] = "No data returned"
+                print(f"  ✗ No data returned for {row['session_name']}")
 
         except Exception as e:
             error_count += 1
+            # Make sure ISSUE_DESCRIPTION column exists
+            if "ISSUE_DESCRIPTION" not in updated_df.columns:
+                updated_df["ISSUE_DESCRIPTION"] = np.nan
+            updated_df.at[idx, "ISSUE_DESCRIPTION"] = (
+                f"Processing error: {str(e)}"
+            )
             print(f"  ✗ Error processing {row['session_name']}: {str(e)}")
 
         print()  # Add blank line between sessions
@@ -173,6 +196,13 @@ def process_asset_inventory(
     print(
         f"Total processed: {success_count + file_not_found_count + error_count} sessions"
     )
+
+    # Print issue breakdown
+    if "ISSUE_DESCRIPTION" in updated_df.columns:
+        issue_counts = updated_df["ISSUE_DESCRIPTION"].value_counts()
+        print(f"\nIssue Breakdown:")
+        for issue, count in issue_counts.items():
+            print(f"  {issue}: {count} sessions")
 
     # Print column summary
     new_columns = [
@@ -247,19 +277,7 @@ def main():
         required=True,
         help="Base path to the data files containing the .mat files",
     )
-    parser.add_argument(
-        "--output-file",
-        type=str,
-        help="Output CSV file path (default: asset_inventory_filled.csv in the script directory)",
-    )
     args = parser.parse_args()
-
-    # Convert paths to Path objects
-    data_path = Path(args.data_path)
-    if args.output_file:
-        output_path = Path(args.output_file)
-    else:
-        output_path = SCRIPT_DIR / "asset_inventory_filled.csv"
 
     # Read the asset inventory from the script directory
     inventory_path = SCRIPT_DIR / "asset_inventory.csv"
@@ -271,9 +289,9 @@ def main():
     print(f"Loaded asset inventory with {len(inventory_df)} sessions")
     print(f"Original columns: {len(inventory_df.columns)}")
 
-    # Process the inventory
+    # Process the inventory and save back to the same file
     process_asset_inventory(
-        inventory_df, str(data_path), output_path, args.all_sessions
+        inventory_df, args.data_path, inventory_path, args.all_sessions
     )
 
 
