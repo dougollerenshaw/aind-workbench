@@ -12,6 +12,48 @@ from utils import (
 # Get the directory containing this script
 SCRIPT_DIR = Path(__file__).parent.absolute()
 
+# Define the desired column order - behavioral metrics right after vast_path
+COLUMN_ORDER = [
+    "session_name",
+    "physiology_modality",
+    "subject_id",
+    "collection_date",
+    "collection_site",
+    "investigators",
+    "rig_id",
+    "funding_source",
+    "on_vast",
+    "vast_path",
+    # Behavioral metrics right after vast_path
+    "ISSUE_DESCRIPTION",
+    "REWARD_CONSUMED_TOTAL_MICROLITER",
+    "SESSION_DURATION_MINUTES",
+    "TOTAL_TRIALS",
+    "TOTAL_REWARDS",
+    "TOTAL_LICKS",
+    "LEFT_REWARDS",
+    "RIGHT_REWARDS",
+    "LEFT_LICKS",
+    "RIGHT_LICKS",
+    "SESSION_DURATION_SECONDS",
+    "TRIAL_TYPE_CSPLUS_COUNT",
+    "TRIAL_TYPE_CSMINUS_COUNT",
+    # Original empty columns after behavioral metrics
+    "SESSION_NOTES",
+    "SESSION_START_TIME",
+    "SESSION_END_TIME",
+    "DATA_STREAM_START_TIME",
+    "DATA_STREAM_END_TIME",
+    "IACUC_PROTOCOL",
+    "EXPERIMENTER_FULL_NAME_LIST",
+    "SUBJECT_WEIGHT_PRIOR",
+    "SUBJECT_WEIGHT_POST",
+    "DATE_OF_BIRTH",
+    "BREEDING_INFO",
+    "GENOTYPE",
+    "SUBJECT_SEX",
+]
+
 
 def fill_behavioral_metrics(row, base_path: str):
     """
@@ -184,66 +226,22 @@ def process_asset_inventory(
 
         print()  # Add blank line between sessions
 
-    # Reorder columns to put new behavioral metrics right after 'vast_path'
-    if "vast_path" in updated_df.columns:
-        # Get the original column order
-        original_cols = list(inventory_df.columns)
+    # Reorder columns using the predefined COLUMN_ORDER
+    # Only include columns that actually exist in the DataFrame
+    final_columns = [col for col in COLUMN_ORDER if col in updated_df.columns]
 
-        # Find the position of 'vast_path'
-        vast_path_idx = original_cols.index("vast_path")
-
-        # Get all the new columns we added
-        new_columns = [
-            col
-            for col in updated_df.columns
-            if col not in inventory_df.columns
-        ]
-
-        # Define the desired order for new columns (most important first)
-        priority_order = [
-            "ISSUE_DESCRIPTION",
-            "REWARD_CONSUMED_TOTAL_MICROLITER",
-            "SESSION_DURATION_MINUTES",
-            "TOTAL_TRIALS",
-            "TOTAL_REWARDS",
-            "TOTAL_LICKS",
-            "LEFT_REWARDS",
-            "RIGHT_REWARDS",
-            "LEFT_LICKS",
-            "RIGHT_LICKS",
-            "SESSION_DURATION_SECONDS",
-        ]
-
-        # Sort new columns by priority, then alphabetically for any others
-        ordered_new_cols = []
-        for col in priority_order:
-            if col in new_columns:
-                ordered_new_cols.append(col)
-
-        # Add any remaining new columns (like trial type breakdowns) alphabetically
-        remaining_new_cols = [
-            col for col in new_columns if col not in ordered_new_cols
-        ]
-        remaining_new_cols.sort()
-        ordered_new_cols.extend(remaining_new_cols)
-
-        # Create the new column order
-        new_column_order = (
-            original_cols[
-                : vast_path_idx + 1
-            ]  # Up to and including 'vast_path'
-            + ordered_new_cols  # New behavioral metrics
-            + original_cols[vast_path_idx + 1 :]  # Rest of original columns
-        )
-
-        # Reorder the DataFrame
-        updated_df = updated_df[new_column_order]
+    # Add any columns that exist in the DataFrame but aren't in COLUMN_ORDER (as a safeguard)
+    remaining_columns = [
+        col for col in updated_df.columns if col not in COLUMN_ORDER
+    ]
+    if remaining_columns:
         print(
-            f"Reordered columns to place {len(ordered_new_cols)} new metrics after 'vast_path'"
+            f"Warning: Found {len(remaining_columns)} columns not in COLUMN_ORDER: {remaining_columns}"
         )
+        final_columns.extend(remaining_columns)
 
-    # Save the updated DataFrame
-    updated_df.to_csv(output_path, index=False)
+    # Save the updated DataFrame with the specified column order
+    updated_df[final_columns].to_csv(output_path, index=False)
     print(f"Updated asset inventory saved to: {output_path}")
 
     # Print summary statistics
