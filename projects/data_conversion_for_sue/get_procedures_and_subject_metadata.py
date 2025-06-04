@@ -199,17 +199,11 @@ def create_session_procedure_summary(
 
         # Count sessions for this subject
         total_sessions = len(subject_sessions)
-        successful_sessions = len(
-            subject_sessions[
-                subject_sessions.get("ISSUE_DESCRIPTION", "") == "Success"
-            ]
-        )
 
         summary_data.append(
             {
                 "subject_id": subject_id,
                 "total_sessions": total_sessions,
-                "successful_behavioral_sessions": successful_sessions,
                 "has_procedure_metadata": has_procedures,
                 "has_subject_metadata": has_subject,
             }
