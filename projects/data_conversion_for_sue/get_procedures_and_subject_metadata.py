@@ -146,10 +146,103 @@ def update_inventory_metadata_status(
     inventory_df.loc[subject_mask, "has_subject_metadata"] = bool(has_subject)
 
 
+def check_existing_metadata(subject_id: str, metadata_dir: Path):
+    """
+    Check if metadata files already exist for a subject.
+
+    Args:
+        subject_id: Subject ID to check
+        metadata_dir: Base metadata directory
+
+    Returns:
+        tuple: (has_procedures: bool, has_subject: bool)
+    """
+    subject_dir = metadata_dir / subject_id
+    procedures_file = subject_dir / "procedures.json"
+    subject_file = subject_dir / "subject.json"
+
+    return procedures_file.exists(), subject_file.exists()
+
+
+def create_session_procedure_summary(
+    inventory_df: pd.DataFrame, output_dir: Path
+):
+    """
+    Create a summary CSV with one row per subject showing metadata availability.
+
+    Args:
+        inventory_df: DataFrame containing session inventory with metadata status
+        output_dir: Directory to save the summary file
+    """
+    # Group by subject and get the metadata status (should be same for all sessions of a subject)
+    summary_data = []
+
+    for subject_id in inventory_df["subject_id"].unique():
+        if pd.isna(subject_id):
+            continue
+
+        subject_sessions = inventory_df[
+            inventory_df["subject_id"] == subject_id
+        ]
+
+        # Get metadata status (should be consistent across all sessions for this subject)
+        has_procedures = (
+            subject_sessions["has_procedure_metadata"].iloc[0]
+            if "has_procedure_metadata" in subject_sessions.columns
+            else False
+        )
+        has_subject = (
+            subject_sessions["has_subject_metadata"].iloc[0]
+            if "has_subject_metadata" in subject_sessions.columns
+            else False
+        )
+
+        # Count sessions for this subject
+        total_sessions = len(subject_sessions)
+        successful_sessions = len(
+            subject_sessions[
+                subject_sessions.get("ISSUE_DESCRIPTION", "") == "Success"
+            ]
+        )
+
+        summary_data.append(
+            {
+                "subject_id": subject_id,
+                "total_sessions": total_sessions,
+                "successful_behavioral_sessions": successful_sessions,
+                "has_procedure_metadata": has_procedures,
+                "has_subject_metadata": has_subject,
+            }
+        )
+
+    # Create summary DataFrame
+    summary_df = pd.DataFrame(summary_data)
+    summary_df = summary_df.sort_values("subject_id")
+
+    # Save summary
+    summary_path = output_dir / "session_procedure_summary.csv"
+    summary_df.to_csv(summary_path, index=False)
+
+    print(f"\nSession procedure summary saved to: {summary_path}")
+    print(f"Summary contains {len(summary_df)} subjects")
+
+    # Print summary statistics
+    if len(summary_df) > 0:
+        proc_success = summary_df["has_procedure_metadata"].sum()
+        subj_success = summary_df["has_subject_metadata"].sum()
+        print(
+            f"Subjects with procedure metadata: {proc_success}/{len(summary_df)}"
+        )
+        print(
+            f"Subjects with subject metadata: {subj_success}/{len(summary_df)}"
+        )
+
+
 def process_subjects(
     inventory_df: pd.DataFrame,
     output_base_dir: Path,
     base_url: str = "http://aind-metadata-service",
+    force_retry: bool = False,
 ):
     """
     Process all unique subjects and fetch their metadata.
@@ -158,6 +251,7 @@ def process_subjects(
         inventory_df: DataFrame containing session inventory
         output_base_dir: Base directory for saving metadata
         base_url: Base URL for the metadata service
+        force_retry: If False, skip subjects that already have metadata files
     """
     # Create output directory
     metadata_dir = output_base_dir / "metadata"
@@ -174,38 +268,87 @@ def process_subjects(
     procedures_failed = 0
     subject_success = 0
     subject_failed = 0
+    skipped_subjects = 0
 
     # Process each subject
     for subject_id in unique_subjects:
         print(f"\nProcessing subject: {subject_id}")
 
-        # Fetch procedures metadata
-        print(f"  Fetching procedures metadata...")
-        proc_success, proc_data, proc_message = fetch_metadata(
-            subject_id, "procedures", base_url
-        )
+        # Check if metadata already exists (unless force_retry is True)
+        if not force_retry:
+            existing_procedures, existing_subject = check_existing_metadata(
+                subject_id, metadata_dir
+            )
+            if existing_procedures and existing_subject:
+                print(
+                    f"  Skipping {subject_id} - both metadata files already exist"
+                )
+                skipped_subjects += 1
+                # Update inventory with existing status
+                update_inventory_metadata_status(
+                    inventory_df, subject_id, True, True
+                )
+                procedures_success += 1
+                subject_success += 1
+                continue
+            elif existing_procedures:
+                print(f"  Procedures metadata already exists for {subject_id}")
+                procedures_success += 1
+            elif existing_subject:
+                print(f"  Subject metadata already exists for {subject_id}")
+                subject_success += 1
 
-        if proc_success:
-            save_metadata(proc_data, subject_id, "procedures", metadata_dir)
-            procedures_success += 1
-            print(f"  ✓ Procedures metadata fetched successfully")
+        # Fetch procedures metadata (if not already exists or force_retry)
+        proc_success = False
+        if (
+            force_retry
+            or not check_existing_metadata(subject_id, metadata_dir)[0]
+        ):
+            print(f"  Fetching procedures metadata...")
+            proc_success, proc_data, proc_message = fetch_metadata(
+                subject_id, "procedures", base_url
+            )
+
+            if proc_success:
+                save_metadata(
+                    proc_data, subject_id, "procedures", metadata_dir
+                )
+                if not check_existing_metadata(subject_id, metadata_dir)[
+                    0
+                ]:  # Wasn't already counted
+                    procedures_success += 1
+                print(f"  ✓ Procedures metadata fetched successfully")
+            else:
+                procedures_failed += 1
+                print(
+                    f"  ✗ Failed to fetch procedures metadata: {proc_message}"
+                )
         else:
-            procedures_failed += 1
-            print(f"  ✗ Failed to fetch procedures metadata: {proc_message}")
+            proc_success = True  # Already exists
 
-        # Fetch subject metadata
-        print(f"  Fetching subject metadata...")
-        subj_success, subj_data, subj_message = fetch_metadata(
-            subject_id, "subject", base_url
-        )
+        # Fetch subject metadata (if not already exists or force_retry)
+        subj_success = False
+        if (
+            force_retry
+            or not check_existing_metadata(subject_id, metadata_dir)[1]
+        ):
+            print(f"  Fetching subject metadata...")
+            subj_success, subj_data, subj_message = fetch_metadata(
+                subject_id, "subject", base_url
+            )
 
-        if subj_success:
-            save_metadata(subj_data, subject_id, "subject", metadata_dir)
-            subject_success += 1
-            print(f"  ✓ Subject metadata fetched successfully")
+            if subj_success:
+                save_metadata(subj_data, subject_id, "subject", metadata_dir)
+                if not check_existing_metadata(subject_id, metadata_dir)[
+                    1
+                ]:  # Wasn't already counted
+                    subject_success += 1
+                print(f"  ✓ Subject metadata fetched successfully")
+            else:
+                subject_failed += 1
+                print(f"  ✗ Failed to fetch subject metadata: {subj_message}")
         else:
-            subject_failed += 1
-            print(f"  ✗ Failed to fetch subject metadata: {subj_message}")
+            subj_success = True  # Already exists
 
         # Update inventory with metadata status
         update_inventory_metadata_status(
@@ -217,6 +360,8 @@ def process_subjects(
     print(f"METADATA FETCHING SUMMARY")
     print(f"=" * 60)
     print(f"Total subjects processed: {len(unique_subjects)}")
+    if not force_retry:
+        print(f"Subjects skipped (already had both files): {skipped_subjects}")
     print(f"")
     print(f"Procedures metadata:")
     print(f"  Successfully fetched: {procedures_success}")
@@ -254,6 +399,11 @@ def main():
         default=None,
         help="Output directory for metadata files (default: same directory as script)",
     )
+    parser.add_argument(
+        "--force-retry",
+        action="store_true",
+        help="Force retry fetching metadata even if files already exist (default: skip existing files)",
+    )
     args = parser.parse_args()
 
     # Set output directory
@@ -273,12 +423,15 @@ def main():
     print(f"Loaded {len(inventory_df)} sessions from asset inventory")
 
     # Process subjects and fetch metadata
-    process_subjects(inventory_df, output_dir, args.base_url)
+    process_subjects(inventory_df, output_dir, args.base_url, args.force_retry)
 
     # Save updated inventory with metadata status
     updated_inventory_path = inventory_path
     inventory_df.to_csv(updated_inventory_path, index=False)
     print(f"\nUpdated asset inventory saved to: {updated_inventory_path}")
+
+    # Create session procedure summary
+    create_session_procedure_summary(inventory_df, output_dir)
 
     # Print final column summary
     if "has_procedure_metadata" in inventory_df.columns:
