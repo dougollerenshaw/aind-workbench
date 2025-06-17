@@ -8,9 +8,9 @@ subject_id,total_sessions,has_procedure_metadata,has_subject_metadata
 754895,9,True,True
 754896,7,True,True
 754898,10,True,True
-KJ005,17,False,False
-KJ007,15,False,False
-KJ009,15,False,False
+KJ005,17,True,True
+KJ007,15,True,True
+KJ009,15,True,True
 ZS059,37,False,False
 ZS060,35,False,False
 ZS061,47,False,False

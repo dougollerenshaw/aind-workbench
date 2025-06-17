@@ -9,6 +9,31 @@ import numpy as np
 # Get the directory containing this script
 SCRIPT_DIR = Path(__file__).parent.absolute()
 
+# Subject ID mapping from old Hopkins IDs to new AIND IDs
+SUBJECT_ID_MAPPING = {
+    'KJ005': '669489',  # KJ_23_016
+    'KJ006': '669491',  # KJ_23_017
+    'KJ007': '669492',  # KJ_23_018
+    'KJ008': '672368',  # KJ_23_026
+    'KJ009': '672850',  # KJ_23_028
+    'KJ010': '676879',  # KJ_23_043
+    'KJ011': '678084',  # KJ_23_044
+    'KJ012': '678085',  # KJ_23_045
+}
+
+
+def get_mapped_subject_id(original_subject_id: str) -> str:
+    """
+    Get the mapped subject ID for metadata service lookup.
+    
+    Args:
+        original_subject_id: Original subject ID from asset inventory
+        
+    Returns:
+        str: Mapped subject ID for metadata service, or original if no mapping exists
+    """
+    return SUBJECT_ID_MAPPING.get(original_subject_id, original_subject_id)
+
 
 def get_unique_subjects(inventory_df: pd.DataFrame):
     """
@@ -35,7 +60,7 @@ def fetch_metadata(
     Fetch metadata for a subject from the AIND metadata service.
 
     Args:
-        subject_id: Subject ID to fetch metadata for
+        subject_id: Original subject ID from asset inventory
         metadata_type: Type of metadata ('procedures' or 'subject')
         base_url: Base URL for the metadata service
 
@@ -43,7 +68,14 @@ def fetch_metadata(
         tuple: (success: bool, data: dict or None, message: str)
     """
     try:
-        url = f"{base_url}/{metadata_type}/{subject_id}"
+        # Get the mapped subject ID for the API call
+        mapped_subject_id = get_mapped_subject_id(subject_id)
+        
+        # If mapping was applied, log it
+        if mapped_subject_id != subject_id:
+            print(f"  Using mapped subject ID: {subject_id} -> {mapped_subject_id}")
+        
+        url = f"{base_url}/{metadata_type}/{mapped_subject_id}"
         print(f"  Fetching {metadata_type} from: {url}")
 
         response = requests.get(url)
