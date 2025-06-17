@@ -5,21 +5,20 @@ import json
 import argparse
 from pathlib import Path
 import numpy as np
+import yaml
 
 # Get the directory containing this script
 SCRIPT_DIR = Path(__file__).parent.absolute()
 
-# Subject ID mapping from old Hopkins IDs to new AIND IDs
-SUBJECT_ID_MAPPING = {
-    'KJ005': '669489',  # KJ_23_016
-    'KJ006': '669491',  # KJ_23_017
-    'KJ007': '669492',  # KJ_23_018
-    'KJ008': '672368',  # KJ_23_026
-    'KJ009': '672850',  # KJ_23_028
-    'KJ010': '676879',  # KJ_23_043
-    'KJ011': '678084',  # KJ_23_044
-    'KJ012': '678085',  # KJ_23_045
-}
+# Load configuration from YAML file
+def load_config():
+    config_path = SCRIPT_DIR / "config.yaml"
+    with open(config_path, 'r') as f:
+        return yaml.safe_load(f)
+
+# Load the subject ID mapping from config
+config = load_config()
+SUBJECT_ID_MAPPING = config['subject_id_mapping']
 
 
 def get_mapped_subject_id(original_subject_id: str) -> str:

@@ -1,0 +1,98 @@
+{
+  "object_type": "Data description",
+  "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/data_description.py",
+  "schema_version": "2.0.10",
+  "license": "CC-BY-4.0",
+  "subject_id": "ZS061",
+  "creation_time": "2021-04-04T12:00:00Z",
+  "tags": [],
+  "name": "ZS061_2021-04-04_12-00-00",
+  "institution": {
+    "name": "Johns Hopkins University",
+    "abbreviation": "JHU",
+    "registry": {
+      "name": "Research Organization Registry",
+      "abbreviation": "ROR"
+    },
+    "registry_identifier": "00za53h95"
+  },
+  "funding_source": [
+    {
+      "object_type": "Funding",
+      "funder": {
+        "name": "National Institute of Neurological Disorders and Stroke",
+        "abbreviation": "NINDS",
+        "registry": {
+          "name": "Research Organization Registry",
+          "abbreviation": "ROR"
+        },
+        "registry_identifier": "01s5ya894"
+      },
+      "grant_number": "1RF1NS131984",
+      "fundee": [
+        {
+          "object_type": "Person",
+          "name": "Jeremiah Cohen",
+          "registry": {
+            "name": "Open Researcher and Contributor ID",
+            "abbreviation": "ORCID"
+          },
+          "registry_identifier": "0000-0002-4768-7124"
+        },
+        {
+          "object_type": "Person",
+          "name": "Kanghoon Jung",
+          "registry": {
+            "name": "Open Researcher and Contributor ID",
+            "abbreviation": "ORCID"
+          },
+          "registry_identifier": "0000-0002-5381-5161"
+        },
+        {
+          "object_type": "Person",
+          "name": "Sue Su",
+          "registry": {
+            "name": "Open Researcher and Contributor ID",
+            "abbreviation": "ORCID"
+          },
+          "registry_identifier": "0000-0002-0138-7433"
+        }
+      ]
+    }
+  ],
+  "data_level": "raw",
+  "group": null,
+  "investigators": [
+    {
+      "object_type": "Person",
+      "name": "Sue Su",
+      "registry": {
+        "name": "Open Researcher and Contributor ID",
+        "abbreviation": "ORCID"
+      },
+      "registry_identifier": null
+    },
+    {
+      "object_type": "Person",
+      "name": "Jeremiah Cohen",
+      "registry": {
+        "name": "Open Researcher and Contributor ID",
+        "abbreviation": "ORCID"
+      },
+      "registry_identifier": null
+    }
+  ],
+  "project_name": "Discovery-Neuromodulator circuit dynamics during foraging",
+  "restrictions": null,
+  "modalities": [
+    {
+      "name": "Behavior",
+      "abbreviation": "behavior"
+    },
+    {
+      "name": "Extracellular electrophysiology",
+      "abbreviation": "ecephys"
+    }
+  ],
+  "data_summary": "Behavioral ephys recording session for subject ZS061"
+}

@@ -1,0 +1,23 @@
+# Configuration file for Sue Su's data conversion project
+# Subject ID mapping from old Hopkins IDs to new AIND IDs
+
+subject_id_mapping:
+  KJ005: "669489"  # KJ_23_016
+  KJ006: "669491"  # KJ_23_017
+  KJ007: "669492"  # KJ_23_018
+  KJ008: "672368"  # KJ_23_026
+  KJ009: "672850"  # KJ_23_028
+  KJ010: "676879"  # KJ_23_043
+  KJ011: "678084"  # KJ_23_044
+  KJ012: "678085"  # KJ_23_045
+
+# ORCID mappings for researchers
+orcid_mapping:
+  "Jeremiah Cohen": "0000-0002-4768-7124"
+  "Sue Su": "0000-0002-0138-7433"
+  "Jonathan Ting": "0000-0001-8266-0392"
+  "Kenta Hagihara": "0000-0003-0064-0852"
+  "Polina Kosillo": "0000-0002-1944-9460"
+  "Yoav Ben-Simon": "0000-0002-7075-097X"
+  "Kanghoon Jung": "0000-0002-5381-5161"
+  "Alex Piet": "0000-0002-6529-1414"

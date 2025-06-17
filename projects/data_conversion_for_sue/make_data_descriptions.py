@@ -13,6 +13,7 @@ import zoneinfo
 from pathlib import Path
 import argparse
 import json
+import yaml
 from typing import List, Optional
 
 from aind_data_schema.core.data_description import DataDescription, Funding, DataLevel
@@ -24,6 +25,17 @@ from utils import construct_file_path
 
 # Get the directory containing this script
 SCRIPT_DIR = Path(__file__).parent.absolute()
+
+# Load configuration from YAML file
+def load_config():
+    config_path = SCRIPT_DIR / "config.yaml"
+    with open(config_path, 'r') as f:
+        return yaml.safe_load(f)
+
+# Load the configuration
+config = load_config()
+SUBJECT_ID_MAPPING = config['subject_id_mapping']
+ORCID_MAPPING = config['orcid_mapping']
 
 # Default session start time when not specified
 DEFAULT_SESSION_TIME = "12:00:00"  # Noon
@@ -65,6 +77,25 @@ def parse_investigators(investigator_string: str) -> List[Person]:
     return investigators
 
 
+def create_person_list(names: List[str]) -> List[Person]:
+    """
+    Create a list of Person objects from a list of names.
+    
+    Args:
+        names: List of person names
+        
+    Returns:
+        List[Person]: List of Person objects with ORCID registry
+    """
+    return [
+        Person(
+            name=name.strip(),
+            registry_identifier=ORCID_MAPPING.get(name.strip())
+        )
+        for name in names
+    ]
+
+
 def parse_funding_sources(funding_string: str, collection_site: str) -> List[Funding]:
     """
     Parse the funding source string into Funding objects.
@@ -76,18 +107,43 @@ def parse_funding_sources(funding_string: str, collection_site: str) -> List[Fun
     Returns:
         List[Funding]: List of Funding objects
     """
-    # If funding is explicitly specified, use it
-    if not (pd.isna(funding_string) or not funding_string.strip()):
-        org = FUNDING_SOURCE_TO_ORG.get(funding_string.strip(), Organization.OTHER)
-        return [Funding(funder=org)]
-    
-    # For AIND sessions, default to Allen Institute (internal funding)
-    if collection_site == 'AIND':
-        return [Funding(funder=Organization.AI)]
-    
-    # For Hopkins sessions, we don't know the funding - use OTHER for now
-    # TODO: Get funding information for Hopkins sessions
-    return [Funding(funder=Organization.OTHER)]
+    # Use specific funding information based on collection site and data type
+    if collection_site.upper() == 'AIND':
+        # AIND fiber photometry data has two funding sources:
+        # 1. Allen Institute (internal funding)
+        # 2. NIMH grant 1R01MH134833
+        ai_fundees = create_person_list([
+            "Alex Piet", "Jeremiah Cohen", "Kanghoon Jung", "Polina Kosillo", "Sue Su"
+        ])
+        nimh_fundees = create_person_list([
+            "Jeremiah Cohen", "Jonathan Ting", "Kenta Hagihara", "Polina Kosillo", "Yoav Ben-Simon"
+        ])
+        
+        return [
+            Funding(
+                funder=Organization.AI,
+                grant_number=None,
+                fundee=ai_fundees
+            ),
+            Funding(
+                funder=Organization.NIMH,
+                grant_number="1R01MH134833",
+                fundee=nimh_fundees
+            )
+        ]
+    else:
+        # Hopkins ephys data is funded by NINDS grant 1RF1NS131984
+        ninds_fundees = create_person_list([
+            "Jeremiah Cohen", "Kanghoon Jung", "Sue Su"
+        ])
+        
+        return [
+            Funding(
+                funder=Organization.NINDS,
+                grant_number="1RF1NS131984", 
+                fundee=ninds_fundees
+            )
+        ]
 
 
 def get_modality_from_physiology(physiology_modality: str) -> List[Modality]:
@@ -146,7 +202,10 @@ def create_data_description(row: pd.Series) -> DataDescription:
         DataDescription: Validated data description object
     """
     session_name = row["session_name"]
-    subject_id = row["subject_id"]
+    original_subject_id = row["subject_id"]
+    
+    # Map Hopkins KJ subjects to their AIND subject IDs
+    subject_id = SUBJECT_ID_MAPPING.get(original_subject_id, original_subject_id)
     
     # Parse basic info
     investigators = parse_investigators(row["investigators"])
@@ -160,9 +219,15 @@ def create_data_description(row: pd.Series) -> DataDescription:
     # Create session datetime
     creation_time = create_session_datetime(row["collection_date"])
     
+    # Generate name in the required format: label_YYYY-MM-DD_HH-MM-SS
+    # The AIND schema expects the name to match the DataRegex.DATA pattern
+    datetime_str = creation_time.strftime("%Y-%m-%d_%H-%M-%S")
+    # Use subject_id as label since that's the convention for RAW data
+    data_name = f"{subject_id}_{datetime_str}"
+    
     # Create data description
     data_description = DataDescription(
-        name=session_name,
+        name=data_name,
         subject_id=str(subject_id),
         creation_time=creation_time,
         institution=institution,
@@ -170,14 +235,9 @@ def create_data_description(row: pd.Series) -> DataDescription:
         funding_source=funding_sources,
         modalities=modalities,
         data_level=DataLevel.RAW,  # Sue's data appears to be raw data
-        project_name="Sue Su Fiber Photometry and Electrophysiology",  # Default project name
+        project_name="Discovery-Neuromodulator circuit dynamics during foraging",  # Project name
         data_summary=f"Behavioral {row['physiology_modality']} recording session for subject {subject_id}",
-        tags=[
-            "behavior", 
-            row["physiology_modality"], 
-            "reward_learning",
-            collection_site.lower()
-        ]
+        tags=[]
     )
     
     return data_description
@@ -185,8 +245,7 @@ def create_data_description(row: pd.Series) -> DataDescription:
 
 def save_data_description(
     data_description: DataDescription, 
-    output_dir: Path, 
-    session_name: str
+    output_dir: Path
 ) -> Path:
     """
     Save the data description to a JSON file.
@@ -194,13 +253,12 @@ def save_data_description(
     Args:
         data_description: DataDescription object to save
         output_dir: Directory to save the file
-        session_name: Name of the session for the filename
         
     Returns:
         Path: Path to the saved file
     """
-    # Create session directory
-    session_dir = output_dir / session_name
+    # Create session directory using the data description's name field
+    session_dir = output_dir / data_description.name
     session_dir.mkdir(parents=True, exist_ok=True)
     
     # Save to data_description.json
@@ -241,22 +299,22 @@ def process_sessions(
         session_name = row["session_name"]
         
         try:
-            # Check if file already exists
-            session_dir = descriptions_dir / session_name
-            output_path = session_dir / "data_description.json"
-            
-            if output_path.exists() and not force_overwrite:
-                print(f"  Skipping {session_name} - file already exists")
-                skip_count += 1
-                continue
-            
             print(f"  Processing {session_name}...")
             
             # Create data description
             data_description = create_data_description(row)
             
+            # Check if file already exists (using the data description name)
+            session_dir = descriptions_dir / data_description.name
+            output_path = session_dir / "data_description.json"
+            
+            if output_path.exists() and not force_overwrite:
+                print(f"    Skipping {data_description.name} - file already exists")
+                skip_count += 1
+                continue
+            
             # Save to file
-            saved_path = save_data_description(data_description, descriptions_dir, session_name)
+            saved_path = save_data_description(data_description, descriptions_dir)
             
             print(f"    ✓ Saved to: {saved_path}")
             success_count += 1
