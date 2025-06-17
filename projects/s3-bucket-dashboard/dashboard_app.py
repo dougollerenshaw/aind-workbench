@@ -2,10 +2,12 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from datetime import datetime, timedelta
+from datetime import datetime
 import sqlite3
 import os
 from aind_data_access_api.document_db import MetadataDbClient
+import schedule
+import time
 
 # Configure page
 st.set_page_config(
@@ -90,17 +92,18 @@ def fetch_current_data():
         st.error(f"Error fetching data: {str(e)}")
         return pd.DataFrame()
 
-def save_snapshot(grouped_df):
-    """Save current snapshot to database"""
+def take_snapshot():
+    """Fetch current data and save snapshot to database."""
+    grouped_df = fetch_current_data()
     if grouped_df.empty:
         return
-        
+
     conn = sqlite3.connect(DB_PATH)
     timestamp = datetime.now().isoformat()
-    
+
     try:
         cursor = conn.cursor()
-        
+
         # Save individual project counts
         for _, row in grouped_df.iterrows():
             cursor.execute('''
@@ -108,19 +111,19 @@ def save_snapshot(grouped_df):
                 (timestamp, project, asset_count)
                 VALUES (?, ?, ?)
             ''', (timestamp, row['project'], row['count']))
-        
+
         # Calculate and save summary
         total_assets = grouped_df['count'].sum()
-        
+
         cursor.execute('''
             INSERT OR REPLACE INTO snapshot_summaries 
             (timestamp, total_private_assets)
             VALUES (?, ?)
         ''', (timestamp, total_assets))
-        
+
         conn.commit()
         st.success(f"Snapshot saved at {timestamp}")
-        
+
     except Exception as e:
         st.error(f"Error saving snapshot: {str(e)}")
     finally:
@@ -170,12 +173,24 @@ def display_metrics(grouped_df):
     col2.metric("Projects with Private Assets", project_count)
 
 def display_data_table(grouped_df):
-    """Display the data table"""
+    """Display the data table with re-indexing and percentage column"""
     st.subheader("Private Bucket Asset Count by Project")
+
+    # Re-index the dataframe and add a percentage column
+    total_count = grouped_df['count'].sum()
+    grouped_df = grouped_df.sort_values('count', ascending=False).reset_index(drop=True)
+    grouped_df['percentage'] = (grouped_df['count'] / total_count * 100).round(1)
+
+    # Display the updated dataframe
     st.dataframe(grouped_df, use_container_width=True)
 
 def create_pie_chart(grouped_df):
     """Create and display pie chart"""
+    # Configurable chart parameters - adjust these values as needed
+    PIE_CHART_HEIGHT = 600       # Overall height of the chart
+    BOTTOM_MARGIN = 600          # Bottom margin for labels
+    VERTICAL_SPACER_HEIGHT = 400  # Additional space after the chart
+    
     fig_pie = px.pie(
         grouped_df, 
         values='count', 
@@ -200,11 +215,12 @@ def create_pie_chart(grouped_df):
         hovertemplate='<b>%{label}</b><br>Count: %{value:,}<br>Percentage: %{percent}<extra></extra>'
     )
     
-    # Use automargin and adjust layout for better label spacing
+    # Adjust layout to prevent chart shrinking
     fig_pie.update_layout(
-        height=800,  # Increased height
-        autosize=True,
-        margin=dict(autoexpand=True),  # Let Plotly auto-expand margins
+        autosize=False,  # Disable autosizing
+        width=1000,  # Explicit width
+        height=PIE_CHART_HEIGHT + BOTTOM_MARGIN,  # Combine height and margin
+        margin=dict(l=50, r=50, t=80, b=BOTTOM_MARGIN),  # Explicit margins with adjustable bottom margin
         title=dict(
             text="Private Bucket Distribution by Project",
             x=0.5,  # Center the title
@@ -222,56 +238,28 @@ def create_pie_chart(grouped_df):
         )
     )
     
-    # Add some padding around the container
+    # Add padding around the container
     st.markdown("<div style='padding: 20px;'>", unsafe_allow_html=True)
     st.plotly_chart(fig_pie, use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
-
-def create_bar_chart(grouped_df):
-    """Create and display bar chart"""
-    # Calculate percentages
-    total_count = grouped_df['count'].sum()
-    grouped_df['percentage'] = (grouped_df['count'] / total_count * 100).round(1)
     
-    # Create a color map based on the pie chart colors
-    colors = px.colors.qualitative.Plotly  # Use Plotly's default color sequence
-    color_map = {project: colors[i % len(colors)] for i, project in enumerate(grouped_df['project'])}
-    
-    fig_projects = px.bar(
-        grouped_df,
-        x='project', 
-        y='count',
-        title="Private Bucket Assets per Project",
-        labels={'count': 'Asset Count', 'project': 'Project'},
-        color='project',
-        color_discrete_map=color_map,
-        text=[f"{count:,}<br>({pct}%)" for count, pct in zip(grouped_df['count'], grouped_df['percentage'])]
-    )
-    
-    fig_projects.update_layout(
-        xaxis_tickangle=-45,
-        showlegend=False,  # Hide legend since pie chart has it
-        height=700,  # More height for better visibility
-        margin=dict(b=250, t=120, l=80, r=80),  # Much more bottom margin for rotated labels
-        xaxis=dict(tickfont=dict(size=10))  # Smaller font for x-axis labels
-    )
-    
-    # Position text above bars
-    fig_projects.update_traces(
-        textposition='outside',
-        textfont_size=9
-    )
-    
-    st.plotly_chart(fig_projects, use_container_width=True)
+    # Add configurable vertical spacer after the chart
+    st.markdown(f"<div style='height: {VERTICAL_SPACER_HEIGHT}px;'></div>", unsafe_allow_html=True)
 
 def display_trend_analysis(summary_df, project_df, grouped_df):
-    """Display historical trend analysis"""
+    """Display historical trend analysis with daily changes"""
     st.header("Historical Trends")
-    
-    if summary_df.empty:
-        st.info("No historical data available. Save a snapshot to start tracking trends.")
+
+    if project_df.empty:
+        st.info("No historical data available.")
         return
-    
+
+    # Filter for daily changes
+    daily_changes_df = project_df.groupby(['timestamp', 'project']).sum().reset_index()
+
+    st.subheader("Daily Changes by Project")
+    st.dataframe(daily_changes_df, use_container_width=True)
+
     # Overall trend
     fig_trend = go.Figure()
     fig_trend.add_trace(go.Scatter(
@@ -362,10 +350,6 @@ def setup_sidebar(grouped_df):
         st.cache_data.clear()
         st.rerun()
         
-    if st.sidebar.button("💾 Save Snapshot"):
-        save_snapshot(grouped_df)
-        st.rerun()
-    
     return auto_refresh
 
 def display_sidebar_info(summary_df):
@@ -378,6 +362,7 @@ def display_sidebar_info(summary_df):
         last_snapshot = summary_df['timestamp'].max()
         st.sidebar.info(f"Last snapshot: {last_snapshot.strftime('%Y-%m-%d %H:%M:%S')}")
 
+# Schedule the snapshot in the main function
 def main():
     """Main dashboard function - orchestrates all components"""
     st.title("📊 Private S3 Bucket Dashboard")
@@ -386,6 +371,17 @@ def main():
     # Initialize database
     init_database()
     
+    # Schedule daily snapshot at midnight
+    schedule.every().day.at("00:00").do(take_snapshot)
+
+    # Start the scheduler in a background thread
+    import threading
+    def run_scheduler():
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+    threading.Thread(target=run_scheduler, daemon=True).start()
+
     # Fetch current data
     st.header("Current Private Bucket Asset Distribution")
     
@@ -403,7 +399,6 @@ def main():
     display_metrics(grouped_df)
     display_data_table(grouped_df)
     create_pie_chart(grouped_df)
-    create_bar_chart(grouped_df)
     
     # Load and display historical data
     summary_df, project_df = load_historical_data()
