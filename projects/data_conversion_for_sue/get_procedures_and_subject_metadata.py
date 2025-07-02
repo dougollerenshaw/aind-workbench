@@ -4,19 +4,9 @@ Fetch procedures and subject metadata from AIND metadata service.
 
 This script retrieves subject and procedures metadata for each unique subject in the asset inventory
 and saves it to both subject-specific folders (legacy format) and experiment-specific folders 
-(new fdef process_subjects(
-    inventory_df: pd.DataFrame,
-    output_base_dir: Path,
-    force_overwrite: bool = False,
-):
-    """
-    Process all unique subjects and fetch their metadata.
+(new format). 
 
-    Args:
-        inventory_df: DataFrame containing session inventory
-        output_base_dir: Base directory for saving metadata
-        force_overwrite: If False, skip subjects that already have metadata files
-    """cript is part of a metadata workflow with make_data_descriptions.py:
+This script is part of a metadata workflow with make_data_descriptions.py:
 1. get_procedures_and_subject_metadata.py (this script): Fetches subject and procedures metadata
 2. make_data_descriptions.py: Creates data_description files
 
@@ -316,7 +306,6 @@ def process_subjects(
         output_base_dir: Base directory for saving metadata
         force_overwrite: If False, skip subjects that already have metadata files
     """
-    """
     # Create output directory
     metadata_dir = output_base_dir / "metadata"
     metadata_dir.mkdir(parents=True, exist_ok=True)
@@ -370,7 +359,7 @@ def process_subjects(
         ):
             print(f"  Fetching procedures metadata...")
             proc_success, proc_data, proc_message = fetch_metadata(
-                subject_id, "procedures", base_url
+                subject_id, "procedures"
             )
 
             if proc_success:
@@ -410,7 +399,7 @@ def process_subjects(
         ):
             print(f"  Fetching subject metadata...")
             subj_success, subj_data, subj_message = fetch_metadata(
-                subject_id, "subject", base_url
+                subject_id, "subject"
             )
 
             if subj_success:
@@ -714,9 +703,6 @@ def main():
     # Print experiment metadata status
     metadata_dir = output_dir / "metadata"
     print_experiment_metadata_status(metadata_dir)
-
-    # Print experiment metadata status
-    print_experiment_metadata_status(output_dir / "metadata")
 
 
 if __name__ == "__main__":

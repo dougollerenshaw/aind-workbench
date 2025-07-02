@@ -439,12 +439,6 @@ def main():
         description="Generate data_description.json files for each session in the asset inventory."
     )
     parser.add_argument(
-        "--base-url",
-        type=str,
-        default="http://aind-metadata-service",
-        help="Base URL for the AIND metadata service (default: http://aind-metadata-service)",
-    )
-    parser.add_argument(
         "--output-dir",
         type=str,
         default=None,

@@ -13,7 +13,7 @@ Fetches subject and procedures metadata from the AIND metadata service for each 
 - Experiment-specific folders (new format): `metadata/<subject_id>_<date>_<time>/`
 
 ```bash
-python get_procedures_and_subject_metadata.py [--base-url URL] [--output-dir DIR] [--force-overwrite]
+python get_procedures_and_subject_metadata.py [--output-dir DIR] [--force-overwrite]
 ```
 
 ### 2. `make_data_descriptions.py`
@@ -21,7 +21,7 @@ python get_procedures_and_subject_metadata.py [--base-url URL] [--output-dir DIR
 Creates AIND data schema 2.0 compliant `data_description.json` files for each experimental session, containing administrative information about the data asset.
 
 ```bash
-python make_data_descriptions.py [--base-url URL] [--output-dir DIR] [--force-overwrite]
+python make_data_descriptions.py [--output-dir DIR] [--force-overwrite]
 ```
 
 ### 3. `generate_all_metadata.py` (Wrapper Script)
@@ -29,7 +29,7 @@ python make_data_descriptions.py [--base-url URL] [--output-dir DIR] [--force-ov
 Runs both scripts in sequence for a complete metadata update:
 
 ```bash
-python generate_all_metadata.py [--base-url URL] [--output-dir DIR] [--force-overwrite]
+python generate_all_metadata.py [--output-dir DIR] [--force-overwrite]
 ```
 
 ## Directory Structure
