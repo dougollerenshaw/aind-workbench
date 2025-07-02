@@ -1,3 +1,30 @@
+#!/usr/bin/env python3
+"""
+Fetch procedures and subject metadata from AIND metadata service.
+
+This script retrieves subject and procedures metadata for each unique subject in the asset inventory
+and saves it to both subject-specific folders (legacy format) and experiment-specific folders 
+(new fdef process_subjects(
+    inventory_df: pd.DataFrame,
+    output_base_dir: Path,
+    force_overwrite: bool = False,
+):
+    """
+    Process all unique subjects and fetch their metadata.
+
+    Args:
+        inventory_df: DataFrame containing session inventory
+        output_base_dir: Base directory for saving metadata
+        force_overwrite: If False, skip subjects that already have metadata files
+    """cript is part of a metadata workflow with make_data_descriptions.py:
+1. get_procedures_and_subject_metadata.py (this script): Fetches subject and procedures metadata
+2. make_data_descriptions.py: Creates data_description files
+
+Together, these scripts ensure that all required metadata files are saved to
+experiment-specific folders using a consistent naming convention based on the
+asset_inventory.csv file.
+"""
+
 import os
 import pandas as pd
 import requests
@@ -7,31 +34,17 @@ from pathlib import Path
 import numpy as np
 import yaml
 
+# Local imports
+from metadata_utils import (
+    load_config, 
+    get_mapped_subject_id,
+    get_experiment_metadata_dir,
+    save_metadata_file,
+    copy_metadata_to_experiment
+)
+
 # Get the directory containing this script
 SCRIPT_DIR = Path(__file__).parent.absolute()
-
-# Load configuration from YAML file
-def load_config():
-    config_path = SCRIPT_DIR / "config.yaml"
-    with open(config_path, 'r') as f:
-        return yaml.safe_load(f)
-
-# Load the subject ID mapping from config
-config = load_config()
-SUBJECT_ID_MAPPING = config['subject_id_mapping']
-
-
-def get_mapped_subject_id(original_subject_id: str) -> str:
-    """
-    Get the mapped subject ID for metadata service lookup.
-    
-    Args:
-        original_subject_id: Original subject ID from asset inventory
-        
-    Returns:
-        str: Mapped subject ID for metadata service, or original if no mapping exists
-    """
-    return SUBJECT_ID_MAPPING.get(original_subject_id, original_subject_id)
 
 
 def get_unique_subjects(inventory_df: pd.DataFrame):
@@ -53,7 +66,6 @@ def get_unique_subjects(inventory_df: pd.DataFrame):
 def fetch_metadata(
     subject_id: str,
     metadata_type: str,
-    base_url: str = "http://aind-metadata-service",
 ):
     """
     Fetch metadata for a subject from the AIND metadata service.
@@ -61,11 +73,11 @@ def fetch_metadata(
     Args:
         subject_id: Original subject ID from asset inventory
         metadata_type: Type of metadata ('procedures' or 'subject')
-        base_url: Base URL for the metadata service
 
     Returns:
         tuple: (success: bool, data: dict or None, message: str)
     """
+    base_url = "http://aind-metadata-service"
     try:
         # Get the mapped subject ID for the API call
         mapped_subject_id = get_mapped_subject_id(subject_id)
@@ -123,18 +135,22 @@ def fetch_metadata(
 
 
 def save_metadata(
-    data: dict, subject_id: str, metadata_type: str, metadata_base_dir: Path
+    data: dict, subject_id: str, metadata_type: str, metadata_base_dir: Path, 
+    session_name: str = None, collection_date: str = None
 ):
     """
-    Save metadata to a JSON file in the subject's folder.
-
+    Save metadata to a JSON file in the subject's folder and, if session details provided,
+    also save to experiment-specific folders.
+    
     Args:
         data: Metadata dictionary to save
         subject_id: Subject ID
         metadata_type: Type of metadata ('procedures' or 'subject')
         metadata_base_dir: Base metadata directory
+        session_name: Optional session name for experiment folder
+        collection_date: Optional collection date for experiment folder
     """
-    # Create subject-specific directory
+    # Create subject-specific directory (legacy format)
     subject_dir = metadata_base_dir / subject_id
     subject_dir.mkdir(parents=True, exist_ok=True)
 
@@ -142,10 +158,34 @@ def save_metadata(
     filename = f"{metadata_type}.json"
     filepath = subject_dir / filename
 
+    # Save to subject directory (legacy format)
     with open(filepath, "w") as f:
         json.dump(data, f, indent=2)
 
     print(f"  Saved {metadata_type} metadata to: {filepath}")
+    
+    # If session details are provided, also save to experiment folder
+    if session_name is not None and collection_date is not None:
+        try:
+            # Get mapped subject ID for folder naming
+            aind_subject_id = get_mapped_subject_id(subject_id)
+            
+            # Get experiment directory
+            experiment_dir = get_experiment_metadata_dir(
+                metadata_base_dir, 
+                session_name,
+                collection_date,
+                aind_subject_id
+            )
+            
+            # Save directly to experiment directory using shared utility
+            save_metadata_file(data, experiment_dir, filename)
+            print(f"  Also saved to experiment folder: {experiment_dir}")
+        except Exception as e:
+            print(f"  Warning: Failed to save to experiment folder: {str(e)}")
+    
+    # Return the subject-folder path where the metadata was saved
+    return filepath
 
 
 def update_inventory_metadata_status(
@@ -266,8 +306,7 @@ def create_session_procedure_summary(
 def process_subjects(
     inventory_df: pd.DataFrame,
     output_base_dir: Path,
-    base_url: str = "http://aind-metadata-service",
-    force_retry: bool = False,
+    force_overwrite: bool = False,
 ):
     """
     Process all unique subjects and fetch their metadata.
@@ -275,8 +314,8 @@ def process_subjects(
     Args:
         inventory_df: DataFrame containing session inventory
         output_base_dir: Base directory for saving metadata
-        base_url: Base URL for the metadata service
-        force_retry: If False, skip subjects that already have metadata files
+        force_overwrite: If False, skip subjects that already have metadata files
+    """
     """
     # Create output directory
     metadata_dir = output_base_dir / "metadata"
@@ -299,8 +338,8 @@ def process_subjects(
     for subject_id in unique_subjects:
         print(f"\nProcessing subject: {subject_id}")
 
-        # Check if metadata already exists (unless force_retry is True)
-        if not force_retry:
+        # Check if metadata already exists (unless force_overwrite is True)
+        if not force_overwrite:
             existing_procedures, existing_subject = check_existing_metadata(
                 subject_id, metadata_dir
             )
@@ -323,10 +362,10 @@ def process_subjects(
                 print(f"  Subject metadata already exists for {subject_id}")
                 subject_success += 1
 
-        # Fetch procedures metadata (if not already exists or force_retry)
+        # Fetch procedures metadata (if not already exists or force_overwrite)
         proc_success = False
         if (
-            force_retry
+            force_overwrite
             or not check_existing_metadata(subject_id, metadata_dir)[0]
         ):
             print(f"  Fetching procedures metadata...")
@@ -335,9 +374,21 @@ def process_subjects(
             )
 
             if proc_success:
-                save_metadata(
-                    proc_data, subject_id, "procedures", metadata_dir
-                )
+                # Find any sessions for this subject to get session details
+                subject_sessions = inventory_df[inventory_df["subject_id"] == subject_id]
+                if not subject_sessions.empty:
+                    # Use the first session's details (assuming procedure metadata is the same for all sessions)
+                    session_row = subject_sessions.iloc[0]
+                    save_metadata(
+                        proc_data, subject_id, "procedures", metadata_dir,
+                        session_row.get("session_name"), session_row.get("collection_date")
+                    )
+                else:
+                    # No session data, just save to subject folder
+                    save_metadata(
+                        proc_data, subject_id, "procedures", metadata_dir
+                    )
+                    
                 if not check_existing_metadata(subject_id, metadata_dir)[
                     0
                 ]:  # Wasn't already counted
@@ -351,10 +402,10 @@ def process_subjects(
         else:
             proc_success = True  # Already exists
 
-        # Fetch subject metadata (if not already exists or force_retry)
+        # Fetch subject metadata (if not already exists or force_overwrite)
         subj_success = False
         if (
-            force_retry
+            force_overwrite
             or not check_existing_metadata(subject_id, metadata_dir)[1]
         ):
             print(f"  Fetching subject metadata...")
@@ -363,7 +414,21 @@ def process_subjects(
             )
 
             if subj_success:
-                save_metadata(subj_data, subject_id, "subject", metadata_dir)
+                # Find any sessions for this subject to get session details
+                subject_sessions = inventory_df[inventory_df["subject_id"] == subject_id]
+                if not subject_sessions.empty:
+                    # Use the first session's details (assuming subject metadata is the same for all sessions)
+                    session_row = subject_sessions.iloc[0]
+                    save_metadata(
+                        subj_data, subject_id, "subject", metadata_dir,
+                        session_row.get("session_name"), session_row.get("collection_date")
+                    )
+                else:
+                    # No session data, just save to subject folder
+                    save_metadata(
+                        subj_data, subject_id, "subject", metadata_dir
+                    )
+                    
                 if not check_existing_metadata(subject_id, metadata_dir)[
                     1
                 ]:  # Wasn't already counted
@@ -385,7 +450,7 @@ def process_subjects(
     print(f"METADATA FETCHING SUMMARY")
     print(f"=" * 60)
     print(f"Total subjects processed: {len(unique_subjects)}")
-    if not force_retry:
+    if not force_overwrite:
         print(f"Subjects skipped (already had both files): {skipped_subjects}")
     print(f"")
     print(f"Procedures metadata:")
@@ -407,16 +472,178 @@ def process_subjects(
             print(f"  {subject_dir.name}/: {len(files)} JSON files")
 
 
+def copy_metadata_to_experiments(
+    inventory_df: pd.DataFrame,
+    metadata_base_dir: Path,
+):
+    """
+    Copy subject and procedures metadata to experiment-specific folders.
+    
+    Args:
+        inventory_df: DataFrame containing session inventory
+        metadata_base_dir: Base directory for metadata
+    """
+    print(f"\n" + "=" * 60)
+    print(f"COPYING METADATA TO EXPERIMENT FOLDERS")
+    print(f"=" * 60)
+    print(f"Processing {len(inventory_df)} sessions for metadata copying...")
+    
+    # Define the metadata directory
+    metadata_dir = metadata_base_dir / "metadata"
+    
+    # Count statistics
+    success_count = 0
+    skipped_count = 0
+    error_count = 0
+    
+    for idx, row in inventory_df.iterrows():
+        session_name = row['session_name']
+        original_subject_id = row['subject_id']
+        collection_date = row['collection_date']
+        
+        # Skip if any required fields are missing
+        if pd.isna(original_subject_id) or pd.isna(collection_date):
+            print(f"  Skipping {session_name} - missing required fields")
+            skipped_count += 1
+            continue
+            
+        # Get mapped subject ID
+        aind_subject_id = get_mapped_subject_id(original_subject_id)
+        
+        # Get the experiment metadata directory
+        experiment_dir = get_experiment_metadata_dir(
+            metadata_dir, 
+            session_name,
+            collection_date,
+            aind_subject_id
+        )
+        
+        print(f"  Processing {session_name} -> {experiment_dir.name}")
+        
+        # Check for required files
+        subject_file = metadata_dir / original_subject_id / "subject.json"
+        procedures_file = metadata_dir / original_subject_id / "procedures.json"
+        
+        if not subject_file.exists() or not procedures_file.exists():
+            print(f"    ✗ Missing required metadata files for {original_subject_id}")
+            error_count += 1
+            continue
+        
+        # Copy metadata files to experiment directory
+        try:
+            # Create experiment directory
+            experiment_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Check if files already exist in experiment folder
+            target_subject_file = experiment_dir / "subject.json"
+            target_procedures_file = experiment_dir / "procedures.json"
+            
+            if target_subject_file.exists() and target_procedures_file.exists():
+                print(f"    ✓ All metadata files already exist in {experiment_dir}")
+                success_count += 1
+                continue
+            
+            # Copy files that don't already exist
+            success1 = True
+            success2 = True
+            
+            if not target_subject_file.exists():
+                success1 = copy_metadata_to_experiment(
+                    metadata_dir,
+                    experiment_dir,
+                    original_subject_id,
+                    "subject"
+                )
+            
+            if not target_procedures_file.exists():
+                success2 = copy_metadata_to_experiment(
+                    metadata_dir,
+                    experiment_dir,
+                    original_subject_id,
+                    "procedures"
+                )
+            
+            if success1 and success2:
+                print(f"    ✓ Copied metadata to {experiment_dir}")
+                success_count += 1
+            else:
+                print(f"    ✗ Error copying some metadata files")
+                error_count += 1
+                
+        except Exception as e:
+            print(f"    ✗ Error processing {session_name}: {str(e)}")
+            error_count += 1
+    
+    # Print summary
+    print(f"\n" + "=" * 60)
+    print(f"METADATA COPYING SUMMARY")
+    print(f"=" * 60)
+    print(f"Total sessions: {len(inventory_df)}")
+    print(f"Successfully copied: {success_count}")
+    print(f"Skipped: {skipped_count}")
+    print(f"Errors: {error_count}")
+    print(f"=" * 60)
+
+
+def print_experiment_metadata_status(metadata_dir: Path):
+    """
+    Print a summary of which experiment directories have complete metadata.
+    
+    Args:
+        metadata_dir: Base metadata directory
+    """
+    # Find all experiment directories (those that follow the naming pattern)
+    import re
+    exp_pattern = re.compile(r"[A-Za-z0-9]+_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}")
+    experiment_dirs = [d for d in metadata_dir.iterdir() if d.is_dir() and exp_pattern.match(d.name)]
+    
+    print(f"\n" + "=" * 60)
+    print(f"EXPERIMENT METADATA STATUS")
+    print(f"=" * 60)
+    print(f"Found {len(experiment_dirs)} experiment directories")
+    
+    # Count files by type
+    files_count = {
+        "subject.json": 0,
+        "procedures.json": 0,
+        "data_description.json": 0,
+        "complete": 0
+    }
+    
+    # Check each experiment directory
+    for exp_dir in experiment_dirs:
+        # Import the checker function (which should be in metadata_utils)
+        from metadata_utils import check_experiment_metadata_completion
+        status = check_experiment_metadata_completion(exp_dir)
+        
+        # Update counts
+        for file_type, exists in status.items():
+            if exists:
+                files_count[file_type] += 1
+        
+        # Check if experiment has all required files
+        if all(status.values()):
+            files_count["complete"] += 1
+    
+    # Print summary
+    print(f"Experiment directories with:")
+    print(f"  subject.json: {files_count['subject.json']}/{len(experiment_dirs)}")
+    print(f"  procedures.json: {files_count['procedures.json']}/{len(experiment_dirs)}")
+    print(f"  data_description.json: {files_count['data_description.json']}/{len(experiment_dirs)}")
+    print(f"  Complete (all files): {files_count['complete']}/{len(experiment_dirs)}")
+    
+    # Print instructions for missing data_description files
+    if files_count['data_description.json'] < len(experiment_dirs):
+        print(f"\nTo add missing data_description.json files, run:")
+        print(f"  python make_data_descriptions.py")
+    
+    print(f"=" * 60)
+
+
 def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser(
         description="Fetch procedures and subject metadata from AIND metadata service for each unique subject in the asset inventory."
-    )
-    parser.add_argument(
-        "--base-url",
-        type=str,
-        default="http://aind-metadata-service",
-        help="Base URL for the AIND metadata service (default: http://aind-metadata-service)",
     )
     parser.add_argument(
         "--output-dir",
@@ -425,9 +652,9 @@ def main():
         help="Output directory for metadata files (default: same directory as script)",
     )
     parser.add_argument(
-        "--force-retry",
+        "--force-overwrite",
         action="store_true",
-        help="Force retry fetching metadata even if files already exist (default: skip existing files)",
+        help="Force overwrite existing metadata files (default: skip existing files)",
     )
     args = parser.parse_args()
 
@@ -448,7 +675,7 @@ def main():
     print(f"Loaded {len(inventory_df)} sessions from asset inventory")
 
     # Process subjects and fetch metadata
-    process_subjects(inventory_df, output_dir, args.base_url, args.force_retry)
+    process_subjects(inventory_df, output_dir, args.force_overwrite)
 
     # Save updated inventory with metadata status
     updated_inventory_path = inventory_path
@@ -457,6 +684,9 @@ def main():
 
     # Create session procedure summary
     create_session_procedure_summary(inventory_df, output_dir)
+
+    # Copy metadata to experiment folders
+    copy_metadata_to_experiments(inventory_df, output_dir)
 
     # Print final column summary
     if "has_procedure_metadata" in inventory_df.columns:
@@ -470,6 +700,23 @@ def main():
         print(f"\nSubject metadata status in asset inventory:")
         for status, count in subj_counts.items():
             print(f"  {status}: {count} sessions")
+    
+    # Print final note about metadata organization
+    print(f"\n" + "=" * 60)
+    print(f"METADATA ORGANIZATION")
+    print(f"=" * 60)
+    print(f"Metadata files are saved in two locations:")
+    print(f"1. Subject-based folders (legacy format): {output_dir / 'metadata' / '<subject_id>'}")
+    print(f"2. Experiment-based folders (new format): {output_dir / 'metadata' / '<subject_id>_<date>_<time>'}")
+    print(f"Run the make_data_descriptions.py script to create data_description.json files in each experiment folder.")
+    print(f"=" * 60)
+    
+    # Print experiment metadata status
+    metadata_dir = output_dir / "metadata"
+    print_experiment_metadata_status(metadata_dir)
+
+    # Print experiment metadata status
+    print_experiment_metadata_status(output_dir / "metadata")
 
 
 if __name__ == "__main__":

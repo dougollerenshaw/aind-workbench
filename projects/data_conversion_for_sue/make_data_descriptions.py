@@ -4,6 +4,14 @@ Generate data_description.json files for each session in the asset inventory.
 
 This script creates AIND data schema 2.0 compliant data_description.json files
 for each experimental session, containing administrative information about the data asset.
+
+This script is part of a metadata workflow with get_procedures_and_subject_metadata.py:
+1. get_procedures_and_subject_metadata.py: Fetches subject and procedures metadata
+2. make_data_descriptions.py (this script): Creates data_description files
+
+Together, these scripts ensure that all required metadata files are saved to
+experiment-specific folders using a consistent naming convention based on the
+asset_inventory.csv file.
 """
 
 import os
@@ -22,15 +30,16 @@ from aind_data_schema_models.modalities import Modality
 from aind_data_schema_models.organizations import Organization
 
 from utils import construct_file_path
+from metadata_utils import (
+    load_config, 
+    get_mapped_subject_id,
+    get_experiment_metadata_dir,
+    save_metadata_file,
+    check_experiment_metadata_completion
+)
 
 # Get the directory containing this script
 SCRIPT_DIR = Path(__file__).parent.absolute()
-
-# Load configuration from YAML file
-def load_config():
-    config_path = SCRIPT_DIR / "config.yaml"
-    with open(config_path, 'r') as f:
-        return yaml.safe_load(f)
 
 # Load the configuration
 config = load_config()
@@ -132,7 +141,7 @@ def parse_funding_sources(funding_string: str, collection_site: str) -> List[Fun
             )
         ]
     else:
-        # Hopkins ephys data is funded by NINDS grant 1RF1NS131984
+        # Hopkins ephys data is funded by NINDS grant R01NS104834
         ninds_fundees = create_person_list([
             "Jeremiah Cohen", "Kanghoon Jung", "Sue Su"
         ])
@@ -140,7 +149,7 @@ def parse_funding_sources(funding_string: str, collection_site: str) -> List[Fun
         return [
             Funding(
                 funder=Organization.NINDS,
-                grant_number="1RF1NS131984", 
+                grant_number="R01NS104834", 
                 fundee=ninds_fundees
             )
         ]
@@ -245,28 +254,41 @@ def create_data_description(row: pd.Series) -> DataDescription:
 
 def save_data_description(
     data_description: DataDescription, 
-    output_dir: Path
+    output_dir: Path,
+    session_name: str,
+    collection_date: str,
+    subject_id: str
 ) -> Path:
     """
     Save the data description to a JSON file.
     
     Args:
         data_description: DataDescription object to save
-        output_dir: Directory to save the file
+        output_dir: Base directory for metadata
+        session_name: Original session name
+        collection_date: Collection date
+        subject_id: Subject ID (already mapped to AIND ID if applicable)
         
     Returns:
         Path: Path to the saved file
     """
-    # Create session directory using the data description's name field
-    session_dir = output_dir / data_description.name
-    session_dir.mkdir(parents=True, exist_ok=True)
+    # Get experiment metadata directory using shared utility
+    experiment_dir = get_experiment_metadata_dir(
+        output_dir,
+        session_name,
+        collection_date,
+        subject_id
+    )
     
-    # Save to data_description.json
-    output_path = session_dir / "data_description.json"
+    # Create directory if it doesn't exist
+    experiment_dir.mkdir(parents=True, exist_ok=True)
     
-    # Use the schema's built-in JSON serialization
-    with open(output_path, 'w') as f:
-        json.dump(data_description.model_dump(mode='json'), f, indent=2, default=str)
+    # Save to data_description.json using the shared utility
+    output_path = save_metadata_file(
+        data_description.model_dump(mode='json'),
+        experiment_dir,
+        "data_description.json"
+    )
     
     return output_path
 
@@ -284,11 +306,11 @@ def process_sessions(
         output_base_dir: Base directory for saving files
         force_overwrite: Whether to overwrite existing files
     """
-    # Create output directory
-    descriptions_dir = output_base_dir / "data_descriptions"
-    descriptions_dir.mkdir(parents=True, exist_ok=True)
+    # Create metadata output directory
+    metadata_dir = output_base_dir / "metadata"
+    metadata_dir.mkdir(parents=True, exist_ok=True)
     
-    print(f"Creating data descriptions in: {descriptions_dir}")
+    print(f"Creating data descriptions in: {metadata_dir}")
     print(f"Processing {len(inventory_df)} sessions...")
     
     success_count = 0
@@ -297,24 +319,48 @@ def process_sessions(
     
     for idx, row in inventory_df.iterrows():
         session_name = row["session_name"]
+        original_subject_id = row["subject_id"]
+        collection_date = row["collection_date"]
         
+        # Skip if any required fields are missing
+        if pd.isna(original_subject_id) or pd.isna(collection_date):
+            print(f"  Skipping {session_name} - missing required fields")
+            skip_count += 1
+            continue
+            
         try:
             print(f"  Processing {session_name}...")
+            
+            # Get mapped subject ID
+            aind_subject_id = get_mapped_subject_id(original_subject_id)
+            
+            # Get the experiment metadata directory path
+            experiment_dir = get_experiment_metadata_dir(
+                metadata_dir,
+                session_name,
+                collection_date,
+                aind_subject_id
+            )
+            
+            # Check if file already exists
+            output_path = experiment_dir / "data_description.json"
+            
+            if output_path.exists() and not force_overwrite:
+                print(f"    Skipping {session_name} - file already exists: {output_path}")
+                skip_count += 1
+                continue
             
             # Create data description
             data_description = create_data_description(row)
             
-            # Check if file already exists (using the data description name)
-            session_dir = descriptions_dir / data_description.name
-            output_path = session_dir / "data_description.json"
-            
-            if output_path.exists() and not force_overwrite:
-                print(f"    Skipping {data_description.name} - file already exists")
-                skip_count += 1
-                continue
-            
-            # Save to file
-            saved_path = save_data_description(data_description, descriptions_dir)
+            # Save to file in the experiment's metadata directory
+            saved_path = save_data_description(
+                data_description,
+                metadata_dir,
+                session_name,
+                collection_date,
+                aind_subject_id
+            )
             
             print(f"    ✓ Saved to: {saved_path}")
             success_count += 1
@@ -331,13 +377,72 @@ def process_sessions(
     print(f"Successfully created: {success_count}")
     print(f"Skipped (already exist): {skip_count}")
     print(f"Errors: {error_count}")
-    print(f"Files saved to: {descriptions_dir}")
+    print(f"Files saved to experiment folders in: {metadata_dir}")
+
+
+def print_experiment_metadata_status(metadata_dir: Path):
+    """
+    Print a summary of which experiment directories have complete metadata.
+    
+    Args:
+        metadata_dir: Base metadata directory
+    """
+    # Find all experiment directories (those that follow the naming pattern)
+    import re
+    exp_pattern = re.compile(r"[A-Za-z0-9]+_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}")
+    experiment_dirs = [d for d in metadata_dir.iterdir() if d.is_dir() and exp_pattern.match(d.name)]
+    
+    print(f"\n" + "=" * 60)
+    print(f"EXPERIMENT METADATA STATUS")
+    print(f"=" * 60)
+    print(f"Found {len(experiment_dirs)} experiment directories")
+    
+    # Count files by type
+    files_count = {
+        "subject.json": 0,
+        "procedures.json": 0,
+        "data_description.json": 0,
+        "complete": 0
+    }
+    
+    # Check each experiment directory
+    for exp_dir in experiment_dirs:
+        status = check_experiment_metadata_completion(exp_dir)
+        
+        # Update counts
+        for file_type, exists in status.items():
+            if exists:
+                files_count[file_type] += 1
+        
+        # Check if experiment has all required files
+        if all(status.values()):
+            files_count["complete"] += 1
+    
+    # Print summary
+    print(f"Experiment directories with:")
+    print(f"  subject.json: {files_count['subject.json']}/{len(experiment_dirs)}")
+    print(f"  procedures.json: {files_count['procedures.json']}/{len(experiment_dirs)}")
+    print(f"  data_description.json: {files_count['data_description.json']}/{len(experiment_dirs)}")
+    print(f"  Complete (all files): {files_count['complete']}/{len(experiment_dirs)}")
+    
+    # Print instructions for missing files
+    if files_count['subject.json'] < len(experiment_dirs) or files_count['procedures.json'] < len(experiment_dirs):
+        print(f"\nTo add missing subject/procedures files, run:")
+        print(f"  python get_procedures_and_subject_metadata.py")
+    
+    print(f"=" * 60)
 
 
 def main():
     """Main function to process command line arguments and run the script."""
     parser = argparse.ArgumentParser(
         description="Generate data_description.json files for each session in the asset inventory."
+    )
+    parser.add_argument(
+        "--base-url",
+        type=str,
+        default="http://aind-metadata-service",
+        help="Base URL for the AIND metadata service (default: http://aind-metadata-service)",
     )
     parser.add_argument(
         "--output-dir",
@@ -371,6 +476,26 @@ def main():
     
     # Process sessions
     process_sessions(inventory_df, output_dir, args.force_overwrite)
+    
+    # Final message about metadata structure
+    metadata_dir = output_dir / "metadata"
+    print(f"\n" + "=" * 60)
+    print(f"METADATA DIRECTORY STRUCTURE")
+    print(f"=" * 60)
+    print(f"Data description files have been saved to experiment-specific folders.")
+    print(f"Each experiment will have its own folder in: {metadata_dir}")
+    print(f"Example structure:")
+    print(f"  {metadata_dir}/")
+    print(f"  └── subject_YYYY-MM-DD_HH-MM-SS/")
+    print(f"      ├── subject.json")
+    print(f"      ├── procedures.json")
+    print(f"      └── data_description.json")
+    print(f"To have all required metadata files in each experiment folder,")
+    print(f"make sure to run get_procedures_and_subject_metadata.py")
+    print(f"=" * 60)
+    
+    # Print experiment metadata status
+    print_experiment_metadata_status(metadata_dir)
 
 
 if __name__ == "__main__":
