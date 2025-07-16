@@ -42,53 +42,40 @@ def get_mapped_subject_id(original_subject_id: str) -> str:
     """
     return SUBJECT_ID_MAPPING.get(original_subject_id, original_subject_id)
 
-def format_session_name(session_name: str, collection_date: str, subject_id: str) -> str:
+def format_session_name(session_name: str, subject_id: str, session_datetime: datetime) -> str:
     """
     Format a session name according to AIND standards.
     
     Args:
         session_name: Original session name
-        collection_date: Collection date string
         subject_id: Mapped AIND subject ID
+        session_datetime: Timezone-aware datetime object for precise timing
         
     Returns:
         str: Formatted session name (subject_id_YYYY-MM-DD_HH-MM-SS)
     """
-    # Convert date to datetime if it's a string
-    if isinstance(collection_date, str):
-        try:
-            date_obj = datetime.strptime(collection_date, '%Y-%m-%d').date()
-        except ValueError:
-            # Try parsing with pandas
-            import pandas as pd
-            date_obj = pd.to_datetime(collection_date).date()
-    else:
-        date_obj = collection_date
-    
-    # Default time is noon if not provided
-    time_str = "12-00-00"
-    
-    # Format date
-    date_str = date_obj.strftime('%Y-%m-%d')
+    # Use the provided datetime (which should be timezone-aware)
+    date_str = session_datetime.strftime('%Y-%m-%d')
+    time_str = session_datetime.strftime('%H-%M-%S')
     
     # Create formatted name
     return f"{subject_id}_{date_str}_{time_str}"
 
-def get_experiment_metadata_dir(metadata_base_dir: Path, session_name: str, collection_date: str, subject_id: str) -> Path:
+def get_experiment_metadata_dir(metadata_base_dir: Path, session_name: str, subject_id: str, session_datetime: datetime) -> Path:
     """
     Get the directory path for an experiment's metadata.
     
     Args:
         metadata_base_dir: Base directory for metadata
         session_name: Original session name
-        collection_date: Collection date
         subject_id: Subject ID (mapped to AIND ID if applicable)
+        session_datetime: Timezone-aware datetime object for precise timing
         
     Returns:
         Path: Path to the experiment's metadata directory
     """
     # Format the session name for the folder
-    aind_name = format_session_name(session_name, collection_date, subject_id)
+    aind_name = format_session_name(session_name, subject_id, session_datetime)
     
     # Create experiment directory path
     return metadata_base_dir / aind_name

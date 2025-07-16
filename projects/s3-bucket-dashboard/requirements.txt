@@ -1,4 +1,5 @@
 streamlit>=1.28.0
 pandas>=1.5.0
 plotly>=5.15.0
-aind-data-access-api
+aind-data-access-api>=0.1.0
+schedule>=1.1.0
