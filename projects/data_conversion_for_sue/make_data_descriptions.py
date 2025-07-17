@@ -195,7 +195,7 @@ def extract_session_start_time_from_path(vast_path: str, session_name: str) -> O
         relative_path = vast_path
     
     # Base path where data is stored
-    base_path = "/allen/aind/scratch/sueSu"
+    base_path = "/allen/aind/stage/hopkins_data"
     session_base_path = os.path.join(base_path, relative_path, "neuralynx", "session")
     
     if not os.path.exists(session_base_path):
@@ -280,7 +280,7 @@ def session_path_exists(vast_path: str, session_name: str) -> bool:
         relative_path = vast_path
     
     # Base path where data is stored
-    base_path = "/allen/aind/scratch/sueSu"
+    base_path = "/allen/aind/stage/hopkins_data"
     session_base_path = os.path.join(base_path, relative_path, "neuralynx", "session")
     
     return os.path.exists(session_base_path)
@@ -484,7 +484,7 @@ def process_sessions(
     print(f"  - Session path does not exist: (see individual messages)")
     print(f"Errors: {error_count}")
     print(f"Files saved to experiment folders in: {metadata_dir}")
-    print(f"\nNote: Only sessions with existing paths in /allen/aind/scratch/sueSu were processed")
+    print(f"\nNote: Only sessions with existing paths in /allen/aind/stage/hopkins_data were processed")
 
 
 def print_experiment_metadata_status(metadata_dir: Path):
