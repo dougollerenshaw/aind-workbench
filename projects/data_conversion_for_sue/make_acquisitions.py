@@ -42,7 +42,8 @@ from metadata_utils import (
     load_config,
     get_mapped_subject_id,
     get_experiment_metadata_dir,
-    save_metadata_file
+    save_metadata_file,
+    get_session_details
 )
 
 # Get the directory containing this script
@@ -228,8 +229,27 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
     
     beh_df, licks_L, licks_R = load_session_data(mat_path)
     
-    # Extract behavioral metrics
-    metrics = extract_behavioral_metrics(beh_df, licks_L, licks_R)
+    # Try to get additional session details from CSV files first
+    session_details = {}
+    try:
+        session_date = acquisition_start_time.strftime('%Y-%m-%d')
+        session_details = get_session_details(subject_id, session_date)
+        if session_details:
+            print(f"Found session details with {len(session_details)} fields")
+    except Exception as e:
+        print(f"Could not load session details: {str(e)}")
+    
+    # Extract behavioral metrics using actual reward size if available
+    reward_size = session_details.get('reward_size', 3.0) if session_details else 3.0
+    expected_water = session_details.get('water_received') if session_details else None
+    
+    metrics = extract_behavioral_metrics(
+        beh_df, 
+        licks_L, 
+        licks_R, 
+        volume_per_reward=reward_size, 
+        expected_water_received=expected_water
+    )
     
     # Calculate end time using duration
     acquisition_end_time = acquisition_start_time + timedelta(
@@ -256,9 +276,8 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
         reward_consumed_total=metrics["reward_volume_microliters"] / 1000,  # Convert μL to mL
         reward_consumed_unit=VolumeUnit.ML,
         animal_weight_prior=(
-            row["SUBJECT_WEIGHT_PRIOR"] 
-            if pd.notna(row["SUBJECT_WEIGHT_PRIOR"]) 
-            else None
+            session_details.get("weight") or
+            (row["SUBJECT_WEIGHT_PRIOR"] if pd.notna(row["SUBJECT_WEIGHT_PRIOR"]) else None)
         ),
         animal_weight_post=(
             row["SUBJECT_WEIGHT_POST"] 
@@ -295,6 +314,15 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
     )
     
     # Create the acquisition object
+    # Build notes with session details if available
+    base_notes = f"{row['physiology_modality']} recording session for subject {subject_id}"
+    if session_details:
+        tetrode_pos = session_details.get('tetrode_position', 'unknown')
+        behavior_notes = session_details.get('behavior_notes', 'none')
+        enhanced_notes = f"{base_notes}. tetrode depth = {tetrode_pos}. session_notes = '{behavior_notes}'"
+    else:
+        enhanced_notes = base_notes
+    
     acquisition = Acquisition(
         subject_id=str(subject_id),
         acquisition_start_time=acquisition_start_time,
@@ -305,7 +333,7 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
         stimulus_epochs=[stimulus_epoch],
         subject_details=subject_details,
         experimenters=[investigator.strip() for investigator in row["investigators"].split(",") if investigator.strip()],
-        notes=f"{row['physiology_modality']} recording session for subject {subject_id}"
+        notes=enhanced_notes
     )
     
     return acquisition

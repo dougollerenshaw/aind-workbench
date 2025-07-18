@@ -117,7 +117,7 @@ def calculate_reward_volume_microliters(beh_df, volume_per_reward=3.0):
 
 
 def extract_behavioral_metrics(
-    beh_df, licks_L, licks_R, volume_per_reward=3.0
+    beh_df, licks_L, licks_R, volume_per_reward=3.0, expected_water_received=None
 ):
     """
     Extract behavioral metrics relevant to AIND data schema from session data.
@@ -127,6 +127,7 @@ def extract_behavioral_metrics(
         licks_L: List of left licks
         licks_R: List of right licks
         volume_per_reward: Volume per reward in microliters (default: 3.0)
+        expected_water_received: Expected water volume in mL from session details (for validation)
 
     Returns:
         dict: Dictionary of behavioral metrics
@@ -139,6 +140,18 @@ def extract_behavioral_metrics(
     metrics["reward_volume_microliters"] = calculate_reward_volume_microliters(
         beh_df, volume_per_reward
     )
+
+    # Validate calculated reward volume against session details if available
+    if expected_water_received is not None:
+        calculated_ml = metrics["reward_volume_microliters"] / 1000  # Convert μL to mL
+        diff_ml = abs(calculated_ml - expected_water_received)
+        diff_percent = (diff_ml / expected_water_received) * 100 if expected_water_received > 0 else 0
+        
+        # Warning if difference is more than 10% or 0.1 mL
+        if diff_percent > 10 or diff_ml > 0.1:
+            print(f"  WARNING: Calculated reward volume ({calculated_ml:.3f} mL) differs significantly from session details ({expected_water_received:.3f} mL). Difference: {diff_ml:.3f} mL ({diff_percent:.1f}%)")
+        else:
+            print(f"  Reward volume validation: calculated={calculated_ml:.3f} mL, expected={expected_water_received:.3f} mL (✓)")
 
     # Lick metrics
     metrics["total_left_licks"] = len(licks_L)

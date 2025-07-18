@@ -14,7 +14,7 @@
   "ethics_review_id": null,
   "instrument_id": "hopkins_ephys",
   "acquisition_type": "Behavioral foraging",
-  "notes": "ephys recording session for subject ZS061",
+  "notes": "ephys recording session for subject ZS061. tetrode depth = 2.8. session_notes = 'Good.'",
   "coordinate_system": null,
   "calibrations": [],
   "maintenance": [],
@@ -113,7 +113,7 @@
   ],
   "subject_details": {
     "object_type": "Acquisition subject details",
-    "animal_weight_prior": null,
+    "animal_weight_prior": "24.3",
     "animal_weight_post": null,
     "weight_unit": "gram",
     "anaesthesia": null,

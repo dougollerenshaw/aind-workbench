@@ -14,7 +14,7 @@
   "ethics_review_id": null,
   "instrument_id": "hopkins_ephys",
   "acquisition_type": "Behavioral foraging",
-  "notes": "ephys recording session for subject ZS059",
+  "notes": "ephys recording session for subject ZS059. tetrode depth = 2.9. session_notes = '0.1 water before session.  a bit left bias. very switchy day'",
   "coordinate_system": null,
   "calibrations": [],
   "maintenance": [],
@@ -98,7 +98,7 @@
       "performance_metrics": {
         "object_type": "Performance metrics",
         "output_parameters": {},
-        "reward_consumed_during_epoch": "654.0",
+        "reward_consumed_during_epoch": "545.0",
         "reward_consumed_unit": "microliter",
         "trials_total": 430,
         "trials_finished": 430,
@@ -113,12 +113,12 @@
   ],
   "subject_details": {
     "object_type": "Acquisition subject details",
-    "animal_weight_prior": null,
+    "animal_weight_prior": "26.4",
     "animal_weight_post": null,
     "weight_unit": "gram",
     "anaesthesia": null,
     "mouse_platform_name": "Unknown",
-    "reward_consumed_total": "0.654",
+    "reward_consumed_total": "0.545",
     "reward_consumed_unit": "milliliter"
   }
 }
