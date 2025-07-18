@@ -12,6 +12,12 @@ from utils import (
 # Get the directory containing this script
 SCRIPT_DIR = Path(__file__).parent.absolute()
 
+# Define possible base paths where data might be located
+POSSIBLE_BASE_PATHS = [
+    "/allen/aind/stage/hopkins_data",  # New location
+    "/allen/aind/scratch/sueSu",       # Original location  
+]
+
 # Define the desired column order - behavioral metrics right after vast_path
 COLUMN_ORDER = [
     "session_name",
@@ -55,37 +61,82 @@ COLUMN_ORDER = [
 ]
 
 
-def fill_behavioral_metrics(row, base_path: str):
+def find_session_data_path(vast_path: str, session_name: str) -> tuple:
+    """
+    Find the actual location of session data by searching for the session folder.
+    
+    Args:
+        vast_path: Original vast_path from CSV (ignored - we search for the session)
+        session_name: Session name to search for
+        
+    Returns:
+        tuple: (found_base_path, found_mat_path, correct_vast_path) if found, (None, None, None) if not found
+    """
+    # Try each possible base path
+    for base_path in POSSIBLE_BASE_PATHS:
+        # Search for the session folder in this base path
+        # Try different possible folder structures
+        possible_paths = [
+            f"{base_path}/{session_name}",  # Direct session folder
+            f"{base_path}/*/{session_name}",  # Session folder under subject folder
+        ]
+        
+        for search_path in possible_paths:
+            import glob
+            matches = glob.glob(search_path)
+            for match in matches:
+                # Check if the behavioral data file exists
+                mat_file = f"{match}/sorted/session/{session_name}_sessionData_behav.mat"
+                if os.path.exists(mat_file):
+                    # Found it! Use the full path as vast_path
+                    return base_path, mat_file, match
+    
+    # Data not found in any location
+    return None, None, None
+
+
+def fill_behavioral_metrics(row):
     """
     Extract behavioral metrics for a single session and return updated row data.
 
     Args:
         row: Row from the asset inventory DataFrame
-        base_path: Base path to the data files
 
     Returns:
         dict: Dictionary of updated values for this row
     """
     session_name = row["session_name"]
-
-    # Construct file path
-    mat_path = construct_file_path(base_path, row["vast_path"], session_name)
+    vast_path = row["vast_path"]
 
     print(f"Processing session: {session_name}")
-    print(f"Data file path: {mat_path}")
 
     # Initialize return dictionary with current values
     updated_values = {}
 
-    try:
-        # Check if file exists
-        if not os.path.exists(mat_path):
-            print(f"  WARNING: File not found: {mat_path}")
-            updated_values["ISSUE_DESCRIPTION"] = "File not found"
-            return updated_values
+    # Check if vast_path is valid
+    if pd.isna(vast_path) or not isinstance(vast_path, str):
+        print(f"  WARNING: Invalid vast_path: {vast_path}")
+        updated_values["ISSUE_DESCRIPTION"] = "Invalid vast_path"
+        return updated_values
 
-        # Load behavioral data
-        beh_df, licks_L, licks_R = load_session_data(mat_path)
+    # Find the actual location of the data by searching for the session folder
+    found_base_path, found_mat_path, correct_vast_path = find_session_data_path(vast_path, session_name)
+    
+    if found_base_path is None:
+        print(f"  WARNING: Session data not found in any location")
+        updated_values["ISSUE_DESCRIPTION"] = "File not found in any location"
+        return updated_values
+    
+    print(f"  Found data in: {found_base_path}")
+    print(f"  Data file path: {found_mat_path}")
+    
+    # Update vast_path to the correct current location
+    updated_values["vast_path"] = correct_vast_path
+    print(f"  Updated vast_path to: {correct_vast_path}")
+
+    try:
+        # Load behavioral data using the found file path
+        beh_df, licks_L, licks_R = load_session_data(found_mat_path)
 
         if beh_df.empty:
             print(f"  WARNING: No behavioral data loaded for {session_name}")
@@ -149,16 +200,14 @@ def fill_behavioral_metrics(row, base_path: str):
 
 def process_asset_inventory(
     inventory_df: pd.DataFrame,
-    base_path: str,
     output_path: Path,
-    all_sessions: bool = False,
+    all_sessions: bool = True,
 ):
     """
     Process the asset inventory and fill in behavioral metrics.
 
     Args:
         inventory_df: DataFrame containing session inventory
-        base_path: Base path to the data files
         output_path: Path to save the updated CSV
         all_sessions: If True, process all sessions; if False, only process the first few
     """
@@ -185,7 +234,7 @@ def process_asset_inventory(
     # Process each session
     for idx, row in sessions_to_process.iterrows():
         try:
-            updated_values = fill_behavioral_metrics(row, base_path)
+            updated_values = fill_behavioral_metrics(row)
 
             if updated_values:
                 # Update the DataFrame with new values
@@ -323,15 +372,9 @@ def main():
         description="Fill asset inventory CSV with behavioral metrics extracted from .mat files."
     )
     parser.add_argument(
-        "--all-sessions",
+        "--test-mode",
         action="store_true",
-        help="Process all sessions (default: only process first 5 sessions for testing)",
-    )
-    parser.add_argument(
-        "--data-path",
-        type=str,
-        required=True,
-        help="Base path to the data files containing the .mat files",
+        help="Process only first 5 sessions for testing (default: process all sessions)",
     )
     args = parser.parse_args()
 
@@ -347,7 +390,7 @@ def main():
 
     # Process the inventory and save back to the same file
     process_asset_inventory(
-        inventory_df, args.data_path, inventory_path, args.all_sessions
+        inventory_df, inventory_path, not args.test_mode
     )
 
 
