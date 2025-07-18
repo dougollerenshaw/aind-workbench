@@ -1,0 +1,189 @@
+[
+    {
+        "acquisition": {
+            "object_type": "Acquisition",
+            "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/acquisition.py",
+            "schema_version": "2.0.34",
+            "subject_id": "791691",
+            "specimen_id": null,
+            "acquisition_start_time": "2025-06-27T13:54:28.160350-07:00",
+            "acquisition_end_time": "2025-06-27T15:17:20.584628-07:00",
+            "experimenters": [
+                "Kanghoon Jung"
+            ],
+            "protocol_id": [
+                ""
+            ],
+            "ethics_review_id": null,
+            "instrument_id": "322_EPHYS4_20241105",
+            "acquisition_type": "Uncoupled Without Baiting",
+            "notes": "baseline = 30, some R eye foam/watery eye near end of session (v1v2 upgrade) Session start time was adjusted from 2025-06-27 13:54:28.160350-07:00 to 2025-06-27 13:54:28.160350-07:00 (v1v2 upgrade) Session end time was adjusted from 2025-06-27 15:17:20.584628-07:00 to 2025-06-27 15:17:20.584628-07:00",
+            "coordinate_system": null,
+            "calibrations": [],
+            "maintenance": [],
+            "data_streams": [
+                {
+                    "object_type": "Data stream",
+                    "stream_start_time": "2025-06-27T13:54:28.160350-07:00",
+                    "stream_end_time": "2025-06-27T15:17:20.584628-07:00",
+                    "modalities": [
+                        {
+                            "name": "Behavior videos",
+                            "abbreviation": "behavior-videos"
+                        },
+                        {
+                            "name": "Extracellular electrophysiology",
+                            "abbreviation": "ecephys"
+                        }
+                    ],
+                    "code": null,
+                    "notes": "None;Ephys modality: recording type: Behavior; file name:791691_2025-06-27_13-54-27;  experiment number:1;  recording number:0",
+                    "active_devices": [
+                        "neuropixel basestation",
+                        "Face Side Left",
+                        "Probe Camera 3",
+                        "Face Bottom",
+                        "Body",
+                        "Probe Assembly 1",
+                        "Face Side Right",
+                        "Probe Camera 1",
+                        "Probe Camera 2"
+                    ],
+                    "configurations": [
+                        {
+                            "object_type": "Ephys assembly config",
+                            "device_name": "Probe Assembly 1",
+                            "manipulator": {
+                                "object_type": "Manipulator config",
+                                "device_name": "unknown",
+                                "coordinate_system": {
+                                    "object_type": "Coordinate system",
+                                    "name": "MPM_MANIP_RFB",
+                                    "origin": "Tip",
+                                    "axes": [
+                                        {
+                                            "object_type": "Axis",
+                                            "name": "X",
+                                            "direction": "Left_to_right"
+                                        },
+                                        {
+                                            "object_type": "Axis",
+                                            "name": "Y",
+                                            "direction": "Back_to_front"
+                                        },
+                                        {
+                                            "object_type": "Axis",
+                                            "name": "Z",
+                                            "direction": "Up_to_down"
+                                        }
+                                    ],
+                                    "axis_unit": "millimeter"
+                                },
+                                "local_axis_positions": {
+                                    "object_type": "Translation",
+                                    "translation": [
+                                        4106,
+                                        4485,
+                                        7668
+                                    ]
+                                }
+                            },
+                            "probes": [],
+                            "modules": [
+                                {
+                                    "object_type": "MIS module config",
+                                    "arc_angle": 9,
+                                    "module_angle": 0,
+                                    "rotation_angle": -90,
+                                    "angle_unit": "degrees",
+                                    "notes": null
+                                }
+                            ]
+                        }
+                    ],
+                    "connections": []
+                }
+            ],
+            "stimulus_epochs": [
+                {
+                    "object_type": "Stimulus epoch",
+                    "stimulus_start_time": "2025-06-27T14:00:43.994897-07:00",
+                    "stimulus_end_time": "2025-06-27T14:55:35.163635-07:00",
+                    "stimulus_name": "The behavior auditory go cue",
+                    "code": null,
+                    "stimulus_modalities": [
+                        "Auditory"
+                    ],
+                    "performance_metrics": {
+                        "object_type": "Performance metrics",
+                        "output_parameters": {
+                            "meta": {
+                                "box": "322_EPHYS4",
+                                "session_run_time_in_min": 54
+                            },
+                            "performance": {
+                                "foraging_efficiency": 0.7383831954169318,
+                                "foraging_efficiency_with_actual_random_seed": 0.7318611987381702
+                            },
+                            "task_parameters": {
+                                "BlockBeta": "20",
+                                "BlockMax": "35",
+                                "BlockMin": "20",
+                                "DelayBeta": "0.0",
+                                "DelayMax": "1.0",
+                                "DelayMin": "1.0",
+                                "ITIBeta": "3.0",
+                                "ITIMax": "15.0",
+                                "ITIMin": "2.0",
+                                "LeftValue_volume": "2.00",
+                                "RightValue_volume": "2.00",
+                                "Task": "Uncoupled Without Baiting",
+                                "reward_probability": "0.1, 0.5, 0.9"
+                            },
+                            "water": {
+                                "water_after_session": null,
+                                "water_day_total": 0.548,
+                                "water_in_session_foraging": 0.464,
+                                "water_in_session_manual": null,
+                                "water_in_session_total": null
+                            }
+                        },
+                        "reward_consumed_during_epoch": "464.0",
+                        "reward_consumed_unit": "microliter",
+                        "trials_total": 446,
+                        "trials_finished": 430,
+                        "trials_rewarded": 232
+                    },
+                    "notes": "The duration of go cue is 100 ms. The frequency is 7500 Hz. Amplitude is 84dB. The total reward consumed in the session is 464.0 microliters. The total reward including consumed in the session and supplementary water is 0.548 milliliters.",
+                    "active_devices": [
+                        "Speaker"
+                    ],
+                    "configurations": [
+                        {
+                            "object_type": "Speaker config",
+                            "device_name": "Stimulus Speaker",
+                            "volume": 84,
+                            "volume_unit": "decibels"
+                        }
+                    ],
+                    "training_protocol_name": null,
+                    "curriculum_status": null
+                }
+            ],
+            "subject_details": {
+                "object_type": "Acquisition subject details",
+                "animal_weight_prior": "29.0",
+                "animal_weight_post": null,
+                "weight_unit": "gram",
+                "anaesthesia": null,
+                "mouse_platform_name": "Tube",
+                "reward_consumed_total": "464.0",
+                "reward_consumed_unit": "microliter"
+            }
+        },
+        "quality_control": null,
+        "model": null,
+        "_created": "2025-07-15T22:03:34.210Z",
+        "_last_modified": "2025-07-15T22:03:34.210Z"
+    }
+]
