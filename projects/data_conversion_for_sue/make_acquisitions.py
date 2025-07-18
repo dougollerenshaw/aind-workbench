@@ -1,16 +1,34 @@
+#!/usr/bin/env python3
+"""
+Generate acquisition.json files for each session in the asset inventory.
+
+This script creates AIND data schema 2.0 compliant acquisition.json files
+for each experimental session, containing detailed acquisition metadata.
+
+This script is part of a metadata workflow and should be run after make_data_descriptions.py
+to ensure experiment directories exist with proper naming.
+"""
+
 import os
 import pandas as pd
 from datetime import datetime, timedelta
 import zoneinfo
 from pathlib import Path
 import argparse
+import json
+import re
+from typing import List, Optional
+
 from aind_data_schema.core.acquisition import (
     Acquisition,
     DataStream,
     AcquisitionSubjectDetails,
+    StimulusEpoch,
+    PerformanceMetrics
 )
 from aind_data_schema_models.modalities import Modality
 from aind_data_schema_models.units import VolumeUnit
+
 from utils import (
     load_session_data,
     calculate_session_duration,
@@ -18,223 +36,425 @@ from utils import (
     construct_file_path,
     extract_behavioral_metrics,
 )
-
-DEFAULT_SESSION_TIME = "12:00:00"  # Noon
-TIME_ASSUMPTION_NOTE = "Note: Session start time is assumed to be 12:00:00 (noon) as exact time was not recorded."
+from metadata_utils import (
+    load_config,
+    get_mapped_subject_id,
+    get_experiment_metadata_dir,
+    save_metadata_file
+)
 
 # Get the directory containing this script
 SCRIPT_DIR = Path(__file__).parent.absolute()
 
+# Load the configuration
+config = load_config()
+SUBJECT_ID_MAPPING = config['subject_id_mapping']
 
-def get_acquisition_type_and_modality(physiology_modality: str):
+
+def extract_session_start_time_from_path(vast_path: str, session_name: str) -> Optional[str]:
     """
-    Determine acquisition type and modality from physiology_modality column.
-
+    Extract session start time from the session folder structure.
+    
     Args:
-        physiology_modality: Value from the physiology_modality column
-
+        vast_path: Path from the vast_path column
+        session_name: Session name to look for
+        
     Returns:
-        tuple: (acquisition_type, modality_enum)
+        Optional[str]: Session start time in YYYY-MM-DD_HH-MM-SS format, or None if not found
     """
-    if physiology_modality == "fiber_photometry":
-        return "behavior_fiber_photometry", Modality.FIB
-    elif physiology_modality == "ephys":
-        return "behavior_ephys", Modality.ECEPHYS
+    # Construct the base path to look for session folders
+    if vast_path.startswith("scratch/sueSu/"):
+        relative_path = vast_path[len("scratch/sueSu/"):]
     else:
-        raise ValueError(f"Unknown physiology modality: {physiology_modality}")
+        relative_path = vast_path
+    
+    # Base path where data is stored
+    base_path = "/allen/aind/scratch/sueSu"
+    session_base_path = os.path.join(base_path, relative_path, "neuralynx", "session")
+    
+    if not os.path.exists(session_base_path):
+        return None
+    
+    # Look for session folders with timestamp format YYYY-MM-DD_HH-MM-SS
+    pattern = re.compile(r'(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})')
+    
+    try:
+        for folder_name in os.listdir(session_base_path):
+            folder_path = os.path.join(session_base_path, folder_name)
+            if os.path.isdir(folder_path):
+                match = pattern.match(folder_name)
+                if match:
+                    return match.group(1)
+    except (OSError, PermissionError):
+        return None
+    
+    return None
 
 
-def create_acquisition_metadata(row, base_path: str) -> Acquisition:
+def create_session_datetime(collection_date: str, vast_path: str, session_name: str, collection_site: str) -> datetime:
     """
-    Create an Acquisition object for a single row of the asset inventory.
+    Create a timezone-aware datetime for the session.
+    
+    Args:
+        collection_date: Date string from CSV
+        vast_path: Path from the vast_path column
+        session_name: Session name
+        collection_site: Collection site (determines timezone)
+        
+    Returns:
+        datetime: Timezone-aware datetime object
+    """
+    # Try to extract session time from folder structure
+    extracted_time = extract_session_start_time_from_path(vast_path, session_name)
+    
+    if extracted_time:
+        # Parse the extracted timestamp: YYYY-MM-DD_HH-MM-SS
+        dt = datetime.strptime(extracted_time, "%Y-%m-%d_%H-%M-%S")
+    else:
+        raise ValueError(f"Could not extract session start time from path for {session_name}")
+    
+    # Set timezone based on collection site
+    if collection_site.upper() in ['JHU', 'HOPKINS']:
+        # Johns Hopkins is East Coast (US/Eastern)
+        eastern = zoneinfo.ZoneInfo("US/Eastern")
+        return dt.replace(tzinfo=eastern)
+    else:
+        # AIND is West Coast (US/Pacific) 
+        pacific = zoneinfo.ZoneInfo("US/Pacific")
+        return dt.replace(tzinfo=pacific)
 
+
+def session_path_exists(vast_path: str, session_name: str) -> bool:
+    """
+    Check if the session path exists on the file system.
+    
+    Args:
+        vast_path: Path from the vast_path column
+        session_name: Session name
+        
+    Returns:
+        bool: True if the session path exists, False otherwise
+    """
+    # Construct the base path to check
+    if vast_path.startswith("scratch/sueSu/"):
+        relative_path = vast_path[len("scratch/sueSu/"):]
+    else:
+        relative_path = vast_path
+    
+    # Base path where data is stored
+    base_path = "/allen/aind/scratch/sueSu"
+    session_base_path = os.path.join(base_path, relative_path, "neuralynx", "session")
+    
+    return os.path.exists(session_base_path)
+
+
+def get_modality_from_physiology(physiology_modality: str) -> List[Modality]:
+    """
+    Convert physiology modality to AIND modality enums.
+    
+    Args:
+        physiology_modality: Value from physiology_modality column
+        
+    Returns:
+        List[Modality]: List of relevant modalities
+    """
+    modalities = [Modality.BEHAVIOR]  # All sessions have behavioral data
+    
+    if physiology_modality == "fiber_photometry":
+        modalities.append(Modality.FIB)
+    elif physiology_modality == "ephys":
+        modalities.append(Modality.ECEPHYS)
+    
+    return modalities
+
+
+def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
+    """
+    Create an Acquisition object for a single session row.
+    
     Args:
         row: Row from the asset inventory DataFrame
         base_path: Base path to the data files
-
+        
     Returns:
-        Acquisition: Validated acquisition metadata
+        Acquisition: Validated acquisition object
     """
     session_name = row["session_name"]
-
-    # Construct file path using shared utility
+    original_subject_id = row["subject_id"]
+    collection_site = row["collection_site"]
+    
+    # Map Hopkins KJ subjects to their AIND subject IDs
+    subject_id = SUBJECT_ID_MAPPING.get(original_subject_id, original_subject_id)
+    
+    print(f"Processing session: {session_name} (Subject: {subject_id})")
+    
+    # Create session datetime with timezone-aware formatting
+    acquisition_start_time = create_session_datetime(
+        row["collection_date"], 
+        row["vast_path"], 
+        session_name, 
+        collection_site
+    )
+    
+    # Load behavioral data to get session duration and metrics
     mat_path = construct_file_path(base_path, row["vast_path"], session_name)
-
-    print(f"\nProcessing session: {session_name}")
-    print(f"Data file path: {mat_path}")
-
-    # Load behavioral data
+    print(f"Loading behavioral data from: {mat_path}")
+    
     beh_df, licks_L, licks_R = load_session_data(mat_path)
-
-    # Print verbose information about the loaded data
-    print(f"Behavioral DataFrame shape: {beh_df.shape}")
-    print(f"Behavioral DataFrame columns: {list(beh_df.columns)}")
-    print(f"Number of left licks: {len(licks_L)}")
-    print(f"Number of right licks: {len(licks_R)}")
-
-    # Extract behavioral metrics using shared utility with default reward volume
+    
+    # Extract behavioral metrics
     metrics = extract_behavioral_metrics(beh_df, licks_L, licks_R)
-
-    print(f"\nSession metrics:")
-    print(
-        f"Session duration: {metrics['session_duration_seconds']} seconds ({metrics['session_duration_seconds']/60:.2f} minutes)"
-    )
-    print(f"Total rewards counted: {metrics['total_rewards']}")
-
-    # Use collection_date from CSV and add default time
-    collection_date = pd.to_datetime(row["collection_date"]).date()
-    datetime_str = f"{collection_date} {DEFAULT_SESSION_TIME}"
-    acquisition_start = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
-    acquisition_start = acquisition_start.replace(
-        tzinfo=zoneinfo.ZoneInfo("UTC")
-    )
-
+    
     # Calculate end time using duration
-    acquisition_end = acquisition_start + timedelta(
+    acquisition_end_time = acquisition_start_time + timedelta(
         seconds=metrics["session_duration_seconds"]
     )
-
-    # Get acquisition type and modality
-    acquisition_type, modality = get_acquisition_type_and_modality(
-        row["physiology_modality"]
-    )
-
-    # Create subject details
+    
+    print(f"Session duration: {metrics['session_duration_seconds']/60:.2f} minutes")
+    print(f"Total rewards: {metrics['total_rewards']}")
+    
+    # Get modalities
+    modalities = get_modality_from_physiology(row["physiology_modality"])
+    
+    # Create subject details with known information only
     subject_details = AcquisitionSubjectDetails(
-        mouse_platform_name="rotating_platform_v1",  # Default value
-        reward_consumed_total=metrics["reward_volume_microliters"]
-        / 1000,  # Convert μL to mL
+        mouse_platform_name=None,  # Don't assume platform type
+        reward_consumed_total=metrics["reward_volume_microliters"] / 1000,  # Convert μL to mL
         reward_consumed_unit=VolumeUnit.ML,
         animal_weight_prior=(
-            row["SUBJECT_WEIGHT_PRIOR"]
-            if pd.notna(row["SUBJECT_WEIGHT_PRIOR"])
+            row["SUBJECT_WEIGHT_PRIOR"] 
+            if pd.notna(row["SUBJECT_WEIGHT_PRIOR"]) 
             else None
         ),
         animal_weight_post=(
-            row["SUBJECT_WEIGHT_POST"]
-            if pd.notna(row["SUBJECT_WEIGHT_POST"])
+            row["SUBJECT_WEIGHT_POST"] 
+            if pd.notna(row["SUBJECT_WEIGHT_POST"]) 
             else None
         ),
     )
-
-    # Create minimal data stream (we'll need to add configurations later)
+    
+    # Create data stream with minimal, known information
     data_stream = DataStream(
-        stream_start_time=acquisition_start,
-        stream_end_time=acquisition_end,
-        modalities=[modality],
-        active_devices=["behavior_rig"],  # Minimal device list
-        configurations=[],  # TODO: Add minimal configurations
-        notes=TIME_ASSUMPTION_NOTE,
+        stream_start_time=acquisition_start_time,
+        stream_end_time=acquisition_end_time,
+        modalities=modalities,
+        active_devices=[],  # Don't assume specific devices
+        configurations=[],  # Keep minimal
+        notes=f"{row['physiology_modality']} recording session"
     )
-
+    
+    # Create stimulus epoch with only confirmed behavioral data
+    stimulus_epoch = StimulusEpoch(
+        stimulus_start_time=acquisition_start_time,
+        stimulus_end_time=acquisition_end_time,
+        stimulus_name="Behavioral foraging task",
+        stimulus_modalities=["Auditory"],  # Assuming auditory cues
+        performance_metrics=PerformanceMetrics(
+            reward_consumed_during_epoch=str(metrics["reward_volume_microliters"]),
+            reward_consumed_unit="microliter",
+            trials_total=metrics.get("total_trials", None),
+            trials_finished=metrics.get("total_trials", None),  # Assuming all trials finished
+            trials_rewarded=metrics["total_rewards"]
+        ),
+        active_devices=[],  # Don't assume specific devices
+        configurations=[]
+    )
+    
     # Create the acquisition object
     acquisition = Acquisition(
-        subject_id=row["subject_id"],
-        acquisition_start_time=acquisition_start,
-        acquisition_end_time=acquisition_end,
+        subject_id=str(subject_id),
+        acquisition_start_time=acquisition_start_time,
+        acquisition_end_time=acquisition_end_time,
         instrument_id=row["rig_id"],
-        acquisition_type=acquisition_type,
+        acquisition_type="Behavioral foraging",
         data_streams=[data_stream],
+        stimulus_epochs=[stimulus_epoch],
         subject_details=subject_details,
+        experimenters=[investigator.strip() for investigator in row["investigators"].split(",") if investigator.strip()],
+        notes=f"{row['physiology_modality']} recording session for subject {subject_id}"
     )
-
+    
     return acquisition
 
 
 def process_acquisitions(
     inventory_df: pd.DataFrame,
     base_path: str,
-    output_dir: Path,
-    all_sessions: bool = False,
+    output_base_dir: Path,
+    force_overwrite: bool = False
 ):
     """
-    Process acquisitions from the inventory and create metadata files.
-
+    Process acquisitions from the inventory and create acquisition.json files.
+    
     Args:
         inventory_df: DataFrame containing session inventory
         base_path: Base path to the data files
-        output_dir: Directory to save metadata files
-        all_sessions: If True, process all sessions; if False, only process the first session
+        output_base_dir: Base directory for saving files
+        force_overwrite: Whether to overwrite existing files
     """
-    # Create output directory
-    output_dir.mkdir(exist_ok=True)
-
-    # Get sessions to process
-    if all_sessions:
-        sessions_to_process = inventory_df
-        print(f"Processing all {len(sessions_to_process)} acquisitions...")
-    else:
-        sessions_to_process = inventory_df.iloc[:1]
-        print("Test mode: Processing only the first acquisition...")
-
-    # Process selected sessions
+    # Create metadata output directory
+    metadata_dir = output_base_dir / "metadata"
+    metadata_dir.mkdir(parents=True, exist_ok=True)
+    
+    print(f"Creating acquisition files in: {metadata_dir}")
+    print(f"Processing {len(inventory_df)} sessions...")
+    
     success_count = 0
+    skip_count = 0
     error_count = 0
-
-    for idx, row in sessions_to_process.iterrows():
+    
+    for idx, row in inventory_df.iterrows():
+        session_name = row["session_name"]
+        original_subject_id = row["subject_id"]
+        collection_date = row["collection_date"]
+        
+        # Skip if any required fields are missing
+        if pd.isna(original_subject_id) or pd.isna(collection_date):
+            print(f"  Skipping {session_name} - missing required fields")
+            skip_count += 1
+            continue
+        
+        # Skip if vast_path is missing (needed to check if session exists)
+        if pd.isna(row["vast_path"]):
+            print(f"  Skipping {session_name} - missing vast_path")
+            skip_count += 1
+            continue
+            
+        # Check if the session path exists on the file system
+        if not session_path_exists(row["vast_path"], session_name):
+            print(f"  Skipping {session_name} - session path does not exist")
+            skip_count += 1
+            continue
+            
         try:
-            # Create acquisition metadata
-            acquisition = create_acquisition_metadata(row, base_path)
-
-            # Save as JSON
-            output_path = (
-                output_dir / f"{row['session_name']}_acquisition.json"
+            print(f"  Processing {session_name}...")
+            
+            # Get mapped subject ID
+            aind_subject_id = get_mapped_subject_id(original_subject_id)
+            
+            # Create acquisition first to get the start_time for folder naming
+            acquisition = create_acquisition(row, base_path)
+            
+            # Get the experiment metadata directory path using the timezone-aware datetime
+            experiment_dir = get_experiment_metadata_dir(
+                metadata_dir,
+                session_name,
+                aind_subject_id,
+                acquisition.acquisition_start_time
             )
-            with open(output_path, "w") as f:
-                f.write(acquisition.model_dump_json(indent=2))
-
-            print(f"Created acquisition metadata for {row['session_name']}")
+            
+            # Check if file already exists
+            output_path = experiment_dir / "acquisition.json"
+            
+            if output_path.exists() and not force_overwrite:
+                print(f"    Skipping {session_name} - file already exists: {output_path}")
+                skip_count += 1
+                continue
+            
+            # Save to file in the experiment's metadata directory
+            saved_path = save_metadata_file(
+                acquisition.model_dump(mode='json'),
+                experiment_dir,
+                "acquisition.json"
+            )
+            
+            print(f"    ✓ Saved to: {saved_path}")
             success_count += 1
-
+            
         except Exception as e:
-            print(f"Error processing {row['session_name']}: {str(e)}")
+            print(f"    ✗ Error processing {session_name}: {str(e)}")
             error_count += 1
-
+    
     # Print summary
-    print(f"\nProcessing complete:")
-    print(f"Successfully processed: {success_count} acquisitions")
-    if error_count > 0:
-        print(f"Errors encountered: {error_count} acquisitions")
+    print(f"\n" + "=" * 60)
+    print(f"ACQUISITION GENERATION SUMMARY")
+    print(f"=" * 60)
+    print(f"Total sessions in inventory: {len(inventory_df)}")
+    print(f"Successfully created: {success_count}")
+    print(f"Skipped: {skip_count}")
+    print(f"  - Already exist: (see individual messages)")
+    print(f"  - Missing required fields: (see individual messages)")
+    print(f"  - Session path does not exist: (see individual messages)")
+    print(f"Errors: {error_count}")
+    print(f"Files saved to experiment folders in: {metadata_dir}")
+    print(f"\nNote: Only sessions with existing paths in /allen/aind/scratch/sueSu were processed")
 
 
 def main():
-    # Parse command line arguments
+    """Main function to process command line arguments and run the script."""
     parser = argparse.ArgumentParser(
-        description="Generate acquisition metadata files."
-    )
-    parser.add_argument(
-        "--all-sessions",
-        action="store_true",
-        help="Process all sessions (default: only process first session)",
+        description="Generate acquisition.json files for each session in the asset inventory."
     )
     parser.add_argument(
         "--data-path",
         type=str,
-        required=True,
-        help="Base path to the data files containing the .mat files",
+        default="/allen/aind/scratch/sueSu",
+        help="Base path to the data files containing the .mat files (default: /allen/aind/scratch/sueSu)",
     )
     parser.add_argument(
         "--output-dir",
         type=str,
-        help="Directory to save acquisition metadata files (default: acquisitions/ in the script directory)",
+        default=None,
+        help="Output directory for acquisition files (default: same directory as script)",
     )
+    parser.add_argument(
+        "--force-overwrite",
+        action="store_true",
+        help="Force overwrite existing acquisition.json files (default: skip existing files)",
+    )
+    parser.add_argument(
+        "--start-row",
+        type=int,
+        default=0,
+        help="Start row index in the asset inventory (0-based, default: 0)",
+    )
+    parser.add_argument(
+        "--end-row",
+        type=int,
+        default=None,
+        help="End row index in the asset inventory (0-based, exclusive, default: process all rows)",
+    )
+    
     args = parser.parse_args()
-
-    # Convert paths to Path objects
-    data_path = Path(args.data_path)
+    
+    # Set output directory
     if args.output_dir:
         output_dir = Path(args.output_dir)
     else:
-        output_dir = SCRIPT_DIR / "acquisitions"
-
-    # Read the asset inventory from the script directory
+        output_dir = SCRIPT_DIR
+    
+    # Read the asset inventory
     inventory_path = SCRIPT_DIR / "asset_inventory.csv"
+    if not inventory_path.exists():
+        print(f"Error: Asset inventory file not found: {inventory_path}")
+        return
+    
+    print(f"Loading asset inventory from: {inventory_path}")
     inventory_df = pd.read_csv(inventory_path)
-
-    # Process acquisitions
-    process_acquisitions(
-        inventory_df, str(data_path), output_dir, args.all_sessions
-    )
+    print(f"Loaded {len(inventory_df)} sessions from asset inventory")
+    
+    # Apply row range filtering
+    start_row = args.start_row
+    end_row = args.end_row if args.end_row is not None else len(inventory_df)
+    
+    if start_row < 0 or start_row >= len(inventory_df):
+        print(f"Error: start-row {start_row} is out of range (0 to {len(inventory_df)-1})")
+        return
+    
+    if end_row > len(inventory_df):
+        print(f"Warning: end-row {end_row} is beyond the data, using {len(inventory_df)}")
+        end_row = len(inventory_df)
+    
+    if start_row >= end_row:
+        print(f"Error: start-row ({start_row}) must be less than end-row ({end_row})")
+        return
+    
+    # Slice the dataframe
+    inventory_df = inventory_df.iloc[start_row:end_row]
+    print(f"Processing rows {start_row} to {end_row-1} ({len(inventory_df)} sessions)")
+    
+    # Process sessions
+    process_acquisitions(inventory_df, args.data_path, output_dir, args.force_overwrite)
 
 
 if __name__ == "__main__":
