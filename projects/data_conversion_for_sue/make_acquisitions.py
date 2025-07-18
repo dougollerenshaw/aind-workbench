@@ -24,16 +24,18 @@ from aind_data_schema.core.acquisition import (
     DataStream,
     AcquisitionSubjectDetails,
     StimulusEpoch,
-    PerformanceMetrics
+    PerformanceMetrics,
+    EphysAssemblyConfig,
+    ManipulatorConfig
 )
 from aind_data_schema_models.modalities import Modality
 from aind_data_schema_models.units import VolumeUnit
+from aind_data_schema.components.coordinates import CoordinateSystem, Axis, Translation
 
 from utils import (
     load_session_data,
     calculate_session_duration,
     count_rewards,
-    construct_file_path,
     extract_behavioral_metrics,
 )
 from metadata_utils import (
@@ -56,21 +58,14 @@ def extract_session_start_time_from_path(vast_path: str, session_name: str) -> O
     Extract session start time from the session folder structure.
     
     Args:
-        vast_path: Path from the vast_path column
+        vast_path: Full absolute path from the vast_path column
         session_name: Session name to look for
         
     Returns:
         Optional[str]: Session start time in YYYY-MM-DD_HH-MM-SS format, or None if not found
     """
-    # Construct the base path to look for session folders
-    if vast_path.startswith("scratch/sueSu/"):
-        relative_path = vast_path[len("scratch/sueSu/"):]
-    else:
-        relative_path = vast_path
-    
-    # Base path where data is stored
-    base_path = "/allen/aind/scratch/sueSu"
-    session_base_path = os.path.join(base_path, relative_path, "neuralynx", "session")
+    # Check if neuralynx/session directory exists
+    session_base_path = os.path.join(vast_path, "neuralynx", "session")
     
     if not os.path.exists(session_base_path):
         return None
@@ -126,25 +121,17 @@ def create_session_datetime(collection_date: str, vast_path: str, session_name: 
 
 def session_path_exists(vast_path: str, session_name: str) -> bool:
     """
-    Check if the session path exists on the file system.
+    Check if the session path exists on the file system with neuralynx structure.
     
     Args:
-        vast_path: Path from the vast_path column
+        vast_path: Full absolute path from the vast_path column
         session_name: Session name
         
     Returns:
-        bool: True if the session path exists, False otherwise
+        bool: True if the session has neuralynx/session structure, False otherwise
     """
-    # Construct the base path to check
-    if vast_path.startswith("scratch/sueSu/"):
-        relative_path = vast_path[len("scratch/sueSu/"):]
-    else:
-        relative_path = vast_path
-    
-    # Base path where data is stored
-    base_path = "/allen/aind/scratch/sueSu"
-    session_base_path = os.path.join(base_path, relative_path, "neuralynx", "session")
-    
+    # Check if neuralynx/session directory exists
+    session_base_path = os.path.join(vast_path, "neuralynx", "session")
     return os.path.exists(session_base_path)
 
 
@@ -166,6 +153,45 @@ def get_modality_from_physiology(physiology_modality: str) -> List[Modality]:
         modalities.append(Modality.ECEPHYS)
     
     return modalities
+
+
+def add_ephys_config(active_devices: List[str], configurations: List) -> None:
+    """
+    Add ephys-specific device configurations for custom tetrode/Neuralynx system.
+    
+    Args:
+        active_devices: List to append device names to
+        configurations: List to append device configurations to
+    """
+    # Add Neuralynx recording system and tetrode probe
+    active_devices.extend([
+        "Neuralynx recording system",
+        "Custom tetrode probe"
+    ])
+    
+    # Create minimal ephys assembly config for tetrode/Neuralynx system
+    ephys_config = EphysAssemblyConfig(
+        device_name="Custom tetrode probe",
+        manipulator=ManipulatorConfig(
+            device_name="unknown",
+            coordinate_system=CoordinateSystem(
+                name="Custom Tetrode Coordinate System",
+                origin="Tip",
+                axes=[
+                    Axis(name="X", direction="Left_to_right"),
+                    Axis(name="Y", direction="Back_to_front"),
+                    Axis(name="Z", direction="Up_to_down")
+                ],
+                axis_unit="millimeter"
+            ),
+            local_axis_positions=Translation(
+                translation=[0, 0, 0]  # Unknown positions
+            )
+        ),
+        probes=[],  # Empty for custom tetrodes
+        modules=[]  # No modules for basic tetrode setup
+    )
+    configurations.append(ephys_config)
 
 
 def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
@@ -197,7 +223,7 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
     )
     
     # Load behavioral data to get session duration and metrics
-    mat_path = construct_file_path(base_path, row["vast_path"], session_name)
+    mat_path = os.path.join(row["vast_path"], "sorted", "session", f"{session_name}_sessionData_behav.mat")
     print(f"Loading behavioral data from: {mat_path}")
     
     beh_df, licks_L, licks_R = load_session_data(mat_path)
@@ -216,9 +242,17 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
     # Get modalities
     modalities = get_modality_from_physiology(row["physiology_modality"])
     
+    # Create device configurations
+    active_devices = []
+    configurations = []
+    
+    # Add ephys-specific configurations if this is an ephys session
+    if Modality.ECEPHYS in modalities:
+        add_ephys_config(active_devices, configurations)
+    
     # Create subject details with known information only
     subject_details = AcquisitionSubjectDetails(
-        mouse_platform_name=None,  # Don't assume platform type
+        mouse_platform_name="Unknown",  # Required field, use placeholder since we don't have this info
         reward_consumed_total=metrics["reward_volume_microliters"] / 1000,  # Convert μL to mL
         reward_consumed_unit=VolumeUnit.ML,
         animal_weight_prior=(
@@ -238,8 +272,8 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
         stream_start_time=acquisition_start_time,
         stream_end_time=acquisition_end_time,
         modalities=modalities,
-        active_devices=[],  # Don't assume specific devices
-        configurations=[],  # Keep minimal
+        active_devices=active_devices,
+        configurations=configurations,
         notes=f"{row['physiology_modality']} recording session"
     )
     
@@ -377,7 +411,7 @@ def process_acquisitions(
     print(f"  - Session path does not exist: (see individual messages)")
     print(f"Errors: {error_count}")
     print(f"Files saved to experiment folders in: {metadata_dir}")
-    print(f"\nNote: Only sessions with existing paths in /allen/aind/scratch/sueSu were processed")
+    print(f"\nNote: Only sessions with neuralynx/session structure were processed")
 
 
 def main():

@@ -1,0 +1,124 @@
+{
+  "object_type": "Acquisition",
+  "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/acquisition.py",
+  "schema_version": "2.0.34",
+  "subject_id": "ZS059",
+  "specimen_id": null,
+  "acquisition_start_time": "2021-04-26T14:44:03-04:00",
+  "acquisition_end_time": "2021-04-26T15:37:58.038000-04:00",
+  "experimenters": [
+    "Sue Su",
+    "Jeremiah Cohen"
+  ],
+  "protocol_id": null,
+  "ethics_review_id": null,
+  "instrument_id": "hopkins_ephys",
+  "acquisition_type": "Behavioral foraging",
+  "notes": "ephys recording session for subject ZS059",
+  "coordinate_system": null,
+  "calibrations": [],
+  "maintenance": [],
+  "data_streams": [
+    {
+      "object_type": "Data stream",
+      "stream_start_time": "2021-04-26T14:44:03-04:00",
+      "stream_end_time": "2021-04-26T15:37:58.038000-04:00",
+      "modalities": [
+        {
+          "name": "Behavior",
+          "abbreviation": "behavior"
+        },
+        {
+          "name": "Extracellular electrophysiology",
+          "abbreviation": "ecephys"
+        }
+      ],
+      "code": null,
+      "notes": "ephys recording session",
+      "active_devices": [
+        "Neuralynx recording system",
+        "Custom tetrode probe"
+      ],
+      "configurations": [
+        {
+          "object_type": "Ephys assembly config",
+          "device_name": "Custom tetrode probe",
+          "manipulator": {
+            "object_type": "Manipulator config",
+            "device_name": "unknown",
+            "coordinate_system": {
+              "object_type": "Coordinate system",
+              "name": "Custom Tetrode Coordinate System",
+              "origin": "Tip",
+              "axes": [
+                {
+                  "object_type": "Axis",
+                  "name": "X",
+                  "direction": "Left_to_right"
+                },
+                {
+                  "object_type": "Axis",
+                  "name": "Y",
+                  "direction": "Back_to_front"
+                },
+                {
+                  "object_type": "Axis",
+                  "name": "Z",
+                  "direction": "Up_to_down"
+                }
+              ],
+              "axis_unit": "millimeter"
+            },
+            "local_axis_positions": {
+              "object_type": "Translation",
+              "translation": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "probes": [],
+          "modules": []
+        }
+      ],
+      "connections": []
+    }
+  ],
+  "stimulus_epochs": [
+    {
+      "object_type": "Stimulus epoch",
+      "stimulus_start_time": "2021-04-26T14:44:03-04:00",
+      "stimulus_end_time": "2021-04-26T15:37:58.038000-04:00",
+      "stimulus_name": "Behavioral foraging task",
+      "code": null,
+      "stimulus_modalities": [
+        "Auditory"
+      ],
+      "performance_metrics": {
+        "object_type": "Performance metrics",
+        "output_parameters": {},
+        "reward_consumed_during_epoch": "588.0",
+        "reward_consumed_unit": "microliter",
+        "trials_total": 354,
+        "trials_finished": 354,
+        "trials_rewarded": 196
+      },
+      "notes": null,
+      "active_devices": [],
+      "configurations": [],
+      "training_protocol_name": null,
+      "curriculum_status": null
+    }
+  ],
+  "subject_details": {
+    "object_type": "Acquisition subject details",
+    "animal_weight_prior": null,
+    "animal_weight_post": null,
+    "weight_unit": "gram",
+    "anaesthesia": null,
+    "mouse_platform_name": "Unknown",
+    "reward_consumed_total": "0.588",
+    "reward_consumed_unit": "milliliter"
+  }
+}
