@@ -101,6 +101,11 @@ def main():
             if spreadsheet_water_received_ul and behavioral_water_volume_ul and spreadsheet_water_received_ul > 0:
                 volume_diff_percent = ((behavioral_water_volume_ul - spreadsheet_water_received_ul) / spreadsheet_water_received_ul) * 100
             
+            # Check if reward counts match between behavioral and spreadsheet
+            counts_match = False
+            if spreadsheet_reward_count is not None and behavioral_reward_count is not None:
+                counts_match = spreadsheet_reward_count == behavioral_reward_count
+            
             # Compile results
             result = {
                 'session_name': session_name,
@@ -113,6 +118,7 @@ def main():
                 'volumes_match_spreadsheet': volumes_match,
                 'behavioral_reward_count': behavioral_reward_count,
                 'behavioral_water_volume_ul': behavioral_water_volume_ul,
+                'counts_match_behavioral_vs_spreadsheet': counts_match,
                 'percent_diff_behavioral_vs_spreadsheet': round(volume_diff_percent, 1) if volume_diff_percent is not None else None,
             }
             
@@ -140,6 +146,7 @@ def main():
     print(f"Sessions with spreadsheet data: {results_df['spreadsheet_reward_size_ul'].notna().sum()}")
     print(f"Sessions with behavioral data: {results_df['behavioral_reward_count'].notna().sum()}")
     print(f"Sessions where spreadsheet volumes match: {results_df['volumes_match_spreadsheet'].sum()}")
+    print(f"Sessions where reward counts match: {results_df['counts_match_behavioral_vs_spreadsheet'].sum()}")
     
     # Show sessions with large percentage differences
     large_diffs = results_df[results_df['percent_diff_behavioral_vs_spreadsheet'].notna() & 
