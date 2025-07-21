@@ -72,16 +72,48 @@ def main():
                 expected_water_received=expected_water
             )
             
+            # Calculate comparison metrics
+            spreadsheet_reward_size = session_details.get('reward_size') if session_details else None
+            
+            # Get reward counts from separate left and right fields
+            spreadsheet_reward_count = None
+            if session_details:
+                left_rewards = session_details.get('num_reward_left', 0) or 0
+                right_rewards = session_details.get('num_reward_right', 0) or 0
+                if left_rewards or right_rewards:  # If either is non-zero
+                    spreadsheet_reward_count = left_rewards + right_rewards
+            
+            spreadsheet_calculated_volume = spreadsheet_reward_size * spreadsheet_reward_count if (spreadsheet_reward_size and spreadsheet_reward_count) else None
+            spreadsheet_water_received_ul = session_details.get('water_received') * 1000 if session_details and session_details.get('water_received') else None
+            
+            # Boolean check: does spreadsheet water received match calculated volume?
+            volumes_match = False
+            if spreadsheet_water_received_ul and spreadsheet_calculated_volume:
+                # Allow for small rounding differences (within 1 microliter)
+                volumes_match = abs(spreadsheet_water_received_ul - spreadsheet_calculated_volume) <= 1
+            
+            # Behavioral data
+            behavioral_reward_count = metrics['total_rewards']
+            behavioral_water_volume_ul = metrics['reward_volume_microliters']
+            
+            # Calculate percentage difference between behavioral and spreadsheet volumes
+            volume_diff_percent = None
+            if spreadsheet_water_received_ul and behavioral_water_volume_ul and spreadsheet_water_received_ul > 0:
+                volume_diff_percent = ((behavioral_water_volume_ul - spreadsheet_water_received_ul) / spreadsheet_water_received_ul) * 100
+            
             # Compile results
             result = {
                 'session_name': session_name,
                 'subject_id': subject_id,
                 'session_date': session_date,
-                'spreadsheet_reward_size_ul': session_details.get('reward_size') if session_details else None,
-                'spreadsheet_water_received_ul': session_details.get('water_received') if session_details else None,
-                'behavioral_total_rewards': metrics['total_rewards'],
-                'behavioral_reward_volume_ul': metrics['reward_volume_microliters'],
-                'behavioral_calculated_volume_ul': metrics['total_rewards'] * reward_size if metrics['total_rewards'] else None,
+                'spreadsheet_reward_size_ul': spreadsheet_reward_size,
+                'spreadsheet_reward_count_total': spreadsheet_reward_count,
+                'spreadsheet_calculated_volume_ul': spreadsheet_calculated_volume,
+                'spreadsheet_water_received_ul': spreadsheet_water_received_ul,
+                'volumes_match_spreadsheet': volumes_match,
+                'behavioral_reward_count': behavioral_reward_count,
+                'behavioral_water_volume_ul': behavioral_water_volume_ul,
+                'percent_diff_behavioral_vs_spreadsheet': round(volume_diff_percent, 1) if volume_diff_percent is not None else None,
             }
             
             results.append(result)
@@ -106,7 +138,24 @@ def main():
     # Show summary statistics
     print(f"\nSummary:")
     print(f"Sessions with spreadsheet data: {results_df['spreadsheet_reward_size_ul'].notna().sum()}")
-    print(f"Sessions with behavioral data: {results_df['behavioral_total_rewards'].notna().sum()}")
+    print(f"Sessions with behavioral data: {results_df['behavioral_reward_count'].notna().sum()}")
+    print(f"Sessions where spreadsheet volumes match: {results_df['volumes_match_spreadsheet'].sum()}")
+    
+    # Show sessions with large percentage differences
+    large_diffs = results_df[results_df['percent_diff_behavioral_vs_spreadsheet'].notna() & 
+                            (results_df['percent_diff_behavioral_vs_spreadsheet'].abs() > 10)]
+    if len(large_diffs) > 0:
+        print(f"Sessions with >10% volume difference: {len(large_diffs)}")
+        print(f"\nTop 5 largest differences:")
+        # Sort by absolute value of percentage difference
+        large_diffs_sorted = large_diffs.assign(
+            abs_percent_diff=large_diffs['percent_diff_behavioral_vs_spreadsheet'].abs()
+        ).nlargest(5, 'abs_percent_diff')
+        
+        top_diffs = large_diffs_sorted[
+            ['session_name', 'spreadsheet_water_received_ul', 'behavioral_water_volume_ul', 'percent_diff_behavioral_vs_spreadsheet']
+        ]
+        print(top_diffs.to_string(index=False))
 
 if __name__ == "__main__":
     main()
