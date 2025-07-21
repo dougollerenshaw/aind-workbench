@@ -1,0 +1,160 @@
+{
+   "object_type": "Procedures",
+   "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/procedures.py",
+   "schema_version": "2.0.32",
+   "subject_id": "ZS059",
+   "subject_procedures": [
+      {
+         "object_type": "Surgery",
+         "protocol_id": null,
+         "start_date": "2021-01-28",
+         "experimenters": [
+            "ZS"
+         ],
+         "ethics_review_id": "M019M432",
+         "animal_weight_prior": 28.3,
+         "animal_weight_post": null,
+         "weight_unit": "gram",
+         "anaesthesia": {
+            "object_type": "Anaesthetic",
+            "anaesthetic_type": "Isoflurane",
+            "duration": 1.0,
+            "duration_unit": "minute",
+            "level": null
+         },
+         "workstation_id": null,
+         "coordinate_system": {
+            "object_type": "Coordinate system",
+            "name": "BREGMA_ARI",
+            "origin": "Bregma",
+            "axes": [
+               {
+                  "object_type": "Axis",
+                  "name": "AP",
+                  "direction": "Posterior_to_anterior"
+               },
+               {
+                  "object_type": "Axis",
+                  "name": "ML",
+                  "direction": "Left_to_right"
+               },
+               {
+                  "object_type": "Axis",
+                  "name": "SI",
+                  "direction": "Superior_to_inferior"
+               }
+            ],
+            "axis_unit": "millimeter"
+         },
+         "measured_coordinates": null,
+         "procedures": [
+            {
+               "object_type": "Headframe",
+               "protocol_id": null,
+               "headframe_type": "Hopkins headframe",
+               "headframe_part_number": "N/A",
+               "headframe_material": "Titanium",
+               "well_part_number": null,
+               "well_type": null
+            },
+            {
+               "object_type": "Brain injection",
+               "injection_materials": [
+                  {
+                     "object_type": "Viral material",
+                     "name": "rAAV5-Ef1a-DIO-hchR2(H134R)-EYFP",
+                     "tars_identifiers": null,
+                     "addgene_id": null,
+                     "titer": 30000000000000,
+                     "titer_unit": "gc/mL"
+                  }
+               ],
+               "targeted_structure": {
+                  "atlas": "CCFv3",
+                  "name": "Locus ceruleus",
+                  "acronym": "LC",
+                  "id": "147"
+               },
+               "relative_position": null,
+               "dynamics": [
+                  {
+                     "object_type": "Injection dynamics",
+                     "profile": "Bolus",
+                     "volume": 250.0,
+                     "volume_unit": "nanoliter",
+                     "rate": null,
+                     "rate_unit": null,
+                     "duration": 250.0,
+                     "duration_unit": "second",
+                     "injection_current": null,
+                     "injection_current_unit": null,
+                     "alternating_current": null
+                  }
+               ],
+               "protocol_id": null,
+               "coordinate_system_name": "BREGMA_ARI",
+               "coordinates": [
+                  []
+               ]
+            },
+            {
+               "object_type": "Probe implant",
+               "protocol_id": null,
+               "implanted_device": {
+                  "object_type": "Ephys probe",
+                  "name": "Tetrode",
+                  "serial_number": null,
+                  "manufacturer": null,
+                  "model": null,
+                  "additional_settings": null,
+                  "notes": "Tetrode of nichrome wire fed through guide tube with a 200 um optic fiber adhered to it",
+                  "probe_model": "Custom",
+                  "headstage": null
+               },
+               "device_config": {
+                  "object_type": "Probe config",
+                  "device_name": "Tetrode",
+                  "primary_targeted_structure": {
+                     "atlas": "CCFv3",
+                     "name": "Locus ceruleus",
+                     "acronym": "LC",
+                     "id": "147"
+                  },
+                  "other_targeted_structure": null,
+                  "atlas_coordinate": null,
+                  "coordinate_system": {
+                     "object_type": "Coordinate system",
+                     "name": "BREGMA_ARI",
+                     "origin": "Bregma",
+                     "axes": [
+                        {
+                           "object_type": "Axis",
+                           "name": "AP",
+                           "direction": "Posterior_to_anterior"
+                        },
+                        {
+                           "object_type": "Axis",
+                           "name": "ML",
+                           "direction": "Left_to_right"
+                        },
+                        {
+                           "object_type": "Axis",
+                           "name": "SI",
+                           "direction": "Superior_to_inferior"
+                        }
+                     ],
+                     "axis_unit": "millimeter"
+                  },
+                  "transform": [],
+                  "dye": null,
+                  "notes": "0.88 ml, 0.35 ap, 2.45 depth relative to the intersection of the most posterior line of the inferior colliculus and sagittal sinus"
+               }
+            }
+         ],
+         "notes": "injections to LC at 0.88 ml, 0.35 ap, [2.7,3.0,3.25] si relative to the intersection of the most posterior line of the inferior colliculus and sagittal sinus"
+      }
+   ],
+   "specimen_procedures": [],
+   "coordinate_system": null,
+   "notes": null
+}
