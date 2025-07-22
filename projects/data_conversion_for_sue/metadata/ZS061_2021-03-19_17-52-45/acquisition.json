@@ -37,34 +37,34 @@
       "notes": "ephys recording session",
       "active_devices": [
         "Neuralynx recording system",
-        "Custom tetrode probe"
+        "Tetrode"
       ],
       "configurations": [
         {
           "object_type": "Ephys assembly config",
-          "device_name": "Custom tetrode probe",
+          "device_name": "Tetrode",
           "manipulator": {
             "object_type": "Manipulator config",
             "device_name": "unknown",
             "coordinate_system": {
               "object_type": "Coordinate system",
-              "name": "Custom Tetrode Coordinate System",
-              "origin": "Tip",
+              "name": "BREGMA_ARI",
+              "origin": "Bregma",
               "axes": [
                 {
                   "object_type": "Axis",
-                  "name": "X",
+                  "name": "AP",
+                  "direction": "Posterior_to_anterior"
+                },
+                {
+                  "object_type": "Axis",
+                  "name": "ML",
                   "direction": "Left_to_right"
                 },
                 {
                   "object_type": "Axis",
-                  "name": "Y",
-                  "direction": "Back_to_front"
-                },
-                {
-                  "object_type": "Axis",
-                  "name": "Z",
-                  "direction": "Up_to_down"
+                  "name": "SI",
+                  "direction": "Superior_to_inferior"
                 }
               ],
               "axis_unit": "millimeter"

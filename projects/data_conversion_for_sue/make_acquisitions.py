@@ -167,26 +167,26 @@ def add_ephys_config(active_devices: List[str], configurations: List) -> None:
     # Add Neuralynx recording system and tetrode probe
     active_devices.extend([
         "Neuralynx recording system",
-        "Custom tetrode probe"
+        "Tetrode"
     ])
     
-    # Create minimal ephys assembly config for tetrode/Neuralynx system
+    # Create ephys assembly config matching procedures.json device naming
     ephys_config = EphysAssemblyConfig(
-        device_name="Custom tetrode probe",
+        device_name="Tetrode",
         manipulator=ManipulatorConfig(
             device_name="unknown",
             coordinate_system=CoordinateSystem(
-                name="Custom Tetrode Coordinate System",
-                origin="Tip",
+                name="BREGMA_ARI",
+                origin="Bregma",
                 axes=[
-                    Axis(name="X", direction="Left_to_right"),
-                    Axis(name="Y", direction="Back_to_front"),
-                    Axis(name="Z", direction="Up_to_down")
+                    Axis(name="AP", direction="Posterior_to_anterior"),
+                    Axis(name="ML", direction="Left_to_right"),
+                    Axis(name="SI", direction="Superior_to_inferior")
                 ],
                 axis_unit="millimeter"
             ),
             local_axis_positions=Translation(
-                translation=[0, 0, 0]  # Unknown positions
+                translation=[0, 0, 0]
             )
         ),
         probes=[],  # Empty for custom tetrodes
