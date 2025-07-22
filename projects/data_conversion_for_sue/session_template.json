@@ -1,0 +1,124 @@
+{
+   "active_mouse_platform": false,
+   "anaesthesia": null,
+   "animal_weight_post": "23.9", #TBU
+   "animal_weight_prior": "29.0", #TBU
+   "calibrations": [],
+   "data_streams": [],
+   "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/session.py",
+   "experimenter_full_name": [
+      "zhixiao su"
+   ],
+   "headframe_registration": null,
+   "iacuc_protocol": "MO19M432",
+   "maintenance": [],
+   "mouse_platform_name": "mouse_tube_foraging_hopkins",
+   "notes": "ephys in dynamic foraging task collected in hopkins",
+   "protocol_id": [
+      ""
+   ],
+   "reward_consumed_total": "796.0", #TBU
+   "reward_consumed_unit": "microliter",
+   "reward_delivery": null,
+   "rig_id": "hopkins_295F_nlyx",
+   "schema_version": "1.0.1",
+   "session_end_time": "2025-06-17T10:35:56.223365-07:00", #TBU
+   "session_start_time": "2025-06-17T08:35:53.727719-07:00", #TBU
+   "session_type": "Uncoupled Without Baiting",
+   "stimulus_epochs": [
+      {
+         "light_source_config": [],
+         "notes": "The duration of go cue is 500 ms. The frequency is 7500 Hz or 15000Hz. Amplitude is 60dB. ",
+         "output_parameters": {
+            "meta": {
+               "box": "hopkins_295F_nlyx",
+               "session_run_time_in_min": 120 # TBU
+            },
+            "performance": {
+               "foraging_efficiency": 0.7421219466716389, #TBU
+               "foraging_efficiency_with_actual_random_seed": 0.7743190661478598 #TBU
+            },
+            "task_parameters": {
+               "BlockBeta": "15",
+               "BlockMax": "35",
+               "BlockMin": "20",
+               "DelayBeta": "0.0",
+               "DelayMax": "1.0",
+               "DelayMin": "1.0",
+               "ITIBeta": "3.0",
+               "ITIMax": "15.0",
+               "ITIMin": "2.0",
+               "LeftValue_volume": "3.00",
+               "RightValue_volume": "3.00",
+               "Task": "Uncoupled Without Baiting",
+               "reward_probability": "0.1, 0.5, 0.9"
+            },
+            "water": {
+               "water_after_session": 0.75, #TBU
+               "water_day_total": 1.578, #TBU
+               "water_in_session_foraging": 0.796, #TBU
+               "water_in_session_manual": 0.03200000000000003, #TBU
+               "water_in_session_total": 0.8280000000000001  #TBU
+            }
+         },
+         "reward_consumed_during_epoch": "796.0", #TBU
+         "reward_consumed_unit": "microliter",
+         "script": null,
+         "session_number": null,
+         "software": [
+            {
+               "name": "dynamic-foraging-task",
+               "parameters": {},
+               "url": "hhttps://github.com/JeremiahYCohenLab/sueBehavior.git",
+               "version": null
+            }
+         ],
+         "speaker_config": {
+            "name": "Stimulus Speaker",
+            "volume": "60",
+            "volume_unit": "decibels"
+         },
+         "stimulus_device_names": [
+            "Stimulus Speaker"
+         ],
+         "stimulus_end_time": "2025-06-17T10:35:56.223365-07:00", #TBU
+         "stimulus_modalities": [
+            "Auditory", 
+            "Auditory"
+         ],
+         "stimulus_name": "The behavior auditory go cue",
+         "stimulus_parameters": [
+            {
+               "amplitude_modulation_frequency": 7500, #TBU
+               "bandpass_filter_type": null,
+               "bandpass_high_frequency": null,
+               "bandpass_low_frequency": null,
+               "bandpass_order": null,
+               "frequency_unit": "hertz",
+               "notes": null,
+               "sample_frequency": "96000",
+               "stimulus_name": "auditory go cue",
+               "stimulus_type": "Auditory Stimulation"
+            },
+            {
+                "amplitude_modulation_frequency": 15000, #TBU
+                "bandpass_filter_type": null,
+                "bandpass_high_frequency": null,
+                "bandpass_low_frequency": null,
+                "bandpass_order": null,
+                "frequency_unit": "hertz",
+                "notes": null,
+                "sample_frequency": "96000",
+                "stimulus_name": "auditory no go cue",
+                "stimulus_type": "Auditory Stimulation"
+            }
+         ],
+         "stimulus_start_time": "2025-06-17T08:35:53.727719-07:00", #TBU
+         "trials_finished": 687, #TBU
+         "trials_rewarded": 398, #TBU
+         "trials_total": 735 #TBU
+      }
+   ],
+   "subject_id": "791691", #TBU
+   "weight_unit": "gram"
+}
