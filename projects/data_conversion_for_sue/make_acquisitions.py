@@ -28,8 +28,9 @@ from aind_data_schema.core.acquisition import (
     EphysAssemblyConfig,
     ManipulatorConfig
 )
+from aind_data_schema.components.configs import SpeakerConfig
 from aind_data_schema_models.modalities import Modality
-from aind_data_schema_models.units import VolumeUnit
+from aind_data_schema_models.units import VolumeUnit, SoundIntensityUnit
 from aind_data_schema.components.coordinates import CoordinateSystem, Axis, Translation
 
 from utils import (
@@ -296,7 +297,23 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
         notes=f"{row['physiology_modality']} recording session"
     )
     
-    # Create stimulus epoch with only confirmed behavioral data
+    # Create stimulus epoch with speaker configuration for Hopkins sessions
+    stimulus_active_devices = []
+    stimulus_configurations = []
+    
+    # Add speaker configuration for Hopkins sessions (rig_id = hopkins_295F_nlyx)
+    if row["rig_id"] == "hopkins_295F_nlyx":
+        # Add the speaker device name to active devices
+        stimulus_active_devices.append("Stimulus Speaker")
+        
+        # Create a SpeakerConfig (not the Speaker device)
+        speaker_config = SpeakerConfig(
+            device_name="Stimulus Speaker",
+            volume=60,
+            volume_unit=SoundIntensityUnit.DB
+        )
+        stimulus_configurations.append(speaker_config)
+    
     stimulus_epoch = StimulusEpoch(
         stimulus_start_time=acquisition_start_time,
         stimulus_end_time=acquisition_end_time,
@@ -309,8 +326,8 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
             trials_finished=metrics.get("total_trials", None),  # Assuming all trials finished
             trials_rewarded=metrics["total_rewards"]
         ),
-        active_devices=[],  # Don't assume specific devices
-        configurations=[]
+        active_devices=stimulus_active_devices,
+        configurations=stimulus_configurations
     )
     
     # Create the acquisition object

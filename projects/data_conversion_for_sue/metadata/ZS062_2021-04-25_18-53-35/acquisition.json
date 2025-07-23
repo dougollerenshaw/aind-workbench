@@ -107,8 +107,17 @@
         "trials_rewarded": 198
       },
       "notes": null,
-      "active_devices": [],
-      "configurations": [],
+      "active_devices": [
+        "Stimulus Speaker"
+      ],
+      "configurations": [
+        {
+          "object_type": "Speaker config",
+          "device_name": "Stimulus Speaker",
+          "volume": 60.0,
+          "volume_unit": "decibels"
+        }
+      ],
       "training_protocol_name": null,
       "curriculum_status": null
     }
