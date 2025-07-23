@@ -24,6 +24,19 @@ def main():
     metadata_dir = Path("metadata")
     subjects_dir = metadata_dir / "subjects"
     procedures_dir = metadata_dir / "procedures"
+    instrument_dir = metadata_dir / "instrument" / "jhu_ephys"
+    instrument_file = instrument_dir / "instrument.json"
+    
+    # Load asset inventory to identify JHU sessions
+    asset_inventory = pd.read_csv("asset_inventory.csv")
+    jhu_sessions = set()
+    for _, row in asset_inventory.iterrows():
+        if row.get("collection_site") == "hopkins":
+            jhu_sessions.add(row["session_name"])
+    
+    print(f"Found {len(jhu_sessions)} JHU sessions in asset inventory")
+    if len(jhu_sessions) > 0:
+        print(f"Sample JHU session names: {list(jhu_sessions)[:5]}")  # Show first 5
     
     # Get all existing session folders
     session_folders = [d for d in metadata_dir.iterdir() if d.is_dir() and not d.name in ['subjects', 'procedures']]
@@ -49,13 +62,27 @@ def main():
                 procedure_files[subject_id] = json_file
     
     print(f"Found {len(subject_files)} subject files, {len(procedure_files)} procedure files")
+    print(f"JHU instrument file exists: {instrument_file.exists()}")
     
     copied = 0
     
     for session_folder in session_folders:
         # Extract subject ID from folder name (format: ZS062_2021-05-11_20-10-59)
         subject_id = session_folder.name.split('_')[0]
-        print(f"Processing {session_folder.name} (subject: {subject_id})...")
+        
+        # Convert folder name to asset inventory format
+        # Folder format: ZS062_2021-05-11_20-10-59
+        # Asset inventory format: mZS062d20210511
+        session_name_parts = session_folder.name.split('_')
+        if len(session_name_parts) >= 2:
+            # Convert date from YYYY-MM-DD to YYYYMMDD
+            date_part = session_name_parts[1].replace('-', '')
+            session_name = f"m{subject_id}d{date_part}"
+        else:
+            session_name = session_folder.name
+        
+        print(f"Processing {session_folder.name} (subject: {subject_id}, session: {session_name})...")
+        print(f"  Session in JHU list: {session_name in jhu_sessions}")
         
         # Copy subject.json
         if subject_id in subject_files:
@@ -71,6 +98,14 @@ def main():
             if not procedure_dest.exists():
                 shutil.copy2(procedure_files[subject_id], procedure_dest)
                 print(f"  ✓ Copied procedures.json from {procedure_files[subject_id].name}")
+                copied += 1
+        
+        # Copy instrument.json only for JHU sessions
+        if session_name in jhu_sessions and instrument_file.exists():
+            instrument_dest = session_folder / "instrument.json"
+            if not instrument_dest.exists():
+                shutil.copy2(instrument_file, instrument_dest)
+                print(f"  ✓ Copied instrument.json from {instrument_file.name} (JHU session)")
                 copied += 1
     
     print(f"\nCopied {copied} files total")

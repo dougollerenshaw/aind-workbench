@@ -161,7 +161,7 @@
     "animal_weight_post": null,
     "weight_unit": "gram",
     "anaesthesia": null,
-    "mouse_platform_name": "Unknown",
+    "mouse_platform_name": "mouse_tube_foraging_hopkins",
     "reward_consumed_total": "0.675",
     "reward_consumed_unit": "milliliter"
   }

@@ -323,7 +323,7 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
     
     # Create subject details with known information only
     subject_details = AcquisitionSubjectDetails(
-        mouse_platform_name="Unknown",  # Required field, use placeholder since we don't have this info
+        mouse_platform_name="mouse_tube_foraging_hopkins",  # Hopkins foraging rig platform
         reward_consumed_total=metrics["reward_volume_microliters"] / 1000,  # Convert μL to mL
         reward_consumed_unit=VolumeUnit.ML,
         animal_weight_prior=(
