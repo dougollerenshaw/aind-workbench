@@ -157,9 +157,12 @@ def get_modality_from_physiology(physiology_modality: str) -> List[Modality]:
     return modalities
 
 
-def create_hopkins_foraging_code() -> Code:
+def create_hopkins_foraging_code(reward_size: float = 3.0) -> Code:
     """
     Create code configuration for Hopkins dynamic foraging task.
+    
+    Args:
+        reward_size: Reward volume in microliters (from session details)
     
     Returns:
         Code: Code object with software, task parameters, and stimulus parameters
@@ -175,8 +178,8 @@ def create_hopkins_foraging_code() -> Code:
         "ITIBeta": "3.0",
         "ITIMax": "15.0",
         "ITIMin": "2.0",
-        "LeftValue_volume": "3.00",
-        "RightValue_volume": "3.00",
+        "LeftValue_volume": f"{reward_size:.2f}",
+        "RightValue_volume": f"{reward_size:.2f}",
         "Task": "Uncoupled Without Baiting",
         "reward_probability": "0.1, 0.5, 0.9"
     }
@@ -210,17 +213,19 @@ def add_ephys_config(active_devices: List[str], configurations: List) -> None:
         active_devices: List to append device names to
         configurations: List to append device configurations to
     """
-    # Add Neuralynx recording system and tetrode probe
+    # Add ephys assembly (must match instrument.json device names exactly)
     active_devices.extend([
-        "Neuralynx recording system",
-        "Tetrode"
+        "Neuralynx Ephys Assembly",
+        "Pupil camera",
+        "Arduino", 
+        "Lick spout assembly"
     ])
     
-    # Create ephys assembly config matching procedures.json device naming
+    # Create ephys assembly config - device names must match instrument.json exactly
     ephys_config = EphysAssemblyConfig(
-        device_name="Tetrode",
+        device_name="Neuralynx Ephys Assembly",
         manipulator=ManipulatorConfig(
-            device_name="unknown",
+            device_name="Drive system",
             coordinate_system=CoordinateSystem(
                 name="BREGMA_ARI",
                 origin="Bregma",
@@ -343,11 +348,11 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
     )
     
     # Hopkins sessions always have speaker configuration
-    stimulus_active_devices = ["Stimulus Speaker"]
+    stimulus_active_devices = ["Speaker"]
     
     # Create a SpeakerConfig for Hopkins auditory stimuli
     speaker_config = SpeakerConfig(
-        device_name="Stimulus Speaker",
+        device_name="Speaker",
         volume=60,
         volume_unit=SoundIntensityUnit.DB
     )
@@ -357,7 +362,7 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
         stimulus_start_time=acquisition_start_time,
         stimulus_end_time=acquisition_end_time,
         stimulus_name="Behavioral foraging task",
-        code=create_hopkins_foraging_code(),
+        code=create_hopkins_foraging_code(reward_size),
         stimulus_modalities=["Auditory"],  # Assuming auditory cues
         performance_metrics=PerformanceMetrics(
             reward_consumed_during_epoch=str(metrics["reward_volume_microliters"]),
@@ -421,6 +426,10 @@ def process_acquisitions(
     skip_count = 0
     error_count = 0
     
+    # Track problematic sessions for detailed reporting
+    skipped_sessions = []
+    error_sessions = []
+    
     for idx, row in inventory_df.iterrows():
         session_name = row["session_name"]
         original_subject_id = row["subject_id"]
@@ -428,19 +437,25 @@ def process_acquisitions(
         
         # Skip if any required fields are missing
         if pd.isna(original_subject_id) or pd.isna(collection_date):
-            print(f"  Skipping {session_name} - missing required fields")
+            reason = f"missing required fields (subject_id: {original_subject_id}, collection_date: {collection_date})"
+            print(f"  Skipping {session_name} - {reason}")
+            skipped_sessions.append((session_name, reason))
             skip_count += 1
             continue
         
         # Skip if vast_path is missing (needed to check if session exists)
         if pd.isna(row["vast_path"]):
-            print(f"  Skipping {session_name} - missing vast_path")
+            reason = "missing vast_path"
+            print(f"  Skipping {session_name} - {reason}")
+            skipped_sessions.append((session_name, reason))
             skip_count += 1
             continue
             
         # Check if the session path exists on the file system
         if not session_path_exists(row["vast_path"], session_name):
-            print(f"  Skipping {session_name} - session path does not exist")
+            reason = f"neuralynx/session path does not exist: {row['vast_path']}"
+            print(f"  Skipping {session_name} - {reason}")
+            skipped_sessions.append((session_name, reason))
             skip_count += 1
             continue
             
@@ -472,7 +487,9 @@ def process_acquisitions(
             success_count += 1
             
         except Exception as e:
-            print(f"    ✗ Error processing {session_name}: {str(e)}")
+            error_msg = str(e)
+            print(f"    ✗ Error processing {session_name}: {error_msg}")
+            error_sessions.append((session_name, error_msg))
             error_count += 1
     
     # Print summary
@@ -482,10 +499,24 @@ def process_acquisitions(
     print(f"Total sessions in inventory: {len(inventory_df)}")
     print(f"Successfully created: {success_count}")
     print(f"Skipped: {skip_count}")
-    print(f"  - Missing required fields: (see individual messages)")
-    print(f"  - Session path does not exist: (see individual messages)")
     print(f"Errors: {error_count}")
     print(f"Files saved to experiment folders in: {metadata_dir}")
+    
+    # Detailed reporting of problematic sessions
+    if skipped_sessions:
+        print(f"\n" + "-" * 40)
+        print(f"SKIPPED SESSIONS ({len(skipped_sessions)}):")
+        print(f"-" * 40)
+        for session_name, reason in skipped_sessions:
+            print(f"  {session_name}: {reason}")
+    
+    if error_sessions:
+        print(f"\n" + "-" * 40)
+        print(f"ERROR SESSIONS ({len(error_sessions)}):")
+        print(f"-" * 40)
+        for session_name, error_msg in error_sessions:
+            print(f"  {session_name}: {error_msg}")
+    
     print(f"\nNote: Only sessions with neuralynx/session structure were processed")
 
 

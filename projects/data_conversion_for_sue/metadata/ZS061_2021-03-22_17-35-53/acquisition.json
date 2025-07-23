@@ -37,16 +37,18 @@
       "code": null,
       "notes": "ephys recording session",
       "active_devices": [
-        "Neuralynx recording system",
-        "Tetrode"
+        "Neuralynx Ephys Assembly",
+        "Pupil camera",
+        "Arduino",
+        "Lick spout assembly"
       ],
       "configurations": [
         {
           "object_type": "Ephys assembly config",
-          "device_name": "Tetrode",
+          "device_name": "Neuralynx Ephys Assembly",
           "manipulator": {
             "object_type": "Manipulator config",
-            "device_name": "unknown",
+            "device_name": "Drive system",
             "coordinate_system": {
               "object_type": "Coordinate system",
               "name": "BREGMA_ARI",
@@ -139,12 +141,12 @@
       },
       "notes": null,
       "active_devices": [
-        "Stimulus Speaker"
+        "Speaker"
       ],
       "configurations": [
         {
           "object_type": "Speaker config",
-          "device_name": "Stimulus Speaker",
+          "device_name": "Speaker",
           "volume": 60.0,
           "volume_unit": "decibels"
         }
