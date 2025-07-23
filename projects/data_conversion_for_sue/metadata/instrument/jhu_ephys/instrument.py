@@ -150,38 +150,3 @@ instrument = r.Instrument(
 
 if __name__ == "__main__":
     instrument.write_standard_file()
-
-
-###
-# daq arduino Uno
-
-
-
-#     pinMode(CSplus, OUTPUT); digitalWrite(CSplus, LOW);
-#     pinMode(CSminus, OUTPUT); digitalWrite(CSminus, LOW);
-#     pinMode(odorBlank, OUTPUT); digitalWrite(odorBlank, LOW);
-#     pinMode(waterR, OUTPUT); digitalWrite(waterR, LOW);
-#     pinMode(waterL, OUTPUT); digitalWrite(waterL, LOW);    
-#     pinMode(solRight, OUTPUT); digitalWrite(solRight, LOW);
-#     pinMode(solLeft, OUTPUT); digitalWrite(solLeft, LOW);
-#     pinMode(led, OUTPUT); digitalWrite(led, LOW);
-#     pinMode(cueSync, OUTPUT); digitalWrite(cueSync, LOW);
-#     pinMode(lickSync, OUTPUT); digitalWrite(lickSync, LOW);
-#     // input pints
-#     pinMode(lickR, INPUT);
-#     pinMode(lickL, INPUT);
-
-# CSplus and minus connects to speaker; 
-# waterR/L connected to water solenoid; 
-# lickR/L for lick Janelia lick sensors; 
-# solRight/Left for lick retraction control;
-
- 
- 
-# }
-
-# #ephys: 
-# no tongue camera
-# no fiber photometry
-# ephys neuralynx (daq) - Sue send ID
-# no leds
