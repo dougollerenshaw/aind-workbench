@@ -107,11 +107,19 @@ def fill_behavioral_metrics(row):
     """
     session_name = row["session_name"]
     vast_path = row["vast_path"]
+    collection_site = row.get("collection_site", "")
 
     print(f"Processing session: {session_name}")
 
     # Initialize return dictionary with current values
     updated_values = {}
+    
+    # Set IACUC protocol based on collection site
+    if collection_site.lower() == "hopkins":
+        updated_values["IACUC_PROTOCOL"] = "MO19M432"
+    elif collection_site.lower() == "aind":
+        updated_values["IACUC_PROTOCOL"] = "2115"  # AIND's IACUC protocol
+    # Leave empty for other sites or if collection_site is not specified
 
     # Check if vast_path is valid
     if pd.isna(vast_path) or not isinstance(vast_path, str):
