@@ -34,6 +34,7 @@ from aind_data_schema.core.acquisition import (
     ManipulatorConfig
 )
 from aind_data_schema.components.configs import SpeakerConfig
+from aind_data_schema.components.identifiers import Code
 from aind_data_schema_models.modalities import Modality
 from aind_data_schema_models.units import VolumeUnit, SoundIntensityUnit
 from aind_data_schema.components.coordinates import CoordinateSystem, Axis, Translation
@@ -154,6 +155,51 @@ def get_modality_from_physiology(physiology_modality: str) -> List[Modality]:
         modalities.append(Modality.ECEPHYS)
     
     return modalities
+
+
+def create_hopkins_foraging_code() -> Code:
+    """
+    Create code configuration for Hopkins dynamic foraging task.
+    
+    Returns:
+        Code: Code object with software, task parameters, and stimulus parameters
+    """
+    # Task parameters from session template
+    task_parameters = {
+        "BlockBeta": "15",
+        "BlockMax": "35", 
+        "BlockMin": "20",
+        "DelayBeta": "0.0",
+        "DelayMax": "1.0",
+        "DelayMin": "1.0", 
+        "ITIBeta": "3.0",
+        "ITIMax": "15.0",
+        "ITIMin": "2.0",
+        "LeftValue_volume": "3.00",
+        "RightValue_volume": "3.00",
+        "Task": "Uncoupled Without Baiting",
+        "reward_probability": "0.1, 0.5, 0.9"
+    }
+    
+    # Stimulus parameters from session template
+    stimulus_parameters = {
+        "go_cue_frequency": 7500,
+        "no_go_cue_frequency": 15000,
+        "sample_frequency": 96000,
+        "frequency_unit": "hertz",
+        "stimulus_duration_ms": 500,
+        "amplitude_db": 60
+    }
+    
+    # Combine task and stimulus parameters
+    all_parameters = {**task_parameters, **stimulus_parameters}
+    
+    return Code(
+        name="dynamic-foraging-task",
+        version=None,  # Version not specified in session template
+        url="https://github.com/JeremiahYCohenLab/sueBehavior.git",
+        parameters=all_parameters
+    )
 
 
 def add_ephys_config(active_devices: List[str], configurations: List) -> None:
@@ -286,7 +332,7 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
         ),
     )
     
-    # Create data stream with minimal, known information
+    # Create data stream (code belongs in stimulus epoch, not data stream)
     data_stream = DataStream(
         stream_start_time=acquisition_start_time,
         stream_end_time=acquisition_end_time,
@@ -311,6 +357,7 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
         stimulus_start_time=acquisition_start_time,
         stimulus_end_time=acquisition_end_time,
         stimulus_name="Behavioral foraging task",
+        code=create_hopkins_foraging_code(),
         stimulus_modalities=["Auditory"],  # Assuming auditory cues
         performance_metrics=PerformanceMetrics(
             reward_consumed_during_epoch=str(metrics["reward_volume_microliters"]),
@@ -342,7 +389,7 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
         data_streams=[data_stream],
         stimulus_epochs=[stimulus_epoch],
         subject_details=subject_details,
-        experimenters=[investigator.strip() for investigator in row["investigators"].split(",") if investigator.strip()],
+        experimenters=["zhixiao su"],  # Sue Su's real name
         ethics_review_id=["MO19M432"],  # Hopkins IACUC protocol
         notes=enhanced_notes
     )
@@ -353,8 +400,7 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
 def process_acquisitions(
     inventory_df: pd.DataFrame,
     base_path: str,
-    output_base_dir: Path,
-    force_overwrite: bool = False
+    output_base_dir: Path
 ):
     """
     Process acquisitions from the inventory and create acquisition.json files.
@@ -363,7 +409,6 @@ def process_acquisitions(
         inventory_df: DataFrame containing session inventory
         base_path: Base path to the data files
         output_base_dir: Base directory for saving files
-        force_overwrite: Whether to overwrite existing files
     """
     # Create metadata output directory
     metadata_dir = output_base_dir / "metadata"
@@ -416,15 +461,7 @@ def process_acquisitions(
                 acquisition.acquisition_start_time
             )
             
-            # Check if file already exists
-            output_path = experiment_dir / "acquisition.json"
-            
-            if output_path.exists() and not force_overwrite:
-                print(f"    Skipping {session_name} - file already exists: {output_path}")
-                skip_count += 1
-                continue
-            
-            # Save to file in the experiment's metadata directory
+            # Save to file in the experiment's metadata directory (always overwrite)
             saved_path = save_metadata_file(
                 acquisition.model_dump(mode='json'),
                 experiment_dir,
@@ -445,7 +482,6 @@ def process_acquisitions(
     print(f"Total sessions in inventory: {len(inventory_df)}")
     print(f"Successfully created: {success_count}")
     print(f"Skipped: {skip_count}")
-    print(f"  - Already exist: (see individual messages)")
     print(f"  - Missing required fields: (see individual messages)")
     print(f"  - Session path does not exist: (see individual messages)")
     print(f"Errors: {error_count}")
@@ -469,23 +505,6 @@ def main():
         type=str,
         default=None,
         help="Output directory for acquisition files (default: same directory as script)",
-    )
-    parser.add_argument(
-        "--force-overwrite",
-        action="store_true",
-        help="Force overwrite existing acquisition.json files (default: skip existing files)",
-    )
-    parser.add_argument(
-        "--start-row",
-        type=int,
-        default=0,
-        help="Start row index in the filtered JHU ephys sessions (0-based, default: 0)",
-    )
-    parser.add_argument(
-        "--end-row",
-        type=int,
-        default=None,
-        help="End row index in the filtered JHU ephys sessions (0-based, exclusive, default: process all rows)",
     )
     
     args = parser.parse_args()
@@ -518,28 +537,10 @@ def main():
         print("No JHU ephys sessions found in asset inventory")
         return
     
-    # Apply row range filtering to the filtered dataset
-    start_row = args.start_row
-    end_row = args.end_row if args.end_row is not None else len(inventory_df)
-    
-    if start_row < 0 or start_row >= len(inventory_df):
-        print(f"Error: start-row {start_row} is out of range (0 to {len(inventory_df)-1})")
-        return
-    
-    if end_row > len(inventory_df):
-        print(f"Warning: end-row {end_row} is beyond the filtered data, using {len(inventory_df)}")
-        end_row = len(inventory_df)
-    
-    if start_row >= end_row:
-        print(f"Error: start-row ({start_row}) must be less than end-row ({end_row})")
-        return
-    
-    # Slice the dataframe
-    inventory_df = inventory_df.iloc[start_row:end_row]
-    print(f"Processing rows {start_row} to {end_row-1} ({len(inventory_df)} JHU ephys sessions)")
+    print(f"Processing all {len(inventory_df)} JHU ephys sessions")
     
     # Process sessions
-    process_acquisitions(inventory_df, args.data_path, output_dir, args.force_overwrite)
+    process_acquisitions(inventory_df, args.data_path, output_dir)
 
 
 if __name__ == "__main__":

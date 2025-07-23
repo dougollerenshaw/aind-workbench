@@ -7,8 +7,7 @@
   "acquisition_start_time": "2021-04-06T14:30:26-04:00",
   "acquisition_end_time": "2021-04-06T15:41:44.652000-04:00",
   "experimenters": [
-    "Sue Su",
-    "Jeremiah Cohen"
+    "zhixiao su"
   ],
   "protocol_id": null,
   "ethics_review_id": [
@@ -93,7 +92,39 @@
       "stimulus_start_time": "2021-04-06T14:30:26-04:00",
       "stimulus_end_time": "2021-04-06T15:41:44.652000-04:00",
       "stimulus_name": "Behavioral foraging task",
-      "code": null,
+      "code": {
+        "object_type": "Code",
+        "url": "https://github.com/JeremiahYCohenLab/sueBehavior.git",
+        "name": "dynamic-foraging-task",
+        "version": null,
+        "container": null,
+        "run_script": null,
+        "language": null,
+        "language_version": null,
+        "input_data": null,
+        "parameters": {
+          "BlockBeta": "15",
+          "BlockMax": "35",
+          "BlockMin": "20",
+          "DelayBeta": "0.0",
+          "DelayMax": "1.0",
+          "DelayMin": "1.0",
+          "ITIBeta": "3.0",
+          "ITIMax": "15.0",
+          "ITIMin": "2.0",
+          "LeftValue_volume": "3.00",
+          "RightValue_volume": "3.00",
+          "Task": "Uncoupled Without Baiting",
+          "reward_probability": "0.1, 0.5, 0.9",
+          "go_cue_frequency": 7500,
+          "no_go_cue_frequency": 15000,
+          "sample_frequency": 96000,
+          "frequency_unit": "hertz",
+          "stimulus_duration_ms": 500,
+          "amplitude_db": 60
+        },
+        "core_dependency": null
+      },
       "stimulus_modalities": [
         "Auditory"
       ],
