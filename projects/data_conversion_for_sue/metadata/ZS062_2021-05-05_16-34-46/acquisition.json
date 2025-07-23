@@ -11,8 +11,10 @@
     "Jeremiah Cohen"
   ],
   "protocol_id": null,
-  "ethics_review_id": null,
-  "instrument_id": "hopkins_ephys",
+  "ethics_review_id": [
+    "MO19M432"
+  ],
+  "instrument_id": "hopkins_295F_nlyx",
   "acquisition_type": "Behavioral foraging",
   "notes": "ephys recording session for subject ZS062. tetrode depth = 4.579. session_notes = 'none'",
   "coordinate_system": null,

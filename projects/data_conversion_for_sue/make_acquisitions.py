@@ -323,6 +323,11 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
     else:
         enhanced_notes = base_notes
     
+    # Get IACUC protocol from CSV if available
+    ethics_review_id = None
+    if pd.notna(row.get("IACUC_PROTOCOL")):
+        ethics_review_id = [str(row["IACUC_PROTOCOL"])]  # Convert to list as expected by schema
+    
     acquisition = Acquisition(
         subject_id=str(subject_id),
         acquisition_start_time=acquisition_start_time,
@@ -333,6 +338,7 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
         stimulus_epochs=[stimulus_epoch],
         subject_details=subject_details,
         experimenters=[investigator.strip() for investigator in row["investigators"].split(",") if investigator.strip()],
+        ethics_review_id=ethics_review_id,
         notes=enhanced_notes
     )
     
