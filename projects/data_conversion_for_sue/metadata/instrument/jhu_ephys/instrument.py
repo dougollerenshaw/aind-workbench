@@ -12,6 +12,7 @@ from aind_data_schema.components.connections import Connection
 from aind_data_schema.components.identifiers import Software
 from aind_data_schema.components.coordinates import CoordinateSystemLibrary
 from aind_data_schema_models.coordinates import AnatomicalRelative
+from aind_data_schema_models.units import FrequencyUnit
 
 camera_assembly_1 = d.CameraAssembly(
     name="Pupil camera assembly",
@@ -22,6 +23,7 @@ camera_assembly_1 = d.CameraAssembly(
         manufacturer=Organization.THORLABS,
         data_interface="USB",
         frame_rate=30,
+        frame_rate_unit=FrequencyUnit.HZ,
         recording_software=Software(name="ThorCam"),
     ),
     lens=d.Lens(
@@ -31,99 +33,11 @@ camera_assembly_1 = d.CameraAssembly(
     ),
 )
 
-camera_assembly_2 = d.CameraAssembly(
-    name="Tongue camera assembly",
-    target=d.CameraTarget.TONGUE,
-    relative_position=[AnatomicalRelative.LEFT],
-    camera=d.Camera(
-        name="Tongue camera",
-        manufacturer=Organization.BASLER,
-        data_interface="USB",
-        model="acA640-750um",
-        serial_number="24621482",
-        frame_rate=550,
-    ),
-    lens=d.Lens(
-        name="Gold Telecentric lens",
-        manufacturer=Organization.EDMUND_OPTICS,
-        model="55-349",
-    ),
-)
-
 patch_cord = d.FiberPatchCord(
     name="Fiber optic patch cord",
     manufacturer=d.Organization.DORIC, # confirm
     core_diameter=200, # confirm
     numerical_aperture=0.37, # confirm
-)
-
-light_sources = [
-    d.LightEmittingDiode(
-        name="470nm LED",
-        manufacturer=Organization.THORLABS,
-        model="M470F3",
-        wavelength=470,
-    ),
-    d.LightEmittingDiode(
-        name="415nm LED",
-        manufacturer=Organization.THORLABS,
-        model="M415F3",
-        wavelength=415,
-    ),
-    d.LightEmittingDiode(
-        name="565nm LED",
-        manufacturer=Organization.THORLABS,
-        model="M565F3",
-        wavelength=565,
-    ),
-    d.LightEmittingDiode(
-        name="810nm LED",
-        manufacturer=Organization.THORLABS,
-        model="M810L5",
-        wavelength=810,
-    )
-]
-
-detector_1 = d.Detector(
-    name="Green CMOS",
-    serial_number="21396991",
-    manufacturer=Organization.FLIR,
-    model="BFS-U3-20S40M",
-    detector_type="Camera",
-    data_interface="USB",
-    cooling="Air",
-    immersion="air",
-    bin_width=4,
-    bin_height=4,
-    bin_mode="Additive",
-    crop_offset_x=0,
-    crop_offset_y=0,
-    crop_width=200,
-    crop_height=200,
-    gain=2,
-    chroma="Monochrome",
-    bit_depth=16,
-)
-
-detector_2 = d.Detector(
-    name="Red CMOS",
-    serial_number="21396991",
-    manufacturer=Organization.FLIR,
-    model="BFS-U3-20S40M",
-    detector_type="Camera",
-    data_interface="USB",
-    cooling="Air",
-    immersion="air",
-    bin_width=4,
-    bin_height=4,
-    bin_mode="Additive",
-    crop_offset_x=0,
-    crop_offset_y=0,
-    crop_width=200,
-    crop_height=200,
-    gain=2,
-    chroma="Monochrome",
-    bit_depth=16,
 )
 
 lick_spout_assembly = d.LickSpoutAssembly( 
@@ -176,34 +90,58 @@ daq = d.DAQDevice(
     data_interface="USB",
 )
 
+ephys_daq = d.DAQDevice(
+    name="Neuralynx",
+    manufacturer=Organization.OTHER,
+    model="unknown",
+    data_interface="Other",
+    notes="Neuralynx ephys recording system"
+)
+
+# Create an ephys assembly for the ECEPHYS modality
+ephys_assembly = d.EphysAssembly(
+    name="Neuralynx Ephys Assembly",
+    assembly_type="Tetrode array",
+    probes=[
+        d.EphysProbe(
+            name="Tetrode array",
+            probe_model="Custom tetrodes",
+            contact_count=32,  # Adjust based on actual tetrode count
+        )
+    ],
+    manipulator=d.Manipulator(
+        name="Drive system",
+        manufacturer=Organization.OTHER,
+        notes="Custom drive system for tetrode positioning"
+    ),
+)
+
 instrument = r.Instrument(
-    location="321", 
-    instrument_id="FIP_Sue",
+    location="JHU Room 295F", 
+    instrument_id="hopkins_295F_nlyx",
     modification_date=date(2021, 2, 10),
-    modalities=[Modality.FIB, Modality.BEHAVIOR_VIDEOS, Modality.BEHAVIOR],
+    modalities=[Modality.ECEPHYS, Modality.BEHAVIOR_VIDEOS, Modality.BEHAVIOR],
     coordinate_system=CoordinateSystemLibrary.BREGMA_ARI,
     components=[
         camera_assembly_1,
-        camera_assembly_2,
         patch_cord,
-        *light_sources,
-        detector_1,
-        detector_2,
         lick_spout_assembly,
         speaker,
         tube,
-        daq
+        daq,
+        ephys_daq,
+        ephys_assembly
     ],
     connections=[
         Connection(
             source_device="Arduino",
             source_port="10",
-            target_device="Solenoid Right",
+            target_device="Solenoid right",
         ),
         Connection(
             source_device="Arduino",
             source_port="11",
-            target_device="Solenoid Left",
+            target_device="Solenoid left",
         ),
         Connection(
             source_device="Arduino",
@@ -218,12 +156,12 @@ instrument = r.Instrument(
         Connection(
             source_device="Janelia_Lick_Detector Right",
             target_device="Arduino",
-            target_port=3,
+            target_port="3",
         ),
         Connection(
             source_device="Janelia_Lick_Detector Left",
             target_device="Arduino",
-            target_port=4,
+            target_port="4",
         ),
     ],
     notes="Instrument made retroactively from incomplete records."
