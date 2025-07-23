@@ -90,17 +90,11 @@ daq = d.DAQDevice(
     data_interface="USB",
 )
 
-ephys_daq = d.DAQDevice(
-    name="Neuralynx",
-    manufacturer=Organization.OTHER,
-    model="unknown",
-    data_interface="Other",
-    notes="Neuralynx ephys recording system"
-)
-
 # Create an ephys assembly for the ECEPHYS modality
 ephys_assembly = d.EphysAssembly(
     name="Neuralynx Ephys Assembly",
+    manufacturer=Organization.NEURALYNX,
+    notes="Neuralynx Cheetah ephys recording system, 32 kHz sampling rate",
     probes=[
         d.EphysProbe(
             name="Tetrode array",
@@ -127,7 +121,6 @@ instrument = r.Instrument(
         speaker,
         tube,
         daq,
-        ephys_daq,
         ephys_assembly
     ],
     connections=[
