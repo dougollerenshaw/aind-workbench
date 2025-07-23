@@ -1,4 +1,4 @@
-"""Sue's Fiber Photometry Rig"""
+"""Sue's JHU Ephys Rig"""
 
 from datetime import date
 
