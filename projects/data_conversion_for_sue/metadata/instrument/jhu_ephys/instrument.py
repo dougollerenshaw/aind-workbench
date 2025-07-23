@@ -33,13 +33,6 @@ camera_assembly_1 = d.CameraAssembly(
     ),
 )
 
-patch_cord = d.FiberPatchCord(
-    name="Fiber optic patch cord",
-    manufacturer=d.Organization.DORIC, # confirm
-    core_diameter=200, # confirm
-    numerical_aperture=0.37, # confirm
-)
-
 lick_spout_assembly = d.LickSpoutAssembly( 
     name="Lick spout assembly",
     lick_spouts=[
@@ -93,8 +86,6 @@ daq = d.DAQDevice(
 # Create an ephys assembly for the ECEPHYS modality
 ephys_assembly = d.EphysAssembly(
     name="Neuralynx Ephys Assembly",
-    manufacturer=Organization.NEURALYNX,
-    notes="Neuralynx Cheetah ephys recording system, 32 kHz sampling rate",
     probes=[
         d.EphysProbe(
             name="Tetrode array",
@@ -116,7 +107,6 @@ instrument = r.Instrument(
     coordinate_system=CoordinateSystemLibrary.BREGMA_ARI,
     components=[
         camera_assembly_1,
-        patch_cord,
         lick_spout_assembly,
         speaker,
         tube,
@@ -159,9 +149,7 @@ instrument = r.Instrument(
 )
 
 if __name__ == "__main__":
-    serialized = instrument.model_dump_json()
-    deserialized = r.Instrument.model_validate_json(serialized)
-    deserialized.write_standard_file()
+    instrument.write_standard_file()
 
 
 ###

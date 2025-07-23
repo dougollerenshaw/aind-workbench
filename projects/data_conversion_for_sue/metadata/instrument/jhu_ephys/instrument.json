@@ -167,23 +167,6 @@
          "filter": null
       },
       {
-         "object_type": "Fiber patch cord",
-         "name": "Fiber optic patch cord",
-         "serial_number": null,
-         "manufacturer": {
-            "name": "Doric",
-            "abbreviation": null,
-            "registry": "Research Organization Registry (ROR)",
-            "registry_identifier": "059n53q30"
-         },
-         "model": null,
-         "additional_settings": null,
-         "notes": null,
-         "core_diameter": "200",
-         "numerical_aperture": "0.37",
-         "photobleaching_date": null
-      },
-      {
          "object_type": "Lick spout assembly",
          "name": "Lick spout assembly",
          "lick_spouts": [
@@ -314,24 +297,6 @@
          "additional_settings": null,
          "notes": null,
          "data_interface": "USB",
-         "channels": [],
-         "firmware_version": null,
-         "hardware_version": null
-      },
-      {
-         "object_type": "DAQ device",
-         "name": "Neuralynx",
-         "serial_number": null,
-         "manufacturer": {
-            "name": "Other",
-            "abbreviation": null,
-            "registry": null,
-            "registry_identifier": null
-         },
-         "model": "unknown",
-         "additional_settings": null,
-         "notes": "Neuralynx ephys recording system",
-         "data_interface": "Other",
          "channels": [],
          "firmware_version": null,
          "hardware_version": null
