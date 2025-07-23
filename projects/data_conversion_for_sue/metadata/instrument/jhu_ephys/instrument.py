@@ -101,12 +101,10 @@ ephys_daq = d.DAQDevice(
 # Create an ephys assembly for the ECEPHYS modality
 ephys_assembly = d.EphysAssembly(
     name="Neuralynx Ephys Assembly",
-    assembly_type="Tetrode array",
     probes=[
         d.EphysProbe(
             name="Tetrode array",
-            probe_model="Custom tetrodes",
-            contact_count=32,  # Adjust based on actual tetrode count
+            probe_model="Custom",
         )
     ],
     manipulator=d.Manipulator(

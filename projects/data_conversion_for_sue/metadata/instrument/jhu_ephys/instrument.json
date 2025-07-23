@@ -1,0 +1,371 @@
+{
+   "object_type": "Instrument",
+   "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/instrument.py",
+   "schema_version": "2.0.38",
+   "location": "JHU Room 295F",
+   "instrument_id": "hopkins_295F_nlyx",
+   "modification_date": "2021-02-10",
+   "modalities": [
+      {
+         "name": "Behavior",
+         "abbreviation": "behavior"
+      },
+      {
+         "name": "Behavior videos",
+         "abbreviation": "behavior-videos"
+      },
+      {
+         "name": "Extracellular electrophysiology",
+         "abbreviation": "ecephys"
+      }
+   ],
+   "calibrations": null,
+   "coordinate_system": {
+      "object_type": "Coordinate system",
+      "name": "BREGMA_ARI",
+      "origin": "Bregma",
+      "axes": [
+         {
+            "object_type": "Axis",
+            "name": "AP",
+            "direction": "Posterior_to_anterior"
+         },
+         {
+            "object_type": "Axis",
+            "name": "ML",
+            "direction": "Left_to_right"
+         },
+         {
+            "object_type": "Axis",
+            "name": "SI",
+            "direction": "Superior_to_inferior"
+         }
+      ],
+      "axis_unit": "millimeter"
+   },
+   "temperature_control": null,
+   "notes": "Instrument made retroactively from incomplete records.",
+   "connections": [
+      {
+         "object_type": "Connection",
+         "source_device": "Arduino",
+         "source_port": "10",
+         "target_device": "Solenoid right",
+         "target_port": null,
+         "send_and_receive": false
+      },
+      {
+         "object_type": "Connection",
+         "source_device": "Arduino",
+         "source_port": "11",
+         "target_device": "Solenoid left",
+         "target_port": null,
+         "send_and_receive": false
+      },
+      {
+         "object_type": "Connection",
+         "source_device": "Arduino",
+         "source_port": "5",
+         "target_device": "Speaker",
+         "target_port": null,
+         "send_and_receive": false
+      },
+      {
+         "object_type": "Connection",
+         "source_device": "Arduino",
+         "source_port": "7",
+         "target_device": "Speaker",
+         "target_port": null,
+         "send_and_receive": false
+      },
+      {
+         "object_type": "Connection",
+         "source_device": "Janelia_Lick_Detector Right",
+         "source_port": null,
+         "target_device": "Arduino",
+         "target_port": "3",
+         "send_and_receive": false
+      },
+      {
+         "object_type": "Connection",
+         "source_device": "Janelia_Lick_Detector Left",
+         "source_port": null,
+         "target_device": "Arduino",
+         "target_port": "4",
+         "send_and_receive": false
+      }
+   ],
+   "components": [
+      {
+         "object_type": "Camera assembly",
+         "relative_position": [
+            "Anterior",
+            "Left"
+         ],
+         "coordinate_system": null,
+         "transform": null,
+         "name": "Pupil camera assembly",
+         "target": "Eye",
+         "camera": {
+            "object_type": "Camera",
+            "name": "Pupil camera",
+            "serial_number": null,
+            "manufacturer": {
+               "name": "Thorlabs",
+               "abbreviation": null,
+               "registry": "Research Organization Registry (ROR)",
+               "registry_identifier": "04gsnvb07"
+            },
+            "model": null,
+            "additional_settings": null,
+            "notes": null,
+            "detector_type": "Camera",
+            "data_interface": "USB",
+            "cooling": "No cooling",
+            "frame_rate": "30",
+            "frame_rate_unit": "hertz",
+            "immersion": null,
+            "chroma": null,
+            "sensor_width": null,
+            "sensor_height": null,
+            "size_unit": "pixel",
+            "sensor_format": null,
+            "sensor_format_unit": null,
+            "bit_depth": null,
+            "bin_mode": "No binning",
+            "bin_width": null,
+            "bin_height": null,
+            "bin_unit": "pixel",
+            "gain": null,
+            "crop_offset_x": null,
+            "crop_offset_y": null,
+            "crop_width": null,
+            "crop_height": null,
+            "crop_unit": "pixel",
+            "recording_software": {
+               "object_type": "Software",
+               "name": "ThorCam",
+               "version": null
+            },
+            "driver": null,
+            "driver_version": null
+         },
+         "lens": {
+            "object_type": "Lens",
+            "name": "Silver Telecentric lens",
+            "serial_number": null,
+            "manufacturer": {
+               "name": "Edmund Optics",
+               "abbreviation": null,
+               "registry": "Research Organization Registry (ROR)",
+               "registry_identifier": "01j1gwp17"
+            },
+            "model": "58-430",
+            "additional_settings": null,
+            "notes": null
+         },
+         "filter": null
+      },
+      {
+         "object_type": "Fiber patch cord",
+         "name": "Fiber optic patch cord",
+         "serial_number": null,
+         "manufacturer": {
+            "name": "Doric",
+            "abbreviation": null,
+            "registry": "Research Organization Registry (ROR)",
+            "registry_identifier": "059n53q30"
+         },
+         "model": null,
+         "additional_settings": null,
+         "notes": null,
+         "core_diameter": "200",
+         "numerical_aperture": "0.37",
+         "photobleaching_date": null
+      },
+      {
+         "object_type": "Lick spout assembly",
+         "name": "Lick spout assembly",
+         "lick_spouts": [
+            {
+               "object_type": "Lick spout",
+               "name": "Left lick spout",
+               "serial_number": null,
+               "manufacturer": null,
+               "model": null,
+               "additional_settings": null,
+               "notes": null,
+               "spout_diameter": "0.8",
+               "spout_diameter_unit": "millimeter",
+               "solenoid_valve": {
+                  "object_type": "Device",
+                  "name": "Solenoid left",
+                  "serial_number": null,
+                  "manufacturer": {
+                     "name": "DigiKey",
+                     "abbreviation": null,
+                     "registry": null,
+                     "registry_identifier": null
+                  },
+                  "model": "1568-11015-ND",
+                  "additional_settings": null,
+                  "notes": null
+               },
+               "lick_sensor": {
+                  "object_type": "Device",
+                  "name": "Janelia_Lick_Detector Left",
+                  "serial_number": null,
+                  "manufacturer": {
+                     "name": "Janelia Research Campus",
+                     "abbreviation": "Janelia",
+                     "registry": "Research Organization Registry (ROR)",
+                     "registry_identifier": "013sk6x84"
+                  },
+                  "model": null,
+                  "additional_settings": null,
+                  "notes": null
+               },
+               "lick_sensor_type": "Capacitive"
+            },
+            {
+               "object_type": "Lick spout",
+               "name": "Right lick spout",
+               "serial_number": null,
+               "manufacturer": null,
+               "model": null,
+               "additional_settings": null,
+               "notes": null,
+               "spout_diameter": "0.8",
+               "spout_diameter_unit": "millimeter",
+               "solenoid_valve": {
+                  "object_type": "Device",
+                  "name": "Solenoid right",
+                  "serial_number": null,
+                  "manufacturer": {
+                     "name": "DigiKey",
+                     "abbreviation": null,
+                     "registry": null,
+                     "registry_identifier": null
+                  },
+                  "model": "1568-11015-ND",
+                  "additional_settings": null,
+                  "notes": null
+               },
+               "lick_sensor": {
+                  "object_type": "Device",
+                  "name": "Janelia_Lick_Detector Right",
+                  "serial_number": null,
+                  "manufacturer": {
+                     "name": "Janelia Research Campus",
+                     "abbreviation": "Janelia",
+                     "registry": "Research Organization Registry (ROR)",
+                     "registry_identifier": "013sk6x84"
+                  },
+                  "model": null,
+                  "additional_settings": null,
+                  "notes": null
+               },
+               "lick_sensor_type": "Capacitive"
+            }
+         ],
+         "motorized_stage": null
+      },
+      {
+         "object_type": "Speaker",
+         "relative_position": [
+            "Anterior"
+         ],
+         "coordinate_system": null,
+         "transform": null,
+         "name": "Speaker",
+         "serial_number": null,
+         "manufacturer": {
+            "name": "Other",
+            "abbreviation": null,
+            "registry": null,
+            "registry_identifier": null
+         },
+         "model": null,
+         "additional_settings": null,
+         "notes": "Unknown manufacturer"
+      },
+      {
+         "object_type": "Tube",
+         "name": "Mouse Tube",
+         "serial_number": null,
+         "manufacturer": null,
+         "model": null,
+         "additional_settings": null,
+         "notes": null,
+         "diameter": "4.0",
+         "diameter_unit": "centimeter"
+      },
+      {
+         "object_type": "DAQ device",
+         "name": "Arduino",
+         "serial_number": null,
+         "manufacturer": {
+            "name": "Arduino",
+            "abbreviation": null,
+            "registry": null,
+            "registry_identifier": null
+         },
+         "model": "Arduino Uno",
+         "additional_settings": null,
+         "notes": null,
+         "data_interface": "USB",
+         "channels": [],
+         "firmware_version": null,
+         "hardware_version": null
+      },
+      {
+         "object_type": "DAQ device",
+         "name": "Neuralynx",
+         "serial_number": null,
+         "manufacturer": {
+            "name": "Other",
+            "abbreviation": null,
+            "registry": null,
+            "registry_identifier": null
+         },
+         "model": "unknown",
+         "additional_settings": null,
+         "notes": "Neuralynx ephys recording system",
+         "data_interface": "Other",
+         "channels": [],
+         "firmware_version": null,
+         "hardware_version": null
+      },
+      {
+         "object_type": "Ephys assembly",
+         "name": "Neuralynx Ephys Assembly",
+         "manipulator": {
+            "object_type": "Manipulator",
+            "name": "Drive system",
+            "serial_number": null,
+            "manufacturer": {
+               "name": "Other",
+               "abbreviation": null,
+               "registry": null,
+               "registry_identifier": null
+            },
+            "model": null,
+            "additional_settings": null,
+            "notes": "Custom drive system for tetrode positioning"
+         },
+         "probes": [
+            {
+               "object_type": "Ephys probe",
+               "name": "Tetrode array",
+               "serial_number": null,
+               "manufacturer": null,
+               "model": null,
+               "additional_settings": null,
+               "notes": null,
+               "probe_model": "Custom",
+               "headstage": null
+            }
+         ]
+      }
+   ]
+}
