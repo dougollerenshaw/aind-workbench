@@ -50,7 +50,8 @@ from metadata_utils import (
     get_mapped_subject_id,
     get_experiment_metadata_dir,
     save_metadata_file,
-    get_session_details
+    get_session_details,
+    create_session_datetime
 )
 
 # Get the directory containing this script
@@ -59,66 +60,6 @@ SCRIPT_DIR = Path(__file__).parent.absolute()
 # Load the configuration
 config = load_config()
 SUBJECT_ID_MAPPING = config['subject_id_mapping']
-
-
-def extract_session_start_time_from_path(vast_path: str, session_name: str) -> Optional[str]:
-    """
-    Extract session start time from the session folder structure.
-    
-    Args:
-        vast_path: Full absolute path from the vast_path column
-        session_name: Session name to look for
-        
-    Returns:
-        Optional[str]: Session start time in YYYY-MM-DD_HH-MM-SS format, or None if not found
-    """
-    # Check if neuralynx/session directory exists
-    session_base_path = os.path.join(vast_path, "neuralynx", "session")
-    
-    if not os.path.exists(session_base_path):
-        return None
-    
-    # Look for session folders with timestamp format YYYY-MM-DD_HH-MM-SS
-    pattern = re.compile(r'(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})')
-    
-    try:
-        for folder_name in os.listdir(session_base_path):
-            folder_path = os.path.join(session_base_path, folder_name)
-            if os.path.isdir(folder_path):
-                match = pattern.match(folder_name)
-                if match:
-                    return match.group(1)
-    except (OSError, PermissionError):
-        return None
-    
-    return None
-
-
-def create_session_datetime(collection_date: str, vast_path: str, session_name: str, collection_site: str) -> datetime:
-    """
-    Create a timezone-aware datetime for the session.
-    
-    Args:
-        collection_date: Date string from CSV
-        vast_path: Path from the vast_path column
-        session_name: Session name
-        collection_site: Collection site (determines timezone)
-        
-    Returns:
-        datetime: Timezone-aware datetime object
-    """
-    # Try to extract session time from folder structure
-    extracted_time = extract_session_start_time_from_path(vast_path, session_name)
-    
-    if extracted_time:
-        # Parse the extracted timestamp: YYYY-MM-DD_HH-MM-SS
-        dt = datetime.strptime(extracted_time, "%Y-%m-%d_%H-%M-%S")
-    else:
-        raise ValueError(f"Could not extract session start time from path for {session_name}")
-    
-    # Set timezone for Hopkins (US/Eastern)
-    eastern = zoneinfo.ZoneInfo("US/Eastern")
-    return dt.replace(tzinfo=eastern)
 
 
 def session_path_exists(vast_path: str, session_name: str) -> bool:
@@ -266,12 +207,23 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
     
     print(f"Processing session: {session_name} (Subject: {subject_id})")
     
-    # Create session datetime with timezone-aware formatting
+    # Try to get additional session details from CSV files first (before creating datetime)
+    session_details = {}
+    try:
+        session_date = row["collection_date"]  # Use collection_date directly
+        session_details = get_session_details(subject_id, session_date)
+        if session_details:
+            print(f"Found session details with {len(session_details)} fields")
+    except Exception as e:
+        print(f"Could not load session details: {str(e)}")
+    
+    # Create session datetime with timezone-aware formatting (with session details for fallback)
     acquisition_start_time = create_session_datetime(
         row["collection_date"], 
         row["vast_path"], 
         session_name, 
-        collection_site
+        collection_site,
+        session_details  # Pass session details for fallback time_started
     )
     
     # Load behavioral data to get session duration and metrics
@@ -279,16 +231,6 @@ def create_acquisition(row: pd.Series, base_path: str) -> Acquisition:
     print(f"Loading behavioral data from: {mat_path}")
     
     beh_df, licks_L, licks_R = load_session_data(mat_path)
-    
-    # Try to get additional session details from CSV files first
-    session_details = {}
-    try:
-        session_date = acquisition_start_time.strftime('%Y-%m-%d')
-        session_details = get_session_details(subject_id, session_date)
-        if session_details:
-            print(f"Found session details with {len(session_details)} fields")
-    except Exception as e:
-        print(f"Could not load session details: {str(e)}")
     
     # Extract behavioral metrics using actual reward size if available
     reward_size = session_details.get('reward_size', 3.0) if session_details else 3.0
@@ -446,14 +388,6 @@ def process_acquisitions(
         # Skip if vast_path is missing (needed to check if session exists)
         if pd.isna(row["vast_path"]):
             reason = "missing vast_path"
-            print(f"  Skipping {session_name} - {reason}")
-            skipped_sessions.append((session_name, reason))
-            skip_count += 1
-            continue
-            
-        # Check if the session path exists on the file system
-        if not session_path_exists(row["vast_path"], session_name):
-            reason = f"neuralynx/session path does not exist: {row['vast_path']}"
             print(f"  Skipping {session_name} - {reason}")
             skipped_sessions.append((session_name, reason))
             skip_count += 1

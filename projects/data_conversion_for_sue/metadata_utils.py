@@ -280,3 +280,113 @@ def get_session_details(subject_id: str, session_date: str) -> dict:
     except Exception as e:
         print(f"Error reading session details for {subject_id} on {session_date}: {str(e)}")
         return {}
+
+
+def extract_session_start_time_from_path(vast_path: str, session_name: str) -> str:
+    """
+    Extract session start time from the session folder structure.
+    
+    Args:
+        vast_path: Path from the vast_path column (e.g. 'scratch/sueSu/ZS061/mZS061d20210404')
+        session_name: Session name to look for
+        
+    Returns:
+        Optional[str]: Session start time in YYYY-MM-DD_HH-MM-SS format, or None if not found
+    """
+    import re
+    
+    # Construct the base path to look for session folders
+    if vast_path.startswith("scratch/sueSu/"):
+        relative_path = vast_path[len("scratch/sueSu/"):]
+    else:
+        relative_path = vast_path
+    
+    # Base path where data is stored
+    base_path = "/allen/aind/stage/hopkins_data"
+    session_base_path = os.path.join(base_path, relative_path, "neuralynx", "session")
+    
+    if not os.path.exists(session_base_path):
+        return None
+    
+    # Look for session folders with timestamp format YYYY-MM-DD_HH-MM-SS
+    pattern = re.compile(r'(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})')
+    
+    try:
+        for folder_name in os.listdir(session_base_path):
+            folder_path = os.path.join(session_base_path, folder_name)
+            if os.path.isdir(folder_path):
+                match = pattern.match(folder_name)
+                if match:
+                    return match.group(1)
+    except (OSError, PermissionError):
+        return None
+    
+    return None
+
+
+def create_session_datetime(collection_date: str, vast_path: str, session_name: str, collection_site: str, session_details: dict = None) -> datetime:
+    """
+    Create a timezone-aware datetime for the session.
+    
+    Uses a two-tier fallback system:
+    1. Try to extract timestamp from Neuralynx folder structure
+    2. Fall back to 'time_started' value from session details CSV
+    3. If neither available, raise ValueError
+    
+    Args:
+        collection_date: Date string from CSV (YYYY-MM-DD format)
+        vast_path: Path from the vast_path column
+        session_name: Session name
+        collection_site: Collection site (JHU=east coast, AIND=west coast)
+        session_details: Session details dict from CSV files (for fallback)
+        
+    Returns:
+        datetime: Timezone-aware datetime object with proper offset format
+                 (e.g., 2021-04-04T17:43:18-04:00 for Eastern time)
+                 Uses zoneinfo for proper timezone handling including DST
+                 
+    Raises:
+        ValueError: If timestamp cannot be extracted from either source
+    """
+    import zoneinfo
+    from datetime import datetime
+    
+    # Try to extract session time from Neuralynx folder structure first
+    extracted_time = extract_session_start_time_from_path(vast_path, session_name)
+    
+    if extracted_time:
+        # Parse the extracted timestamp: YYYY-MM-DD_HH-MM-SS
+        dt = datetime.strptime(extracted_time, "%Y-%m-%d_%H-%M-%S")
+        print(f"  Using timestamp from Neuralynx folder: {extracted_time}")
+    else:
+        # Fall back to "time_started" value from session details CSV
+        time_started = session_details.get('time_started') if session_details else None
+        if time_started and str(time_started).strip():
+            # Try to parse the time_started value - format may vary
+            time_str = str(time_started).strip()
+            print(f"  Neuralynx folder timestamp not found, using 'time_started' from session details: {time_str}")
+            
+            # Try common time formats
+            for fmt in ["%H:%M:%S", "%H:%M", "%I:%M:%S %p", "%I:%M %p"]:
+                try:
+                    time_obj = datetime.strptime(time_str, fmt).time()
+                    # Combine with collection date
+                    date_obj = datetime.strptime(collection_date, "%Y-%m-%d").date()
+                    dt = datetime.combine(date_obj, time_obj)
+                    break
+                except ValueError:
+                    continue
+            else:
+                raise ValueError(f"Could not parse 'time_started' value: {time_str} for session {session_name}")
+        else:
+            raise ValueError(f"Could not extract session start time from Neuralynx path and no 'time_started' value available for {session_name}")
+    
+    # Set timezone based on collection site
+    if collection_site.upper() in ['JHU', 'HOPKINS']:
+        # Johns Hopkins is East Coast (US/Eastern)
+        eastern = zoneinfo.ZoneInfo("US/Eastern")
+        return dt.replace(tzinfo=eastern)
+    else:
+        # AIND is West Coast (US/Pacific) 
+        pacific = zoneinfo.ZoneInfo("US/Pacific")
+        return dt.replace(tzinfo=pacific)

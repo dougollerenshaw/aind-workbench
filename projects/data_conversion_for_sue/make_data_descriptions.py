@@ -37,7 +37,9 @@ from metadata_utils import (
     get_mapped_subject_id,
     get_experiment_metadata_dir,
     save_metadata_file,
-    check_experiment_metadata_completion
+    check_experiment_metadata_completion,
+    get_session_details,
+    create_session_datetime
 )
 
 # Get the directory containing this script
@@ -47,9 +49,6 @@ SCRIPT_DIR = Path(__file__).parent.absolute()
 config = load_config()
 SUBJECT_ID_MAPPING = config['subject_id_mapping']
 ORCID_MAPPING = config['orcid_mapping']
-
-# Default session start time when not specified
-DEFAULT_SESSION_TIME = "12:00:00"  # Noon
 
 # Organization mappings
 COLLECTION_SITE_TO_ORG = {
@@ -177,121 +176,13 @@ def get_modality_from_physiology(physiology_modality: str) -> List[Modality]:
     return modalities
 
 
-def extract_session_start_time_from_path(vast_path: str, session_name: str) -> Optional[str]:
-    """
-    Extract session start time from the session folder structure.
-    
-    Args:
-        vast_path: Path from the vast_path column (e.g. 'scratch/sueSu/ZS061/mZS061d20210404')
-        session_name: Session name to look for
-        
-    Returns:
-        Optional[str]: Session start time in YYYY-MM-DD_HH-MM-SS format, or None if not found
-    """
-    # Construct the base path to look for session folders
-    if vast_path.startswith("scratch/sueSu/"):
-        relative_path = vast_path[len("scratch/sueSu/"):]
-    else:
-        relative_path = vast_path
-    
-    # Base path where data is stored
-    base_path = "/allen/aind/stage/hopkins_data"
-    session_base_path = os.path.join(base_path, relative_path, "neuralynx", "session")
-    
-    if not os.path.exists(session_base_path):
-        return None
-    
-    # Look for session folders with timestamp format YYYY-MM-DD_HH-MM-SS
-    pattern = re.compile(r'(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})')
-    
-    try:
-        for folder_name in os.listdir(session_base_path):
-            folder_path = os.path.join(session_base_path, folder_name)
-            if os.path.isdir(folder_path):
-                match = pattern.match(folder_name)
-                if match:
-                    return match.group(1)
-    except (OSError, PermissionError):
-        return None
-    
-    return None
-
-
-def create_session_datetime(collection_date: str, vast_path: str, session_name: str, collection_site: str, session_time: Optional[str] = None) -> datetime:
-    """
-    Create a timezone-aware datetime for the session.
-    
-    Args:
-        collection_date: Date string from CSV
-        vast_path: Path from the vast_path column
-        session_name: Session name
-        collection_site: Collection site (JHU=east coast, AIND=west coast)
-        session_time: Optional session time, will try to extract from folder structure first
-        
-    Returns:
-        datetime: Timezone-aware datetime object with proper offset format
-                 (e.g., 2021-04-04T17:43:18-04:00 for Eastern time)
-                 Uses zoneinfo for proper timezone handling including DST
-    """
-    # Try to extract session time from folder structure first
-    extracted_time = extract_session_start_time_from_path(vast_path, session_name)
-    
-    if extracted_time:
-        # Parse the extracted timestamp: YYYY-MM-DD_HH-MM-SS
-        dt = datetime.strptime(extracted_time, "%Y-%m-%d_%H-%M-%S")
-    else:
-        # Fall back to provided session_time or default
-        if session_time is None:
-            session_time = DEFAULT_SESSION_TIME
-        
-        # Parse date
-        date_obj = pd.to_datetime(collection_date).date()
-        
-        # Combine with time
-        datetime_str = f"{date_obj} {session_time}"
-        dt = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
-    
-    # Set timezone based on collection site
-    if collection_site.upper() in ['JHU', 'HOPKINS']:
-        # Johns Hopkins is East Coast (US/Eastern)
-        eastern = zoneinfo.ZoneInfo("US/Eastern")
-        return dt.replace(tzinfo=eastern)
-    else:
-        # AIND is West Coast (US/Pacific) 
-        pacific = zoneinfo.ZoneInfo("US/Pacific")
-        return dt.replace(tzinfo=pacific)
-
-
-def session_path_exists(vast_path: str, session_name: str) -> bool:
-    """
-    Check if the session path exists on the file system.
-    
-    Args:
-        vast_path: Path from the vast_path column
-        session_name: Session name
-        
-    Returns:
-        bool: True if the session path exists, False otherwise
-    """
-    # Construct the base path to check
-    if vast_path.startswith("scratch/sueSu/"):
-        relative_path = vast_path[len("scratch/sueSu/"):]
-    else:
-        relative_path = vast_path
-    
-    # Base path where data is stored
-    base_path = "/allen/aind/stage/hopkins_data"
-    session_base_path = os.path.join(base_path, relative_path, "neuralynx", "session")
-    
-    return os.path.exists(session_base_path)
-
-
-def create_data_description(row: pd.Series) -> DataDescription:
+def create_data_description(row: pd.Series, session_details: dict = None) -> DataDescription:
     """
     Create a DataDescription object for a single session row.
     
     Args:
         row: Row from the asset inventory DataFrame
+        session_details: Session details dict from CSV files (for timestamp fallback)
         
     Returns:
         DataDescription: Validated data description object
@@ -311,12 +202,13 @@ def create_data_description(row: pd.Series) -> DataDescription:
     # Get institution
     institution = COLLECTION_SITE_TO_ORG.get(collection_site, Organization.OTHER)
     
-    # Create session datetime with timezone-aware formatting
+    # Create session datetime with timezone-aware formatting and session details fallback
     creation_time = create_session_datetime(
         row["collection_date"], 
         row["vast_path"], 
         session_name, 
-        collection_site
+        collection_site,
+        session_details
     )
     
     # Generate name in the required format: label_YYYY-MM-DD_HH-MM-SS
@@ -419,26 +311,23 @@ def process_sessions(
             skip_count += 1
             continue
         
-        # Skip if vast_path is missing (needed to check if session exists)
+        # Skip if vast_path is missing (needed for path-based timestamp extraction)
         if pd.isna(row["vast_path"]):
             print(f"  Skipping {session_name} - missing vast_path")
-            skip_count += 1
-            continue
-            
-        # Check if the session path exists on the file system
-        if not session_path_exists(row["vast_path"], session_name):
-            print(f"  Skipping {session_name} - session path does not exist")
             skip_count += 1
             continue
             
         try:
             print(f"  Processing {session_name}...")
             
+            # Get session details for timestamp fallback
+            session_details = get_session_details(original_subject_id, collection_date)
+            
             # Get mapped subject ID
             aind_subject_id = get_mapped_subject_id(original_subject_id)
             
             # Create data description first to get the creation_time
-            data_description = create_data_description(row)
+            data_description = create_data_description(row, session_details)
             
             # Get the experiment metadata directory path using the timezone-aware datetime
             experiment_dir = get_experiment_metadata_dir(

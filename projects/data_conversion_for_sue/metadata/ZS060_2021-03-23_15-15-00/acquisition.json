@@ -1,0 +1,168 @@
+{
+  "object_type": "Acquisition",
+  "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/acquisition.py",
+  "schema_version": "2.0.34",
+  "subject_id": "ZS060",
+  "specimen_id": null,
+  "acquisition_start_time": "2021-03-23T15:15:00-04:00",
+  "acquisition_end_time": "2021-03-23T16:07:12.264000-04:00",
+  "experimenters": [
+    "zhixiao su"
+  ],
+  "protocol_id": null,
+  "ethics_review_id": [
+    "MO19M432"
+  ],
+  "instrument_id": "hopkins_295F_nlyx",
+  "acquisition_type": "Behavioral foraging",
+  "notes": "ephys recording session for subject ZS060. tetrode depth = 2.775. session_notes = 'Right bias later. primed on left once.'",
+  "coordinate_system": null,
+  "calibrations": [],
+  "maintenance": [],
+  "data_streams": [
+    {
+      "object_type": "Data stream",
+      "stream_start_time": "2021-03-23T15:15:00-04:00",
+      "stream_end_time": "2021-03-23T16:07:12.264000-04:00",
+      "modalities": [
+        {
+          "name": "Behavior",
+          "abbreviation": "behavior"
+        },
+        {
+          "name": "Extracellular electrophysiology",
+          "abbreviation": "ecephys"
+        }
+      ],
+      "code": null,
+      "notes": "ephys recording session",
+      "active_devices": [
+        "Neuralynx Ephys Assembly",
+        "Pupil camera",
+        "Arduino",
+        "Lick spout assembly"
+      ],
+      "configurations": [
+        {
+          "object_type": "Ephys assembly config",
+          "device_name": "Neuralynx Ephys Assembly",
+          "manipulator": {
+            "object_type": "Manipulator config",
+            "device_name": "Drive system",
+            "coordinate_system": {
+              "object_type": "Coordinate system",
+              "name": "BREGMA_ARI",
+              "origin": "Bregma",
+              "axes": [
+                {
+                  "object_type": "Axis",
+                  "name": "AP",
+                  "direction": "Posterior_to_anterior"
+                },
+                {
+                  "object_type": "Axis",
+                  "name": "ML",
+                  "direction": "Left_to_right"
+                },
+                {
+                  "object_type": "Axis",
+                  "name": "SI",
+                  "direction": "Superior_to_inferior"
+                }
+              ],
+              "axis_unit": "millimeter"
+            },
+            "local_axis_positions": {
+              "object_type": "Translation",
+              "translation": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "probes": [],
+          "modules": []
+        }
+      ],
+      "connections": []
+    }
+  ],
+  "stimulus_epochs": [
+    {
+      "object_type": "Stimulus epoch",
+      "stimulus_start_time": "2021-03-23T15:15:00-04:00",
+      "stimulus_end_time": "2021-03-23T16:07:12.264000-04:00",
+      "stimulus_name": "Behavioral foraging task",
+      "code": {
+        "object_type": "Code",
+        "url": "https://github.com/JeremiahYCohenLab/sueBehavior.git",
+        "name": "dynamic-foraging-task",
+        "version": null,
+        "container": null,
+        "run_script": null,
+        "language": null,
+        "language_version": null,
+        "input_data": null,
+        "parameters": {
+          "BlockBeta": "15",
+          "BlockMax": "35",
+          "BlockMin": "20",
+          "DelayBeta": "0.0",
+          "DelayMax": "1.0",
+          "DelayMin": "1.0",
+          "ITIBeta": "3.0",
+          "ITIMax": "15.0",
+          "ITIMin": "2.0",
+          "LeftValue_volume": "2.50",
+          "RightValue_volume": "2.50",
+          "Task": "Uncoupled Without Baiting",
+          "reward_probability": "0.1, 0.5, 0.9",
+          "go_cue_frequency": 7500,
+          "no_go_cue_frequency": 15000,
+          "sample_frequency": 96000,
+          "frequency_unit": "hertz",
+          "stimulus_duration_ms": 500,
+          "amplitude_db": 60
+        },
+        "core_dependency": null
+      },
+      "stimulus_modalities": [
+        "Auditory"
+      ],
+      "performance_metrics": {
+        "object_type": "Performance metrics",
+        "output_parameters": {},
+        "reward_consumed_during_epoch": "525.0",
+        "reward_consumed_unit": "microliter",
+        "trials_total": 418,
+        "trials_finished": 418,
+        "trials_rewarded": 210
+      },
+      "notes": null,
+      "active_devices": [
+        "Speaker"
+      ],
+      "configurations": [
+        {
+          "object_type": "Speaker config",
+          "device_name": "Speaker",
+          "volume": 60.0,
+          "volume_unit": "decibels"
+        }
+      ],
+      "training_protocol_name": null,
+      "curriculum_status": null
+    }
+  ],
+  "subject_details": {
+    "object_type": "Acquisition subject details",
+    "animal_weight_prior": "24.4",
+    "animal_weight_post": null,
+    "weight_unit": "gram",
+    "anaesthesia": null,
+    "mouse_platform_name": "mouse_tube_foraging_hopkins",
+    "reward_consumed_total": "0.525",
+    "reward_consumed_unit": "milliliter"
+  }
+}

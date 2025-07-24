@@ -24,9 +24,9 @@ def main():
     metadata_dir = Path("metadata")
     subjects_dir = metadata_dir / "subjects"
     procedures_dir = metadata_dir / "procedures"
-    instrument_dir = metadata_dir / "instrument" / "jhu_ephys"
-    instrument_file = instrument_dir / "instrument.json"
-    
+    jhu_instrument_dir = metadata_dir / "instrument" / "jhu_ephys"
+    jhu_instrument_file = jhu_instrument_dir / "instrument.json"
+
     # Load asset inventory to identify JHU sessions
     asset_inventory = pd.read_csv("asset_inventory.csv")
     jhu_sessions = set()
@@ -62,7 +62,7 @@ def main():
                 procedure_files[subject_id] = json_file
     
     print(f"Found {len(subject_files)} subject files, {len(procedure_files)} procedure files")
-    print(f"JHU instrument file exists: {instrument_file.exists()}")
+    print(f"JHU instrument file exists: {jhu_instrument_file.exists()}")
     
     copied = 0
     
@@ -87,26 +87,23 @@ def main():
         # Copy subject.json
         if subject_id in subject_files:
             subject_dest = session_folder / "subject.json"
-            if not subject_dest.exists():
-                shutil.copy2(subject_files[subject_id], subject_dest)
-                print(f"  ✓ Copied subject.json from {subject_files[subject_id].name}")
-                copied += 1
+            shutil.copy2(subject_files[subject_id], subject_dest)
+            print(f"  ✓ Copied subject.json from {subject_files[subject_id].name}")
+            copied += 1
         
         # Copy procedures.json
         if subject_id in procedure_files:
             procedure_dest = session_folder / "procedures.json"
-            if not procedure_dest.exists():
-                shutil.copy2(procedure_files[subject_id], procedure_dest)
-                print(f"  ✓ Copied procedures.json from {procedure_files[subject_id].name}")
-                copied += 1
+            shutil.copy2(procedure_files[subject_id], procedure_dest)
+            print(f"  ✓ Copied procedures.json from {procedure_files[subject_id].name}")
+            copied += 1
         
         # Copy instrument.json only for JHU sessions
-        if session_name in jhu_sessions and instrument_file.exists():
+        if session_name in jhu_sessions and jhu_instrument_file.exists():
             instrument_dest = session_folder / "instrument.json"
-            if not instrument_dest.exists():
-                shutil.copy2(instrument_file, instrument_dest)
-                print(f"  ✓ Copied instrument.json from {instrument_file.name} (JHU session)")
-                copied += 1
+            shutil.copy2(jhu_instrument_file, instrument_dest)
+            print(f"  ✓ Copied instrument.json from {jhu_instrument_file.name} (JHU session)")
+            copied += 1
     
     print(f"\nCopied {copied} files total")
 
