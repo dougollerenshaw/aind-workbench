@@ -302,35 +302,22 @@
          "hardware_version": null
       },
       {
-         "object_type": "Ephys assembly",
-         "name": "Neuralynx Ephys Assembly",
-         "manipulator": {
-            "object_type": "Manipulator",
-            "name": "Drive system",
-            "serial_number": null,
-            "manufacturer": {
-               "name": "Other",
-               "abbreviation": null,
-               "registry": null,
-               "registry_identifier": null
-            },
-            "model": null,
-            "additional_settings": null,
-            "notes": "Custom drive system for tetrode positioning"
+         "object_type": "DAQ device",
+         "name": "Neuralynx Ephys Acquisition System",
+         "serial_number": null,
+         "manufacturer": {
+            "name": "NeuraLynx",
+            "abbreviation": null,
+            "registry": null,
+            "registry_identifier": null
          },
-         "probes": [
-            {
-               "object_type": "Ephys probe",
-               "name": "Tetrode array",
-               "serial_number": null,
-               "manufacturer": null,
-               "model": null,
-               "additional_settings": null,
-               "notes": null,
-               "probe_model": "Custom",
-               "headstage": null
-            }
-         ]
+         "model": "Cheetah",
+         "additional_settings": null,
+         "notes": null,
+         "data_interface": "PCIe",
+         "channels": [],
+         "firmware_version": null,
+         "hardware_version": null
       }
    ]
 }

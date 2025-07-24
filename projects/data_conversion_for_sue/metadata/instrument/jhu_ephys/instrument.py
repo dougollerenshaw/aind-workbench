@@ -83,28 +83,12 @@ daq = d.DAQDevice(
     data_interface="USB",
 )
 
-# ephys_daq = d.DAQDevice(
-#     name="Neuralynx Ephys Acquisition System",
-#     manufacturer=Organization.NEURALYNX,
-#     model="Cheetah",
-#     data_interface="PCIe",
-# )
-
-# Create an ephys assembly for the ECEPHYS modality
-# ephys_assembly =(
-#     name="Neuralynx Ephys Assembly",
-#     probes=[
-#         d.EphysProbe(
-#             name="Tetrode array",
-#             probe_model="Custom",
-#         )
-#     ],
-#     manipulator=d.Manipulator(
-#         name="Drive system",
-#         manufacturer=Organization.OTHER,
-#         notes="Custom drive system for tetrode positioning"
-#     ),
-# )
+ephys_daq = d.DAQDevice(
+    name="Neuralynx Ephys Acquisition System",
+    manufacturer=Organization.NEURALYNX,
+    model="Cheetah",
+    data_interface="PCIe",
+)
 
 instrument = r.Instrument(
     location="JHU Room 295F", 
@@ -118,7 +102,7 @@ instrument = r.Instrument(
         speaker,
         tube,
         daq,
-        # ephys_assembly
+        ephys_daq,
     ],
     connections=[
         Connection(
