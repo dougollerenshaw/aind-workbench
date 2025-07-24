@@ -88,6 +88,8 @@ ephys_daq = d.DAQDevice(
     manufacturer=Organization.NEURALYNX,
     model="Cheetah",
     data_interface="PCIe",
+    firmware_version="5.7.4",
+    notes="Neuralynx Cheetah 5.7.4 acquiring at 32 kHz"
 )
 
 instrument = r.Instrument(

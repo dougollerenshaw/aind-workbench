@@ -313,10 +313,10 @@
          },
          "model": "Cheetah",
          "additional_settings": null,
-         "notes": null,
+         "notes": "Neuralynx Cheetah 5.7.4 acquiring at 32 kHz",
          "data_interface": "PCIe",
          "channels": [],
-         "firmware_version": null,
+         "firmware_version": "5.7.4",
          "hardware_version": null
       }
    ]
