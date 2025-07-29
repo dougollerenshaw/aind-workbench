@@ -22,7 +22,7 @@ def main():
     
     # Set up paths
     metadata_dir = Path("metadata")
-    subjects_dir = metadata_dir / "subjects"
+    subjects_dir = metadata_dir / "subjects" / "v2"  # Use v2 (schema 2.0) subject files
     procedures_dir = metadata_dir / "procedures"
     jhu_instrument_dir = metadata_dir / "instrument" / "jhu_ephys"
     jhu_instrument_file = jhu_instrument_dir / "instrument.json"
@@ -47,7 +47,7 @@ def main():
     subject_files = {}  # subject_id -> file_path
     procedure_files = {}  # subject_id -> file_path
     
-    # Index subject files
+    # Index subject files (using v2 schema 2.0 format)
     if subjects_dir.exists():
         for json_file in subjects_dir.glob("*.json"):
             subject_id = get_subject_id_from_json(json_file)

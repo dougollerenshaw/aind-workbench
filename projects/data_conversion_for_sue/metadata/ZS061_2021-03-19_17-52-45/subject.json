@@ -1,39 +1,44 @@
 {
+  "object_type": "Subject",
   "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/subject.py",
-  "schema_version": "1.0.2",
+  "schema_version": "2.0.12",
   "subject_id": "ZS061",
-  "sex": "Male",
-  "date_of_birth": "2020-11-05",
-  "genotype": "Dbh-Cre-KI/wt",
-  "species": {
-    "name": "Mus musculus",
-    "registry": {
-      "name": "National Center for Biotechnology Information",
-      "abbreviation": "NCBI"
+  "subject_details": {
+    "object_type": "Mouse subject",
+    "sex": "Male",
+    "date_of_birth": "2020-11-05",
+    "strain": {
+      "name": "C57BL/6J",
+      "species": "Mus musculus",
+      "registry": "Mouse Genome Informatics (MGI)",
+      "registry_identifier": "MGI:3028467"
     },
-    "registry_identifier": "NCBI:txid10090"
-  },
-  "alleles": [],
-  "background_strain": null,
-  "breeding_info": {
-    "breeding_group": "Dbh-Cre-KI(ND)",
-    "maternal_id": "",
-    "maternal_genotype": "wt/wt",
-    "paternal_id": "",
-    "paternal_genotype": "Dbh-Cre-KI/wt"
-  },
-  "source": {
-    "name": "",
-    "abbreviation": "",
-    "registry": {
-      "name": "",
-      "abbreviation": ""
+    "species": {
+      "name": "Mus musculus",
+      "common_name": "House mouse",
+      "registry": "National Center for Biotechnology Information (NCBI)",
+      "registry_identifier": "NCBI:txid10090"
     },
-    "registry_identifier": ""
+    "alleles": [],
+    "genotype": "Dbh-Cre-KI/wt",
+    "breeding_info": {
+      "object_type": "Breeding info",
+      "breeding_group": "Dbh-Cre-KI(ND)",
+      "maternal_id": "",
+      "maternal_genotype": "wt/wt",
+      "paternal_id": "",
+      "paternal_genotype": "Dbh-Cre-KI/wt"
+    },
+    "wellness_reports": [],
+    "housing": null,
+    "source": {
+      "name": "Other",
+      "abbreviation": null,
+      "registry": null,
+      "registry_identifier": null
+    },
+    "restrictions": null,
+    "rrid": null
   },
-  "rrid": null,
-  "restrictions": null,
-  "wellness_reports": [],
-  "housing": null,
   "notes": null
 }
