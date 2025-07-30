@@ -94,6 +94,7 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
     Update or create a CSV file with injection material tracking information.
     This creates a separate CSV file dedicated to viral material tracking,
     keeping the original patchseq_subject_ids.csv unchanged.
+    Uses tidy format: one row per injection with injection_number column.
     
     Args:
         subjects_processed: List of subject IDs that were processed
@@ -101,84 +102,70 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
     """
     csv_file = "viral_material_tracking.csv"
     
-    # Determine the maximum number of injections across all subjects
-    max_injections = 0
-    for subject_id in subjects_processed:
-        injection_count = len(all_injection_data.get(subject_id, []))
-        max_injections = max(max_injections, injection_count)
+    # Count total injections across all subjects
+    total_injections = sum(len(all_injection_data.get(subject_id, [])) for subject_id in subjects_processed)
     
-    if max_injections == 0:
+    if total_injections == 0:
         print(f"  No injections found, skipping CSV update")
         return
     
-    print(f"  Maximum injections per subject: {max_injections}")
+    print(f"  Total injections to track: {total_injections}")
     
-    # Create column names for each injection
-    base_columns = [
+    # Define columns for tidy format
+    columns = [
+        'subject_id', 'injection_number',
         'coordinates_ap', 'coordinates_ml', 'coordinates_si', 'volume_nl',
         'hemisphere', 'angle_degrees', 'recovery_time', 'recovery_time_unit', 'protocol_id',
         'viral_material_name', 'tars_identifier', 'addgene_id', 
         'titer_injected', 'titer_unit', 'targeted_structure'
     ]
     
-    # Build all column names
-    columns = ['subject_id']
-    for inj_num in range(1, max_injections + 1):
-        for base_col in base_columns:
-            columns.append(f'injection_{inj_num}_{base_col}')
-    
     # Load existing CSV if it exists, otherwise create new DataFrame
     try:
         existing_df = pd.read_csv(csv_file)
         print(f"  Loaded existing {csv_file} with {len(existing_df)} rows")
+        # Remove rows for subjects we're updating to avoid duplicates
+        existing_df = existing_df[~existing_df['subject_id'].isin(subjects_processed)]
+        print(f"  Removed {len(subjects_processed)} subjects for update, {len(existing_df)} rows remaining")
     except FileNotFoundError:
         existing_df = pd.DataFrame(columns=columns)
         print(f"  Creating new {csv_file}")
     
-    # Update the DataFrame with new data
+    # Create new rows for current subjects
+    new_rows = []
     for subject_id in subjects_processed:
         injections = all_injection_data.get(subject_id, [])
         
-        # Prepare row data
-        row_data = {'subject_id': subject_id}
-        
-        # Fill in injection data
-        for inj_num in range(1, max_injections + 1):
-            inj_index = inj_num - 1
-            if inj_index < len(injections):
-                injection = injections[inj_index]
-                for base_col in base_columns:
-                    col_name = f'injection_{inj_num}_{base_col}'
-                    row_data[col_name] = injection.get(base_col, "")
-            else:
-                # No injection at this index, fill with empty strings
-                for base_col in base_columns:
-                    col_name = f'injection_{inj_num}_{base_col}'
-                    row_data[col_name] = ""
-        
-        # Update existing row or add new row
-        if subject_id in existing_df['subject_id'].values:
-            # Update existing row
-            idx = existing_df[existing_df['subject_id'] == subject_id].index[0]
-            for col, value in row_data.items():
-                if col in existing_df.columns:
-                    existing_df.at[idx, col] = value
-        else:
-            # Add new row
-            new_row = pd.DataFrame([row_data])
-            existing_df = pd.concat([existing_df, new_row], ignore_index=True)
+        for injection_num, injection in enumerate(injections, 1):
+            row_data = {
+                'subject_id': subject_id,
+                'injection_number': injection_num
+            }
+            
+            # Add all injection details
+            for key, value in injection.items():
+                if key in columns:  # Only include columns we want
+                    row_data[key] = value
+            
+            new_rows.append(row_data)
     
-    # Ensure all columns exist (in case max_injections increased)
-    for col in columns:
-        if col not in existing_df.columns:
-            existing_df[col] = ""
+    # Convert new rows to DataFrame
+    if new_rows:
+        new_df = pd.DataFrame(new_rows)
+        # Combine existing and new data
+        combined_df = pd.concat([existing_df, new_df], ignore_index=True)
+    else:
+        combined_df = existing_df
     
-    # Reorder columns
-    existing_df = existing_df.reindex(columns=columns, fill_value="")
+    # Ensure all columns exist and are in the right order
+    combined_df = combined_df.reindex(columns=columns, fill_value="")
+    
+    # Sort by subject_id and injection_number for easy reading
+    combined_df = combined_df.sort_values(['subject_id', 'injection_number']).reset_index(drop=True)
     
     # Save the updated CSV
-    existing_df.to_csv(csv_file, index=False)
-    print(f"  ✓ Updated {csv_file} with injection data for {len(subjects_processed)} subjects")
+    combined_df.to_csv(csv_file, index=False)
+    print(f"  ✓ Updated {csv_file} with {len(new_rows)} injection rows for {len(subjects_processed)} subjects")
     print(f"  📋 Polina can now fill out the empty viral material columns for missing data")
 
 
@@ -813,8 +800,8 @@ def main():
     parser = argparse.ArgumentParser(description="Create procedures.json files for patchseq subjects")
     parser.add_argument("--limit", type=int, default=None, 
                        help="Limit the number of subjects to process (default: process all)")
-    parser.add_argument("--force-overwrite", action="store_true", 
-                       help="Overwrite existing procedures.json files (default: skip existing files)")
+    parser.add_argument("--avoid-overwrite", action="store_true", 
+                       help="Skip existing procedures.json (v2.0) files instead of overwriting them")
     args = parser.parse_args()
     
     print("Creating procedures.json files for patchseq subjects")
@@ -851,18 +838,18 @@ def main():
         # Check if procedures files already exist
         v1_exists, v2_exists, v1_data, v2_data = check_existing_procedures(subject_id)
         
-        # Skip if v2.0 file already exists (unless force_overwrite)
-        if v2_exists and not args.force_overwrite:
-            print(f"  Skipping - procedures.json (v2.0) already exists")
+        # Skip if v2.0 file already exists and avoid_overwrite is True
+        if v2_exists and args.avoid_overwrite:
+            print(f"  Skipping - procedures.json (v2.0) already exists (--avoid-overwrite)")
             skipped_count += 1
             continue
         
-        # Determine source of v1 data
-        if v1_exists and not args.force_overwrite:
+        # Use existing v1 data if available, never overwrite it from service
+        if v1_exists:
             print(f"  Using existing procedures.json.v1")
             v1_source_data = v1_data
         else:
-            # Fetch from service
+            # Fetch from service only if no v1 file exists
             print(f"  Fetching procedures metadata from service...")
             success, v1_source_data, message = fetch_procedures_metadata(subject_id)
             
@@ -871,7 +858,7 @@ def main():
                 print(f"  ✗ Failed to fetch: {message}")
                 continue
             
-            # Save the v1 data
+            # Save the v1 data (only when fetching for first time)
             save_procedures_json(subject_id, v1_source_data, is_v1=True)
         
         # Extract injection details for tracking
