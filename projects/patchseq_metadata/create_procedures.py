@@ -200,13 +200,10 @@ def convert_procedures_to_v2(data):
         # Build final Procedures object
         procedures_obj = Procedures(
             subject_id=subject_id,
-            subject_procedures=subject_procedures,
-            specimen_procedures=data.get("specimen_procedures", []),
-            notes=data.get("notes")
+            subject_procedures=subject_procedures
         )
         
-        print(f"    ✓ Successfully converted to schema 2.0")
-        return procedures_obj.model_dump()
+        return procedures_obj
         
     except Exception as e:
         print(f"    ✗ Schema conversion failed: {e}")
