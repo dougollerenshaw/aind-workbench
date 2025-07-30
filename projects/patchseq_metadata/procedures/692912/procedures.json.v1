@@ -1,0 +1,104 @@
+{
+  "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/procedures.py",
+  "schema_version": "1.2.1",
+  "subject_id": "692912",
+  "subject_procedures": [
+    {
+      "procedure_type": "Surgery",
+      "start_date": "2023-09-15",
+      "experimenter_full_name": "30509",
+      "iacuc_protocol": "2109",
+      "animal_weight_prior": null,
+      "animal_weight_post": null,
+      "weight_unit": "gram",
+      "anaesthesia": null,
+      "workstation_id": null,
+      "procedures": [
+        {
+          "procedure_type": "Perfusion",
+          "output_specimen_ids": [
+            "692912"
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.8epv51bejl1b/v6"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "procedure_type": "Surgery",
+      "start_date": "2023-08-18",
+      "experimenter_full_name": "NSB-1007",
+      "iacuc_protocol": "2109",
+      "animal_weight_prior": "23.9",
+      "animal_weight_post": "23.9",
+      "weight_unit": "gram",
+      "anaesthesia": {
+        "type": "isoflurane",
+        "duration": "57.00",
+        "duration_unit": "minute",
+        "level": "1.5"
+      },
+      "workstation_id": "SWS 5",
+      "procedures": [
+        {
+          "injection_materials": [],
+          "recovery_time": "5.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "0.2",
+          "injection_coordinate_ap": "2.0",
+          "injection_coordinate_depth": [
+            "1.8"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": null,
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": "0.0",
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Right",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "50.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        },
+        {
+          "injection_materials": [],
+          "recovery_time": "5.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "0.2",
+          "injection_coordinate_ap": "1.6",
+          "injection_coordinate_depth": [
+            "2.0"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": null,
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": "0.0",
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Right",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "50.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        }
+      ],
+      "notes": null,
+      "protocol_id": "dx.doi.org/10.17504/protocols.io.kqdg392o7g25/v2"
+    }
+  ],
+  "specimen_procedures": [],
+  "notes": null
+}

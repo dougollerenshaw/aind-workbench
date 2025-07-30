@@ -1,0 +1,16 @@
+# PatchSeq Metadata Project - Python Dependencies
+#
+# Install these packages in the patchseq_metadata conda environment:
+# conda activate patchseq_metadata
+# pip install -r requirements.txt
+
+# Data manipulation and CSV handling
+pandas>=1.5.0
+
+# HTTP requests for AIND metadata service API calls
+requests>=2.28.0
+
+# AIND data schema for procedures validation and conversion
+aind-data-schema>=2.0.0
+
+# Note: json and pathlib are part of Python standard library (no installation needed)
