@@ -11,13 +11,13 @@ import copy
 from pathlib import Path
 from datetime import date, datetime
 
-from aind_data_schema.core.procedures import Procedures, Surgery
+from aind_data_schema.core.procedures import Procedures, Surgery, SpecimenProcedure
 from aind_data_schema.components.coordinates import CoordinateSystemLibrary, Translation, Rotation
 from aind_data_schema.components.surgery_procedures import BrainInjection, Perfusion, Anaesthetic
-from aind_data_schema.components.injection_procedures import InjectionDynamics, InjectionProfile, NonViralMaterial
+from aind_data_schema.components.injection_procedures import InjectionDynamics, InjectionProfile, NonViralMaterial, ViralMaterial
 from aind_data_schema.components.reagent import Reagent
 from aind_data_schema_models.organizations import Organization
-from aind_data_schema_models.units import VolumeUnit
+from aind_data_schema_models.units import VolumeUnit, TimeUnit, AngleUnit
 
 
 def get_subjects_list():
@@ -32,6 +32,320 @@ def get_subjects_list():
     subjects = df['subject_id'].tolist()
     print(f"Found {len(subjects)} subjects in {csv_file}")
     return subjects
+
+
+def load_specimen_procedures_excel(excel_file="DT_HM_TissueClearingTracking_.xlsx"):
+    """
+    Load Excel file with specimen procedures data and return a dictionary of DataFrames.
+    Currently handles:
+    - "Batch Info" sheet: Clean format with headers in first row
+    - Time-based sheets: Complex multi-level headers (rows 1-3) with data starting at row 4
+    - Silently ignores specified sheets
+    
+    Args:
+        excel_file: Path to the Excel file
+        
+    Returns:
+        dict: Dictionary where keys are sheet names and values are DataFrames
+    """
+    # Sheets to ignore (silently skip these)
+    sheets_to_ignore = ["TestBrains", "Additional batch info"]
+    
+    try:
+        print(f"Loading Excel file: {excel_file}")
+        
+        # First, get all sheet names to identify which ones to process
+        all_sheets = pd.ExcelFile(excel_file).sheet_names
+        print(f"Found {len(all_sheets)} total sheets")
+        
+        sheet_data = {}
+        
+        # Load Batch Info sheet with proper headers
+        if "Batch Info" in all_sheets:
+            print(f"\n--- Loading 'Batch Info' sheet ---")
+            batch_info_df = pd.read_excel(excel_file, sheet_name="Batch Info", header=0)
+            
+            # Clean up any unnamed columns
+            batch_info_df.columns = [str(col) if not str(col).startswith('Unnamed:') else f"Column_{i}" 
+                                    for i, col in enumerate(batch_info_df.columns)]
+            
+            print(f"✓ Batch Info loaded - Shape: {batch_info_df.shape}")
+            print(f"  Columns: {list(batch_info_df.columns)}")
+            
+            sheet_data["Batch Info"] = batch_info_df
+        
+        # Process time-based sheets (complex multi-level headers)
+        time_based_sheets = [sheet for sheet in all_sheets 
+                           if sheet not in sheets_to_ignore and sheet != "Batch Info"]
+        
+        for sheet_name in time_based_sheets:
+            print(f"\n--- Loading '{sheet_name}' sheet ---")
+            
+            # Load with multi-level headers (rows 0, 1, 2)
+            df_raw = pd.read_excel(excel_file, sheet_name=sheet_name, header=None)
+            
+            if len(df_raw) < 4:
+                print(f"  ⚠️  Sheet too small ({len(df_raw)} rows), skipping")
+                continue
+            
+            # Extract the three header rows
+            header_row1 = df_raw.iloc[0].fillna('')  # Top-level categories
+            header_row2 = df_raw.iloc[1].fillna('')  # Sub-categories  
+            header_row3 = df_raw.iloc[2].fillna('')  # Column names
+            
+            # Create meaningful column names by combining the three levels
+            combined_headers = []
+            for i in range(len(header_row3)):
+                level1 = str(header_row1.iloc[i]).strip() if pd.notna(header_row1.iloc[i]) else ''
+                level2 = str(header_row2.iloc[i]).strip() if pd.notna(header_row2.iloc[i]) else ''
+                level3 = str(header_row3.iloc[i]).strip() if pd.notna(header_row3.iloc[i]) else ''
+                
+                # Build hierarchical column name ensuring uniqueness
+                parts = []
+                if level1 and level1 != '':
+                    parts.append(level1)
+                if level2 and level2 != '':
+                    parts.append(level2)
+                if level3 and level3 != '':
+                    parts.append(level3)
+                
+                if parts:
+                    combined_name = '_'.join(parts)
+                else:
+                    combined_name = f"Column_{i}"
+                
+                # Ensure uniqueness by adding index if name already exists
+                original_name = combined_name
+                counter = 1
+                while combined_name in combined_headers:
+                    combined_name = f"{original_name}_{counter}"
+                    counter += 1
+                
+                combined_headers.append(combined_name)
+            
+            # Create DataFrame with data starting from row 4 (index 3)
+            data_df = df_raw.iloc[3:].copy()
+            data_df.columns = combined_headers
+            data_df = data_df.reset_index(drop=True)
+            
+            # Remove completely empty rows
+            data_df = data_df.dropna(how='all')
+            
+            print(f"✓ {sheet_name} loaded - Shape: {data_df.shape}")
+            print(f"  Sample columns: {list(data_df.columns)[:5]}...")
+            
+            sheet_data[sheet_name] = data_df
+        
+        print(f"\n✓ Successfully loaded {len(sheet_data)} sheets")
+        return sheet_data
+        
+    except Exception as e:
+        print(f"❌ Error loading Excel file: {e}")
+        return None
+
+
+def get_specimen_procedures_for_subject(subject_id, sheet_data):
+    """
+    Get specimen procedures for a subject using batch-based lookup.
+    
+    Args:
+        subject_id: The subject ID to look up
+        sheet_data: Dictionary of DataFrames from load_specimen_procedures_excel()
+        
+    Returns:
+        List of specimen procedure dictionaries matching AIND schema format
+    """
+    def parse_date_range(date_str):
+        """Parse date range like '10/3/23 - 10/6/23' into start and end dates"""
+        if pd.isna(date_str):
+            return None, None
+        date_str = str(date_str).strip()
+        if ' - ' in date_str:
+            parts = date_str.split(' - ')
+            if len(parts) == 2:
+                return parts[0].strip(), parts[1].strip()
+        return date_str, None
+
+    def safe_get_value(row, column_name):
+        """Safely get value from row, handling Series case for duplicate columns"""
+        value = row.get(column_name)
+        if hasattr(value, 'iloc'):
+            # It's a Series, get the first value
+            return value.iloc[0] if len(value) > 0 else None
+        return value
+
+    # Step 1: Find the batch number for this subject in Batch Info
+    batch_info = sheet_data["Batch Info"]
+    subject_batch = None
+
+    for idx, row in batch_info.iterrows():
+        lab_track_ids = str(row['LabTrack IDs']) if pd.notna(row['LabTrack IDs']) else ""
+        if subject_id in lab_track_ids:
+            subject_batch = row['Batch #']
+            break
+
+    if subject_batch is None:
+        return []
+
+    # Step 2: Find which date range sheet contains this batch
+    target_sheet = None
+    for sheet_name, df in sheet_data.items():
+        if sheet_name == "Batch Info":
+            continue
+        
+        batch_cols = [col for col in df.columns if 'batch' in col.lower()]
+        if batch_cols:
+            batch_col = batch_cols[0]
+            if subject_batch in df[batch_col].values:
+                target_sheet = sheet_name
+                break
+
+    if not target_sheet:
+        return []
+
+    # Step 3: Get the batch row data (first row with matching batch)
+    df = sheet_data[target_sheet]
+    batch_col = [col for col in df.columns if 'batch' in col.lower()][0]
+    batch_row = df[df[batch_col] == subject_batch].iloc[0]
+
+    # Extract experimenter
+    experimenter = safe_get_value(batch_row, 'Experimenter') or 'Unknown'
+
+    procedures = []
+
+    # Build procedures based on the actual data
+    procedure_mappings = [
+        {
+            'date_col': 'Fixation_SHIELD OFF_Date(s)',
+            'procedure_type': 'Fixation',
+            'procedure_name': 'SHIELD OFF',
+            'notes_col': 'Notes',  # Index 9 - main Notes column
+            'reagents': [
+                ('SHIELD Buffer_Lot#', 'SHIELD Buffer', 'LifeCanvas'),
+                ('SHIELD Epoxy_Lot#', 'SHIELD Epoxy', 'LifeCanvas')
+            ]
+        },
+        {
+            'date_col': 'SHIELD ON_Date(s)',
+            'procedure_type': 'Fixation', 
+            'procedure_name': 'SHIELD ON',
+            'notes_col': 'Notes',  # Index 9 - main Notes column
+            'reagents': [
+                ('SHIELD ON_Lot#', 'SHIELD On', 'LifeCanvas')
+            ]
+        },
+        {
+            'date_col': 'Passive delipidation_24 Hr Delipidation_Date(s)',
+            'procedure_type': 'Delipidation',
+            'procedure_name': 'Passive Delipidation',
+            'notes_col': 'Notes_1',  # Index 12 - Passive delipidation Notes
+            'reagents': [
+                ('Delipidation Buffer_Lot#', 'Delipidation Buffer', 'Other')
+            ]
+        },
+        {
+            'date_col': 'Active Delipidation_Active Delipidation_Date(s)',
+            'procedure_type': 'Delipidation',
+            'procedure_name': 'Active Delipidation',
+            'notes_col': 'Notes_2',  # Index 17 - Active Delipidation Notes
+            'reagents': [
+                ('Conduction Buffer_Lot#', 'Conductivity Buffer', 'Other')
+            ]
+        },
+        {
+            'date_col': 'Index matching_50% EasyIndex_Date(s)',
+            'procedure_type': 'Refractive index matching',
+            'procedure_name': 'EasyIndex 50%',
+            'notes_col': 'Notes_3',  # Index 22 - EasyIndex Notes
+            'reagents': [
+                ('EasyIndex_Lot#', 'Easy Index', 'LifeCanvas')
+            ]
+        },
+        {
+            'date_col': '100% EasyIndex_Date(s)',
+            'procedure_type': 'Refractive index matching',
+            'procedure_name': 'EasyIndex 100%',
+            'notes_col': 'Notes_3',  # Index 22 - EasyIndex Notes
+            'reagents': [
+                ('EasyIndex_Lot#', 'Easy Index', 'LifeCanvas')
+            ]
+        }
+    ]
+
+    for mapping in procedure_mappings:
+        date_value = safe_get_value(batch_row, mapping['date_col'])
+        
+        if pd.notna(date_value):
+            start_date, end_date = parse_date_range(date_value)
+            
+            # Convert date strings to date objects if they exist
+            start_date_obj = None
+            end_date_obj = None
+            if start_date:
+                try:
+                    # Parse date format like "10/3/23"
+                    start_date_obj = datetime.strptime(start_date, "%m/%d/%y").date()
+                except ValueError:
+                    print(f"    Warning: Could not parse start date '{start_date}'")
+            if end_date:
+                try:
+                    end_date_obj = datetime.strptime(end_date, "%m/%d/%y").date()
+                except ValueError:
+                    print(f"    Warning: Could not parse end date '{end_date}'")
+            
+            # Build reagent details using proper Reagent models
+            procedure_details = []
+            for lot_col, reagent_name, source_name in mapping['reagents']:
+                lot_value = safe_get_value(batch_row, lot_col)
+                if pd.notna(lot_value):
+                    # Create Organization object for source
+                    if source_name == 'LifeCanvas':
+                        org = Organization.LIFECANVAS
+                    else:
+                        org = Organization.OTHER
+                    
+                    reagent = Reagent(
+                        name=reagent_name,
+                        source=org,
+                        lot_number=str(lot_value).strip()
+                    )
+                    procedure_details.append(reagent)
+            
+            # Extract notes from the appropriate column
+            notes_value = None
+            
+            # First check if there's a hardcoded notes value (for backward compatibility)
+            if mapping.get('notes'):
+                notes_value = mapping['notes']
+            # Then check for notes_col_index (for specific Notes column by index)
+            elif mapping.get('notes_col_index') is not None:
+                col_index = mapping['notes_col_index']
+                if col_index < len(df.columns):
+                    notes_col_name = df.columns[col_index]
+                    notes_raw = safe_get_value(batch_row, notes_col_name)
+                    if pd.notna(notes_raw) and str(notes_raw).strip():
+                        notes_value = str(notes_raw).strip()
+            # Finally check for notes_col by name
+            elif mapping.get('notes_col'):
+                notes_raw = safe_get_value(batch_row, mapping['notes_col'])
+                if pd.notna(notes_raw) and str(notes_raw).strip():
+                    notes_value = str(notes_raw).strip()
+            
+            # Create SpecimenProcedure using proper Pydantic model
+            specimen_proc = SpecimenProcedure(
+                procedure_type=mapping['procedure_type'],
+                procedure_name=mapping['procedure_name'],
+                specimen_id=subject_id,
+                start_date=start_date_obj,
+                end_date=end_date_obj,
+                experimenters=[experimenter],
+                procedure_details=procedure_details,
+                notes=notes_value
+            )
+            
+            procedures.append(specimen_proc)
+
+    return procedures
 
 
 def fetch_procedures_metadata(subject_id):
@@ -84,9 +398,10 @@ def fetch_procedures_metadata(subject_id):
         return False, None, f"Unexpected error: {str(e)}"
 
 
-def convert_procedures_to_v2(data):
+def convert_procedures_to_v2(data, excel_sheet_data=None):
     """
     Convert procedures data from v1.x to schema 2.0 by building proper Pydantic model objects.
+    Also adds specimen procedures from Excel data if available.
     Returns the converted data if successful, or None if conversion fails.
     """
     try:
@@ -150,14 +465,17 @@ def convert_procedures_to_v2(data):
                             "coordinate_system_name": "BREGMA_ARI"
                         }
                         
-                        # Handle injection materials - create a minimal non-viral material
-                        materials = [NonViralMaterial(
-                            name="Unknown viral material",
-                            source=Organization.OTHER
+                        # Handle injection materials - create a more descriptive viral material
+                        material_name = "Viral vector (Nanoject injection)"
+                        if sub_proc.get("injection_hemisphere"):
+                            material_name += f" - {sub_proc['injection_hemisphere']} hemisphere"
+                        
+                        materials = [ViralMaterial(
+                            name=material_name
                         )]
                         injection_kwargs["injection_materials"] = materials
                         
-                        # Handle coordinates
+                        # Handle coordinates with injection angle
                         if all(k in sub_proc for k in ["injection_coordinate_ml", "injection_coordinate_ap", "injection_coordinate_depth"]):
                             coordinates = []
                             depths = sub_proc["injection_coordinate_depth"]
@@ -165,30 +483,69 @@ def convert_procedures_to_v2(data):
                                 depths = [depths]
                             
                             for depth in depths:
-                                coord_transform = Translation(
+                                coord_transforms = []
+                                
+                                # Add translation
+                                translation = Translation(
                                     translation=[
                                         float(sub_proc["injection_coordinate_ml"]),
                                         float(sub_proc["injection_coordinate_ap"]),
                                         float(depth)
                                     ]
                                 )
-                                coordinates.append([coord_transform])
+                                coord_transforms.append(translation)
+                                
+                                # Add rotation for injection angle if available
+                                if sub_proc.get("injection_angle"):
+                                    try:
+                                        angle = float(sub_proc["injection_angle"])
+                                        if angle != 0.0:  # Only add rotation if non-zero
+                                            rotation = Rotation(
+                                                angles=[angle, 0.0, 0.0],  # Assume angle is around x-axis
+                                                angles_unit=AngleUnit.DEGREES
+                                            )
+                                            coord_transforms.append(rotation)
+                                    except (ValueError, TypeError):
+                                        pass  # Skip if angle conversion fails
+                                
+                                coordinates.append(coord_transforms)
                             injection_kwargs["coordinates"] = coordinates
                         
-                        # Handle injection dynamics
+                        # Handle injection dynamics with recovery time
+                        dynamics = []
                         if sub_proc.get("injection_volume"):
                             volumes = sub_proc["injection_volume"]
                             if not isinstance(volumes, list):
                                 volumes = [volumes]
                             
-                            dynamics = []
                             for volume in volumes:
-                                dynamics.append(InjectionDynamics(
-                                    volume=float(volume),
-                                    volume_unit=VolumeUnit.NL,
-                                    profile=InjectionProfile.BOLUS
-                                ))
-                            injection_kwargs["dynamics"] = dynamics
+                                dynamics_kwargs = {
+                                    "volume": float(volume),
+                                    "volume_unit": VolumeUnit.NL,
+                                    "profile": InjectionProfile.BOLUS
+                                }
+                                
+                                # Add recovery time as duration if available
+                                if sub_proc.get("recovery_time"):
+                                    try:
+                                        recovery_time = float(sub_proc["recovery_time"])
+                                        dynamics_kwargs["duration"] = recovery_time
+                                        # Get time unit, default to minutes
+                                        time_unit_str = sub_proc.get("recovery_time_unit", "minute")
+                                        if time_unit_str == "minute":
+                                            dynamics_kwargs["duration_unit"] = TimeUnit.M
+                                        elif time_unit_str == "second":
+                                            dynamics_kwargs["duration_unit"] = TimeUnit.S
+                                        elif time_unit_str == "hour":
+                                            dynamics_kwargs["duration_unit"] = TimeUnit.HR
+                                        else:
+                                            dynamics_kwargs["duration_unit"] = TimeUnit.M
+                                    except (ValueError, TypeError):
+                                        pass  # Skip if recovery time conversion fails
+                                
+                                dynamics.append(InjectionDynamics(**dynamics_kwargs))
+                            
+                        injection_kwargs["dynamics"] = dynamics
                         
                         brain_injection = BrainInjection(**injection_kwargs)
                         procedures_list.append(brain_injection)
@@ -202,6 +559,19 @@ def convert_procedures_to_v2(data):
             subject_id=subject_id,
             subject_procedures=subject_procedures
         )
+        
+        # Add specimen procedures from Excel data if available
+        if excel_sheet_data:
+            try:
+                specimen_procedures_list = get_specimen_procedures_for_subject(subject_id, excel_sheet_data)
+                if specimen_procedures_list:
+                    print(f"    ✓ Found {len(specimen_procedures_list)} specimen procedures in Excel data")
+                    # The specimen_procedures_list already contains proper SpecimenProcedure objects
+                    procedures_obj.specimen_procedures = specimen_procedures_list
+                else:
+                    print(f"    ⚠️  No specimen procedures found for subject {subject_id} in Excel data")
+            except Exception as e:
+                print(f"    ⚠️  Error extracting specimen procedures: {e}")
         
         return procedures_obj
         
@@ -298,6 +668,14 @@ def main():
     print("Creating procedures.json files for patchseq subjects")
     print("=" * 60)
     
+    # Load Excel specimen procedures data once at the beginning
+    print("Loading specimen procedures from Excel...")
+    excel_sheet_data = load_specimen_procedures_excel()
+    if excel_sheet_data:
+        print(f"✓ Loaded Excel data with {len(excel_sheet_data)} sheets")
+    else:
+        print("⚠️  No Excel data loaded - will proceed without specimen procedures")
+    
     # Step 1: Get list of subjects
     subjects = get_subjects_list()
     
@@ -342,7 +720,7 @@ def main():
         
         # Convert to schema 2.0
         print(f"  Converting to schema 2.0...")
-        v2_data = convert_procedures_to_v2(v1_source_data)
+        v2_data = convert_procedures_to_v2(v1_source_data, excel_sheet_data)
         
         # Check if conversion was successful
         if v2_data is None:
