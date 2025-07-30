@@ -79,7 +79,7 @@
           "injection_materials": [
             {
               "object_type": "Viral material",
-              "name": "Viral vector (Nanoject injection) - Right hemisphere",
+              "name": "Viral vector (Nanoject injection)",
               "tars_identifiers": null,
               "addgene_id": null,
               "titer": null,
@@ -110,8 +110,8 @@
               {
                 "object_type": "Translation",
                 "translation": [
-                  0.2,
                   2.0,
+                  0.2,
                   1.8
                 ]
               }
@@ -123,7 +123,7 @@
           "injection_materials": [
             {
               "object_type": "Viral material",
-              "name": "Viral vector (Nanoject injection) - Right hemisphere",
+              "name": "Viral vector (Nanoject injection)",
               "tars_identifiers": null,
               "addgene_id": null,
               "titer": null,
@@ -154,8 +154,8 @@
               {
                 "object_type": "Translation",
                 "translation": [
-                  0.2,
                   1.6,
+                  0.2,
                   2.0
                 ]
               }
@@ -299,43 +299,16 @@
     {
       "object_type": "Specimen procedure",
       "procedure_type": "Refractive index matching",
-      "procedure_name": "EasyIndex 50%",
+      "procedure_name": "EasyIndex",
       "specimen_id": "692912",
       "start_date": "2023-10-13",
-      "end_date": "2023-10-17",
-      "experimenters": [
-        "Holly Myers"
-      ],
-      "protocol_id": null,
-      "protocol_parameters": null,
-      "procedure_details": [
-        {
-          "object_type": "Reagent",
-          "name": "Easy Index",
-          "source": {
-            "name": "LifeCanvas",
-            "abbreviation": null,
-            "registry": null,
-            "registry_identifier": null
-          },
-          "rrid": null,
-          "lot_number": "EI41",
-          "expiration_date": null
-        }
-      ],
-      "notes": "RT 50% easy index 10/13/23 - 10/16/23"
-    },
-    {
-      "object_type": "Specimen procedure",
-      "procedure_type": "Refractive index matching",
-      "procedure_name": "EasyIndex 100%",
-      "specimen_id": "692912",
-      "start_date": "2023-10-17",
       "end_date": "2023-10-18",
       "experimenters": [
         "Holly Myers"
       ],
-      "protocol_id": null,
+      "protocol_id": [
+        "dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1"
+      ],
       "protocol_parameters": null,
       "procedure_details": [
         {

@@ -254,17 +254,10 @@ def get_specimen_procedures_for_subject(subject_id, sheet_data):
         },
         {
             'date_col': 'Index matching_50% EasyIndex_Date(s)',
+            'end_date_col': '100% EasyIndex_Date(s)',  # Use end date from 100% step
             'procedure_type': 'Refractive index matching',
-            'procedure_name': 'EasyIndex 50%',
-            'notes_col': 'Notes_3',  # Index 22 - EasyIndex Notes
-            'reagents': [
-                ('EasyIndex_Lot#', 'Easy Index', 'LifeCanvas')
-            ]
-        },
-        {
-            'date_col': '100% EasyIndex_Date(s)',
-            'procedure_type': 'Refractive index matching',
-            'procedure_name': 'EasyIndex 100%',
+            'procedure_name': 'EasyIndex',
+            'protocol_id': 'dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1',
             'notes_col': 'Notes_3',  # Index 22 - EasyIndex Notes
             'reagents': [
                 ('EasyIndex_Lot#', 'Easy Index', 'LifeCanvas')
@@ -277,6 +270,14 @@ def get_specimen_procedures_for_subject(subject_id, sheet_data):
         
         if pd.notna(date_value):
             start_date, end_date = parse_date_range(date_value)
+            
+            # Check if there's a separate end date column (for merged procedures like EasyIndex)
+            if mapping.get('end_date_col'):
+                end_date_value = safe_get_value(batch_row, mapping['end_date_col'])
+                if pd.notna(end_date_value):
+                    _, end_date_from_col = parse_date_range(end_date_value)
+                    if end_date_from_col:
+                        end_date = end_date_from_col  # Use the end date from the separate column
             
             # Convert date strings to date objects if they exist
             start_date_obj = None
@@ -332,6 +333,10 @@ def get_specimen_procedures_for_subject(subject_id, sheet_data):
                     notes_value = str(notes_raw).strip()
             
             # Create SpecimenProcedure using proper Pydantic model
+            protocol_ids = None
+            if mapping.get('protocol_id'):
+                protocol_ids = [mapping['protocol_id']]  # Convert to list
+            
             specimen_proc = SpecimenProcedure(
                 procedure_type=mapping['procedure_type'],
                 procedure_name=mapping['procedure_name'],
@@ -339,6 +344,7 @@ def get_specimen_procedures_for_subject(subject_id, sheet_data):
                 start_date=start_date_obj,
                 end_date=end_date_obj,
                 experimenters=[experimenter],
+                protocol_id=protocol_ids,
                 procedure_details=procedure_details,
                 notes=notes_value
             )
@@ -465,17 +471,15 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
                             "coordinate_system_name": "BREGMA_ARI"
                         }
                         
-                        # Handle injection materials - create a more descriptive viral material
+                        # Handle injection materials - create viral material without hemisphere
                         material_name = "Viral vector (Nanoject injection)"
-                        if sub_proc.get("injection_hemisphere"):
-                            material_name += f" - {sub_proc['injection_hemisphere']} hemisphere"
                         
                         materials = [ViralMaterial(
                             name=material_name
                         )]
                         injection_kwargs["injection_materials"] = materials
                         
-                        # Handle coordinates with injection angle
+                        # Handle coordinates with correct AP/ML/SI ordering for BREGMA_ARI
                         if all(k in sub_proc for k in ["injection_coordinate_ml", "injection_coordinate_ap", "injection_coordinate_depth"]):
                             coordinates = []
                             depths = sub_proc["injection_coordinate_depth"]
@@ -485,12 +489,12 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
                             for depth in depths:
                                 coord_transforms = []
                                 
-                                # Add translation
+                                # Add translation with correct AP/ML/SI order for BREGMA_ARI
                                 translation = Translation(
                                     translation=[
-                                        float(sub_proc["injection_coordinate_ml"]),
-                                        float(sub_proc["injection_coordinate_ap"]),
-                                        float(depth)
+                                        float(sub_proc["injection_coordinate_ap"]),  # AP first
+                                        float(sub_proc["injection_coordinate_ml"]),  # ML second  
+                                        float(depth)                                 # SI third (depth)
                                     ]
                                 )
                                 coord_transforms.append(translation)
