@@ -1,0 +1,252 @@
+{
+  "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/procedures.py",
+  "schema_version": "1.2.1",
+  "subject_id": "716946",
+  "subject_procedures": [
+    {
+      "procedure_type": "Surgery",
+      "start_date": "2024-04-15",
+      "experimenter_full_name": "30333",
+      "iacuc_protocol": "2109",
+      "animal_weight_prior": null,
+      "animal_weight_post": null,
+      "weight_unit": "gram",
+      "anaesthesia": null,
+      "workstation_id": null,
+      "procedures": [
+        {
+          "procedure_type": "Perfusion",
+          "output_specimen_ids": [
+            "716946"
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.8epv51bejl1b/v6"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "procedure_type": "Surgery",
+      "start_date": "2024-03-05",
+      "experimenter_full_name": "NSB-43",
+      "iacuc_protocol": "2109",
+      "animal_weight_prior": "30.9",
+      "animal_weight_post": "30.7",
+      "weight_unit": "gram",
+      "anaesthesia": {
+        "type": "isoflurane",
+        "duration": "90.0",
+        "duration_unit": "minute",
+        "level": "1.75"
+      },
+      "workstation_id": "SWS 6",
+      "procedures": [
+        {
+          "injection_materials": [
+            {
+              "material_type": "Virus",
+              "name": "pAAV-EF1a-Cre",
+              "tars_identifiers": {
+                "virus_tars_id": "VIR300007_rAAV2-retro",
+                "plasmid_tars_alias": "ExP300007",
+                "prep_lot_number": "V176203",
+                "prep_date": "2024-01-01",
+                "prep_type": "Purified",
+                "prep_protocol": "MGT#1.0"
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Cre",
+                "abbreviation": null,
+                "registry": null,
+                "registry_identifier": "55636"
+              },
+              "titer": 22000000000000,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "recovery_time": "10.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "0.0",
+          "injection_coordinate_ap": "-5.75",
+          "injection_coordinate_depth": [
+            "-0.5"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": null,
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": null,
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Right",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "300.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        },
+        {
+          "injection_materials": [
+            {
+              "material_type": "Virus",
+              "name": "pAAV-EF1a-Cre",
+              "tars_identifiers": {
+                "virus_tars_id": "VIR300007_rAAV2-retro",
+                "plasmid_tars_alias": "ExP300007",
+                "prep_lot_number": "V176203",
+                "prep_date": "2024-01-01",
+                "prep_type": "Purified",
+                "prep_protocol": "MGT#1.0"
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Cre",
+                "abbreviation": null,
+                "registry": null,
+                "registry_identifier": "55636"
+              },
+              "titer": 22000000000000,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "recovery_time": "10.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "2.0",
+          "injection_coordinate_ap": "-7.5",
+          "injection_coordinate_depth": [
+            "-1.75",
+            "-0.9"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": null,
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": null,
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Right",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "200.0",
+            "200.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        },
+        {
+          "injection_materials": [
+            {
+              "material_type": "Virus",
+              "name": "pAAV-EF1a-Flpo",
+              "tars_identifiers": {
+                "virus_tars_id": "VIR300025_rAAV2-retro",
+                "plasmid_tars_alias": "ExP300025",
+                "prep_lot_number": "V163384",
+                "prep_date": "2024-01-01",
+                "prep_type": null,
+                "prep_protocol": null
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Flpo",
+                "abbreviation": null,
+                "registry": {
+                  "name": "Addgene_55637",
+                  "abbreviation": null
+                },
+                "registry_identifier": "Addgene #55637"
+              },
+              "titer": 23000000000000,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "recovery_time": "10.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "0.9",
+          "injection_coordinate_ap": "1.7",
+          "injection_coordinate_depth": [
+            "-0.8",
+            "-0.4"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": null,
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": null,
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Right",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "150.0",
+            "150.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        },
+        {
+          "injection_materials": [
+            {
+              "material_type": "Virus",
+              "name": "pAAV-EF1a-Flpo",
+              "tars_identifiers": {
+                "virus_tars_id": "VIR300025_rAAV2-retro",
+                "plasmid_tars_alias": "ExP300025",
+                "prep_lot_number": "V163384",
+                "prep_date": "2024-01-01",
+                "prep_type": null,
+                "prep_protocol": null
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Flpo",
+                "abbreviation": null,
+                "registry": {
+                  "name": "Addgene_55637",
+                  "abbreviation": null
+                },
+                "registry_identifier": "Addgene #55637"
+              },
+              "titer": 23000000000000,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "recovery_time": "10.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "0.3",
+          "injection_coordinate_ap": "2.0",
+          "injection_coordinate_depth": [
+            "-1.2"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": null,
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": null,
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Right",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "300.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        }
+      ],
+      "notes": null,
+      "protocol_id": "dx.doi.org/10.17504/protocols.io.kqdg392o7g25/v2"
+    }
+  ],
+  "specimen_procedures": [],
+  "notes": null
+}

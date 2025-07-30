@@ -34,6 +34,154 @@ def get_subjects_list():
     return subjects
 
 
+def extract_injection_details(v1_data):
+    """
+    Extract injection details from v1 procedures data for CSV tracking.
+    
+    Args:
+        v1_data: V1 procedures data dict
+        
+    Returns:
+        list: List of injection detail dicts, one per injection
+    """
+    injections = []
+    
+    for proc_data in v1_data.get("subject_procedures", []):
+        if proc_data.get("procedure_type") == "Surgery":
+            for sub_proc in proc_data.get("procedures", []):
+                if sub_proc.get("procedure_type") == "Nanoject injection":
+                    # Extract coordinates
+                    ap = sub_proc.get("injection_coordinate_ap", "")
+                    ml = sub_proc.get("injection_coordinate_ml", "")
+                    depths = sub_proc.get("injection_coordinate_depth", [])
+                    if not isinstance(depths, list):
+                        depths = [depths]
+                    
+                    # Extract volumes
+                    volumes = sub_proc.get("injection_volume", [])
+                    if not isinstance(volumes, list):
+                        volumes = [volumes]
+                    
+                    # Create one entry per depth/volume combination
+                    for i, depth in enumerate(depths):
+                        volume = volumes[i] if i < len(volumes) else volumes[0] if volumes else ""
+                        
+                        injection_details = {
+                            'coordinates_ap': ap,
+                            'coordinates_ml': ml, 
+                            'coordinates_si': depth,
+                            'volume_nl': volume,
+                            'hemisphere': sub_proc.get("injection_hemisphere", ""),
+                            'angle_degrees': sub_proc.get("injection_angle", ""),
+                            'recovery_time': sub_proc.get("recovery_time", ""),
+                            'recovery_time_unit': sub_proc.get("recovery_time_unit", ""),
+                            'protocol_id': sub_proc.get("protocol_id", ""),
+                            # Fields for Polina to fill out
+                            'viral_material_name': "",
+                            'tars_identifier': "",
+                            'addgene_id': "",
+                            'titer_injected': "",
+                            'titer_unit': "",
+                            'targeted_structure': ""
+                        }
+                        injections.append(injection_details)
+    
+    return injections
+
+
+def update_injection_tracking_csv(subjects_processed, all_injection_data):
+    """
+    Update or create a CSV file with injection material tracking information.
+    This creates a separate CSV file dedicated to viral material tracking,
+    keeping the original patchseq_subject_ids.csv unchanged.
+    
+    Args:
+        subjects_processed: List of subject IDs that were processed
+        all_injection_data: Dict mapping subject_id -> list of injection details
+    """
+    csv_file = "viral_material_tracking.csv"
+    
+    # Determine the maximum number of injections across all subjects
+    max_injections = 0
+    for subject_id in subjects_processed:
+        injection_count = len(all_injection_data.get(subject_id, []))
+        max_injections = max(max_injections, injection_count)
+    
+    if max_injections == 0:
+        print(f"  No injections found, skipping CSV update")
+        return
+    
+    print(f"  Maximum injections per subject: {max_injections}")
+    
+    # Create column names for each injection
+    base_columns = [
+        'coordinates_ap', 'coordinates_ml', 'coordinates_si', 'volume_nl',
+        'hemisphere', 'angle_degrees', 'recovery_time', 'recovery_time_unit', 'protocol_id',
+        'viral_material_name', 'tars_identifier', 'addgene_id', 
+        'titer_injected', 'titer_unit', 'targeted_structure'
+    ]
+    
+    # Build all column names
+    columns = ['subject_id']
+    for inj_num in range(1, max_injections + 1):
+        for base_col in base_columns:
+            columns.append(f'injection_{inj_num}_{base_col}')
+    
+    # Load existing CSV if it exists, otherwise create new DataFrame
+    try:
+        existing_df = pd.read_csv(csv_file)
+        print(f"  Loaded existing {csv_file} with {len(existing_df)} rows")
+    except FileNotFoundError:
+        existing_df = pd.DataFrame(columns=columns)
+        print(f"  Creating new {csv_file}")
+    
+    # Update the DataFrame with new data
+    for subject_id in subjects_processed:
+        injections = all_injection_data.get(subject_id, [])
+        
+        # Prepare row data
+        row_data = {'subject_id': subject_id}
+        
+        # Fill in injection data
+        for inj_num in range(1, max_injections + 1):
+            inj_index = inj_num - 1
+            if inj_index < len(injections):
+                injection = injections[inj_index]
+                for base_col in base_columns:
+                    col_name = f'injection_{inj_num}_{base_col}'
+                    row_data[col_name] = injection.get(base_col, "")
+            else:
+                # No injection at this index, fill with empty strings
+                for base_col in base_columns:
+                    col_name = f'injection_{inj_num}_{base_col}'
+                    row_data[col_name] = ""
+        
+        # Update existing row or add new row
+        if subject_id in existing_df['subject_id'].values:
+            # Update existing row
+            idx = existing_df[existing_df['subject_id'] == subject_id].index[0]
+            for col, value in row_data.items():
+                if col in existing_df.columns:
+                    existing_df.at[idx, col] = value
+        else:
+            # Add new row
+            new_row = pd.DataFrame([row_data])
+            existing_df = pd.concat([existing_df, new_row], ignore_index=True)
+    
+    # Ensure all columns exist (in case max_injections increased)
+    for col in columns:
+        if col not in existing_df.columns:
+            existing_df[col] = ""
+    
+    # Reorder columns
+    existing_df = existing_df.reindex(columns=columns, fill_value="")
+    
+    # Save the updated CSV
+    existing_df.to_csv(csv_file, index=False)
+    print(f"  ✓ Updated {csv_file} with injection data for {len(subjects_processed)} subjects")
+    print(f"  📋 Polina can now fill out the empty viral material columns for missing data")
+
+
 def load_specimen_procedures_excel(excel_file="DT_HM_TissueClearingTracking_.xlsx"):
     """
     Load Excel file with specimen procedures data and return a dictionary of DataFrames.
@@ -693,6 +841,10 @@ def main():
     failed_count = 0
     skipped_count = 0
     
+    # Track injection data for CSV
+    all_injection_data = {}
+    subjects_processed = []
+    
     for subject_id in subjects:
         print(f"\nProcessing subject: {subject_id}")
         
@@ -722,6 +874,12 @@ def main():
             # Save the v1 data
             save_procedures_json(subject_id, v1_source_data, is_v1=True)
         
+        # Extract injection details for tracking
+        injection_details = extract_injection_details(v1_source_data)
+        all_injection_data[subject_id] = injection_details
+        if injection_details:
+            print(f"  Found {len(injection_details)} injections for material tracking")
+        
         # Convert to schema 2.0
         print(f"  Converting to schema 2.0...")
         v2_data = convert_procedures_to_v2(v1_source_data, excel_sheet_data)
@@ -736,7 +894,15 @@ def main():
         # Save the v2.0 compliant data
         save_procedures_json(subject_id, v2_data, is_v1=False)
         success_count += 1
+        subjects_processed.append(subject_id)
         print(f"  ✓ Successfully created schema 2.0 compliant procedures.json")
+    
+    # Update injection materials tracking CSV
+    if subjects_processed:
+        print(f"\n" + "=" * 60)
+        print(f"Creating viral material tracking CSV")
+        print(f"=" * 60)
+        update_injection_tracking_csv(subjects_processed, all_injection_data)
     
     # Summary
     print(f"\n" + "=" * 60)
@@ -746,6 +912,9 @@ def main():
     print(f"Successfully processed: {success_count}")
     print(f"Failed: {failed_count}")
     print(f"Skipped (already exist): {skipped_count}")
+    if all_injection_data:
+        total_injections = sum(len(inj_list) for inj_list in all_injection_data.values())
+        print(f"Injection materials tracked: {total_injections} injections across {len(all_injection_data)} subjects")
 
 
 if __name__ == "__main__":
