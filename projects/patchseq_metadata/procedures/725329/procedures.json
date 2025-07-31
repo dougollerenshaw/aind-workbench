@@ -337,7 +337,168 @@
       "notes": null
     }
   ],
-  "specimen_procedures": [],
+  "specimen_procedures": [
+    {
+      "object_type": "Specimen procedure",
+      "procedure_type": "Fixation",
+      "procedure_name": "SHIELD OFF",
+      "specimen_id": "725329",
+      "start_date": "2024-05-13",
+      "end_date": "2024-05-16",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "protocol_parameters": null,
+      "procedure_details": [
+        {
+          "object_type": "Reagent",
+          "name": "SHIELD Buffer",
+          "source": {
+            "name": "LifeCanvas",
+            "abbreviation": null,
+            "registry": null,
+            "registry_identifier": null
+          },
+          "rrid": null,
+          "lot_number": "bu20",
+          "expiration_date": null
+        },
+        {
+          "object_type": "Reagent",
+          "name": "SHIELD Epoxy",
+          "source": {
+            "name": "LifeCanvas",
+            "abbreviation": null,
+            "registry": null,
+            "registry_identifier": null
+          },
+          "rrid": null,
+          "lot_number": "ex47",
+          "expiration_date": null
+        }
+      ],
+      "notes": "5/17/24 - in 1xpbs in 4c"
+    },
+    {
+      "object_type": "Specimen procedure",
+      "procedure_type": "Fixation",
+      "procedure_name": "SHIELD ON",
+      "specimen_id": "725329",
+      "start_date": "2024-05-16",
+      "end_date": "2024-05-17",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "protocol_parameters": null,
+      "procedure_details": [
+        {
+          "object_type": "Reagent",
+          "name": "SHIELD On",
+          "source": {
+            "name": "LifeCanvas",
+            "abbreviation": null,
+            "registry": null,
+            "registry_identifier": null
+          },
+          "rrid": null,
+          "lot_number": "on26",
+          "expiration_date": null
+        }
+      ],
+      "notes": "5/17/24 - in 1xpbs in 4c"
+    },
+    {
+      "object_type": "Specimen procedure",
+      "procedure_type": "Delipidation",
+      "procedure_name": "Passive Delipidation",
+      "specimen_id": "725329",
+      "start_date": "2024-05-28",
+      "end_date": "2024-05-29",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "protocol_parameters": null,
+      "procedure_details": [
+        {
+          "object_type": "Reagent",
+          "name": "Delipidation Buffer",
+          "source": {
+            "name": "Other",
+            "abbreviation": null,
+            "registry": null,
+            "registry_identifier": null
+          },
+          "rrid": null,
+          "lot_number": "d21",
+          "expiration_date": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "object_type": "Specimen procedure",
+      "procedure_type": "Delipidation",
+      "procedure_name": "Active Delipidation",
+      "specimen_id": "725329",
+      "start_date": "2024-05-29",
+      "end_date": "2024-05-31",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "protocol_parameters": null,
+      "procedure_details": [
+        {
+          "object_type": "Reagent",
+          "name": "Conductivity Buffer",
+          "source": {
+            "name": "Other",
+            "abbreviation": null,
+            "registry": null,
+            "registry_identifier": null
+          },
+          "rrid": null,
+          "lot_number": "d21",
+          "expiration_date": null
+        }
+      ],
+      "notes": null
+    },
+    {
+      "object_type": "Specimen procedure",
+      "procedure_type": "Refractive index matching",
+      "procedure_name": "EasyIndex",
+      "specimen_id": "725329",
+      "start_date": "2024-05-31",
+      "end_date": "2024-06-06",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": [
+        "dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1"
+      ],
+      "protocol_parameters": null,
+      "procedure_details": [
+        {
+          "object_type": "Reagent",
+          "name": "Easy Index",
+          "source": {
+            "name": "LifeCanvas",
+            "abbreviation": null,
+            "registry": null,
+            "registry_identifier": null
+          },
+          "rrid": null,
+          "lot_number": "EI54",
+          "expiration_date": null
+        }
+      ],
+      "notes": "RT in 50% EasyIndex 5/31/24 - 6/3/24"
+    }
+  ],
   "coordinate_system": null,
   "notes": null
 }
