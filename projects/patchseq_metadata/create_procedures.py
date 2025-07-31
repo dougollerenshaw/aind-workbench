@@ -450,7 +450,7 @@ def load_specimen_procedures_excel(excel_file="DT_HM_TissueClearingTracking_.xls
         dict: Dictionary where keys are sheet names and values are DataFrames
     """
     # Sheets to ignore (silently skip these)
-    sheets_to_ignore = ["TestBrains", "Additional batch info"]
+    sheets_to_ignore = ["TestBrains"]
     
     try:
         print(f"Loading Excel file: {excel_file}")
