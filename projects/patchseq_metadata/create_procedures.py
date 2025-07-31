@@ -823,6 +823,342 @@ def fetch_procedures_metadata(subject_id):
         return False, None, f"Unexpected error: {str(e)}"
 
 
+def create_viral_material_from_v1(material_data, missing_injection_coords_info):
+    """
+    Create a ViralMaterial object from v1 material data.
+    
+    Args:
+        material_data: Dictionary containing v1 material information
+        missing_injection_coords_info: Dict to track any missing coordinate issues
+        
+    Returns:
+        ViralMaterial: Configured ViralMaterial object
+    """
+    material_name = material_data.get("name", "Viral vector (Nanoject injection)")
+    
+    # Create ViralMaterial with rich data when available
+    viral_kwargs = {"name": material_name}
+    
+    # Add TARS identifiers if available
+    tars_info = material_data.get("tars_identifiers", {})
+    if tars_info and any(tars_info.values()):
+        tars_kwargs = {}
+        if tars_info.get("virus_tars_id"):
+            tars_kwargs["virus_tars_id"] = tars_info["virus_tars_id"]
+        if tars_info.get("plasmid_tars_alias"):
+            # Convert to list if it's a string
+            plasmid_alias = tars_info["plasmid_tars_alias"]
+            if isinstance(plasmid_alias, str):
+                plasmid_alias = [plasmid_alias]
+            tars_kwargs["plasmid_tars_alias"] = plasmid_alias
+        if tars_info.get("prep_lot_number"):
+            tars_kwargs["prep_lot_number"] = tars_info["prep_lot_number"]
+        if tars_info.get("prep_date"):
+            # Convert string date to date object if needed
+            prep_date = tars_info["prep_date"]
+            if isinstance(prep_date, str):
+                try:
+                    prep_date = datetime.strptime(prep_date, "%Y-%m-%d").date()
+                except ValueError:
+                    prep_date = None
+            if prep_date:
+                tars_kwargs["prep_date"] = prep_date
+        if tars_info.get("prep_type"):
+            tars_kwargs["prep_type"] = tars_info["prep_type"]
+        if tars_info.get("prep_protocol"):
+            tars_kwargs["prep_protocol"] = tars_info["prep_protocol"]
+        
+        viral_kwargs["tars_identifiers"] = TarsVirusIdentifiers(**tars_kwargs)
+    
+    # Add addgene_id if available
+    addgene_info = material_data.get("addgene_id", {})
+    if addgene_info and addgene_info.get("registry_identifier"):
+        raw_addgene_id = addgene_info["registry_identifier"]
+        # Normalize format: extract just the number
+        if isinstance(raw_addgene_id, str) and "Addgene #" in raw_addgene_id:
+            addgene_id = raw_addgene_id.replace("Addgene #", "").strip()
+        else:
+            addgene_id = str(raw_addgene_id).strip()
+        
+        # Create PIDName for Addgene
+        try:
+            # Create proper PIDName object
+            viral_kwargs["addgene_id"] = PIDName(
+                name=addgene_info.get("name", material_name),
+                abbreviation=addgene_info.get("abbreviation"),
+                registry="Addgene",
+                registry_identifier=addgene_id
+            )
+        except Exception as e:
+            # Fall back to simple PIDName with minimal info if creation fails
+            try:
+                viral_kwargs["addgene_id"] = PIDName(
+                    name=material_name,
+                    registry="Addgene",
+                    registry_identifier=addgene_id
+                )
+            except:
+                # Skip addgene_id if PIDName creation completely fails
+                pass
+    
+    # Add titer information if available
+    if material_data.get("titer"):
+        try:
+            viral_kwargs["titer"] = int(material_data["titer"])
+        except (ValueError, TypeError):
+            # If conversion to int fails, store as None
+            pass
+    if material_data.get("titer_unit"):
+        viral_kwargs["titer_unit"] = material_data["titer_unit"]
+    
+    return ViralMaterial(**viral_kwargs)
+
+
+def create_injection_coordinates(sub_proc, missing_injection_coords_info):
+    """
+    Create injection coordinates from v1 procedure data with proper handling of missing coordinates.
+    
+    Args:
+        sub_proc: Dictionary containing injection procedure data from v1
+        missing_injection_coords_info: Dict to track missing coordinate issues
+        
+    Returns:
+        list: List of coordinate transforms for the injection
+    """
+    # Handle coordinates with correct AP/ML/SI ordering for BREGMA_ARI
+    if all(k in sub_proc and sub_proc[k] is not None for k in ["injection_coordinate_ml", "injection_coordinate_ap", "injection_coordinate_depth"]):
+        # All coordinates available - use actual values
+        coordinates = []
+        depths = sub_proc["injection_coordinate_depth"]
+        if not isinstance(depths, list):
+            depths = [depths]
+        
+        for depth in depths:
+            coord_transforms = []
+            
+            # Add translation with correct AP/ML/SI order for BREGMA_ARI
+            translation = Translation(
+                translation=[
+                    float(sub_proc["injection_coordinate_ap"]),  # AP first
+                    float(sub_proc["injection_coordinate_ml"]),  # ML second  
+                    float(depth)                                 # SI third (depth)
+                ]
+            )
+            coord_transforms.append(translation)
+            
+            # Add rotation for injection angle if available
+            if sub_proc.get("injection_angle"):
+                try:
+                    angle = float(sub_proc["injection_angle"])
+                    if angle != 0.0:  # Only add rotation if non-zero
+                        rotation = Rotation(
+                            angles=[angle, 0.0, 0.0],  # Assume angle is around x-axis
+                            angles_unit=AngleUnit.DEGREES
+                        )
+                        coord_transforms.append(rotation)
+                except (ValueError, TypeError):
+                    pass  # Skip if angle conversion fails
+            
+            coordinates.append(coord_transforms)
+        return coordinates
+    elif sub_proc.get("injection_coordinate_depth") and sub_proc.get("injection_volume"):
+        # Some coordinates missing - create placeholder coordinates for schema compliance
+        # Track which coordinates are missing
+        missing_injection_coords_info['has_missing_injection_coords'] = True
+        missing_injection_coords = []
+        if sub_proc.get("injection_coordinate_ap") is None:
+            missing_injection_coords.append("AP")
+        if sub_proc.get("injection_coordinate_ml") is None:
+            missing_injection_coords.append("ML")
+        
+        missing_injection_detail = f"Injection missing {'/'.join(missing_injection_coords)} coordinate(s), using placeholder values"
+        missing_injection_coords_info['missing_injection_details'].append(missing_injection_detail)
+        
+        # Use 0.0 for missing AP/ML coordinates, but preserve available ones
+        coordinates = []
+        depths = sub_proc["injection_coordinate_depth"]
+        if not isinstance(depths, list):
+            depths = [depths]
+        
+        # Get available coordinate values, use 0.0 for missing
+        ap_val = 0.0
+        ml_val = 0.0
+        if sub_proc.get("injection_coordinate_ap") is not None:
+            try:
+                ap_val = float(sub_proc["injection_coordinate_ap"])
+            except (ValueError, TypeError):
+                ap_val = 0.0
+        if sub_proc.get("injection_coordinate_ml") is not None:
+            try:
+                ml_val = float(sub_proc["injection_coordinate_ml"])
+            except (ValueError, TypeError):
+                ml_val = 0.0
+        
+        for depth in depths:
+            coord_transforms = []
+            
+            # Add translation with placeholder values for missing coordinates
+            translation = Translation(
+                translation=[ap_val, ml_val, float(depth)]
+            )
+            coord_transforms.append(translation)
+            
+            coordinates.append(coord_transforms)
+        return coordinates
+    else:
+        # No coordinate or volume data - create minimal placeholder for schema compliance
+        missing_injection_coords_info['has_missing_injection_coords'] = True
+        missing_injection_coords_info['missing_injection_details'].append("No injection coordinate or volume data available, using minimal placeholder")
+        return [[Translation(translation=[0.0, 0.0, 0.0])]]
+
+
+def create_injection_dynamics(sub_proc):
+    """
+    Create injection dynamics from v1 procedure data.
+    
+    Args:
+        sub_proc: Dictionary containing injection procedure data from v1
+        
+    Returns:
+        list: List of InjectionDynamics objects
+    """
+    dynamics = []
+    if sub_proc.get("injection_volume"):
+        volumes = sub_proc["injection_volume"]
+        if not isinstance(volumes, list):
+            volumes = [volumes]
+        
+        for volume in volumes:
+            dynamics_kwargs = {
+                "volume": float(volume),
+                "volume_unit": VolumeUnit.NL,
+                "profile": InjectionProfile.BOLUS
+            }
+            
+            # Add recovery time as duration if available
+            if sub_proc.get("recovery_time"):
+                try:
+                    recovery_time = float(sub_proc["recovery_time"])
+                    dynamics_kwargs["duration"] = recovery_time
+                    # Get time unit, default to minutes
+                    time_unit_str = sub_proc.get("recovery_time_unit", "minute")
+                    if time_unit_str == "minute":
+                        dynamics_kwargs["duration_unit"] = TimeUnit.M
+                    elif time_unit_str == "second":
+                        dynamics_kwargs["duration_unit"] = TimeUnit.S
+                    elif time_unit_str == "hour":
+                        dynamics_kwargs["duration_unit"] = TimeUnit.HR
+                    else:
+                        dynamics_kwargs["duration_unit"] = TimeUnit.M
+                except (ValueError, TypeError):
+                    pass  # Skip if recovery time conversion fails
+            
+            dynamics.append(InjectionDynamics(**dynamics_kwargs))
+    
+    return dynamics
+
+
+def create_brain_injection_from_v1(sub_proc, missing_injection_coords_info):
+    """
+    Create a BrainInjection object from v1 procedure data.
+    
+    Args:
+        sub_proc: Dictionary containing injection procedure data from v1
+        missing_injection_coords_info: Dict to track missing coordinate issues
+        
+    Returns:
+        BrainInjection: Configured BrainInjection object
+    """
+    # Build BrainInjection
+    injection_kwargs = {
+        "protocol_id": sub_proc.get("protocol_id"),
+        "coordinate_system_name": "BREGMA_ARI"
+    }
+    
+    # Handle injection materials with rich v1 data when available
+    materials = []
+    injection_materials = sub_proc.get("injection_materials", [])
+    
+    if injection_materials:
+        # Use the detailed viral material information from v1
+        for material_data in injection_materials:
+            materials.append(create_viral_material_from_v1(material_data, missing_injection_coords_info))
+    else:
+        # Fallback to generic viral material when no injection_materials present
+        materials.append(ViralMaterial(name="Viral vector (Nanoject injection)"))
+    
+    injection_kwargs["injection_materials"] = materials
+    injection_kwargs["coordinates"] = create_injection_coordinates(sub_proc, missing_injection_coords_info)
+    injection_kwargs["dynamics"] = create_injection_dynamics(sub_proc)
+    
+    return BrainInjection(**injection_kwargs)
+
+
+def create_surgery_from_v1(proc_data, missing_injection_coords_info):
+    """
+    Create a Surgery object from v1 procedure data.
+    
+    Args:
+        proc_data: Dictionary containing surgery procedure data from v1
+        missing_injection_coords_info: Dict to track missing coordinate issues
+        
+    Returns:
+        Surgery: Configured Surgery object
+    """
+    # Build Surgery object
+    surgery_kwargs = {
+        "start_date": datetime.strptime(proc_data["start_date"], "%Y-%m-%d").date(),
+        "experimenters": [proc_data.get("experimenter_full_name", "Unknown")],
+        "ethics_review_id": proc_data.get("iacuc_protocol"),
+        "protocol_id": proc_data.get("protocol_id"),
+    }
+    
+    # Add optional fields
+    if proc_data.get("animal_weight_prior"):
+        surgery_kwargs["animal_weight_prior"] = float(proc_data["animal_weight_prior"])
+    if proc_data.get("animal_weight_post"):
+        surgery_kwargs["animal_weight_post"] = float(proc_data["animal_weight_post"])
+    if proc_data.get("weight_unit"):
+        surgery_kwargs["weight_unit"] = proc_data["weight_unit"]
+    if proc_data.get("workstation_id"):
+        surgery_kwargs["workstation_id"] = proc_data["workstation_id"]
+    
+    # Handle anaesthesia
+    if proc_data.get("anaesthesia"):
+        anesthesia_data = proc_data["anaesthesia"]
+        anaesthesia = Anaesthetic(
+            anaesthetic_type=anesthesia_data.get("type", "Unknown"),
+            duration=float(anesthesia_data.get("duration", 0)) if anesthesia_data.get("duration") else None,
+            level=float(anesthesia_data.get("level", 0)) if anesthesia_data.get("level") else None
+        )
+        surgery_kwargs["anaesthesia"] = anaesthesia
+    
+    # Check if we need a coordinate system (for injections)
+    has_injections = any(
+        sub_proc.get("procedure_type") == "Nanoject injection" 
+        for sub_proc in proc_data.get("procedures", [])
+    )
+    if has_injections:
+        surgery_kwargs["coordinate_system"] = CoordinateSystemLibrary.BREGMA_ARI
+    
+    # Process nested procedures
+    procedures_list = []
+    for sub_proc in proc_data.get("procedures", []):
+        if sub_proc.get("procedure_type") == "Perfusion":
+            perfusion = Perfusion(
+                protocol_id=sub_proc.get("protocol_id"),
+                output_specimen_ids=sub_proc.get("output_specimen_ids", [])
+            )
+            procedures_list.append(perfusion)
+        
+        elif sub_proc.get("procedure_type") == "Nanoject injection":
+            brain_injection = create_brain_injection_from_v1(sub_proc, missing_injection_coords_info)
+            procedures_list.append(brain_injection)
+    
+    surgery_kwargs["procedures"] = procedures_list
+    return Surgery(**surgery_kwargs)
+
+
 def convert_procedures_to_v2(data, excel_sheet_data=None):
     """
     Convert procedures data from v1.x to schema 2.0 by building proper Pydantic model objects.
@@ -852,277 +1188,7 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
         # Process each subject procedure
         for proc_data in data.get("subject_procedures", []):
             if proc_data.get("procedure_type") == "Surgery":
-                # Build Surgery object
-                surgery_kwargs = {
-                    "start_date": datetime.strptime(proc_data["start_date"], "%Y-%m-%d").date(),
-                    "experimenters": [proc_data.get("experimenter_full_name", "Unknown")],
-                    "ethics_review_id": proc_data.get("iacuc_protocol"),
-                    "protocol_id": proc_data.get("protocol_id"),
-                }
-                
-                # Add optional fields
-                if proc_data.get("animal_weight_prior"):
-                    surgery_kwargs["animal_weight_prior"] = float(proc_data["animal_weight_prior"])
-                if proc_data.get("animal_weight_post"):
-                    surgery_kwargs["animal_weight_post"] = float(proc_data["animal_weight_post"])
-                if proc_data.get("weight_unit"):
-                    surgery_kwargs["weight_unit"] = proc_data["weight_unit"]
-                if proc_data.get("workstation_id"):
-                    surgery_kwargs["workstation_id"] = proc_data["workstation_id"]
-                
-                # Handle anaesthesia
-                if proc_data.get("anaesthesia"):
-                    anesthesia_data = proc_data["anaesthesia"]
-                    anaesthesia = Anaesthetic(
-                        anaesthetic_type=anesthesia_data.get("type", "Unknown"),
-                        duration=float(anesthesia_data.get("duration", 0)) if anesthesia_data.get("duration") else None,
-                        level=float(anesthesia_data.get("level", 0)) if anesthesia_data.get("level") else None
-                    )
-                    surgery_kwargs["anaesthesia"] = anaesthesia
-                
-                # Check if we need a coordinate system (for injections)
-                has_injections = any(
-                    sub_proc.get("procedure_type") == "Nanoject injection" 
-                    for sub_proc in proc_data.get("procedures", [])
-                )
-                if has_injections:
-                    surgery_kwargs["coordinate_system"] = CoordinateSystemLibrary.BREGMA_ARI
-                
-                # Process nested procedures
-                procedures_list = []
-                for sub_proc in proc_data.get("procedures", []):
-                    if sub_proc.get("procedure_type") == "Perfusion":
-                        perfusion = Perfusion(
-                            protocol_id=sub_proc.get("protocol_id"),
-                            output_specimen_ids=sub_proc.get("output_specimen_ids", [])
-                        )
-                        procedures_list.append(perfusion)
-                    
-                    elif sub_proc.get("procedure_type") == "Nanoject injection":
-                        # Build BrainInjection
-                        injection_kwargs = {
-                            "protocol_id": sub_proc.get("protocol_id"),
-                            "coordinate_system_name": "BREGMA_ARI"
-                        }
-                        
-                        # Handle injection materials with rich v1 data when available
-                        materials = []
-                        injection_materials = sub_proc.get("injection_materials", [])
-                        
-                        if injection_materials:
-                            # Use the detailed viral material information from v1
-                            for material_data in injection_materials:
-                                material_name = material_data.get("name", "Viral vector (Nanoject injection)")
-                                
-                                # Create ViralMaterial with rich data when available
-                                viral_kwargs = {"name": material_name}
-                                
-                                # Add TARS identifiers if available
-                                tars_info = material_data.get("tars_identifiers", {})
-                                if tars_info and any(tars_info.values()):
-                                    tars_kwargs = {}
-                                    if tars_info.get("virus_tars_id"):
-                                        tars_kwargs["virus_tars_id"] = tars_info["virus_tars_id"]
-                                    if tars_info.get("plasmid_tars_alias"):
-                                        # Convert to list if it's a string
-                                        plasmid_alias = tars_info["plasmid_tars_alias"]
-                                        if isinstance(plasmid_alias, str):
-                                            plasmid_alias = [plasmid_alias]
-                                        tars_kwargs["plasmid_tars_alias"] = plasmid_alias
-                                    if tars_info.get("prep_lot_number"):
-                                        tars_kwargs["prep_lot_number"] = tars_info["prep_lot_number"]
-                                    if tars_info.get("prep_date"):
-                                        # Convert string date to date object if needed
-                                        prep_date = tars_info["prep_date"]
-                                        if isinstance(prep_date, str):
-                                            try:
-                                                prep_date = datetime.strptime(prep_date, "%Y-%m-%d").date()
-                                            except ValueError:
-                                                prep_date = None
-                                        if prep_date:
-                                            tars_kwargs["prep_date"] = prep_date
-                                    if tars_info.get("prep_type"):
-                                        tars_kwargs["prep_type"] = tars_info["prep_type"]
-                                    if tars_info.get("prep_protocol"):
-                                        tars_kwargs["prep_protocol"] = tars_info["prep_protocol"]
-                                    
-                                    viral_kwargs["tars_identifiers"] = TarsVirusIdentifiers(**tars_kwargs)
-                                
-                                # Add addgene_id if available
-                                addgene_info = material_data.get("addgene_id", {})
-                                if addgene_info and addgene_info.get("registry_identifier"):
-                                    raw_addgene_id = addgene_info["registry_identifier"]
-                                    # Normalize format: extract just the number
-                                    if isinstance(raw_addgene_id, str) and "Addgene #" in raw_addgene_id:
-                                        addgene_id = raw_addgene_id.replace("Addgene #", "").strip()
-                                    else:
-                                        addgene_id = str(raw_addgene_id).strip()
-                                    
-                                    # Create PIDName for Addgene
-                                    try:
-                                        # Create proper PIDName object
-                                        viral_kwargs["addgene_id"] = PIDName(
-                                            name=addgene_info.get("name", material_name),
-                                            abbreviation=addgene_info.get("abbreviation"),
-                                            registry="Addgene",
-                                            registry_identifier=addgene_id
-                                        )
-                                    except Exception as e:
-                                        # Fall back to simple PIDName with minimal info if creation fails
-                                        try:
-                                            viral_kwargs["addgene_id"] = PIDName(
-                                                name=material_name,
-                                                registry="Addgene",
-                                                registry_identifier=addgene_id
-                                            )
-                                        except:
-                                            # Skip addgene_id if PIDName creation completely fails
-                                            pass
-                                
-                                # Add titer information if available
-                                if material_data.get("titer"):
-                                    try:
-                                        viral_kwargs["titer"] = int(material_data["titer"])
-                                    except (ValueError, TypeError):
-                                        # If conversion to int fails, store as None
-                                        pass
-                                if material_data.get("titer_unit"):
-                                    viral_kwargs["titer_unit"] = material_data["titer_unit"]
-                                
-                                materials.append(ViralMaterial(**viral_kwargs))
-                        else:
-                            # Fallback to generic viral material when no injection_materials present
-                            materials.append(ViralMaterial(name="Viral vector (Nanoject injection)"))
-                        
-                        injection_kwargs["injection_materials"] = materials
-                        
-                        # Handle coordinates with correct AP/ML/SI ordering for BREGMA_ARI
-                        if all(k in sub_proc and sub_proc[k] is not None for k in ["injection_coordinate_ml", "injection_coordinate_ap", "injection_coordinate_depth"]):
-                            # All coordinates available - use actual values
-                            coordinates = []
-                            depths = sub_proc["injection_coordinate_depth"]
-                            if not isinstance(depths, list):
-                                depths = [depths]
-                            
-                            for depth in depths:
-                                coord_transforms = []
-                                
-                                # Add translation with correct AP/ML/SI order for BREGMA_ARI
-                                translation = Translation(
-                                    translation=[
-                                        float(sub_proc["injection_coordinate_ap"]),  # AP first
-                                        float(sub_proc["injection_coordinate_ml"]),  # ML second  
-                                        float(depth)                                 # SI third (depth)
-                                    ]
-                                )
-                                coord_transforms.append(translation)
-                                
-                                # Add rotation for injection angle if available
-                                if sub_proc.get("injection_angle"):
-                                    try:
-                                        angle = float(sub_proc["injection_angle"])
-                                        if angle != 0.0:  # Only add rotation if non-zero
-                                            rotation = Rotation(
-                                                angles=[angle, 0.0, 0.0],  # Assume angle is around x-axis
-                                                angles_unit=AngleUnit.DEGREES
-                                            )
-                                            coord_transforms.append(rotation)
-                                    except (ValueError, TypeError):
-                                        pass  # Skip if angle conversion fails
-                                
-                                coordinates.append(coord_transforms)
-                            injection_kwargs["coordinates"] = coordinates
-                        elif sub_proc.get("injection_coordinate_depth") and sub_proc.get("injection_volume"):
-                            # Some coordinates missing - create placeholder coordinates for schema compliance
-                            # Track which coordinates are missing
-                            missing_injection_coords_info['has_missing_injection_coords'] = True
-                            missing_injection_coords = []
-                            if sub_proc.get("injection_coordinate_ap") is None:
-                                missing_injection_coords.append("AP")
-                            if sub_proc.get("injection_coordinate_ml") is None:
-                                missing_injection_coords.append("ML")
-                            
-                            missing_injection_detail = f"Injection missing {'/'.join(missing_injection_coords)} coordinate(s), using placeholder values"
-                            missing_injection_coords_info['missing_injection_details'].append(missing_injection_detail)
-                            
-                            # Use 0.0 for missing AP/ML coordinates, but preserve available ones
-                            coordinates = []
-                            depths = sub_proc["injection_coordinate_depth"]
-                            if not isinstance(depths, list):
-                                depths = [depths]
-                            
-                            # Get available coordinate values, use 0.0 for missing
-                            ap_val = 0.0
-                            ml_val = 0.0
-                            if sub_proc.get("injection_coordinate_ap") is not None:
-                                try:
-                                    ap_val = float(sub_proc["injection_coordinate_ap"])
-                                except (ValueError, TypeError):
-                                    ap_val = 0.0
-                            if sub_proc.get("injection_coordinate_ml") is not None:
-                                try:
-                                    ml_val = float(sub_proc["injection_coordinate_ml"])
-                                except (ValueError, TypeError):
-                                    ml_val = 0.0
-                            
-                            for depth in depths:
-                                coord_transforms = []
-                                
-                                # Add translation with placeholder values for missing coordinates
-                                translation = Translation(
-                                    translation=[ap_val, ml_val, float(depth)]
-                                )
-                                coord_transforms.append(translation)
-                                
-                                coordinates.append(coord_transforms)
-                            injection_kwargs["coordinates"] = coordinates
-                        else:
-                            # No coordinate or volume data - create minimal placeholder for schema compliance
-                            missing_injection_coords_info['has_missing_injection_coords'] = True
-                            missing_injection_coords_info['missing_injection_details'].append("No injection coordinate or volume data available, using minimal placeholder")
-                            injection_kwargs["coordinates"] = [[Translation(translation=[0.0, 0.0, 0.0])]]
-                        
-                        # Handle injection dynamics with recovery time
-                        dynamics = []
-                        if sub_proc.get("injection_volume"):
-                            volumes = sub_proc["injection_volume"]
-                            if not isinstance(volumes, list):
-                                volumes = [volumes]
-                            
-                            for volume in volumes:
-                                dynamics_kwargs = {
-                                    "volume": float(volume),
-                                    "volume_unit": VolumeUnit.NL,
-                                    "profile": InjectionProfile.BOLUS
-                                }
-                                
-                                # Add recovery time as duration if available
-                                if sub_proc.get("recovery_time"):
-                                    try:
-                                        recovery_time = float(sub_proc["recovery_time"])
-                                        dynamics_kwargs["duration"] = recovery_time
-                                        # Get time unit, default to minutes
-                                        time_unit_str = sub_proc.get("recovery_time_unit", "minute")
-                                        if time_unit_str == "minute":
-                                            dynamics_kwargs["duration_unit"] = TimeUnit.M
-                                        elif time_unit_str == "second":
-                                            dynamics_kwargs["duration_unit"] = TimeUnit.S
-                                        elif time_unit_str == "hour":
-                                            dynamics_kwargs["duration_unit"] = TimeUnit.HR
-                                        else:
-                                            dynamics_kwargs["duration_unit"] = TimeUnit.M
-                                    except (ValueError, TypeError):
-                                        pass  # Skip if recovery time conversion fails
-                                
-                                dynamics.append(InjectionDynamics(**dynamics_kwargs))
-                            
-                        injection_kwargs["dynamics"] = dynamics
-                        
-                        brain_injection = BrainInjection(**injection_kwargs)
-                        procedures_list.append(brain_injection)
-                
-                surgery_kwargs["procedures"] = procedures_list
-                surgery = Surgery(**surgery_kwargs)
+                surgery = create_surgery_from_v1(proc_data, missing_injection_coords_info)
                 subject_procedures.append(surgery)
         
         # Build final Procedures object
@@ -1225,6 +1291,149 @@ def check_existing_procedures(subject_id):
     return v1_exists, v2_exists, v1_data, v2_data
 
 
+def process_single_subject(subject_id, excel_sheet_data, args, all_injection_data, all_specimen_procedure_data, subjects_with_missing_injection_coords, subjects_with_missing_specimen_procedures):
+    """
+    Process a single subject: check existing files, fetch/convert data, track injection coordinates and specimen procedures.
+    
+    Args:
+        subject_id: Subject ID to process
+        excel_sheet_data: Excel sheet data for specimen procedures
+        args: Command line arguments
+        all_injection_data: Dict to store injection data for CSV tracking
+        all_specimen_procedure_data: Dict to store specimen procedure data for CSV tracking
+        subjects_with_missing_injection_coords: List to track subjects with missing injection coordinates
+        subjects_with_missing_specimen_procedures: List to track subjects with missing specimen procedures
+        
+    Returns:
+        str: Result status - 'success', 'failed', or 'skipped'
+    """
+    print(f"\nProcessing subject: {subject_id}")
+    
+    # Check if procedures files already exist
+    v1_exists, v2_exists, v1_data, v2_data = check_existing_procedures(subject_id)
+    
+    # Skip if v2.0 file already exists and avoid_overwrite is True
+    if v2_exists and args.avoid_overwrite:
+        print(f"  Skipping - procedures.json (v2.0) already exists (--avoid-overwrite)")
+        return 'skipped'
+    
+    # Use existing v1 data if available, never overwrite it from service
+    if v1_exists:
+        print(f"  Using existing procedures.json.v1")
+        v1_source_data = v1_data
+    else:
+        # Fetch from service only if no v1 file exists
+        print(f"  Fetching procedures metadata from service...")
+        success, v1_source_data, message = fetch_procedures_metadata(subject_id)
+        
+        if not success:
+            print(f"  ✗ Failed to fetch: {message}")
+            return 'failed'
+        
+        # Save the v1 data (only when fetching for first time)
+        save_procedures_json(subject_id, v1_source_data, is_v1=True)
+    
+    # Extract injection details for tracking
+    injection_details = extract_injection_details(v1_source_data)
+    all_injection_data[subject_id] = injection_details
+    if injection_details:
+        print(f"  Found {len(injection_details)} injections for material tracking")
+    
+    # Convert to schema 2.0
+    print(f"  Converting to schema 2.0...")
+    v2_data, missing_injection_coords_info, batch_tracking_info = convert_procedures_to_v2(v1_source_data, excel_sheet_data)
+    
+    # Track subjects with missing injection coordinates
+    if missing_injection_coords_info['has_missing_injection_coords']:
+        subjects_with_missing_injection_coords.append({
+            'subject_id': subject_id,
+            'details': missing_injection_coords_info['missing_injection_details']
+        })
+    
+    # Extract specimen procedure details for tracking
+    if v2_data and hasattr(v2_data, 'specimen_procedures') and v2_data.specimen_procedures:
+        specimen_procedure_details = extract_specimen_procedure_details(v2_data.specimen_procedures, batch_tracking_info)
+        all_specimen_procedure_data[subject_id] = specimen_procedure_details
+        print(f"  Found specimen procedures for tracking")
+    else:
+        # Track subjects with missing specimen procedures - include batch tracking for debugging
+        subjects_with_missing_specimen_procedures.append(subject_id)
+        # Still add batch tracking info even if no procedures found
+        if batch_tracking_info:
+            all_specimen_procedure_data[subject_id] = {
+                'batch_number': batch_tracking_info.get('batch_number', ""),
+                'date_range_tab': batch_tracking_info.get('date_range_tab', "")
+            }
+        else:
+            all_specimen_procedure_data[subject_id] = {}
+    
+    # Check if conversion was successful
+    if v2_data is None:
+        # Conversion failed
+        print(f"  ✗ Schema 2.0 conversion failed - keeping v1 format only")
+        return 'failed'
+    
+    # Save the v2.0 compliant data
+    save_procedures_json(subject_id, v2_data, is_v1=False)
+    print(f"  ✓ Successfully created schema 2.0 compliant procedures.json")
+    return 'success'
+
+
+def print_summary_reports(subjects, success_count, failed_count, skipped_count, all_injection_data, all_specimen_procedure_data, subjects_with_missing_injection_coords, subjects_with_missing_specimen_procedures):
+    """
+    Print comprehensive summary reports for the processing results.
+    
+    Args:
+        subjects: List of all subjects processed
+        success_count: Number of successful conversions
+        failed_count: Number of failed conversions
+        skipped_count: Number of skipped subjects
+        all_injection_data: Dict of injection data by subject
+        all_specimen_procedure_data: Dict of specimen procedure data by subject
+        subjects_with_missing_injection_coords: List of subjects with missing injection coordinates
+        subjects_with_missing_specimen_procedures: List of subjects with missing specimen procedures
+    """
+    # Summary
+    print(f"\n" + "=" * 60)
+    print(f"SUMMARY")
+    print(f"=" * 60)
+    print(f"Total subjects processed: {len(subjects)}")
+    print(f"Successfully processed: {success_count}")
+    print(f"Failed: {failed_count}")
+    print(f"Skipped (already exist): {skipped_count}")
+    if all_injection_data:
+        total_injections = sum(len(inj_list) for inj_list in all_injection_data.values())
+        print(f"Injection materials tracked: {total_injections} injections across {len(all_injection_data)} subjects")
+    if all_specimen_procedure_data:
+        subjects_with_procedures = len([s for s in all_specimen_procedure_data if all_specimen_procedure_data[s]])
+        total_tracked_subjects = len(all_specimen_procedure_data)
+        print(f"Specimen procedures tracked: {total_tracked_subjects} subjects total ({subjects_with_procedures} with procedure data)")
+    
+    # Report subjects with missing injection coordinate information
+    if subjects_with_missing_injection_coords:
+        print(f"\n" + "⚠️  SUBJECTS WITH MISSING INJECTION COORDINATE DATA")
+        print(f"=" * 60)
+        print(f"Found {len(subjects_with_missing_injection_coords)} subjects with incomplete injection coordinate information:")
+        for subject_info in subjects_with_missing_injection_coords:
+            print(f"\n  Subject {subject_info['subject_id']}:")
+            for detail in subject_info['details']:
+                print(f"    • {detail}")
+        print(f"\nNote: Placeholder injection coordinates (0.0) were used for missing values to maintain schema compliance.")
+    else:
+        print(f"\n✓ All subjects had complete injection coordinate data")
+    
+    # Report subjects with missing specimen procedures
+    if subjects_with_missing_specimen_procedures:
+        print(f"\n" + "⚠️  SUBJECTS WITH MISSING SPECIMEN PROCEDURES")
+        print(f"=" * 60)
+        print(f"Found {len(subjects_with_missing_specimen_procedures)} subjects with no specimen procedures from Excel data:")
+        for subject_id in subjects_with_missing_specimen_procedures:
+            print(f"  • Subject {subject_id}")
+        print(f"\nNote: These subjects were not found in the Excel specimen procedures data or had no valid procedures.")
+    else:
+        print(f"\n✓ All subjects had specimen procedures from Excel data")
+
+
 def main():
     """
     Main function to process all subjects and create procedures.json files.
@@ -1275,80 +1484,23 @@ def main():
     all_specimen_procedure_data = {}
     
     for subject_id in subjects:
-        print(f"\nProcessing subject: {subject_id}")
+        result = process_single_subject(
+            subject_id, 
+            excel_sheet_data, 
+            args, 
+            all_injection_data, 
+            all_specimen_procedure_data, 
+            subjects_with_missing_injection_coords, 
+            subjects_with_missing_specimen_procedures
+        )
         
-        # Check if procedures files already exist
-        v1_exists, v2_exists, v1_data, v2_data = check_existing_procedures(subject_id)
-        
-        # Skip if v2.0 file already exists and avoid_overwrite is True
-        if v2_exists and args.avoid_overwrite:
-            print(f"  Skipping - procedures.json (v2.0) already exists (--avoid-overwrite)")
-            skipped_count += 1
-            continue
-        
-        # Use existing v1 data if available, never overwrite it from service
-        if v1_exists:
-            print(f"  Using existing procedures.json.v1")
-            v1_source_data = v1_data
-        else:
-            # Fetch from service only if no v1 file exists
-            print(f"  Fetching procedures metadata from service...")
-            success, v1_source_data, message = fetch_procedures_metadata(subject_id)
-            
-            if not success:
-                failed_count += 1
-                print(f"  ✗ Failed to fetch: {message}")
-                continue
-            
-            # Save the v1 data (only when fetching for first time)
-            save_procedures_json(subject_id, v1_source_data, is_v1=True)
-        
-        # Extract injection details for tracking
-        injection_details = extract_injection_details(v1_source_data)
-        all_injection_data[subject_id] = injection_details
-        if injection_details:
-            print(f"  Found {len(injection_details)} injections for material tracking")
-        
-        # Convert to schema 2.0
-        print(f"  Converting to schema 2.0...")
-        v2_data, missing_injection_coords_info, batch_tracking_info = convert_procedures_to_v2(v1_source_data, excel_sheet_data)
-        
-        # Track subjects with missing injection coordinates
-        if missing_injection_coords_info['has_missing_injection_coords']:
-            subjects_with_missing_injection_coords.append({
-                'subject_id': subject_id,
-                'details': missing_injection_coords_info['missing_injection_details']
-            })
-        
-        # Extract specimen procedure details for tracking
-        if v2_data and hasattr(v2_data, 'specimen_procedures') and v2_data.specimen_procedures:
-            specimen_procedure_details = extract_specimen_procedure_details(v2_data.specimen_procedures, batch_tracking_info)
-            all_specimen_procedure_data[subject_id] = specimen_procedure_details
-            print(f"  Found specimen procedures for tracking")
-        else:
-            # Track subjects with missing specimen procedures - include batch tracking for debugging
-            subjects_with_missing_specimen_procedures.append(subject_id)
-            # Still add batch tracking info even if no procedures found
-            if batch_tracking_info:
-                all_specimen_procedure_data[subject_id] = {
-                    'batch_number': batch_tracking_info.get('batch_number', ""),
-                    'date_range_tab': batch_tracking_info.get('date_range_tab', "")
-                }
-            else:
-                all_specimen_procedure_data[subject_id] = {}
-        
-        # Check if conversion was successful
-        if v2_data is None:
-            # Conversion failed
+        if result == 'success':
+            success_count += 1
+            subjects_processed.append(subject_id)
+        elif result == 'failed':
             failed_count += 1
-            print(f"  ✗ Schema 2.0 conversion failed - keeping v1 format only")
-            continue
-        
-        # Save the v2.0 compliant data
-        save_procedures_json(subject_id, v2_data, is_v1=False)
-        success_count += 1
-        subjects_processed.append(subject_id)
-        print(f"  ✓ Successfully created schema 2.0 compliant procedures.json")
+        elif result == 'skipped':
+            skipped_count += 1
     
     # Update injection materials tracking CSV
     if subjects_processed:
@@ -1362,45 +1514,17 @@ def main():
         print(f"=" * 60)
         update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_procedure_data)
     
-    # Summary
-    print(f"\n" + "=" * 60)
-    print(f"SUMMARY")
-    print(f"=" * 60)
-    print(f"Total subjects processed: {len(subjects)}")
-    print(f"Successfully processed: {success_count}")
-    print(f"Failed: {failed_count}")
-    print(f"Skipped (already exist): {skipped_count}")
-    if all_injection_data:
-        total_injections = sum(len(inj_list) for inj_list in all_injection_data.values())
-        print(f"Injection materials tracked: {total_injections} injections across {len(all_injection_data)} subjects")
-    if all_specimen_procedure_data:
-        subjects_with_procedures = len([s for s in all_specimen_procedure_data if all_specimen_procedure_data[s]])
-        total_tracked_subjects = len(all_specimen_procedure_data)
-        print(f"Specimen procedures tracked: {total_tracked_subjects} subjects total ({subjects_with_procedures} with procedure data)")
-    
-    # Report subjects with missing injection coordinate information
-    if subjects_with_missing_injection_coords:
-        print(f"\n" + "⚠️  SUBJECTS WITH MISSING INJECTION COORDINATE DATA")
-        print(f"=" * 60)
-        print(f"Found {len(subjects_with_missing_injection_coords)} subjects with incomplete injection coordinate information:")
-        for subject_info in subjects_with_missing_injection_coords:
-            print(f"\n  Subject {subject_info['subject_id']}:")
-            for detail in subject_info['details']:
-                print(f"    • {detail}")
-        print(f"\nNote: Placeholder injection coordinates (0.0) were used for missing values to maintain schema compliance.")
-    else:
-        print(f"\n✓ All subjects had complete injection coordinate data")
-    
-    # Report subjects with missing specimen procedures
-    if subjects_with_missing_specimen_procedures:
-        print(f"\n" + "⚠️  SUBJECTS WITH MISSING SPECIMEN PROCEDURES")
-        print(f"=" * 60)
-        print(f"Found {len(subjects_with_missing_specimen_procedures)} subjects with no specimen procedures from Excel data:")
-        for subject_id in subjects_with_missing_specimen_procedures:
-            print(f"  • Subject {subject_id}")
-        print(f"\nNote: These subjects were not found in the Excel specimen procedures data or had no valid procedures.")
-    else:
-        print(f"\n✓ All subjects had specimen procedures from Excel data")
+    # Print comprehensive summary reports
+    print_summary_reports(
+        subjects, 
+        success_count, 
+        failed_count, 
+        skipped_count, 
+        all_injection_data, 
+        all_specimen_procedure_data, 
+        subjects_with_missing_injection_coords, 
+        subjects_with_missing_specimen_procedures
+    )
 
 
 if __name__ == "__main__":
