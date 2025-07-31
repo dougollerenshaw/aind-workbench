@@ -80,9 +80,24 @@
             {
               "object_type": "Viral material",
               "name": "pAAV-EF1a-Cre",
-              "tars_identifiers": null,
-              "addgene_id": null,
-              "titer": null,
+              "tars_identifiers": {
+                "object_type": "Tars virus identifiers",
+                "virus_tars_id": "VIR300007_rAAV2-retro",
+                "plasmid_tars_alias": [
+                  "ExP300007"
+                ],
+                "prep_lot_number": "V176203",
+                "prep_date": "2024-01-01",
+                "prep_type": "Purified",
+                "prep_protocol": "MGT#1.0"
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Cre",
+                "abbreviation": null,
+                "registry": "Addgene",
+                "registry_identifier": "55636"
+              },
+              "titer": 22000000000000,
               "titer_unit": "gc/mL"
             }
           ],
@@ -124,9 +139,24 @@
             {
               "object_type": "Viral material",
               "name": "pAAV-EF1a-Cre",
-              "tars_identifiers": null,
-              "addgene_id": null,
-              "titer": null,
+              "tars_identifiers": {
+                "object_type": "Tars virus identifiers",
+                "virus_tars_id": "VIR300007_rAAV2-retro",
+                "plasmid_tars_alias": [
+                  "ExP300007"
+                ],
+                "prep_lot_number": "V176203",
+                "prep_date": "2024-01-01",
+                "prep_type": "Purified",
+                "prep_protocol": "MGT#1.0"
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Cre",
+                "abbreviation": null,
+                "registry": "Addgene",
+                "registry_identifier": "55636"
+              },
+              "titer": 22000000000000,
               "titer_unit": "gc/mL"
             }
           ],
@@ -191,9 +221,24 @@
             {
               "object_type": "Viral material",
               "name": "pAAV-EF1a-Flpo",
-              "tars_identifiers": null,
-              "addgene_id": null,
-              "titer": null,
+              "tars_identifiers": {
+                "object_type": "Tars virus identifiers",
+                "virus_tars_id": "VIR300025_rAAV2-retro",
+                "plasmid_tars_alias": [
+                  "ExP300025"
+                ],
+                "prep_lot_number": "V163384",
+                "prep_date": "2024-01-01",
+                "prep_type": null,
+                "prep_protocol": null
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Flpo",
+                "abbreviation": null,
+                "registry": "Addgene",
+                "registry_identifier": "55637"
+              },
+              "titer": 23000000000000,
               "titer_unit": "gc/mL"
             }
           ],
@@ -235,9 +280,24 @@
             {
               "object_type": "Viral material",
               "name": "pAAV-EF1a-Flpo",
-              "tars_identifiers": null,
-              "addgene_id": null,
-              "titer": null,
+              "tars_identifiers": {
+                "object_type": "Tars virus identifiers",
+                "virus_tars_id": "VIR300025_rAAV2-retro",
+                "plasmid_tars_alias": [
+                  "ExP300025"
+                ],
+                "prep_lot_number": "V163384",
+                "prep_date": "2024-01-01",
+                "prep_type": null,
+                "prep_protocol": null
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Flpo",
+                "abbreviation": null,
+                "registry": "Addgene",
+                "registry_identifier": "55637"
+              },
+              "titer": 23000000000000,
               "titer_unit": "gc/mL"
             }
           ],

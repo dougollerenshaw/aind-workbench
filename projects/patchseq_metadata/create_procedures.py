@@ -14,7 +14,7 @@ from datetime import date, datetime
 from aind_data_schema.core.procedures import Procedures, Surgery, SpecimenProcedure
 from aind_data_schema.components.coordinates import CoordinateSystemLibrary, Translation, Rotation
 from aind_data_schema.components.surgery_procedures import BrainInjection, Perfusion, Anaesthetic
-from aind_data_schema.components.injection_procedures import InjectionDynamics, InjectionProfile, NonViralMaterial, ViralMaterial
+from aind_data_schema.components.injection_procedures import InjectionDynamics, InjectionProfile, ViralMaterial, TarsVirusIdentifiers
 from aind_data_schema.components.reagent import Reagent
 from aind_data_schema_models.organizations import Organization
 from aind_data_schema_models.units import VolumeUnit, TimeUnit, AngleUnit
@@ -62,47 +62,55 @@ def extract_injection_details(v1_data):
                     if not isinstance(volumes, list):
                         volumes = [volumes]
                     
-                    # Extract viral material information if available
-                    viral_material_name = ""
-                    tars_identifier = ""
-                    addgene_id = ""
-                    titer_injected = ""
-                    titer_unit = ""
-                    targeted_structure = sub_proc.get("targeted_structure", "")
+                    # Initialize all viral material fields
+                    viral_material_fields = {
+                        'name': "",
+                        'tars_identifiers.virus_tars_id': "",
+                        'tars_identifiers.plasmid_tars_alias': "",
+                        'tars_identifiers.prep_lot_number': "",
+                        'tars_identifiers.prep_date': "",
+                        'tars_identifiers.prep_type': "",
+                        'tars_identifiers.prep_protocol': "",
+                        'addgene_id.name': "",
+                        'addgene_id.abbreviation': "",
+                        'addgene_id.registry': "",
+                        'addgene_id.registry_identifier': "",
+                        'titer': "",
+                        'titer_unit': ""
+                    }
                     
                     # Get viral material details from injection_materials
                     injection_materials = sub_proc.get("injection_materials", [])
                     if injection_materials and len(injection_materials) > 0:
                         material = injection_materials[0]  # Take first material
-                        viral_material_name = material.get("name", "")
+                        
+                        # Basic material info
+                        viral_material_fields['name'] = material.get("name", "")
+                        viral_material_fields['titer'] = material.get("titer", "")
+                        viral_material_fields['titer_unit'] = material.get("titer_unit", "")
                         
                         # Extract TARS information
                         tars_info = material.get("tars_identifiers", {})
                         if tars_info:
-                            tars_parts = []
-                            if tars_info.get("virus_tars_id"):
-                                tars_parts.append(f"Virus: {tars_info['virus_tars_id']}")
-                            if tars_info.get("plasmid_tars_alias"):
-                                tars_parts.append(f"Plasmid: {tars_info['plasmid_tars_alias']}")
-                            if tars_info.get("prep_lot_number"):
-                                tars_parts.append(f"Lot: {tars_info['prep_lot_number']}")
-                            tars_identifier = "; ".join(tars_parts)
+                            viral_material_fields['tars_identifiers.virus_tars_id'] = tars_info.get("virus_tars_id", "")
+                            # Handle plasmid_tars_alias array - join with semicolon if multiple
+                            plasmid_alias = tars_info.get("plasmid_tars_alias", "")
+                            if isinstance(plasmid_alias, list):
+                                viral_material_fields['tars_identifiers.plasmid_tars_alias'] = "; ".join(plasmid_alias)
+                            else:
+                                viral_material_fields['tars_identifiers.plasmid_tars_alias'] = str(plasmid_alias)
+                            viral_material_fields['tars_identifiers.prep_lot_number'] = tars_info.get("prep_lot_number", "")
+                            viral_material_fields['tars_identifiers.prep_date'] = str(tars_info.get("prep_date", ""))
+                            viral_material_fields['tars_identifiers.prep_type'] = tars_info.get("prep_type", "")
+                            viral_material_fields['tars_identifiers.prep_protocol'] = tars_info.get("prep_protocol", "")
                         
                         # Extract Addgene information
                         addgene_info = material.get("addgene_id", {})
-                        if addgene_info and addgene_info.get("registry_identifier"):
-                            raw_addgene_id = addgene_info["registry_identifier"]
-                            # Normalize format: extract just the number if it contains "Addgene #"
-                            if isinstance(raw_addgene_id, str) and "Addgene #" in raw_addgene_id:
-                                # Extract just the number after "Addgene #"
-                                addgene_id = raw_addgene_id.replace("Addgene #", "").strip()
-                            else:
-                                addgene_id = str(raw_addgene_id).strip()
-                        
-                        # Extract titer information
-                        if material.get("titer"):
-                            titer_injected = str(material["titer"])
-                            titer_unit = material.get("titer_unit", "")
+                        if addgene_info:
+                            viral_material_fields['addgene_id.name'] = addgene_info.get("name", "")
+                            viral_material_fields['addgene_id.abbreviation'] = addgene_info.get("abbreviation", "")
+                            viral_material_fields['addgene_id.registry'] = addgene_info.get("registry", "")
+                            viral_material_fields['addgene_id.registry_identifier'] = addgene_info.get("registry_identifier", "")
                     
                     # Create one entry per depth/volume combination
                     for i, depth in enumerate(depths):
@@ -118,14 +126,10 @@ def extract_injection_details(v1_data):
                             'recovery_time': sub_proc.get("recovery_time", ""),
                             'recovery_time_unit': sub_proc.get("recovery_time_unit", ""),
                             'protocol_id': sub_proc.get("protocol_id", ""),
-                            # Viral material info from v1 data
-                            'viral_material_name': viral_material_name,
-                            'tars_identifier': tars_identifier,
-                            'addgene_id': addgene_id,
-                            'titer_injected': titer_injected,
-                            'titer_unit': titer_unit,
-                            'targeted_structure': targeted_structure
                         }
+                        # Add all viral material fields
+                        injection_details.update(viral_material_fields)
+                        
                         injections.append(injection_details)
     
     return injections
@@ -153,13 +157,24 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
     
     print(f"  Total injections to track: {total_injections}")
     
-    # Define columns for tidy format
+    # Define columns for tidy format with comprehensive viral material fields
     columns = [
         'subject_id', 'injection_number',
         'coordinates_ap', 'coordinates_ml', 'coordinates_si', 'volume_nl',
         'hemisphere', 'angle_degrees', 'recovery_time', 'recovery_time_unit', 'protocol_id',
-        'viral_material_name', 'tars_identifier', 'addgene_id', 
-        'titer_injected', 'titer_unit', 'targeted_structure'
+        'name', 
+        'tars_identifiers.virus_tars_id',
+        'tars_identifiers.plasmid_tars_alias',
+        'tars_identifiers.prep_lot_number',
+        'tars_identifiers.prep_date',
+        'tars_identifiers.prep_type',
+        'tars_identifiers.prep_protocol',
+        'addgene_id.name',
+        'addgene_id.abbreviation',
+        'addgene_id.registry',
+        'addgene_id.registry_identifier',
+        'titer',
+        'titer_unit'
     ]
     
     # Load existing CSV if it exists, otherwise create new DataFrame
@@ -207,8 +222,7 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
     
     # Save the updated CSV
     combined_df.to_csv(csv_file, index=False)
-    print(f"  ✓ Updated {csv_file} with {len(new_rows)} injection rows for {len(subjects_processed)} subjects")
-    print(f"  📋 Polina can now fill out the empty viral material columns for missing data")
+    print(f"  Updated {csv_file} with {len(new_rows)} injection rows for {len(subjects_processed)} subjects")
 
 
 def load_specimen_procedures_excel(excel_file="DT_HM_TissueClearingTracking_.xlsx"):
@@ -317,7 +331,7 @@ def load_specimen_procedures_excel(excel_file="DT_HM_TissueClearingTracking_.xls
         return sheet_data
         
     except Exception as e:
-        print(f"❌ Error loading Excel file: {e}")
+        print(f" Error loading Excel file: {e}")
         return None
 
 
@@ -660,6 +674,37 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
                                 # Create ViralMaterial with rich data when available
                                 viral_kwargs = {"name": material_name}
                                 
+                                # Add TARS identifiers if available
+                                tars_info = material_data.get("tars_identifiers", {})
+                                if tars_info and any(tars_info.values()):
+                                    tars_kwargs = {}
+                                    if tars_info.get("virus_tars_id"):
+                                        tars_kwargs["virus_tars_id"] = tars_info["virus_tars_id"]
+                                    if tars_info.get("plasmid_tars_alias"):
+                                        # Convert to list if it's a string
+                                        plasmid_alias = tars_info["plasmid_tars_alias"]
+                                        if isinstance(plasmid_alias, str):
+                                            plasmid_alias = [plasmid_alias]
+                                        tars_kwargs["plasmid_tars_alias"] = plasmid_alias
+                                    if tars_info.get("prep_lot_number"):
+                                        tars_kwargs["prep_lot_number"] = tars_info["prep_lot_number"]
+                                    if tars_info.get("prep_date"):
+                                        # Convert string date to date object if needed
+                                        prep_date = tars_info["prep_date"]
+                                        if isinstance(prep_date, str):
+                                            try:
+                                                prep_date = datetime.strptime(prep_date, "%Y-%m-%d").date()
+                                            except ValueError:
+                                                prep_date = None
+                                        if prep_date:
+                                            tars_kwargs["prep_date"] = prep_date
+                                    if tars_info.get("prep_type"):
+                                        tars_kwargs["prep_type"] = tars_info["prep_type"]
+                                    if tars_info.get("prep_protocol"):
+                                        tars_kwargs["prep_protocol"] = tars_info["prep_protocol"]
+                                    
+                                    viral_kwargs["tars_identifiers"] = TarsVirusIdentifiers(**tars_kwargs)
+                                
                                 # Add addgene_id if available
                                 addgene_info = material_data.get("addgene_id", {})
                                 if addgene_info and addgene_info.get("registry_identifier"):
@@ -669,14 +714,31 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
                                         addgene_id = raw_addgene_id.replace("Addgene #", "").strip()
                                     else:
                                         addgene_id = str(raw_addgene_id).strip()
-                                    # Note: ViralMaterial schema may not have addgene_id field, 
-                                    # but we preserve this in the name or description if needed
+                                    
+                                    # Create PIDName for Addgene
+                                    try:
+                                        # Try to create PIDName object (registry should be "Addgene")
+                                        viral_kwargs["addgene_id"] = {
+                                            "name": addgene_info.get("name", material_name),
+                                            "abbreviation": addgene_info.get("abbreviation"),
+                                            "registry": "Addgene",
+                                            "registry_identifier": addgene_id
+                                        }
+                                    except:
+                                        # Fall back to simple dict if PIDName creation fails
+                                        viral_kwargs["addgene_id"] = {
+                                            "registry_identifier": addgene_id
+                                        }
                                 
                                 # Add titer information if available
                                 if material_data.get("titer"):
-                                    # Note: ViralMaterial schema may not have titer field,
-                                    # but we preserve this information in the CSV
-                                    pass
+                                    try:
+                                        viral_kwargs["titer"] = int(material_data["titer"])
+                                    except (ValueError, TypeError):
+                                        # If conversion to int fails, store as None
+                                        pass
+                                if material_data.get("titer_unit"):
+                                    viral_kwargs["titer_unit"] = material_data["titer_unit"]
                                 
                                 materials.append(ViralMaterial(**viral_kwargs))
                         else:
