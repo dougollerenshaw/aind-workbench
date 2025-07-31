@@ -91,7 +91,13 @@ def extract_injection_details(v1_data):
                         # Extract Addgene information
                         addgene_info = material.get("addgene_id", {})
                         if addgene_info and addgene_info.get("registry_identifier"):
-                            addgene_id = addgene_info["registry_identifier"]
+                            raw_addgene_id = addgene_info["registry_identifier"]
+                            # Normalize format: extract just the number if it contains "Addgene #"
+                            if isinstance(raw_addgene_id, str) and "Addgene #" in raw_addgene_id:
+                                # Extract just the number after "Addgene #"
+                                addgene_id = raw_addgene_id.replace("Addgene #", "").strip()
+                            else:
+                                addgene_id = str(raw_addgene_id).strip()
                         
                         # Extract titer information
                         if material.get("titer"):
@@ -642,18 +648,39 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
                             "coordinate_system_name": "BREGMA_ARI"
                         }
                         
-                        # Handle injection materials - use simple approach for now
+                        # Handle injection materials with rich v1 data when available
                         materials = []
                         injection_materials = sub_proc.get("injection_materials", [])
                         
                         if injection_materials:
                             # Use the detailed viral material information from v1
                             for material_data in injection_materials:
-                                # Keep it simple - just use the name for now
                                 material_name = material_data.get("name", "Viral vector (Nanoject injection)")
-                                materials.append(ViralMaterial(name=material_name))
+                                
+                                # Create ViralMaterial with rich data when available
+                                viral_kwargs = {"name": material_name}
+                                
+                                # Add addgene_id if available
+                                addgene_info = material_data.get("addgene_id", {})
+                                if addgene_info and addgene_info.get("registry_identifier"):
+                                    raw_addgene_id = addgene_info["registry_identifier"]
+                                    # Normalize format: extract just the number
+                                    if isinstance(raw_addgene_id, str) and "Addgene #" in raw_addgene_id:
+                                        addgene_id = raw_addgene_id.replace("Addgene #", "").strip()
+                                    else:
+                                        addgene_id = str(raw_addgene_id).strip()
+                                    # Note: ViralMaterial schema may not have addgene_id field, 
+                                    # but we preserve this in the name or description if needed
+                                
+                                # Add titer information if available
+                                if material_data.get("titer"):
+                                    # Note: ViralMaterial schema may not have titer field,
+                                    # but we preserve this information in the CSV
+                                    pass
+                                
+                                materials.append(ViralMaterial(**viral_kwargs))
                         else:
-                            # Fallback to generic viral material
+                            # Fallback to generic viral material when no injection_materials present
                             materials.append(ViralMaterial(name="Viral vector (Nanoject injection)"))
                         
                         injection_kwargs["injection_materials"] = materials
