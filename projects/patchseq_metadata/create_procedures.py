@@ -607,8 +607,19 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
     """
     Convert procedures data from v1.x to schema 2.0 by building proper Pydantic model objects.
     Also adds specimen procedures from Excel data if available.
-    Returns the converted data if successful, or None if conversion fails.
+    Returns tuple: (converted_data_or_None, missing_injection_coords_info)
+    
+    missing_injection_coords_info is a dict with details about any missing injection coordinate issues:
+    {
+        'has_missing_injection_coords': bool,
+        'missing_injection_details': [list of strings describing what injection coordinates are missing]
+    }
     """
+    missing_injection_coords_info = {
+        'has_missing_injection_coords': False,
+        'missing_injection_details': []
+    }
+    
     try:
         # Extract basic info
         subject_id = data["subject_id"]
@@ -762,7 +773,8 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
                         injection_kwargs["injection_materials"] = materials
                         
                         # Handle coordinates with correct AP/ML/SI ordering for BREGMA_ARI
-                        if all(k in sub_proc for k in ["injection_coordinate_ml", "injection_coordinate_ap", "injection_coordinate_depth"]):
+                        if all(k in sub_proc and sub_proc[k] is not None for k in ["injection_coordinate_ml", "injection_coordinate_ap", "injection_coordinate_depth"]):
+                            # All coordinates available - use actual values
                             coordinates = []
                             depths = sub_proc["injection_coordinate_depth"]
                             if not isinstance(depths, list):
@@ -796,6 +808,55 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
                                 
                                 coordinates.append(coord_transforms)
                             injection_kwargs["coordinates"] = coordinates
+                        elif sub_proc.get("injection_coordinate_depth") and sub_proc.get("injection_volume"):
+                            # Some coordinates missing - create placeholder coordinates for schema compliance
+                            # Track which coordinates are missing
+                            missing_injection_coords_info['has_missing_injection_coords'] = True
+                            missing_injection_coords = []
+                            if sub_proc.get("injection_coordinate_ap") is None:
+                                missing_injection_coords.append("AP")
+                            if sub_proc.get("injection_coordinate_ml") is None:
+                                missing_injection_coords.append("ML")
+                            
+                            missing_injection_detail = f"Injection missing {'/'.join(missing_injection_coords)} coordinate(s), using placeholder values"
+                            missing_injection_coords_info['missing_injection_details'].append(missing_injection_detail)
+                            
+                            # Use 0.0 for missing AP/ML coordinates, but preserve available ones
+                            coordinates = []
+                            depths = sub_proc["injection_coordinate_depth"]
+                            if not isinstance(depths, list):
+                                depths = [depths]
+                            
+                            # Get available coordinate values, use 0.0 for missing
+                            ap_val = 0.0
+                            ml_val = 0.0
+                            if sub_proc.get("injection_coordinate_ap") is not None:
+                                try:
+                                    ap_val = float(sub_proc["injection_coordinate_ap"])
+                                except (ValueError, TypeError):
+                                    ap_val = 0.0
+                            if sub_proc.get("injection_coordinate_ml") is not None:
+                                try:
+                                    ml_val = float(sub_proc["injection_coordinate_ml"])
+                                except (ValueError, TypeError):
+                                    ml_val = 0.0
+                            
+                            for depth in depths:
+                                coord_transforms = []
+                                
+                                # Add translation with placeholder values for missing coordinates
+                                translation = Translation(
+                                    translation=[ap_val, ml_val, float(depth)]
+                                )
+                                coord_transforms.append(translation)
+                                
+                                coordinates.append(coord_transforms)
+                            injection_kwargs["coordinates"] = coordinates
+                        else:
+                            # No coordinate or volume data - create minimal placeholder for schema compliance
+                            missing_injection_coords_info['has_missing_injection_coords'] = True
+                            missing_injection_coords_info['missing_injection_details'].append("No injection coordinate or volume data available, using minimal placeholder")
+                            injection_kwargs["coordinates"] = [[Translation(translation=[0.0, 0.0, 0.0])]]
                         
                         # Handle injection dynamics with recovery time
                         dynamics = []
@@ -859,11 +920,11 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
             except Exception as e:
                 print(f"    ⚠️  Error extracting specimen procedures: {e}")
         
-        return procedures_obj
+        return procedures_obj, missing_injection_coords_info
         
     except Exception as e:
         print(f"    ✗ Schema conversion failed: {e}")
-        return None
+        return None, missing_injection_coords_info
 
 
 def save_procedures_json(subject_id, data, is_v1=False):
@@ -979,6 +1040,9 @@ def main():
     all_injection_data = {}
     subjects_processed = []
     
+    # Track subjects with missing injection coordinate information
+    subjects_with_missing_injection_coords = []
+    
     for subject_id in subjects:
         print(f"\nProcessing subject: {subject_id}")
         
@@ -1016,7 +1080,14 @@ def main():
         
         # Convert to schema 2.0
         print(f"  Converting to schema 2.0...")
-        v2_data = convert_procedures_to_v2(v1_source_data, excel_sheet_data)
+        v2_data, missing_injection_coords_info = convert_procedures_to_v2(v1_source_data, excel_sheet_data)
+        
+        # Track subjects with missing injection coordinates
+        if missing_injection_coords_info['has_missing_injection_coords']:
+            subjects_with_missing_injection_coords.append({
+                'subject_id': subject_id,
+                'details': missing_injection_coords_info['missing_injection_details']
+            })
         
         # Check if conversion was successful
         if v2_data is None:
@@ -1049,6 +1120,19 @@ def main():
     if all_injection_data:
         total_injections = sum(len(inj_list) for inj_list in all_injection_data.values())
         print(f"Injection materials tracked: {total_injections} injections across {len(all_injection_data)} subjects")
+    
+    # Report subjects with missing injection coordinate information
+    if subjects_with_missing_injection_coords:
+        print(f"\n" + "⚠️  SUBJECTS WITH MISSING INJECTION COORDINATE DATA")
+        print(f"=" * 60)
+        print(f"Found {len(subjects_with_missing_injection_coords)} subjects with incomplete injection coordinate information:")
+        for subject_info in subjects_with_missing_injection_coords:
+            print(f"\n  Subject {subject_info['subject_id']}:")
+            for detail in subject_info['details']:
+                print(f"    • {detail}")
+        print(f"\nNote: Placeholder injection coordinates (0.0) were used for missing values to maintain schema compliance.")
+    else:
+        print(f"\n✓ All subjects had complete injection coordinate data")
 
 
 if __name__ == "__main__":
