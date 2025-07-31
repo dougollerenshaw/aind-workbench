@@ -164,14 +164,10 @@ def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_proc
     """
     csv_file = "specimen_procedure_tracking.csv"
     
-    # Count subjects with procedures
+    # Count subjects with procedures vs total subjects
     subjects_with_procedures = len([s for s in subjects_processed if all_specimen_procedure_data.get(s)])
     
-    if subjects_with_procedures == 0:
-        print(f"  No specimen procedures found, skipping CSV update")
-        return
-    
-    print(f"  Subjects with specimen procedures to track: {subjects_with_procedures}")
+    print(f"  Total subjects to track: {len(subjects_processed)} (including {subjects_with_procedures} with specimen procedures)")
     
     # Define columns for wide format with predefined procedure columns
     columns = [
@@ -199,21 +195,20 @@ def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_proc
         existing_df = pd.DataFrame(columns=columns)
         print(f"  Creating new {csv_file}")
     
-    # Create new rows for current subjects
+    # Create new rows for current subjects - include ALL subjects (even with missing data)
     new_rows = []
     for subject_id in subjects_processed:
         procedure_data = all_specimen_procedure_data.get(subject_id, {})
         
-        # Only add row if subject has procedure data
-        if procedure_data:
-            row_data = {'subject_id': subject_id}
-            
-            # Add all procedure details
-            for key, value in procedure_data.items():
-                if key in columns:  # Only include columns we want
-                    row_data[key] = value
-            
-            new_rows.append(row_data)
+        # Always add row for every processed subject
+        row_data = {'subject_id': subject_id}
+        
+        # Add all procedure details (will be empty strings if no data)
+        for key, value in procedure_data.items():
+            if key in columns:  # Only include columns we want
+                row_data[key] = value
+        
+        new_rows.append(row_data)
     
     # Convert new rows to DataFrame
     if new_rows:
@@ -231,7 +226,7 @@ def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_proc
     
     # Save the updated CSV
     combined_df.to_csv(csv_file, index=False)
-    print(f"  Updated {csv_file} with {len(new_rows)} subject rows")
+    print(f"  Updated {csv_file} with {len(new_rows)} subject rows ({subjects_with_procedures} with specimen procedures)")
 
 
 def extract_injection_details(v1_data):
@@ -1342,7 +1337,8 @@ def main():
         print(f"Injection materials tracked: {total_injections} injections across {len(all_injection_data)} subjects")
     if all_specimen_procedure_data:
         subjects_with_procedures = len([s for s in all_specimen_procedure_data if all_specimen_procedure_data[s]])
-        print(f"Specimen procedures tracked: {subjects_with_procedures} subjects with procedure data")
+        total_tracked_subjects = len(all_specimen_procedure_data)
+        print(f"Specimen procedures tracked: {total_tracked_subjects} subjects total ({subjects_with_procedures} with procedure data)")
     
     # Report subjects with missing injection coordinate information
     if subjects_with_missing_injection_coords:
