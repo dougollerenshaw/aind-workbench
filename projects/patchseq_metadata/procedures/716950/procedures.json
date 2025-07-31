@@ -2,12 +2,12 @@
   "object_type": "Procedures",
   "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/procedures.py",
   "schema_version": "2.0.32",
-  "subject_id": "716946",
+  "subject_id": "716950",
   "subject_procedures": [
     {
       "object_type": "Surgery",
       "protocol_id": null,
-      "start_date": "2024-04-15",
+      "start_date": "2024-03-18",
       "experimenters": [
         "30333"
       ],
@@ -24,7 +24,7 @@
           "object_type": "Perfusion",
           "protocol_id": "dx.doi.org/10.17504/protocols.io.8epv51bejl1b/v6",
           "output_specimen_ids": [
-            "716946"
+            "716950"
           ]
         }
       ],
@@ -33,22 +33,22 @@
     {
       "object_type": "Surgery",
       "protocol_id": "dx.doi.org/10.17504/protocols.io.kqdg392o7g25/v2",
-      "start_date": "2024-03-05",
+      "start_date": "2024-02-06",
       "experimenters": [
-        "NSB-43"
+        "NSB-1007"
       ],
       "ethics_review_id": "2109",
-      "animal_weight_prior": 30.9,
-      "animal_weight_post": 30.7,
+      "animal_weight_prior": 20.8,
+      "animal_weight_post": 20.7,
       "weight_unit": "gram",
       "anaesthesia": {
         "object_type": "Anaesthetic",
         "anaesthetic_type": "isoflurane",
-        "duration": 90.0,
+        "duration": 63.0,
         "duration_unit": "minute",
-        "level": 1.75
+        "level": 1.5
       },
-      "workstation_id": "SWS 6",
+      "workstation_id": "SWS 5",
       "coordinate_system": {
         "object_type": "Coordinate system",
         "name": "BREGMA_ARI",
@@ -79,51 +79,7 @@
           "injection_materials": [
             {
               "object_type": "Viral material",
-              "name": "pAAV-EF1a-Cre",
-              "tars_identifiers": null,
-              "addgene_id": null,
-              "titer": null,
-              "titer_unit": "gc/mL"
-            }
-          ],
-          "targeted_structure": null,
-          "relative_position": null,
-          "dynamics": [
-            {
-              "object_type": "Injection dynamics",
-              "profile": "Bolus",
-              "volume": 300.0,
-              "volume_unit": "nanoliter",
-              "rate": null,
-              "rate_unit": null,
-              "duration": 10.0,
-              "duration_unit": "minute",
-              "injection_current": null,
-              "injection_current_unit": null,
-              "alternating_current": null
-            }
-          ],
-          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
-          "coordinate_system_name": "BREGMA_ARI",
-          "coordinates": [
-            [
-              {
-                "object_type": "Translation",
-                "translation": [
-                  -5.75,
-                  0.0,
-                  -0.5
-                ]
-              }
-            ]
-          ]
-        },
-        {
-          "object_type": "Brain injection",
-          "injection_materials": [
-            {
-              "object_type": "Viral material",
-              "name": "pAAV-EF1a-Cre",
+              "name": "pAAV-EF1a-Flpo",
               "tars_identifiers": null,
               "addgene_id": null,
               "titer": null,
@@ -140,141 +96,7 @@
               "volume_unit": "nanoliter",
               "rate": null,
               "rate_unit": null,
-              "duration": 10.0,
-              "duration_unit": "minute",
-              "injection_current": null,
-              "injection_current_unit": null,
-              "alternating_current": null
-            },
-            {
-              "object_type": "Injection dynamics",
-              "profile": "Bolus",
-              "volume": 200.0,
-              "volume_unit": "nanoliter",
-              "rate": null,
-              "rate_unit": null,
-              "duration": 10.0,
-              "duration_unit": "minute",
-              "injection_current": null,
-              "injection_current_unit": null,
-              "alternating_current": null
-            }
-          ],
-          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
-          "coordinate_system_name": "BREGMA_ARI",
-          "coordinates": [
-            [
-              {
-                "object_type": "Translation",
-                "translation": [
-                  -7.5,
-                  2.0,
-                  -1.75
-                ]
-              }
-            ],
-            [
-              {
-                "object_type": "Translation",
-                "translation": [
-                  -7.5,
-                  2.0,
-                  -0.9
-                ]
-              }
-            ]
-          ]
-        },
-        {
-          "object_type": "Brain injection",
-          "injection_materials": [
-            {
-              "object_type": "Viral material",
-              "name": "pAAV-EF1a-Flpo",
-              "tars_identifiers": null,
-              "addgene_id": null,
-              "titer": null,
-              "titer_unit": "gc/mL"
-            }
-          ],
-          "targeted_structure": null,
-          "relative_position": null,
-          "dynamics": [
-            {
-              "object_type": "Injection dynamics",
-              "profile": "Bolus",
-              "volume": 150.0,
-              "volume_unit": "nanoliter",
-              "rate": null,
-              "rate_unit": null,
-              "duration": 10.0,
-              "duration_unit": "minute",
-              "injection_current": null,
-              "injection_current_unit": null,
-              "alternating_current": null
-            },
-            {
-              "object_type": "Injection dynamics",
-              "profile": "Bolus",
-              "volume": 150.0,
-              "volume_unit": "nanoliter",
-              "rate": null,
-              "rate_unit": null,
-              "duration": 10.0,
-              "duration_unit": "minute",
-              "injection_current": null,
-              "injection_current_unit": null,
-              "alternating_current": null
-            }
-          ],
-          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
-          "coordinate_system_name": "BREGMA_ARI",
-          "coordinates": [
-            [
-              {
-                "object_type": "Translation",
-                "translation": [
-                  1.7,
-                  0.9,
-                  -0.8
-                ]
-              }
-            ],
-            [
-              {
-                "object_type": "Translation",
-                "translation": [
-                  1.7,
-                  0.9,
-                  -0.4
-                ]
-              }
-            ]
-          ]
-        },
-        {
-          "object_type": "Brain injection",
-          "injection_materials": [
-            {
-              "object_type": "Viral material",
-              "name": "pAAV-EF1a-Flpo",
-              "tars_identifiers": null,
-              "addgene_id": null,
-              "titer": null,
-              "titer_unit": "gc/mL"
-            }
-          ],
-          "targeted_structure": null,
-          "relative_position": null,
-          "dynamics": [
-            {
-              "object_type": "Injection dynamics",
-              "profile": "Bolus",
-              "volume": 300.0,
-              "volume_unit": "nanoliter",
-              "rate": null,
-              "rate_unit": null,
-              "duration": 10.0,
+              "duration": 5.0,
               "duration_unit": "minute",
               "injection_current": null,
               "injection_current_unit": null,
@@ -295,6 +117,50 @@
               }
             ]
           ]
+        },
+        {
+          "object_type": "Brain injection",
+          "injection_materials": [
+            {
+              "object_type": "Viral material",
+              "name": "pAAV-EF1a-Cre",
+              "tars_identifiers": null,
+              "addgene_id": null,
+              "titer": null,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "targeted_structure": null,
+          "relative_position": null,
+          "dynamics": [
+            {
+              "object_type": "Injection dynamics",
+              "profile": "Bolus",
+              "volume": 250.0,
+              "volume_unit": "nanoliter",
+              "rate": null,
+              "rate_unit": null,
+              "duration": 5.0,
+              "duration_unit": "minute",
+              "injection_current": null,
+              "injection_current_unit": null,
+              "alternating_current": null
+            }
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
+          "coordinate_system_name": "BREGMA_ARI",
+          "coordinates": [
+            [
+              {
+                "object_type": "Translation",
+                "translation": [
+                  -6.0,
+                  2.9,
+                  -0.6
+                ]
+              }
+            ]
+          ]
         }
       ],
       "notes": null
@@ -305,9 +171,9 @@
       "object_type": "Specimen procedure",
       "procedure_type": "Fixation",
       "procedure_name": "SHIELD OFF",
-      "specimen_id": "716946",
-      "start_date": "2024-04-19",
-      "end_date": "2024-04-22",
+      "specimen_id": "716950",
+      "start_date": "2024-03-22",
+      "end_date": "2024-03-26",
       "experimenters": [
         "Holly Myers"
       ],
@@ -324,7 +190,7 @@
             "registry_identifier": null
           },
           "rrid": null,
-          "lot_number": "bu19",
+          "lot_number": "bu17",
           "expiration_date": null
         },
         {
@@ -337,19 +203,19 @@
             "registry_identifier": null
           },
           "rrid": null,
-          "lot_number": "ex35",
+          "lot_number": "ex43",
           "expiration_date": null
         }
       ],
-      "notes": "4/23/24 - 4/25/24 in 1xpbs in 4c"
+      "notes": null
     },
     {
       "object_type": "Specimen procedure",
       "procedure_type": "Fixation",
       "procedure_name": "SHIELD ON",
-      "specimen_id": "716946",
-      "start_date": "2024-04-22",
-      "end_date": "2024-04-23",
+      "specimen_id": "716950",
+      "start_date": "2024-03-26",
+      "end_date": "2024-03-27",
       "experimenters": [
         "Holly Myers"
       ],
@@ -370,15 +236,15 @@
           "expiration_date": null
         }
       ],
-      "notes": "4/23/24 - 4/25/24 in 1xpbs in 4c"
+      "notes": null
     },
     {
       "object_type": "Specimen procedure",
       "procedure_type": "Delipidation",
       "procedure_name": "Passive Delipidation",
-      "specimen_id": "716946",
-      "start_date": "2024-04-25",
-      "end_date": "2024-04-24",
+      "specimen_id": "716950",
+      "start_date": "2024-03-27",
+      "end_date": "2024-03-28",
       "experimenters": [
         "Holly Myers"
       ],
@@ -405,9 +271,9 @@
       "object_type": "Specimen procedure",
       "procedure_type": "Delipidation",
       "procedure_name": "Active Delipidation",
-      "specimen_id": "716946",
-      "start_date": "2025-04-26",
-      "end_date": "2024-04-26",
+      "specimen_id": "716950",
+      "start_date": "2024-03-28",
+      "end_date": "2024-04-01",
       "experimenters": [
         "Holly Myers"
       ],
@@ -434,9 +300,9 @@
       "object_type": "Specimen procedure",
       "procedure_type": "Refractive index matching",
       "procedure_name": "EasyIndex",
-      "specimen_id": "716946",
-      "start_date": "2024-04-29",
-      "end_date": "2024-05-02",
+      "specimen_id": "716950",
+      "start_date": "2024-04-01",
+      "end_date": "2024-04-04",
       "experimenters": [
         "Holly Myers"
       ],
@@ -455,7 +321,7 @@
             "registry_identifier": null
           },
           "rrid": null,
-          "lot_number": "EI53",
+          "lot_number": "EI51",
           "expiration_date": null
         }
       ],

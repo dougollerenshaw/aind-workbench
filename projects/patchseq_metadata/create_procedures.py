@@ -62,6 +62,42 @@ def extract_injection_details(v1_data):
                     if not isinstance(volumes, list):
                         volumes = [volumes]
                     
+                    # Extract viral material information if available
+                    viral_material_name = ""
+                    tars_identifier = ""
+                    addgene_id = ""
+                    titer_injected = ""
+                    titer_unit = ""
+                    targeted_structure = sub_proc.get("targeted_structure", "")
+                    
+                    # Get viral material details from injection_materials
+                    injection_materials = sub_proc.get("injection_materials", [])
+                    if injection_materials and len(injection_materials) > 0:
+                        material = injection_materials[0]  # Take first material
+                        viral_material_name = material.get("name", "")
+                        
+                        # Extract TARS information
+                        tars_info = material.get("tars_identifiers", {})
+                        if tars_info:
+                            tars_parts = []
+                            if tars_info.get("virus_tars_id"):
+                                tars_parts.append(f"Virus: {tars_info['virus_tars_id']}")
+                            if tars_info.get("plasmid_tars_alias"):
+                                tars_parts.append(f"Plasmid: {tars_info['plasmid_tars_alias']}")
+                            if tars_info.get("prep_lot_number"):
+                                tars_parts.append(f"Lot: {tars_info['prep_lot_number']}")
+                            tars_identifier = "; ".join(tars_parts)
+                        
+                        # Extract Addgene information
+                        addgene_info = material.get("addgene_id", {})
+                        if addgene_info and addgene_info.get("registry_identifier"):
+                            addgene_id = addgene_info["registry_identifier"]
+                        
+                        # Extract titer information
+                        if material.get("titer"):
+                            titer_injected = str(material["titer"])
+                            titer_unit = material.get("titer_unit", "")
+                    
                     # Create one entry per depth/volume combination
                     for i, depth in enumerate(depths):
                         volume = volumes[i] if i < len(volumes) else volumes[0] if volumes else ""
@@ -76,13 +112,13 @@ def extract_injection_details(v1_data):
                             'recovery_time': sub_proc.get("recovery_time", ""),
                             'recovery_time_unit': sub_proc.get("recovery_time_unit", ""),
                             'protocol_id': sub_proc.get("protocol_id", ""),
-                            # Fields for Polina to fill out
-                            'viral_material_name': "",
-                            'tars_identifier': "",
-                            'addgene_id': "",
-                            'titer_injected': "",
-                            'titer_unit': "",
-                            'targeted_structure': ""
+                            # Viral material info from v1 data
+                            'viral_material_name': viral_material_name,
+                            'tars_identifier': tars_identifier,
+                            'addgene_id': addgene_id,
+                            'titer_injected': titer_injected,
+                            'titer_unit': titer_unit,
+                            'targeted_structure': targeted_structure
                         }
                         injections.append(injection_details)
     
@@ -606,12 +642,20 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
                             "coordinate_system_name": "BREGMA_ARI"
                         }
                         
-                        # Handle injection materials - create viral material without hemisphere
-                        material_name = "Viral vector (Nanoject injection)"
+                        # Handle injection materials - use simple approach for now
+                        materials = []
+                        injection_materials = sub_proc.get("injection_materials", [])
                         
-                        materials = [ViralMaterial(
-                            name=material_name
-                        )]
+                        if injection_materials:
+                            # Use the detailed viral material information from v1
+                            for material_data in injection_materials:
+                                # Keep it simple - just use the name for now
+                                material_name = material_data.get("name", "Viral vector (Nanoject injection)")
+                                materials.append(ViralMaterial(name=material_name))
+                        else:
+                            # Fallback to generic viral material
+                            materials.append(ViralMaterial(name="Viral vector (Nanoject injection)"))
+                        
                         injection_kwargs["injection_materials"] = materials
                         
                         # Handle coordinates with correct AP/ML/SI ordering for BREGMA_ARI
