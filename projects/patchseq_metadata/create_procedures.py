@@ -591,7 +591,7 @@ def get_specimen_procedures_for_subject(subject_id, sheet_data):
         # Subject not found in Batch Info
         batch_tracking_info = {
             'batch_number': "",
-            'date_range_tab': "NOT_IN_BATCH_INFO"
+            'date_range_tab': ""
         }
         return [], batch_tracking_info
 
@@ -612,7 +612,7 @@ def get_specimen_procedures_for_subject(subject_id, sheet_data):
         # Batch found in Batch Info but not in any date range tab
         batch_tracking_info = {
             'batch_number': str(subject_batch),
-            'date_range_tab': "BATCH_NOT_IN_DATE_TABS"
+            'date_range_tab': ""
         }
         return [], batch_tracking_info
 
