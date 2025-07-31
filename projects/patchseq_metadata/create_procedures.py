@@ -38,80 +38,154 @@ def get_subjects_list():
 def extract_specimen_procedure_details(specimen_procedures_list):
     """
     Extract specimen procedure details for CSV tracking.
+    Uses wide format with predefined columns for the 5 known procedures.
     
     Args:
         specimen_procedures_list: List of SpecimenProcedure objects
         
     Returns:
-        list: List of specimen procedure detail dicts, one per procedure
+        dict: Single dict with all procedure details in wide format
     """
-    procedures = []
+    # Initialize wide format structure for the 5 known procedures
+    procedure_data = {
+        'shield_off.start_date': "",
+        'shield_off.end_date': "",
+        'shield_off.experimenter': "",
+        'shield_off.notes': "",
+        'shield_off.shield_buffer_lot': "",
+        'shield_off.shield_epoxy_lot': "",
+        'shield_on.start_date': "",
+        'shield_on.end_date': "",
+        'shield_on.experimenter': "",
+        'shield_on.notes': "",
+        'shield_on.shield_on_lot': "",
+        'passive_delipidation.start_date': "",
+        'passive_delipidation.end_date': "",
+        'passive_delipidation.experimenter': "",
+        'passive_delipidation.notes': "",
+        'passive_delipidation.delipidation_buffer_lot': "",
+        'active_delipidation.start_date': "",
+        'active_delipidation.end_date': "",
+        'active_delipidation.experimenter': "",
+        'active_delipidation.notes': "",
+        'active_delipidation.conductivity_buffer_lot': "",
+        'easyindex.start_date': "",
+        'easyindex.end_date': "",
+        'easyindex.experimenter': "",
+        'easyindex.notes': "",
+        'easyindex.protocol_id': "",
+        'easyindex.easy_index_lot': ""
+    }
     
+    # Map procedures to their data
     for proc in specimen_procedures_list:
-        # Initialize all specimen procedure fields with dot notation
-        procedure_fields = {
-            'procedure_type': proc.procedure_type if hasattr(proc, 'procedure_type') else "",
-            'procedure_name': proc.procedure_name if hasattr(proc, 'procedure_name') else "",
-            'start_date': str(proc.start_date) if hasattr(proc, 'start_date') and proc.start_date else "",
-            'end_date': str(proc.end_date) if hasattr(proc, 'end_date') and proc.end_date else "",
-            'experimenters': ", ".join(proc.experimenters) if hasattr(proc, 'experimenters') and proc.experimenters else "",
-            'protocol_id': ", ".join(proc.protocol_id) if hasattr(proc, 'protocol_id') and proc.protocol_id else "",
-            'notes': proc.notes if hasattr(proc, 'notes') and proc.notes else "",
-            'reagent_1.name': "",
-            'reagent_1.source.name': "",
-            'reagent_1.lot_number': "",
-            'reagent_2.name': "",
-            'reagent_2.source.name': "",
-            'reagent_2.lot_number': "",
-            'reagent_3.name': "",
-            'reagent_3.source.name': "",
-            'reagent_3.lot_number': ""
-        }
+        experimenter = ", ".join(proc.experimenters) if hasattr(proc, 'experimenters') and proc.experimenters else ""
+        start_date = str(proc.start_date) if hasattr(proc, 'start_date') and proc.start_date else ""
+        end_date = str(proc.end_date) if hasattr(proc, 'end_date') and proc.end_date else ""
+        notes = proc.notes if hasattr(proc, 'notes') and proc.notes else ""
+        protocol_id = ", ".join(proc.protocol_id) if hasattr(proc, 'protocol_id') and proc.protocol_id else ""
         
-        # Extract reagent details if available
-        if hasattr(proc, 'procedure_details') and proc.procedure_details:
-            for i, reagent in enumerate(proc.procedure_details[:3], 1):  # Limit to 3 reagents
-                if hasattr(reagent, 'name'):
-                    procedure_fields[f'reagent_{i}.name'] = reagent.name
-                if hasattr(reagent, 'source') and reagent.source:
-                    if hasattr(reagent.source, 'name'):
-                        procedure_fields[f'reagent_{i}.source.name'] = reagent.source.name
-                if hasattr(reagent, 'lot_number') and reagent.lot_number:
-                    procedure_fields[f'reagent_{i}.lot_number'] = reagent.lot_number
-        
-        procedures.append(procedure_fields)
+        if hasattr(proc, 'procedure_name'):
+            if proc.procedure_name == "SHIELD OFF":
+                procedure_data['shield_off.start_date'] = start_date
+                procedure_data['shield_off.end_date'] = end_date
+                procedure_data['shield_off.experimenter'] = experimenter
+                procedure_data['shield_off.notes'] = notes
+                
+                # Extract specific reagent lots
+                if hasattr(proc, 'procedure_details') and proc.procedure_details:
+                    for reagent in proc.procedure_details:
+                        if hasattr(reagent, 'name'):
+                            if reagent.name == "SHIELD Buffer" and hasattr(reagent, 'lot_number'):
+                                procedure_data['shield_off.shield_buffer_lot'] = reagent.lot_number
+                            elif reagent.name == "SHIELD Epoxy" and hasattr(reagent, 'lot_number'):
+                                procedure_data['shield_off.shield_epoxy_lot'] = reagent.lot_number
+            
+            elif proc.procedure_name == "SHIELD ON":
+                procedure_data['shield_on.start_date'] = start_date
+                procedure_data['shield_on.end_date'] = end_date
+                procedure_data['shield_on.experimenter'] = experimenter
+                procedure_data['shield_on.notes'] = notes
+                
+                # Extract Shield On lot
+                if hasattr(proc, 'procedure_details') and proc.procedure_details:
+                    for reagent in proc.procedure_details:
+                        if hasattr(reagent, 'name') and reagent.name == "SHIELD On" and hasattr(reagent, 'lot_number'):
+                            procedure_data['shield_on.shield_on_lot'] = reagent.lot_number
+            
+            elif proc.procedure_name == "Passive Delipidation":
+                procedure_data['passive_delipidation.start_date'] = start_date
+                procedure_data['passive_delipidation.end_date'] = end_date
+                procedure_data['passive_delipidation.experimenter'] = experimenter
+                procedure_data['passive_delipidation.notes'] = notes
+                
+                # Extract Delipidation Buffer lot
+                if hasattr(proc, 'procedure_details') and proc.procedure_details:
+                    for reagent in proc.procedure_details:
+                        if hasattr(reagent, 'name') and reagent.name == "Delipidation Buffer" and hasattr(reagent, 'lot_number'):
+                            procedure_data['passive_delipidation.delipidation_buffer_lot'] = reagent.lot_number
+            
+            elif proc.procedure_name == "Active Delipidation":
+                procedure_data['active_delipidation.start_date'] = start_date
+                procedure_data['active_delipidation.end_date'] = end_date
+                procedure_data['active_delipidation.experimenter'] = experimenter
+                procedure_data['active_delipidation.notes'] = notes
+                
+                # Extract Conductivity Buffer lot
+                if hasattr(proc, 'procedure_details') and proc.procedure_details:
+                    for reagent in proc.procedure_details:
+                        if hasattr(reagent, 'name') and reagent.name == "Conductivity Buffer" and hasattr(reagent, 'lot_number'):
+                            procedure_data['active_delipidation.conductivity_buffer_lot'] = reagent.lot_number
+            
+            elif proc.procedure_name == "EasyIndex":
+                procedure_data['easyindex.start_date'] = start_date
+                procedure_data['easyindex.end_date'] = end_date
+                procedure_data['easyindex.experimenter'] = experimenter
+                procedure_data['easyindex.notes'] = notes
+                procedure_data['easyindex.protocol_id'] = protocol_id
+                
+                # Extract Easy Index lot
+                if hasattr(proc, 'procedure_details') and proc.procedure_details:
+                    for reagent in proc.procedure_details:
+                        if hasattr(reagent, 'name') and reagent.name == "Easy Index" and hasattr(reagent, 'lot_number'):
+                            procedure_data['easyindex.easy_index_lot'] = reagent.lot_number
     
-    return procedures
+    return procedure_data
 
 
 def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_procedure_data):
     """
     Update or create a CSV file with specimen procedure tracking information.
-    Uses tidy format: one row per procedure with procedure_number column.
+    Uses wide format: one row per subject with columns for each of the 5 procedures.
     
     Args:
         subjects_processed: List of subject IDs that were processed
-        all_specimen_procedure_data: Dict mapping subject_id -> list of procedure details
+        all_specimen_procedure_data: Dict mapping subject_id -> procedure details dict
     """
     csv_file = "specimen_procedure_tracking.csv"
     
-    # Count total procedures across all subjects
-    total_procedures = sum(len(all_specimen_procedure_data.get(subject_id, [])) for subject_id in subjects_processed)
+    # Count subjects with procedures
+    subjects_with_procedures = len([s for s in subjects_processed if all_specimen_procedure_data.get(s)])
     
-    if total_procedures == 0:
+    if subjects_with_procedures == 0:
         print(f"  No specimen procedures found, skipping CSV update")
         return
     
-    print(f"  Total specimen procedures to track: {total_procedures}")
+    print(f"  Subjects with specimen procedures to track: {subjects_with_procedures}")
     
-    # Define columns for tidy format with comprehensive specimen procedure fields
+    # Define columns for wide format with predefined procedure columns
     columns = [
-        'subject_id', 'procedure_number',
-        'procedure_type', 'procedure_name', 'start_date', 'end_date', 
-        'experimenters', 'protocol_id', 'notes',
-        'reagent_1.name', 'reagent_1.source.name', 'reagent_1.lot_number',
-        'reagent_2.name', 'reagent_2.source.name', 'reagent_2.lot_number',
-        'reagent_3.name', 'reagent_3.source.name', 'reagent_3.lot_number'
+        'subject_id',
+        'shield_off.start_date', 'shield_off.end_date', 'shield_off.experimenter', 'shield_off.notes',
+        'shield_off.shield_buffer_lot', 'shield_off.shield_epoxy_lot',
+        'shield_on.start_date', 'shield_on.end_date', 'shield_on.experimenter', 'shield_on.notes',
+        'shield_on.shield_on_lot',
+        'passive_delipidation.start_date', 'passive_delipidation.end_date', 'passive_delipidation.experimenter', 'passive_delipidation.notes',
+        'passive_delipidation.delipidation_buffer_lot',
+        'active_delipidation.start_date', 'active_delipidation.end_date', 'active_delipidation.experimenter', 'active_delipidation.notes',
+        'active_delipidation.conductivity_buffer_lot',
+        'easyindex.start_date', 'easyindex.end_date', 'easyindex.experimenter', 'easyindex.notes',
+        'easyindex.protocol_id', 'easyindex.easy_index_lot'
     ]
     
     # Load existing CSV if it exists, otherwise create new DataFrame
@@ -128,16 +202,14 @@ def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_proc
     # Create new rows for current subjects
     new_rows = []
     for subject_id in subjects_processed:
-        procedures = all_specimen_procedure_data.get(subject_id, [])
+        procedure_data = all_specimen_procedure_data.get(subject_id, {})
         
-        for procedure_num, procedure in enumerate(procedures, 1):
-            row_data = {
-                'subject_id': subject_id,
-                'procedure_number': procedure_num
-            }
+        # Only add row if subject has procedure data
+        if procedure_data:
+            row_data = {'subject_id': subject_id}
             
             # Add all procedure details
-            for key, value in procedure.items():
+            for key, value in procedure_data.items():
                 if key in columns:  # Only include columns we want
                     row_data[key] = value
             
@@ -154,12 +226,12 @@ def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_proc
     # Ensure all columns exist and are in the right order
     combined_df = combined_df.reindex(columns=columns, fill_value="")
     
-    # Sort by subject_id and procedure_number for easy reading
-    combined_df = combined_df.sort_values(['subject_id', 'procedure_number']).reset_index(drop=True)
+    # Sort by subject_id for easy reading
+    combined_df = combined_df.sort_values(['subject_id']).reset_index(drop=True)
     
     # Save the updated CSV
     combined_df.to_csv(csv_file, index=False)
-    print(f"  Updated {csv_file} with {len(new_rows)} procedure rows for {len(subjects_processed)} subjects")
+    print(f"  Updated {csv_file} with {len(new_rows)} subject rows")
 
 
 def extract_injection_details(v1_data):
@@ -1226,11 +1298,11 @@ def main():
         if v2_data and hasattr(v2_data, 'specimen_procedures') and v2_data.specimen_procedures:
             specimen_procedure_details = extract_specimen_procedure_details(v2_data.specimen_procedures)
             all_specimen_procedure_data[subject_id] = specimen_procedure_details
-            print(f"  Found {len(specimen_procedure_details)} specimen procedures for tracking")
+            print(f"  Found specimen procedures for tracking")
         else:
             # Track subjects with missing specimen procedures
             subjects_with_missing_specimen_procedures.append(subject_id)
-            all_specimen_procedure_data[subject_id] = []
+            all_specimen_procedure_data[subject_id] = {}
         
         # Check if conversion was successful
         if v2_data is None:
@@ -1269,8 +1341,8 @@ def main():
         total_injections = sum(len(inj_list) for inj_list in all_injection_data.values())
         print(f"Injection materials tracked: {total_injections} injections across {len(all_injection_data)} subjects")
     if all_specimen_procedure_data:
-        total_specimen_procedures = sum(len(proc_list) for proc_list in all_specimen_procedure_data.values())
-        print(f"Specimen procedures tracked: {total_specimen_procedures} procedures across {len([s for s in all_specimen_procedure_data if all_specimen_procedure_data[s]])} subjects")
+        subjects_with_procedures = len([s for s in all_specimen_procedure_data if all_specimen_procedure_data[s]])
+        print(f"Specimen procedures tracked: {subjects_with_procedures} subjects with procedure data")
     
     # Report subjects with missing injection coordinate information
     if subjects_with_missing_injection_coords:
