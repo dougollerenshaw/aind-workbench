@@ -1,33 +1,33 @@
-subject_id,shield_off.start_date,shield_off.end_date,shield_off.experimenter,shield_off.notes,shield_off.shield_buffer_lot,shield_off.shield_epoxy_lot,shield_on.start_date,shield_on.end_date,shield_on.experimenter,shield_on.notes,shield_on.shield_on_lot,passive_delipidation.start_date,passive_delipidation.end_date,passive_delipidation.experimenter,passive_delipidation.notes,passive_delipidation.delipidation_buffer_lot,active_delipidation.start_date,active_delipidation.end_date,active_delipidation.experimenter,active_delipidation.notes,active_delipidation.conductivity_buffer_lot,easyindex.start_date,easyindex.end_date,easyindex.experimenter,easyindex.notes,easyindex.protocol_id,easyindex.easy_index_lot
-692912,2023-10-03,2023-10-06,Holly Myers,4c shield on 10/6/23 - 10/8/23,bu12,ex40,2023-10-06,2023-10-09,Holly Myers,4c shield on 10/6/23 - 10/8/23,on18,2023-10-10,2023-10-11,Holly Myers,,db8,2023-10-11,2023-10-13,Holly Myers,,c10,2023-10-13,2023-10-18,Holly Myers,RT 50% easy index 10/13/23 - 10/16/23,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI41
-716946,2024-04-19,2024-04-22,Holly Myers,4/23/24 - 4/25/24 in 1xpbs in 4c,bu19,ex35,2024-04-22,2024-04-23,Holly Myers,4/23/24 - 4/25/24 in 1xpbs in 4c,on24,2024-04-25,2024-04-24,Holly Myers,,d19,2025-04-26,2024-04-26,Holly Myers,,d19,2024-04-29,2024-05-02,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI53
-716947,2024-04-19,2024-04-22,Holly Myers,4/23/24 - 4/25/24 in 1xpbs in 4c,bu19,ex35,2024-04-22,2024-04-23,Holly Myers,4/23/24 - 4/25/24 in 1xpbs in 4c,on24,2024-04-25,2024-04-24,Holly Myers,,d19,2025-04-26,2024-04-26,Holly Myers,,d19,2024-04-29,2024-05-02,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI53
-716948,2024-04-01,2024-04-04,Holly Myers,4/5/24 - 4/8/24 in 1xpbs in 4c,bu19,ex45,2024-04-04,2024-04-05,Holly Myers,4/5/24 - 4/8/24 in 1xpbs in 4c,on24,2024-04-08,2024-04-09,Holly Myers,,d19,2024-04-09,2024-04-11,Holly Myers,,d19,2024-04-11,2024-04-16,Holly Myers,RT in 100% EasyIndex 4/12/24 - 4/13/24,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI53
-716949,2024-03-22,2024-03-26,Holly Myers,,bu17,ex43,2024-03-26,2024-03-27,Holly Myers,,on24,2024-03-27,2024-03-28,Holly Myers,,d19,2024-03-28,2024-04-01,Holly Myers,,d19,2024-04-01,2024-04-04,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI51
-716950,2024-03-22,2024-03-26,Holly Myers,,bu17,ex43,2024-03-26,2024-03-27,Holly Myers,,on24,2024-03-27,2024-03-28,Holly Myers,,d19,2024-03-28,2024-04-01,Holly Myers,,d19,2024-04-01,2024-04-04,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI51
-716951,2024-04-01,2024-04-04,Holly Myers,4/5/24 - 4/8/24 in 1xpbs in 4c,bu19,ex45,2024-04-04,2024-04-05,Holly Myers,4/5/24 - 4/8/24 in 1xpbs in 4c,on24,2024-04-08,2024-04-09,Holly Myers,,d19,2024-04-09,2024-04-11,Holly Myers,,d19,2024-04-11,2024-04-16,Holly Myers,RT in 100% EasyIndex 4/12/24 - 4/13/24,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI53
-725231,,,,,,,,,,,,,,,,,,,,,,,,,,,
-725328,,,,,,,,,,,,,,,,,,,,,,,,,,,
-725329,,,,,,,,,,,,,,,,,,,,,,,,,,,
-728854,,,,,,,,,,,,,,,,,,,,,,,,,,,
-731907,2024-06-21,2024-06-24,Holly Myers,1xpbs in 4c 6/25/24 - 7/1/24,bu21,ex47,2024-06-24,2024-06-25,Holly Myers,1xpbs in 4c 6/25/24 - 7/1/24,on27,2024-07-01,2024-07-02,Holly Myers,,d21,2024-07-02,2024-07-04,Holly Myers,,d21,2024-07-05,2024-07-11,Holly Myers,RT 7/5/24 - 7/8/24,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI57
-737038,,,,,,,,,,,,,,,,,,,,,,,,,,,
-737042,,,,,,,,,,,,,,,,,,,,,,,,,,,
-744117,,,,,,,,,,,,,,,,,,,,,,,,,,,
-744119,,,,,,,,,,,,,,,,,,,,,,,,,,,
-746041,,,,,,,,,,,,,,,,,,,,,,,,,,,
-746043,,,,,,,,,,,,,,,,,,,,,,,,,,,
-746045,,,,,,,,,,,,,,,,,,,,,,,,,,,
-746046,,,,,,,,,,,,,,,,,,,,,,,,,,,
-751017,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
-751019,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
-751023,,,,,,,,,,,,,,,,,,,,,,,,,,,
-751024,,,,,,,,,,,,,,,,,,,,,,,,,,,
-751035,,,,,,,,,,,,,,,,,,,,,,,,,,,
-755069,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
-755071,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
-755072,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
-755073,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
-755790,,,,,,,,,,,,,,,,,,,,,,,,,,,
-762196,,,,,,,,,,,,,,,,,,,,,,,,,,,
-762199,,,,,,,,,,,,,,,,,,,,,,,,,,,
+subject_id,batch_number,date_range_tab,shield_off.start_date,shield_off.end_date,shield_off.experimenter,shield_off.notes,shield_off.shield_buffer_lot,shield_off.shield_epoxy_lot,shield_on.start_date,shield_on.end_date,shield_on.experimenter,shield_on.notes,shield_on.shield_on_lot,passive_delipidation.start_date,passive_delipidation.end_date,passive_delipidation.experimenter,passive_delipidation.notes,passive_delipidation.delipidation_buffer_lot,active_delipidation.start_date,active_delipidation.end_date,active_delipidation.experimenter,active_delipidation.notes,active_delipidation.conductivity_buffer_lot,easyindex.start_date,easyindex.end_date,easyindex.experimenter,easyindex.notes,easyindex.protocol_id,easyindex.easy_index_lot
+692912,35,Sep - Nov 2023,2023-10-03,2023-10-06,Holly Myers,4c shield on 10/6/23 - 10/8/23,bu12,ex40,2023-10-06,2023-10-09,Holly Myers,4c shield on 10/6/23 - 10/8/23,on18,2023-10-10,2023-10-11,Holly Myers,,db8,2023-10-11,2023-10-13,Holly Myers,,c10,2023-10-13,2023-10-18,Holly Myers,RT 50% easy index 10/13/23 - 10/16/23,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI41
+716946,69,Mar - May 2024,2024-04-19,2024-04-22,Holly Myers,4/23/24 - 4/25/24 in 1xpbs in 4c,bu19,ex35,2024-04-22,2024-04-23,Holly Myers,4/23/24 - 4/25/24 in 1xpbs in 4c,on24,2024-04-25,2024-04-24,Holly Myers,,d19,2025-04-26,2024-04-26,Holly Myers,,d19,2024-04-29,2024-05-02,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI53
+716947,69,Mar - May 2024,2024-04-19,2024-04-22,Holly Myers,4/23/24 - 4/25/24 in 1xpbs in 4c,bu19,ex35,2024-04-22,2024-04-23,Holly Myers,4/23/24 - 4/25/24 in 1xpbs in 4c,on24,2024-04-25,2024-04-24,Holly Myers,,d19,2025-04-26,2024-04-26,Holly Myers,,d19,2024-04-29,2024-05-02,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI53
+716948,63,Mar - May 2024,2024-04-01,2024-04-04,Holly Myers,4/5/24 - 4/8/24 in 1xpbs in 4c,bu19,ex45,2024-04-04,2024-04-05,Holly Myers,4/5/24 - 4/8/24 in 1xpbs in 4c,on24,2024-04-08,2024-04-09,Holly Myers,,d19,2024-04-09,2024-04-11,Holly Myers,,d19,2024-04-11,2024-04-16,Holly Myers,RT in 100% EasyIndex 4/12/24 - 4/13/24,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI53
+716949,60,Mar - May 2024,2024-03-22,2024-03-26,Holly Myers,,bu17,ex43,2024-03-26,2024-03-27,Holly Myers,,on24,2024-03-27,2024-03-28,Holly Myers,,d19,2024-03-28,2024-04-01,Holly Myers,,d19,2024-04-01,2024-04-04,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI51
+716950,60,Mar - May 2024,2024-03-22,2024-03-26,Holly Myers,,bu17,ex43,2024-03-26,2024-03-27,Holly Myers,,on24,2024-03-27,2024-03-28,Holly Myers,,d19,2024-03-28,2024-04-01,Holly Myers,,d19,2024-04-01,2024-04-04,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI51
+716951,63,Mar - May 2024,2024-04-01,2024-04-04,Holly Myers,4/5/24 - 4/8/24 in 1xpbs in 4c,bu19,ex45,2024-04-04,2024-04-05,Holly Myers,4/5/24 - 4/8/24 in 1xpbs in 4c,on24,2024-04-08,2024-04-09,Holly Myers,,d19,2024-04-09,2024-04-11,Holly Myers,,d19,2024-04-11,2024-04-16,Holly Myers,RT in 100% EasyIndex 4/12/24 - 4/13/24,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI53
+725231,79,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+725328,75,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+725329,,NOT_IN_BATCH_INFO,,,,,,,,,,,,,,,,,,,,,,,,,,,
+728854,79,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+731907,81,Jun - Aug 2024,2024-06-21,2024-06-24,Holly Myers,1xpbs in 4c 6/25/24 - 7/1/24,bu21,ex47,2024-06-24,2024-06-25,Holly Myers,1xpbs in 4c 6/25/24 - 7/1/24,on27,2024-07-01,2024-07-02,Holly Myers,,d21,2024-07-02,2024-07-04,Holly Myers,,d21,2024-07-05,2024-07-11,Holly Myers,RT 7/5/24 - 7/8/24,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI57
+737038,86,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+737042,86,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+744117,92,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+744119,92,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+746041,94,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+746043,94,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+746045,94,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+746046,94,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+751017,100,Sep - Nov 2024,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
+751019,100,Sep - Nov 2024,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
+751023,97,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+751024,97,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+751035,97,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+755069,100,Sep - Nov 2024,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
+755071,100,Sep - Nov 2024,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
+755072,100,Sep - Nov 2024,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
+755073,100,Sep - Nov 2024,2024-10-11,2024-10-14,Holly Myers,,bu24,"ex49, ex50",2024-10-14,2024-10-15,Holly Myers,,on30,2024-10-15,2024-10-17,Holly Myers,,d23,2024-10-17,2024-10-19,Holly Myers,,C19S106,2024-10-21,2024-10-24,Holly Myers,,dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1,EI64
+755790,104,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+762196,104,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,
+762199,107,BATCH_NOT_IN_DATE_TABS,,,,,,,,,,,,,,,,,,,,,,,,,,,

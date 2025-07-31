@@ -35,19 +35,22 @@ def get_subjects_list():
     return subjects
 
 
-def extract_specimen_procedure_details(specimen_procedures_list):
+def extract_specimen_procedure_details(specimen_procedures_list, batch_tracking_info=None):
     """
     Extract specimen procedure details for CSV tracking.
     Uses wide format with predefined columns for the 5 known procedures.
     
     Args:
         specimen_procedures_list: List of SpecimenProcedure objects
+        batch_tracking_info: Dict with batch_number and date_range_tab for tracking
         
     Returns:
         dict: Single dict with all procedure details in wide format
     """
     # Initialize wide format structure for the 5 known procedures
     procedure_data = {
+        'batch_number': "",
+        'date_range_tab': "",
         'shield_off.start_date': "",
         'shield_off.end_date': "",
         'shield_off.experimenter': "",
@@ -76,6 +79,11 @@ def extract_specimen_procedure_details(specimen_procedures_list):
         'easyindex.protocol_id': "",
         'easyindex.easy_index_lot': ""
     }
+    
+    # Populate batch tracking information if available
+    if batch_tracking_info:
+        procedure_data['batch_number'] = batch_tracking_info.get('batch_number', "")
+        procedure_data['date_range_tab'] = batch_tracking_info.get('date_range_tab', "")
     
     # Map procedures to their data
     for proc in specimen_procedures_list:
@@ -171,7 +179,7 @@ def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_proc
     
     # Define columns for wide format with predefined procedure columns
     columns = [
-        'subject_id',
+        'subject_id', 'batch_number', 'date_range_tab',
         'shield_off.start_date', 'shield_off.end_date', 'shield_off.experimenter', 'shield_off.notes',
         'shield_off.shield_buffer_lot', 'shield_off.shield_epoxy_lot',
         'shield_on.start_date', 'shield_on.end_date', 'shield_on.experimenter', 'shield_on.notes',
@@ -546,7 +554,9 @@ def get_specimen_procedures_for_subject(subject_id, sheet_data):
         sheet_data: Dictionary of DataFrames from load_specimen_procedures_excel()
         
     Returns:
-        List of specimen procedure dictionaries matching AIND schema format
+        tuple: (procedures_list, batch_tracking_info)
+        - procedures_list: List of SpecimenProcedure objects 
+        - batch_tracking_info: Dict with 'batch_number' and 'date_range_tab' for tracking
     """
     def parse_date_range(date_str):
         """Parse date range like '10/3/23 - 10/6/23' into start and end dates"""
@@ -578,7 +588,12 @@ def get_specimen_procedures_for_subject(subject_id, sheet_data):
             break
 
     if subject_batch is None:
-        return []
+        # Subject not found in Batch Info
+        batch_tracking_info = {
+            'batch_number': "",
+            'date_range_tab': "NOT_IN_BATCH_INFO"
+        }
+        return [], batch_tracking_info
 
     # Step 2: Find which date range sheet contains this batch
     target_sheet = None
@@ -594,7 +609,12 @@ def get_specimen_procedures_for_subject(subject_id, sheet_data):
                 break
 
     if not target_sheet:
-        return []
+        # Batch found in Batch Info but not in any date range tab
+        batch_tracking_info = {
+            'batch_number': str(subject_batch),
+            'date_range_tab': "BATCH_NOT_IN_DATE_TABS"
+        }
+        return [], batch_tracking_info
 
     # Step 3: Get the batch row data (first row with matching batch)
     df = sheet_data[target_sheet]
@@ -744,7 +764,13 @@ def get_specimen_procedures_for_subject(subject_id, sheet_data):
             
             procedures.append(specimen_proc)
 
-    return procedures
+    # Create batch tracking info for successful case
+    batch_tracking_info = {
+        'batch_number': str(subject_batch),
+        'date_range_tab': target_sheet
+    }
+
+    return procedures, batch_tracking_info
 
 
 def fetch_procedures_metadata(subject_id):
@@ -801,18 +827,22 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
     """
     Convert procedures data from v1.x to schema 2.0 by building proper Pydantic model objects.
     Also adds specimen procedures from Excel data if available.
-    Returns tuple: (converted_data_or_None, missing_injection_coords_info)
+    Returns tuple: (converted_data_or_None, missing_injection_coords_info, batch_tracking_info)
     
     missing_injection_coords_info is a dict with details about any missing injection coordinate issues:
     {
         'has_missing_injection_coords': bool,
         'missing_injection_details': [list of strings describing what injection coordinates are missing]
     }
+    
+    batch_tracking_info is a dict with batch number and date range tab information for debugging missing procedures
     """
     missing_injection_coords_info = {
         'has_missing_injection_coords': False,
         'missing_injection_details': []
     }
+    
+    batch_tracking_info = None
     
     try:
         # Extract basic info
@@ -1104,7 +1134,7 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
         # Add specimen procedures from Excel data if available
         if excel_sheet_data:
             try:
-                specimen_procedures_list = get_specimen_procedures_for_subject(subject_id, excel_sheet_data)
+                specimen_procedures_list, batch_tracking_info = get_specimen_procedures_for_subject(subject_id, excel_sheet_data)
                 if specimen_procedures_list:
                     print(f"    ✓ Found {len(specimen_procedures_list)} specimen procedures in Excel data")
                     # The specimen_procedures_list already contains proper SpecimenProcedure objects
@@ -1113,12 +1143,13 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
                     print(f"    ⚠️  No specimen procedures found for subject {subject_id} in Excel data")
             except Exception as e:
                 print(f"    ⚠️  Error extracting specimen procedures: {e}")
+                batch_tracking_info = None
         
-        return procedures_obj, missing_injection_coords_info
+        return procedures_obj, missing_injection_coords_info, batch_tracking_info
         
     except Exception as e:
         print(f"    ✗ Schema conversion failed: {e}")
-        return None, missing_injection_coords_info
+        return None, missing_injection_coords_info, None
 
 
 def save_procedures_json(subject_id, data, is_v1=False):
@@ -1280,7 +1311,7 @@ def main():
         
         # Convert to schema 2.0
         print(f"  Converting to schema 2.0...")
-        v2_data, missing_injection_coords_info = convert_procedures_to_v2(v1_source_data, excel_sheet_data)
+        v2_data, missing_injection_coords_info, batch_tracking_info = convert_procedures_to_v2(v1_source_data, excel_sheet_data)
         
         # Track subjects with missing injection coordinates
         if missing_injection_coords_info['has_missing_injection_coords']:
@@ -1291,13 +1322,20 @@ def main():
         
         # Extract specimen procedure details for tracking
         if v2_data and hasattr(v2_data, 'specimen_procedures') and v2_data.specimen_procedures:
-            specimen_procedure_details = extract_specimen_procedure_details(v2_data.specimen_procedures)
+            specimen_procedure_details = extract_specimen_procedure_details(v2_data.specimen_procedures, batch_tracking_info)
             all_specimen_procedure_data[subject_id] = specimen_procedure_details
             print(f"  Found specimen procedures for tracking")
         else:
-            # Track subjects with missing specimen procedures
+            # Track subjects with missing specimen procedures - include batch tracking for debugging
             subjects_with_missing_specimen_procedures.append(subject_id)
-            all_specimen_procedure_data[subject_id] = {}
+            # Still add batch tracking info even if no procedures found
+            if batch_tracking_info:
+                all_specimen_procedure_data[subject_id] = {
+                    'batch_number': batch_tracking_info.get('batch_number', ""),
+                    'date_range_tab': batch_tracking_info.get('date_range_tab', "")
+                }
+            else:
+                all_specimen_procedure_data[subject_id] = {}
         
         # Check if conversion was successful
         if v2_data is None:
