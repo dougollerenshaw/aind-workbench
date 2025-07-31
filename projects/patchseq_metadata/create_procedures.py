@@ -35,6 +35,133 @@ def get_subjects_list():
     return subjects
 
 
+def extract_specimen_procedure_details(specimen_procedures_list):
+    """
+    Extract specimen procedure details for CSV tracking.
+    
+    Args:
+        specimen_procedures_list: List of SpecimenProcedure objects
+        
+    Returns:
+        list: List of specimen procedure detail dicts, one per procedure
+    """
+    procedures = []
+    
+    for proc in specimen_procedures_list:
+        # Initialize all specimen procedure fields with dot notation
+        procedure_fields = {
+            'procedure_type': proc.procedure_type if hasattr(proc, 'procedure_type') else "",
+            'procedure_name': proc.procedure_name if hasattr(proc, 'procedure_name') else "",
+            'start_date': str(proc.start_date) if hasattr(proc, 'start_date') and proc.start_date else "",
+            'end_date': str(proc.end_date) if hasattr(proc, 'end_date') and proc.end_date else "",
+            'experimenters': ", ".join(proc.experimenters) if hasattr(proc, 'experimenters') and proc.experimenters else "",
+            'protocol_id': ", ".join(proc.protocol_id) if hasattr(proc, 'protocol_id') and proc.protocol_id else "",
+            'notes': proc.notes if hasattr(proc, 'notes') and proc.notes else "",
+            'reagent_1.name': "",
+            'reagent_1.source.name': "",
+            'reagent_1.lot_number': "",
+            'reagent_2.name': "",
+            'reagent_2.source.name': "",
+            'reagent_2.lot_number': "",
+            'reagent_3.name': "",
+            'reagent_3.source.name': "",
+            'reagent_3.lot_number': ""
+        }
+        
+        # Extract reagent details if available
+        if hasattr(proc, 'procedure_details') and proc.procedure_details:
+            for i, reagent in enumerate(proc.procedure_details[:3], 1):  # Limit to 3 reagents
+                if hasattr(reagent, 'name'):
+                    procedure_fields[f'reagent_{i}.name'] = reagent.name
+                if hasattr(reagent, 'source') and reagent.source:
+                    if hasattr(reagent.source, 'name'):
+                        procedure_fields[f'reagent_{i}.source.name'] = reagent.source.name
+                if hasattr(reagent, 'lot_number') and reagent.lot_number:
+                    procedure_fields[f'reagent_{i}.lot_number'] = reagent.lot_number
+        
+        procedures.append(procedure_fields)
+    
+    return procedures
+
+
+def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_procedure_data):
+    """
+    Update or create a CSV file with specimen procedure tracking information.
+    Uses tidy format: one row per procedure with procedure_number column.
+    
+    Args:
+        subjects_processed: List of subject IDs that were processed
+        all_specimen_procedure_data: Dict mapping subject_id -> list of procedure details
+    """
+    csv_file = "specimen_procedure_tracking.csv"
+    
+    # Count total procedures across all subjects
+    total_procedures = sum(len(all_specimen_procedure_data.get(subject_id, [])) for subject_id in subjects_processed)
+    
+    if total_procedures == 0:
+        print(f"  No specimen procedures found, skipping CSV update")
+        return
+    
+    print(f"  Total specimen procedures to track: {total_procedures}")
+    
+    # Define columns for tidy format with comprehensive specimen procedure fields
+    columns = [
+        'subject_id', 'procedure_number',
+        'procedure_type', 'procedure_name', 'start_date', 'end_date', 
+        'experimenters', 'protocol_id', 'notes',
+        'reagent_1.name', 'reagent_1.source.name', 'reagent_1.lot_number',
+        'reagent_2.name', 'reagent_2.source.name', 'reagent_2.lot_number',
+        'reagent_3.name', 'reagent_3.source.name', 'reagent_3.lot_number'
+    ]
+    
+    # Load existing CSV if it exists, otherwise create new DataFrame
+    try:
+        existing_df = pd.read_csv(csv_file)
+        print(f"  Loaded existing {csv_file} with {len(existing_df)} rows")
+        # Remove rows for subjects we're updating to avoid duplicates
+        existing_df = existing_df[~existing_df['subject_id'].isin(subjects_processed)]
+        print(f"  Removed {len(subjects_processed)} subjects for update, {len(existing_df)} rows remaining")
+    except FileNotFoundError:
+        existing_df = pd.DataFrame(columns=columns)
+        print(f"  Creating new {csv_file}")
+    
+    # Create new rows for current subjects
+    new_rows = []
+    for subject_id in subjects_processed:
+        procedures = all_specimen_procedure_data.get(subject_id, [])
+        
+        for procedure_num, procedure in enumerate(procedures, 1):
+            row_data = {
+                'subject_id': subject_id,
+                'procedure_number': procedure_num
+            }
+            
+            # Add all procedure details
+            for key, value in procedure.items():
+                if key in columns:  # Only include columns we want
+                    row_data[key] = value
+            
+            new_rows.append(row_data)
+    
+    # Convert new rows to DataFrame
+    if new_rows:
+        new_df = pd.DataFrame(new_rows)
+        # Combine existing and new data
+        combined_df = pd.concat([existing_df, new_df], ignore_index=True)
+    else:
+        combined_df = existing_df
+    
+    # Ensure all columns exist and are in the right order
+    combined_df = combined_df.reindex(columns=columns, fill_value="")
+    
+    # Sort by subject_id and procedure_number for easy reading
+    combined_df = combined_df.sort_values(['subject_id', 'procedure_number']).reset_index(drop=True)
+    
+    # Save the updated CSV
+    combined_df.to_csv(csv_file, index=False)
+    print(f"  Updated {csv_file} with {len(new_rows)} procedure rows for {len(subjects_processed)} subjects")
+
+
 def extract_injection_details(v1_data):
     """
     Extract injection details from v1 procedures data for CSV tracking.
@@ -1043,6 +1170,12 @@ def main():
     # Track subjects with missing injection coordinate information
     subjects_with_missing_injection_coords = []
     
+    # Track subjects with missing specimen procedures
+    subjects_with_missing_specimen_procedures = []
+    
+    # Track specimen procedure data for CSV
+    all_specimen_procedure_data = {}
+    
     for subject_id in subjects:
         print(f"\nProcessing subject: {subject_id}")
         
@@ -1089,6 +1222,16 @@ def main():
                 'details': missing_injection_coords_info['missing_injection_details']
             })
         
+        # Extract specimen procedure details for tracking
+        if v2_data and hasattr(v2_data, 'specimen_procedures') and v2_data.specimen_procedures:
+            specimen_procedure_details = extract_specimen_procedure_details(v2_data.specimen_procedures)
+            all_specimen_procedure_data[subject_id] = specimen_procedure_details
+            print(f"  Found {len(specimen_procedure_details)} specimen procedures for tracking")
+        else:
+            # Track subjects with missing specimen procedures
+            subjects_with_missing_specimen_procedures.append(subject_id)
+            all_specimen_procedure_data[subject_id] = []
+        
         # Check if conversion was successful
         if v2_data is None:
             # Conversion failed
@@ -1108,6 +1251,11 @@ def main():
         print(f"Creating viral material tracking CSV")
         print(f"=" * 60)
         update_injection_tracking_csv(subjects_processed, all_injection_data)
+        
+        print(f"\n" + "=" * 60)
+        print(f"Creating specimen procedure tracking CSV")
+        print(f"=" * 60)
+        update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_procedure_data)
     
     # Summary
     print(f"\n" + "=" * 60)
@@ -1120,6 +1268,9 @@ def main():
     if all_injection_data:
         total_injections = sum(len(inj_list) for inj_list in all_injection_data.values())
         print(f"Injection materials tracked: {total_injections} injections across {len(all_injection_data)} subjects")
+    if all_specimen_procedure_data:
+        total_specimen_procedures = sum(len(proc_list) for proc_list in all_specimen_procedure_data.values())
+        print(f"Specimen procedures tracked: {total_specimen_procedures} procedures across {len([s for s in all_specimen_procedure_data if all_specimen_procedure_data[s]])} subjects")
     
     # Report subjects with missing injection coordinate information
     if subjects_with_missing_injection_coords:
@@ -1133,6 +1284,17 @@ def main():
         print(f"\nNote: Placeholder injection coordinates (0.0) were used for missing values to maintain schema compliance.")
     else:
         print(f"\n✓ All subjects had complete injection coordinate data")
+    
+    # Report subjects with missing specimen procedures
+    if subjects_with_missing_specimen_procedures:
+        print(f"\n" + "⚠️  SUBJECTS WITH MISSING SPECIMEN PROCEDURES")
+        print(f"=" * 60)
+        print(f"Found {len(subjects_with_missing_specimen_procedures)} subjects with no specimen procedures from Excel data:")
+        for subject_id in subjects_with_missing_specimen_procedures:
+            print(f"  • Subject {subject_id}")
+        print(f"\nNote: These subjects were not found in the Excel specimen procedures data or had no valid procedures.")
+    else:
+        print(f"\n✓ All subjects had specimen procedures from Excel data")
 
 
 if __name__ == "__main__":
