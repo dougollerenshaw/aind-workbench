@@ -18,6 +18,7 @@ from aind_data_schema.components.injection_procedures import InjectionDynamics, 
 from aind_data_schema.components.reagent import Reagent
 from aind_data_schema_models.organizations import Organization
 from aind_data_schema_models.units import VolumeUnit, TimeUnit, AngleUnit
+from aind_data_schema_models.pid_names import PIDName
 
 
 def get_subjects_list():
@@ -109,8 +110,15 @@ def extract_injection_details(v1_data):
                         if addgene_info:
                             viral_material_fields['addgene_id.name'] = addgene_info.get("name", "")
                             viral_material_fields['addgene_id.abbreviation'] = addgene_info.get("abbreviation", "")
-                            viral_material_fields['addgene_id.registry'] = addgene_info.get("registry", "")
-                            viral_material_fields['addgene_id.registry_identifier'] = addgene_info.get("registry_identifier", "")
+                            # Registry should always be "Addgene" for Addgene IDs
+                            viral_material_fields['addgene_id.registry'] = "Addgene" if addgene_info.get("registry_identifier") else ""
+                            # Normalize registry_identifier: remove "Addgene #" prefix if present
+                            raw_registry_id = addgene_info.get("registry_identifier", "")
+                            if isinstance(raw_registry_id, str) and "Addgene #" in raw_registry_id:
+                                normalized_id = raw_registry_id.replace("Addgene #", "").strip()
+                                viral_material_fields['addgene_id.registry_identifier'] = normalized_id
+                            else:
+                                viral_material_fields['addgene_id.registry_identifier'] = raw_registry_id
                     
                     # Create one entry per depth/volume combination
                     for i, depth in enumerate(depths):
@@ -717,18 +725,24 @@ def convert_procedures_to_v2(data, excel_sheet_data=None):
                                     
                                     # Create PIDName for Addgene
                                     try:
-                                        # Try to create PIDName object (registry should be "Addgene")
-                                        viral_kwargs["addgene_id"] = {
-                                            "name": addgene_info.get("name", material_name),
-                                            "abbreviation": addgene_info.get("abbreviation"),
-                                            "registry": "Addgene",
-                                            "registry_identifier": addgene_id
-                                        }
-                                    except:
-                                        # Fall back to simple dict if PIDName creation fails
-                                        viral_kwargs["addgene_id"] = {
-                                            "registry_identifier": addgene_id
-                                        }
+                                        # Create proper PIDName object
+                                        viral_kwargs["addgene_id"] = PIDName(
+                                            name=addgene_info.get("name", material_name),
+                                            abbreviation=addgene_info.get("abbreviation"),
+                                            registry="Addgene",
+                                            registry_identifier=addgene_id
+                                        )
+                                    except Exception as e:
+                                        # Fall back to simple PIDName with minimal info if creation fails
+                                        try:
+                                            viral_kwargs["addgene_id"] = PIDName(
+                                                name=material_name,
+                                                registry="Addgene",
+                                                registry_identifier=addgene_id
+                                            )
+                                        except:
+                                            # Skip addgene_id if PIDName creation completely fails
+                                            pass
                                 
                                 # Add titer information if available
                                 if material_data.get("titer"):
