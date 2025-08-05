@@ -266,6 +266,7 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
         'subject_id', 'injection_number',
         'coordinates_ap', 'coordinates_ml', 'coordinates_si', 'volume_nl',
         'hemisphere', 'angle_degrees', 'recovery_time', 'recovery_time_unit', 'protocol_id',
+        'injection_type',
         'name', 
         'tars_identifiers.virus_tars_id',
         'tars_identifiers.plasmid_tars_alias',
@@ -308,6 +309,13 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
                 if key in columns:  # Only include columns we want
                     row_data[key] = value
             
+            # Add injection type based on AP coordinate
+            ap_coord = injection.get('coordinates_ap')
+            if pd.isna(ap_coord) or ap_coord == '' or ap_coord is None:
+                row_data['injection_type'] = 'spinal_cord'
+            else:
+                row_data['injection_type'] = 'brain'
+            
             new_rows.append(row_data)
     
     # Convert new rows to DataFrame
@@ -320,6 +328,9 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
     
     # Ensure all columns exist and are in the right order
     combined_df = combined_df.reindex(columns=columns, fill_value="")
+    
+    # Ensure subject_id is string type for consistent sorting
+    combined_df['subject_id'] = combined_df['subject_id'].astype(str)
     
     # Sort by subject_id and injection_number for easy reading
     combined_df = combined_df.sort_values(['subject_id', 'injection_number']).reset_index(drop=True)
@@ -396,6 +407,9 @@ def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_proc
     
     # Ensure all columns exist and are in the right order
     combined_df = combined_df.reindex(columns=columns, fill_value="")
+    
+    # Ensure subject_id is string type for consistent sorting
+    combined_df['subject_id'] = combined_df['subject_id'].astype(str)
     
     # Sort by subject_id for easy reading
     combined_df = combined_df.sort_values(['subject_id']).reset_index(drop=True)

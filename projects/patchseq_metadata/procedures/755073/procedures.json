@@ -1,37 +1,24 @@
 {
-  "object_type": "Procedures",
-  "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/procedures.py",
-  "schema_version": "2.0.32",
   "subject_id": "755073",
   "subject_procedures": [
     {
-      "object_type": "Surgery",
       "protocol_id": null,
       "start_date": "2024-10-10",
       "experimenters": [
         "30333"
       ],
       "ethics_review_id": "2109",
-      "animal_weight_prior": null,
-      "animal_weight_post": null,
       "weight_unit": "gram",
-      "anaesthesia": null,
-      "workstation_id": null,
-      "coordinate_system": null,
-      "measured_coordinates": null,
       "procedures": [
         {
-          "object_type": "Perfusion",
           "protocol_id": "dx.doi.org/10.17504/protocols.io.8epv51bejl1b/v6",
           "output_specimen_ids": [
             "755073"
           ]
         }
-      ],
-      "notes": null
+      ]
     },
     {
-      "object_type": "Surgery",
       "protocol_id": "dx.doi.org/10.17504/protocols.io.kqdg392o7g25/v2",
       "start_date": "2024-08-30",
       "experimenters": [
@@ -42,54 +29,42 @@
       "animal_weight_post": 17.2,
       "weight_unit": "gram",
       "anaesthesia": {
-        "object_type": "Anaesthetic",
         "anaesthetic_type": "isoflurane",
         "duration": 84.0,
-        "duration_unit": "minute",
         "level": 1.5
       },
       "workstation_id": "SWS 1",
       "coordinate_system": {
-        "object_type": "Coordinate system",
         "name": "BREGMA_ARI",
         "origin": "Bregma",
         "axes": [
           {
-            "object_type": "Axis",
             "name": "AP",
             "direction": "Posterior_to_anterior"
           },
           {
-            "object_type": "Axis",
             "name": "ML",
             "direction": "Left_to_right"
           },
           {
-            "object_type": "Axis",
             "name": "SI",
             "direction": "Superior_to_inferior"
           }
         ],
         "axis_unit": "millimeter"
       },
-      "measured_coordinates": null,
       "procedures": [
         {
-          "object_type": "Brain injection",
           "injection_materials": [
             {
-              "object_type": "Viral material",
               "name": "AAV pEF1a-DIO-FLPo-WPRE-hGHpA",
               "tars_identifiers": {
-                "object_type": "Tars virus identifiers",
                 "virus_tars_id": "VIR300023_rAAV2-retro",
                 "plasmid_tars_alias": [
                   "ExP300023"
                 ],
                 "prep_lot_number": "V168836",
-                "prep_date": "2023-03-01",
-                "prep_type": null,
-                "prep_protocol": null
+                "prep_date": "2023-03-01"
               },
               "addgene_id": {
                 "name": "AAV pEF1a-DIO-FLPo-WPRE-hGHpA",
@@ -101,21 +76,13 @@
               "titer_unit": "gc/mL"
             }
           ],
-          "targeted_structure": null,
-          "relative_position": null,
           "dynamics": [
             {
-              "object_type": "Injection dynamics",
               "profile": "Bolus",
               "volume": 300.0,
               "volume_unit": "nanoliter",
-              "rate": null,
-              "rate_unit": null,
               "duration": 8.0,
-              "duration_unit": "minute",
-              "injection_current": null,
-              "injection_current_unit": null,
-              "alternating_current": null
+              "duration_unit": "minute"
             }
           ],
           "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
@@ -123,7 +90,6 @@
           "coordinates": [
             [
               {
-                "object_type": "Translation",
                 "translation": [
                   2.1,
                   0.33,
@@ -134,21 +100,16 @@
           ]
         },
         {
-          "object_type": "Brain injection",
           "injection_materials": [
             {
-              "object_type": "Viral material",
               "name": "AAV pEF1a-DIO-FLPo-WPRE-hGHpA",
               "tars_identifiers": {
-                "object_type": "Tars virus identifiers",
                 "virus_tars_id": "VIR300023_rAAV2-retro",
                 "plasmid_tars_alias": [
                   "ExP300023"
                 ],
                 "prep_lot_number": "V168836",
-                "prep_date": "2023-03-01",
-                "prep_type": null,
-                "prep_protocol": null
+                "prep_date": "2023-03-01"
               },
               "addgene_id": {
                 "name": "AAV pEF1a-DIO-FLPo-WPRE-hGHpA",
@@ -160,34 +121,20 @@
               "titer_unit": "gc/mL"
             }
           ],
-          "targeted_structure": null,
-          "relative_position": null,
           "dynamics": [
             {
-              "object_type": "Injection dynamics",
               "profile": "Bolus",
               "volume": 150.0,
               "volume_unit": "nanoliter",
-              "rate": null,
-              "rate_unit": null,
               "duration": 8.0,
-              "duration_unit": "minute",
-              "injection_current": null,
-              "injection_current_unit": null,
-              "alternating_current": null
+              "duration_unit": "minute"
             },
             {
-              "object_type": "Injection dynamics",
               "profile": "Bolus",
               "volume": 150.0,
               "volume_unit": "nanoliter",
-              "rate": null,
-              "rate_unit": null,
               "duration": 8.0,
-              "duration_unit": "minute",
-              "injection_current": null,
-              "injection_current_unit": null,
-              "alternating_current": null
+              "duration_unit": "minute"
             }
           ],
           "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
@@ -195,7 +142,6 @@
           "coordinates": [
             [
               {
-                "object_type": "Translation",
                 "translation": [
                   1.7,
                   0.9,
@@ -205,7 +151,6 @@
             ],
             [
               {
-                "object_type": "Translation",
                 "translation": [
                   1.7,
                   0.9,
@@ -215,13 +160,11 @@
             ]
           ]
         }
-      ],
-      "notes": null
+      ]
     }
   ],
   "specimen_procedures": [
     {
-      "object_type": "Specimen procedure",
       "procedure_type": "Fixation",
       "procedure_name": "SHIELD OFF",
       "specimen_id": "755073",
@@ -231,39 +174,21 @@
         "Holly Myers"
       ],
       "protocol_id": null,
-      "protocol_parameters": null,
       "procedure_details": [
         {
-          "object_type": "Reagent",
           "name": "SHIELD Buffer",
-          "source": {
-            "name": "LifeCanvas",
-            "abbreviation": null,
-            "registry": null,
-            "registry_identifier": null
-          },
-          "rrid": null,
-          "lot_number": "bu24",
-          "expiration_date": null
+          "source": {},
+          "lot_number": "bu24"
         },
         {
-          "object_type": "Reagent",
           "name": "SHIELD Epoxy",
-          "source": {
-            "name": "LifeCanvas",
-            "abbreviation": null,
-            "registry": null,
-            "registry_identifier": null
-          },
-          "rrid": null,
-          "lot_number": "ex49, ex50",
-          "expiration_date": null
+          "source": {},
+          "lot_number": "ex49, ex50"
         }
       ],
       "notes": null
     },
     {
-      "object_type": "Specimen procedure",
       "procedure_type": "Fixation",
       "procedure_name": "SHIELD ON",
       "specimen_id": "755073",
@@ -273,26 +198,16 @@
         "Holly Myers"
       ],
       "protocol_id": null,
-      "protocol_parameters": null,
       "procedure_details": [
         {
-          "object_type": "Reagent",
           "name": "SHIELD On",
-          "source": {
-            "name": "LifeCanvas",
-            "abbreviation": null,
-            "registry": null,
-            "registry_identifier": null
-          },
-          "rrid": null,
-          "lot_number": "on30",
-          "expiration_date": null
+          "source": {},
+          "lot_number": "on30"
         }
       ],
       "notes": null
     },
     {
-      "object_type": "Specimen procedure",
       "procedure_type": "Delipidation",
       "procedure_name": "Passive Delipidation",
       "specimen_id": "755073",
@@ -302,26 +217,16 @@
         "Holly Myers"
       ],
       "protocol_id": null,
-      "protocol_parameters": null,
       "procedure_details": [
         {
-          "object_type": "Reagent",
           "name": "Delipidation Buffer",
-          "source": {
-            "name": "Other",
-            "abbreviation": null,
-            "registry": null,
-            "registry_identifier": null
-          },
-          "rrid": null,
-          "lot_number": "d23",
-          "expiration_date": null
+          "source": {},
+          "lot_number": "d23"
         }
       ],
       "notes": null
     },
     {
-      "object_type": "Specimen procedure",
       "procedure_type": "Delipidation",
       "procedure_name": "Active Delipidation",
       "specimen_id": "755073",
@@ -331,26 +236,16 @@
         "Holly Myers"
       ],
       "protocol_id": null,
-      "protocol_parameters": null,
       "procedure_details": [
         {
-          "object_type": "Reagent",
           "name": "Conductivity Buffer",
-          "source": {
-            "name": "Other",
-            "abbreviation": null,
-            "registry": null,
-            "registry_identifier": null
-          },
-          "rrid": null,
-          "lot_number": "C19S106",
-          "expiration_date": null
+          "source": {},
+          "lot_number": "C19S106"
         }
       ],
       "notes": null
     },
     {
-      "object_type": "Specimen procedure",
       "procedure_type": "Refractive index matching",
       "procedure_name": "EasyIndex",
       "specimen_id": "755073",
@@ -362,25 +257,14 @@
       "protocol_id": [
         "dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1"
       ],
-      "protocol_parameters": null,
       "procedure_details": [
         {
-          "object_type": "Reagent",
           "name": "Easy Index",
-          "source": {
-            "name": "LifeCanvas",
-            "abbreviation": null,
-            "registry": null,
-            "registry_identifier": null
-          },
-          "rrid": null,
-          "lot_number": "EI64",
-          "expiration_date": null
+          "source": {},
+          "lot_number": "EI64"
         }
       ],
       "notes": null
     }
-  ],
-  "coordinate_system": null,
-  "notes": null
+  ]
 }

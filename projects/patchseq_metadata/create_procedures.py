@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
 Simple script to create procedures.json files for patchseq subjects.
+By default, this will create procedures for the 32 mice defined in the subjects list in extract_patchseq_subjects.py.
+It's also possible to generate procedures for a specific subject using --subjects argument followed by a space separated list of subject IDs
 """
 
 import argparse

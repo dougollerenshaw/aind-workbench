@@ -2,20 +2,49 @@
 Utility functions for getting subject lists.
 """
 
-import pandas as pd
+# Subject IDs extracted from the SmartSPIM filenames in Polina's analysis capsule
+PATCHSEQ_SUBJECT_IDS = [
+    "692912",  
+    "716946",
+    "716947",
+    "716948",
+    "716949",
+    "716950",
+    "716951",
+    "725231",
+    "725328",
+    "725329",
+    "728854",
+    "731907",
+    "737038",
+    "737042",
+    "744117",
+    "744119",
+    "746041",
+    "746043",
+    "746045",
+    "746046",
+    "751017",
+    "751019",
+    "751023",
+    "751024",
+    "751035",
+    "755069",
+    "755071",
+    "755072",
+    "755073",
+    "755790",
+    "762196",
+    "762199",
+]
 
 
-def get_subjects_list(csv_file="patchseq_subject_ids.csv"):
+def get_subjects_list():
     """
-    Read the CSV file and return a list of subject IDs.
+    Get the list of patchseq subject IDs.
     
-    Args:
-        csv_file: Path to CSV file with subject IDs
-        
     Returns:
         list: List of subject IDs
     """
-    df = pd.read_csv(csv_file)
-    subjects = df['subject_id'].tolist()
-    print(f"Found {len(subjects)} subjects in {csv_file}")
-    return subjects
+    print(f"Found {len(PATCHSEQ_SUBJECT_IDS)} patchseq subjects")
+    return PATCHSEQ_SUBJECT_IDS
