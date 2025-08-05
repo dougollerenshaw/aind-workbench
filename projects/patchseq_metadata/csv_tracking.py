@@ -263,10 +263,9 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
     
     # Define columns for tidy format with comprehensive viral material fields
     columns = [
-        'subject_id', 'injection_number',
+        'subject_id', 'injection_number', 'injection_type',
         'coordinates_ap', 'coordinates_ml', 'coordinates_si', 'volume_nl',
         'hemisphere', 'angle_degrees', 'recovery_time', 'recovery_time_unit', 'protocol_id',
-        'injection_type',
         'name', 
         'tars_identifiers.virus_tars_id',
         'tars_identifiers.plasmid_tars_alias',
@@ -309,13 +308,6 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
                 if key in columns:  # Only include columns we want
                     row_data[key] = value
             
-            # Add injection type based on AP coordinate
-            ap_coord = injection.get('coordinates_ap')
-            if pd.isna(ap_coord) or ap_coord == '' or ap_coord is None:
-                row_data['injection_type'] = 'spinal_cord'
-            else:
-                row_data['injection_type'] = 'brain'
-            
             new_rows.append(row_data)
     
     # Convert new rows to DataFrame
@@ -328,6 +320,16 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
     
     # Ensure all columns exist and are in the right order
     combined_df = combined_df.reindex(columns=columns, fill_value="")
+    
+    # Fill in injection_type for ALL rows based on AP coordinates
+    def determine_injection_type(row):
+        ap_coord = row['coordinates_ap']
+        if pd.isna(ap_coord) or ap_coord == '' or ap_coord is None:
+            return 'spinal_cord'
+        else:
+            return 'brain'
+    
+    combined_df['injection_type'] = combined_df.apply(determine_injection_type, axis=1)
     
     # Ensure subject_id is string type for consistent sorting
     combined_df['subject_id'] = combined_df['subject_id'].astype(str)
