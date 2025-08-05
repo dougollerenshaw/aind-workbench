@@ -19,31 +19,27 @@ from subject_utils import get_subjects_list
 
 def process_single_subject(
     subject_id, 
-    excel_sheet_data=None, 
-    skip_existing=False,
+    excel_sheet_data=None,
     all_injection_data=None, 
     all_specimen_procedure_data=None, 
-    subjects_with_missing_injection_coords=None, 
+    subjects_with_missing_injection_coords=None,
     subjects_with_missing_specimen_procedures=None
 ):
     """
-    Process a single subject: check existing files, fetch/convert data, track injection coordinates and specimen procedures.
+    Process a single subject by fetching data, converting to v2 schema, and saving.
     
     Args:
-        subject_id: Subject ID to process
-        excel_sheet_data: Excel sheet data for specimen procedures (optional)
-        skip_existing: Skip processing if v2.0 procedures.json already exists
+        subject_id: The subject ID to process
+        excel_sheet_data: Dict containing specimen procedures Excel data (optional)
         all_injection_data: Dict to store injection data for CSV tracking (optional)
         all_specimen_procedure_data: Dict to store specimen procedure data for CSV tracking (optional)
-        subjects_with_missing_injection_coords: List to track subjects with missing injection coordinates (optional)
+        subjects_with_missing_injection_coords: List to track subjects with missing injection coords (optional)
         subjects_with_missing_specimen_procedures: List to track subjects with missing specimen procedures (optional)
         
     Returns:
-        bool: True if processing was successful, False if it failed
+        bool: True if successful, False otherwise
     """
-    # Initialize optional parameters with defaults
-    if excel_sheet_data is None:
-        excel_sheet_data = {}
+    # Initialize tracking variables if not provided
     if all_injection_data is None:
         all_injection_data = {}
     if all_specimen_procedure_data is None:
@@ -57,10 +53,6 @@ def process_single_subject(
     
     # Check if files already exist
     v1_exists, v2_exists, v1_data, v2_data = check_existing_procedures(subject_id)
-    
-    if v2_exists and skip_existing:
-        print(f"  ✓ v2.0 procedures.json already exists, skipping (--skip-existing flag set)")
-        return True
     
     # Fetch v1 data from API if not cached
     if v1_exists and v1_data:
@@ -174,7 +166,6 @@ def main():
     Main function that orchestrates the procedure processing workflow.
     """
     parser = argparse.ArgumentParser(description="Create procedures.json files for patchseq subjects")
-    parser.add_argument("--skip-existing", action="store_true", help="Skip subjects that already have v2.0 procedures.json files")
     parser.add_argument("--limit", type=int, help="Limit number of subjects to process")
     parser.add_argument("--subjects", nargs="+", help="Process specific subjects (space-separated list)")
     parser.add_argument("--excel", default="DT_HM_TissueClearingTracking_.xlsx", help="Excel file with specimen procedures data")
@@ -215,7 +206,6 @@ def main():
             success = process_single_subject(
                 subject_id, 
                 excel_sheet_data=excel_sheet_data,
-                skip_existing=args.skip_existing,
                 all_injection_data=all_injection_data,
                 all_specimen_procedure_data=all_specimen_procedure_data,
                 subjects_with_missing_injection_coords=subjects_with_missing_injection_coords,

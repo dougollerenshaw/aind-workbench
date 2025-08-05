@@ -165,76 +165,180 @@ def extract_specimen_procedure_details(specimen_procedures_list, batch_tracking_
     
     # Map procedures to their data
     for proc in specimen_procedures_list:
-        experimenter = ", ".join(proc.experimenters) if hasattr(proc, 'experimenters') and proc.experimenters else ""
-        start_date = str(proc.start_date) if hasattr(proc, 'start_date') and proc.start_date else ""
-        end_date = str(proc.end_date) if hasattr(proc, 'end_date') and proc.end_date else ""
-        notes = proc.notes if hasattr(proc, 'notes') and proc.notes else ""
-        protocol_id = ", ".join(proc.protocol_id) if hasattr(proc, 'protocol_id') and proc.protocol_id else ""
+        # Handle both object attributes and dictionary keys
+        experimenters = []
+        if hasattr(proc, 'experimenters'):
+            experimenters = proc.experimenters if proc.experimenters else []
+        elif isinstance(proc, dict) and 'experimenters' in proc:
+            experimenters = proc['experimenters'] if proc['experimenters'] else []
+        experimenter = ", ".join(experimenters)
         
+        start_date = ""
+        if hasattr(proc, 'start_date'):
+            start_date = str(proc.start_date) if proc.start_date else ""
+        elif isinstance(proc, dict) and 'start_date' in proc:
+            start_date = str(proc['start_date']) if proc['start_date'] else ""
+            
+        end_date = ""
+        if hasattr(proc, 'end_date'):
+            end_date = str(proc.end_date) if proc.end_date else ""
+        elif isinstance(proc, dict) and 'end_date' in proc:
+            end_date = str(proc['end_date']) if proc['end_date'] else ""
+            
+        notes = ""
+        if hasattr(proc, 'notes'):
+            notes = proc.notes if proc.notes else ""
+        elif isinstance(proc, dict) and 'notes' in proc:
+            notes = proc['notes'] if proc['notes'] else ""
+            
+        protocol_id = ""
+        if hasattr(proc, 'protocol_id'):
+            protocol_id = ", ".join(proc.protocol_id) if proc.protocol_id else ""
+        elif isinstance(proc, dict) and 'protocol_id' in proc:
+            pid = proc['protocol_id']
+            if isinstance(pid, list):
+                protocol_id = ", ".join(pid)
+            else:
+                protocol_id = str(pid) if pid else ""
+        
+        procedure_name = ""
         if hasattr(proc, 'procedure_name'):
-            if proc.procedure_name == "SHIELD OFF":
-                procedure_data['shield_off.start_date'] = start_date
-                procedure_data['shield_off.end_date'] = end_date
-                procedure_data['shield_off.experimenter'] = experimenter
-                procedure_data['shield_off.notes'] = notes
-                
-                # Extract specific reagent lots
-                if hasattr(proc, 'procedure_details') and proc.procedure_details:
-                    for reagent in proc.procedure_details:
-                        if hasattr(reagent, 'name'):
-                            if reagent.name == "SHIELD Buffer" and hasattr(reagent, 'lot_number'):
-                                procedure_data['shield_off.shield_buffer_lot'] = reagent.lot_number
-                            elif reagent.name == "SHIELD Epoxy" and hasattr(reagent, 'lot_number'):
-                                procedure_data['shield_off.shield_epoxy_lot'] = reagent.lot_number
+            procedure_name = proc.procedure_name
+        elif isinstance(proc, dict) and 'procedure_name' in proc:
+            procedure_name = proc['procedure_name']
+        
+        if procedure_name == "SHIELD OFF":
+            procedure_data['shield_off.start_date'] = start_date
+            procedure_data['shield_off.end_date'] = end_date
+            procedure_data['shield_off.experimenter'] = experimenter
+            procedure_data['shield_off.notes'] = notes
             
-            elif proc.procedure_name == "SHIELD ON":
-                procedure_data['shield_on.start_date'] = start_date
-                procedure_data['shield_on.end_date'] = end_date
-                procedure_data['shield_on.experimenter'] = experimenter
-                procedure_data['shield_on.notes'] = notes
+            # Extract specific reagent lots
+            procedure_details = []
+            if hasattr(proc, 'procedure_details'):
+                procedure_details = proc.procedure_details if proc.procedure_details else []
+            elif isinstance(proc, dict) and 'procedure_details' in proc:
+                procedure_details = proc['procedure_details'] if proc['procedure_details'] else []
                 
-                # Extract Shield On lot
-                if hasattr(proc, 'procedure_details') and proc.procedure_details:
-                    for reagent in proc.procedure_details:
-                        if hasattr(reagent, 'name') and reagent.name == "SHIELD On" and hasattr(reagent, 'lot_number'):
-                            procedure_data['shield_on.shield_on_lot'] = reagent.lot_number
+            for reagent in procedure_details:
+                reagent_name = ""
+                lot_number = ""
+                if hasattr(reagent, 'name'):
+                    reagent_name = reagent.name
+                    lot_number = reagent.lot_number if hasattr(reagent, 'lot_number') else ""
+                elif isinstance(reagent, dict):
+                    reagent_name = reagent.get('name', '')
+                    lot_number = reagent.get('lot_number', '')
+                    
+                if reagent_name == "SHIELD Buffer" and lot_number:
+                    procedure_data['shield_off.shield_buffer_lot'] = lot_number
+                elif reagent_name == "SHIELD Epoxy" and lot_number:
+                    procedure_data['shield_off.shield_epoxy_lot'] = lot_number
+        
+        elif procedure_name == "SHIELD ON":
+            procedure_data['shield_on.start_date'] = start_date
+            procedure_data['shield_on.end_date'] = end_date
+            procedure_data['shield_on.experimenter'] = experimenter
+            procedure_data['shield_on.notes'] = notes
             
-            elif proc.procedure_name == "Passive Delipidation":
-                procedure_data['passive_delipidation.start_date'] = start_date
-                procedure_data['passive_delipidation.end_date'] = end_date
-                procedure_data['passive_delipidation.experimenter'] = experimenter
-                procedure_data['passive_delipidation.notes'] = notes
+            # Extract Shield On lot
+            procedure_details = []
+            if hasattr(proc, 'procedure_details'):
+                procedure_details = proc.procedure_details if proc.procedure_details else []
+            elif isinstance(proc, dict) and 'procedure_details' in proc:
+                procedure_details = proc['procedure_details'] if proc['procedure_details'] else []
                 
-                # Extract Delipidation Buffer lot
-                if hasattr(proc, 'procedure_details') and proc.procedure_details:
-                    for reagent in proc.procedure_details:
-                        if hasattr(reagent, 'name') and reagent.name == "Delipidation Buffer" and hasattr(reagent, 'lot_number'):
-                            procedure_data['passive_delipidation.delipidation_buffer_lot'] = reagent.lot_number
+            for reagent in procedure_details:
+                reagent_name = ""
+                lot_number = ""
+                if hasattr(reagent, 'name'):
+                    reagent_name = reagent.name
+                    lot_number = reagent.lot_number if hasattr(reagent, 'lot_number') else ""
+                elif isinstance(reagent, dict):
+                    reagent_name = reagent.get('name', '')
+                    lot_number = reagent.get('lot_number', '')
+                    
+                if reagent_name == "SHIELD On" and lot_number:
+                    procedure_data['shield_on.shield_on_lot'] = lot_number
+        
+        elif procedure_name == "Passive Delipidation":
+            procedure_data['passive_delipidation.start_date'] = start_date
+            procedure_data['passive_delipidation.end_date'] = end_date
+            procedure_data['passive_delipidation.experimenter'] = experimenter
+            procedure_data['passive_delipidation.notes'] = notes
             
-            elif proc.procedure_name == "Active Delipidation":
-                procedure_data['active_delipidation.start_date'] = start_date
-                procedure_data['active_delipidation.end_date'] = end_date
-                procedure_data['active_delipidation.experimenter'] = experimenter
-                procedure_data['active_delipidation.notes'] = notes
+            # Extract Delipidation Buffer lot
+            procedure_details = []
+            if hasattr(proc, 'procedure_details'):
+                procedure_details = proc.procedure_details if proc.procedure_details else []
+            elif isinstance(proc, dict) and 'procedure_details' in proc:
+                procedure_details = proc['procedure_details'] if proc['procedure_details'] else []
                 
-                # Extract Conductivity Buffer lot
-                if hasattr(proc, 'procedure_details') and proc.procedure_details:
-                    for reagent in proc.procedure_details:
-                        if hasattr(reagent, 'name') and reagent.name == "Conductivity Buffer" and hasattr(reagent, 'lot_number'):
-                            procedure_data['active_delipidation.conductivity_buffer_lot'] = reagent.lot_number
+            for reagent in procedure_details:
+                reagent_name = ""
+                lot_number = ""
+                if hasattr(reagent, 'name'):
+                    reagent_name = reagent.name
+                    lot_number = reagent.lot_number if hasattr(reagent, 'lot_number') else ""
+                elif isinstance(reagent, dict):
+                    reagent_name = reagent.get('name', '')
+                    lot_number = reagent.get('lot_number', '')
+                    
+                if reagent_name == "Delipidation Buffer" and lot_number:
+                    procedure_data['passive_delipidation.delipidation_buffer_lot'] = lot_number
+        
+        elif procedure_name == "Active Delipidation":
+            procedure_data['active_delipidation.start_date'] = start_date
+            procedure_data['active_delipidation.end_date'] = end_date
+            procedure_data['active_delipidation.experimenter'] = experimenter
+            procedure_data['active_delipidation.notes'] = notes
             
-            elif proc.procedure_name == "EasyIndex":
-                procedure_data['easyindex.start_date'] = start_date
-                procedure_data['easyindex.end_date'] = end_date
-                procedure_data['easyindex.experimenter'] = experimenter
-                procedure_data['easyindex.notes'] = notes
-                procedure_data['easyindex.protocol_id'] = protocol_id
+            # Extract Conductivity Buffer lot
+            procedure_details = []
+            if hasattr(proc, 'procedure_details'):
+                procedure_details = proc.procedure_details if proc.procedure_details else []
+            elif isinstance(proc, dict) and 'procedure_details' in proc:
+                procedure_details = proc['procedure_details'] if proc['procedure_details'] else []
                 
-                # Extract Easy Index lot
-                if hasattr(proc, 'procedure_details') and proc.procedure_details:
-                    for reagent in proc.procedure_details:
-                        if hasattr(reagent, 'name') and reagent.name == "Easy Index" and hasattr(reagent, 'lot_number'):
-                            procedure_data['easyindex.easy_index_lot'] = reagent.lot_number
+            for reagent in procedure_details:
+                reagent_name = ""
+                lot_number = ""
+                if hasattr(reagent, 'name'):
+                    reagent_name = reagent.name
+                    lot_number = reagent.lot_number if hasattr(reagent, 'lot_number') else ""
+                elif isinstance(reagent, dict):
+                    reagent_name = reagent.get('name', '')
+                    lot_number = reagent.get('lot_number', '')
+                    
+                if reagent_name == "Conductivity Buffer" and lot_number:
+                    procedure_data['active_delipidation.conductivity_buffer_lot'] = lot_number
+        
+        elif procedure_name == "EasyIndex":
+            procedure_data['easyindex.start_date'] = start_date
+            procedure_data['easyindex.end_date'] = end_date
+            procedure_data['easyindex.experimenter'] = experimenter
+            procedure_data['easyindex.notes'] = notes
+            procedure_data['easyindex.protocol_id'] = protocol_id
+            
+            # Extract Easy Index lot
+            procedure_details = []
+            if hasattr(proc, 'procedure_details'):
+                procedure_details = proc.procedure_details if proc.procedure_details else []
+            elif isinstance(proc, dict) and 'procedure_details' in proc:
+                procedure_details = proc['procedure_details'] if proc['procedure_details'] else []
+                
+            for reagent in procedure_details:
+                reagent_name = ""
+                lot_number = ""
+                if hasattr(reagent, 'name'):
+                    reagent_name = reagent.name
+                    lot_number = reagent.lot_number if hasattr(reagent, 'lot_number') else ""
+                elif isinstance(reagent, dict):
+                    reagent_name = reagent.get('name', '')
+                    lot_number = reagent.get('lot_number', '')
+                    
+                if reagent_name == "Easy Index" and lot_number:
+                    procedure_data['easyindex.easy_index_lot'] = lot_number
     
     return procedure_data
 
