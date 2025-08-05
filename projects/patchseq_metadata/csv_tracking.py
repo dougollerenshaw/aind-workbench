@@ -241,9 +241,7 @@ def extract_specimen_procedure_details(specimen_procedures_list, batch_tracking_
 
 def update_injection_tracking_csv(subjects_processed, all_injection_data):
     """
-    Update or create a CSV file with injection material tracking information.
-    This creates a separate CSV file dedicated to viral material tracking,
-    keeping the original patchseq_subject_ids.csv unchanged.
+    Create a fresh CSV file with injection material tracking information.
     Uses tidy format: one row per injection with injection_number column.
     
     Args:
@@ -256,10 +254,11 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
     total_injections = sum(len(all_injection_data.get(subject_id, [])) for subject_id in subjects_processed)
     
     if total_injections == 0:
-        print(f"  No injections found, skipping CSV update")
+        print(f"  No injections found, creating empty CSV")
+        pd.DataFrame().to_csv(csv_file, index=False)
         return
     
-    print(f"  Total injections to track: {total_injections}")
+    print(f"  Creating fresh CSV with {total_injections} injections")
     
     # Define columns for tidy format with comprehensive viral material fields
     columns = [
@@ -281,25 +280,14 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
         'titer_unit'
     ]
     
-    # Load existing CSV if it exists, otherwise create new DataFrame
-    try:
-        existing_df = pd.read_csv(csv_file)
-        print(f"  Loaded existing {csv_file} with {len(existing_df)} rows")
-        # Remove rows for subjects we're updating to avoid duplicates
-        existing_df = existing_df[~existing_df['subject_id'].isin(subjects_processed)]
-        print(f"  Removed {len(subjects_processed)} subjects for update, {len(existing_df)} rows remaining")
-    except FileNotFoundError:
-        existing_df = pd.DataFrame(columns=columns)
-        print(f"  Creating new {csv_file}")
-    
-    # Create new rows for current subjects
-    new_rows = []
+    # Create rows for all subjects
+    rows = []
     for subject_id in subjects_processed:
         injections = all_injection_data.get(subject_id, [])
         
         for injection_num, injection in enumerate(injections, 1):
             row_data = {
-                'subject_id': subject_id,
+                'subject_id': str(subject_id),
                 'injection_number': injection_num
             }
             
@@ -308,20 +296,15 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
                 if key in columns:  # Only include columns we want
                     row_data[key] = value
             
-            new_rows.append(row_data)
+            rows.append(row_data)
     
-    # Convert new rows to DataFrame
-    if new_rows:
-        new_df = pd.DataFrame(new_rows)
-        # Combine existing and new data
-        combined_df = pd.concat([existing_df, new_df], ignore_index=True)
-    else:
-        combined_df = existing_df
+    # Create DataFrame
+    df = pd.DataFrame(rows)
     
     # Ensure all columns exist and are in the right order
-    combined_df = combined_df.reindex(columns=columns, fill_value="")
+    df = df.reindex(columns=columns, fill_value="")
     
-    # Fill in injection_type for ALL rows based on AP coordinates
+    # Fill in injection_type based on AP coordinates
     def determine_injection_type(row):
         ap_coord = row['coordinates_ap']
         if pd.isna(ap_coord) or ap_coord == '' or ap_coord is None:
@@ -329,22 +312,19 @@ def update_injection_tracking_csv(subjects_processed, all_injection_data):
         else:
             return 'brain'
     
-    combined_df['injection_type'] = combined_df.apply(determine_injection_type, axis=1)
-    
-    # Ensure subject_id is string type for consistent sorting
-    combined_df['subject_id'] = combined_df['subject_id'].astype(str)
+    df['injection_type'] = df.apply(determine_injection_type, axis=1)
     
     # Sort by subject_id and injection_number for easy reading
-    combined_df = combined_df.sort_values(['subject_id', 'injection_number']).reset_index(drop=True)
+    df = df.sort_values(['subject_id', 'injection_number']).reset_index(drop=True)
     
-    # Save the updated CSV
-    combined_df.to_csv(csv_file, index=False)
-    print(f"  Updated {csv_file} with {len(new_rows)} injection rows for {len(subjects_processed)} subjects")
+    # Save the CSV
+    df.to_csv(csv_file, index=False)
+    print(f"  Created {csv_file} with {len(rows)} injection rows for {len(subjects_processed)} subjects")
 
 
 def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_procedure_data):
     """
-    Update or create a CSV file with specimen procedure tracking information.
+    Create a fresh CSV file with specimen procedure tracking information.
     Uses wide format: one row per subject with columns for each of the 5 procedures.
     
     Args:
@@ -356,7 +336,7 @@ def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_proc
     # Count subjects with procedures vs total subjects
     subjects_with_procedures = len([s for s in subjects_processed if all_specimen_procedure_data.get(s)])
     
-    print(f"  Total subjects to track: {len(subjects_processed)} (including {subjects_with_procedures} with specimen procedures)")
+    print(f"  Creating fresh CSV for {len(subjects_processed)} subjects ({subjects_with_procedures} with specimen procedures)")
     
     # Define columns for wide format with predefined procedure columns
     columns = [
@@ -373,49 +353,30 @@ def update_specimen_procedure_tracking_csv(subjects_processed, all_specimen_proc
         'easyindex.protocol_id', 'easyindex.easy_index_lot'
     ]
     
-    # Load existing CSV if it exists, otherwise create new DataFrame
-    try:
-        existing_df = pd.read_csv(csv_file)
-        print(f"  Loaded existing {csv_file} with {len(existing_df)} rows")
-        # Remove rows for subjects we're updating to avoid duplicates
-        existing_df = existing_df[~existing_df['subject_id'].isin(subjects_processed)]
-        print(f"  Removed {len(subjects_processed)} subjects for update, {len(existing_df)} rows remaining")
-    except FileNotFoundError:
-        existing_df = pd.DataFrame(columns=columns)
-        print(f"  Creating new {csv_file}")
-    
-    # Create new rows for current subjects - include ALL subjects (even with missing data)
-    new_rows = []
+    # Create rows for all subjects
+    rows = []
     for subject_id in subjects_processed:
         procedure_data = all_specimen_procedure_data.get(subject_id, {})
         
         # Always add row for every processed subject
-        row_data = {'subject_id': subject_id}
+        row_data = {'subject_id': str(subject_id)}
         
         # Add all procedure details (will be empty strings if no data)
         for key, value in procedure_data.items():
             if key in columns:  # Only include columns we want
                 row_data[key] = value
         
-        new_rows.append(row_data)
+        rows.append(row_data)
     
-    # Convert new rows to DataFrame
-    if new_rows:
-        new_df = pd.DataFrame(new_rows)
-        # Combine existing and new data
-        combined_df = pd.concat([existing_df, new_df], ignore_index=True)
-    else:
-        combined_df = existing_df
+    # Create DataFrame
+    df = pd.DataFrame(rows)
     
     # Ensure all columns exist and are in the right order
-    combined_df = combined_df.reindex(columns=columns, fill_value="")
-    
-    # Ensure subject_id is string type for consistent sorting
-    combined_df['subject_id'] = combined_df['subject_id'].astype(str)
+    df = df.reindex(columns=columns, fill_value="")
     
     # Sort by subject_id for easy reading
-    combined_df = combined_df.sort_values(['subject_id']).reset_index(drop=True)
+    df = df.sort_values(['subject_id']).reset_index(drop=True)
     
-    # Save the updated CSV
-    combined_df.to_csv(csv_file, index=False)
-    print(f"  Updated {csv_file} with {len(new_rows)} subject rows ({subjects_with_procedures} with specimen procedures)")
+    # Save the CSV
+    df.to_csv(csv_file, index=False)
+    print(f"  Created {csv_file} with {len(rows)} subject rows ({subjects_with_procedures} with specimen procedures)")
