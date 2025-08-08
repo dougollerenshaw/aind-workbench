@@ -4,7 +4,6 @@ Utility functions for getting subject lists.
 
 # Subject IDs extracted from the SmartSPIM filenames in Polina's analysis capsule
 PATCHSEQ_SUBJECT_IDS = [
-    "692912",  
     "716946",
     "716947",
     "716948",
