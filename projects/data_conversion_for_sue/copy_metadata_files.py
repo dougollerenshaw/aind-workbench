@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """
 Copy subject.json and procedures.json files to session metadata folders.
+Optionally copy all metadata files to original VAST locations.
 """
 
 import pandas as pd
 import shutil
 import json
+import argparse
 from pathlib import Path
 
 def get_subject_id_from_json(json_file: Path) -> str:
@@ -17,9 +19,93 @@ def get_subject_id_from_json(json_file: Path) -> str:
     except:
         return ''
 
-def main():
-    """Copy metadata files to session folders."""
+def copy_to_vast_locations(asset_inventory_df, metadata_dir):
+    """
+    Copy all 5 JSON files from session folders to their original VAST locations.
     
+    Args:
+        asset_inventory_df: DataFrame with session info including vast_path
+        metadata_dir: Path to the metadata directory containing session folders
+    """
+    print("\n" + "="*60)
+    print("COPYING TO VAST LOCATIONS")
+    print("="*60)
+    
+    # Get all session folders 
+    session_folders = [d for d in metadata_dir.iterdir() if d.is_dir() and not d.name in ['subjects', 'procedures', 'instrument']]
+    
+    copied_count = 0
+    error_count = 0
+    
+    for session_folder in session_folders:
+        # Convert folder name to asset inventory format
+        # Folder format: ZS062_2021-05-11_20-10-59
+        # Asset inventory format: mZS062d20210511
+        subject_id = session_folder.name.split('_')[0]
+        session_name_parts = session_folder.name.split('_')
+        if len(session_name_parts) >= 2:
+            # Convert date from YYYY-MM-DD to YYYYMMDD
+            date_part = session_name_parts[1].replace('-', '')
+            session_name = f"m{subject_id}d{date_part}"
+        else:
+            session_name = session_folder.name
+        
+        # Find this session in the asset inventory
+        session_row = asset_inventory_df[asset_inventory_df['session_name'] == session_name]
+        
+        if session_row.empty:
+            print(f"⚠ Session {session_name} not found in asset inventory, skipping...")
+            continue
+        
+        vast_path = session_row.iloc[0]['vast_path']
+        if pd.isna(vast_path) or not vast_path.strip():
+            print(f"⚠ No VAST path for session {session_name}, skipping...")
+            continue
+        
+        vast_dest_dir = Path(vast_path)
+        print(f"\nProcessing {session_folder.name} -> {vast_dest_dir}")
+        
+        # Check if VAST destination exists
+        if not vast_dest_dir.exists():
+            print(f"  ⚠ VAST destination does not exist: {vast_dest_dir}")
+            print(f"    Creating directory...")
+            try:
+                vast_dest_dir.mkdir(parents=True, exist_ok=True)
+            except Exception as e:
+                print(f"  ✗ Failed to create directory: {e}")
+                error_count += 1
+                continue
+        
+        # Copy all 5 JSON files
+        json_files = ['acquisition.json', 'data_description.json', 'subject.json', 'procedures.json', 'instrument.json']
+        
+        for json_file in json_files:
+            source_file = session_folder / json_file
+            if source_file.exists():
+                dest_file = vast_dest_dir / json_file
+                try:
+                    shutil.copy2(source_file, dest_file)
+                    print(f"  ✓ Copied {json_file}")
+                    copied_count += 1
+                except Exception as e:
+                    print(f"  ✗ Failed to copy {json_file}: {e}")
+                    error_count += 1
+            else:
+                print(f"  ⚠ Missing {json_file} in session folder")
+    
+    print(f"\nVAST copy summary:")
+    print(f"  Files copied: {copied_count}")
+    print(f"  Errors: {error_count}")
+
+
+def main():
+    """Copy metadata files to session folders and optionally to VAST locations."""
+    
+    parser = argparse.ArgumentParser(description="Copy metadata files to session folders and optionally to VAST")
+    parser.add_argument('--copy-to-vast', action='store_true', 
+                       help='Also copy all JSON files to original VAST locations after copying within repo')
+    args = parser.parse_args()
+
     # Set up paths
     metadata_dir = Path("metadata")
     subjects_dir = metadata_dir / "subjects" / "v2"  # Use v2 (schema 2.0) subject files
@@ -34,12 +120,15 @@ def main():
         if row.get("collection_site") == "hopkins":
             jhu_sessions.add(row["session_name"])
     
+    print("="*60)
+    print("COPYING WITHIN REPO")
+    print("="*60)
     print(f"Found {len(jhu_sessions)} JHU sessions in asset inventory")
     if len(jhu_sessions) > 0:
         print(f"Sample JHU session names: {list(jhu_sessions)[:5]}")  # Show first 5
     
-    # Get all existing session folders
-    session_folders = [d for d in metadata_dir.iterdir() if d.is_dir() and not d.name in ['subjects', 'procedures']]
+    # Get all existing session folders (but not metadata subdirectories)
+    session_folders = [d for d in metadata_dir.iterdir() if d.is_dir() and not d.name in ['subjects', 'procedures', 'instrument']]
     
     print(f"Found {len(session_folders)} session folders")
     
@@ -105,7 +194,11 @@ def main():
             print(f"  ✓ Copied instrument.json from {jhu_instrument_file.name} (JHU session)")
             copied += 1
     
-    print(f"\nCopied {copied} files total")
+    print(f"\nRepo copy summary: {copied} files copied")
+    
+    # If requested, copy to VAST locations
+    if args.copy_to_vast:
+        copy_to_vast_locations(asset_inventory, metadata_dir)
 
 if __name__ == "__main__":
     main()
