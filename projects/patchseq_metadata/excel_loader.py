@@ -27,25 +27,20 @@ def load_specimen_procedures_excel(excel_file="DT_HM_TissueClearingTracking_.xls
     sheets_to_ignore = ["TestBrains"]
     
     try:
-        print(f"Loading Excel file: {excel_file}")
         
         # First, get all sheet names to identify which ones to process
         all_sheets = pd.ExcelFile(excel_file).sheet_names
-        print(f"Found {len(all_sheets)} total sheets")
         
         sheet_data = {}
         
         # Load Batch Info sheet with proper headers
         if "Batch Info" in all_sheets:
-            print(f"\n--- Loading 'Batch Info' sheet ---")
             batch_info_df = pd.read_excel(excel_file, sheet_name="Batch Info", header=0)
             
             # Clean up any unnamed columns
             batch_info_df.columns = [str(col) if not str(col).startswith('Unnamed:') else f"Column_{i}" 
                                     for i, col in enumerate(batch_info_df.columns)]
             
-            print(f"✓ Batch Info loaded - Shape: {batch_info_df.shape}")
-            print(f"  Columns: {list(batch_info_df.columns)}")
             
             sheet_data["Batch Info"] = batch_info_df
         
@@ -54,13 +49,11 @@ def load_specimen_procedures_excel(excel_file="DT_HM_TissueClearingTracking_.xls
                            if sheet not in sheets_to_ignore and sheet != "Batch Info"]
         
         for sheet_name in time_based_sheets:
-            print(f"\n--- Loading '{sheet_name}' sheet ---")
             
             # Load with multi-level headers (rows 0, 1, 2)
             df_raw = pd.read_excel(excel_file, sheet_name=sheet_name, header=None)
             
             if len(df_raw) < 4:
-                print(f"  ⚠️  Sheet too small ({len(df_raw)} rows), skipping")
                 continue
             
             # Extract the three header rows
@@ -106,16 +99,12 @@ def load_specimen_procedures_excel(excel_file="DT_HM_TissueClearingTracking_.xls
             # Remove completely empty rows
             data_df = data_df.dropna(how='all')
             
-            print(f"✓ {sheet_name} loaded - Shape: {data_df.shape}")
-            print(f"  Sample columns: {list(data_df.columns)[:5]}...")
             
             sheet_data[sheet_name] = data_df
         
-        print(f"\n✓ Successfully loaded {len(sheet_data)} sheets")
         return sheet_data
         
     except Exception as e:
-        print(f" Error loading Excel file: {e}")
         return None
 
 
