@@ -1,0 +1,4282 @@
+[{
+  "acquisition": {
+    "active_objectives": null,
+    "axes": [
+      {
+        "dimension": 2,
+        "direction": "Left_to_right",
+        "name": "X",
+        "unit": "micrometer"
+      },
+      {
+        "dimension": 1,
+        "direction": "Posterior_to_anterior",
+        "name": "Y",
+        "unit": "micrometer"
+      },
+      {
+        "dimension": 0,
+        "direction": "Superior_to_inferior",
+        "name": "Z",
+        "unit": "micrometer"
+      }
+    ],
+    "chamber_immersion": {
+      "medium": "Cargille Oil 1.5200",
+      "refractive_index": 1.5214
+    },
+    "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/imaging/acquisition.py",
+    "experimenter_full_name": [
+      "John Rohde"
+    ],
+    "external_storage_directory": "",
+    "instrument_id": "SmartSPIM-2-1",
+    "local_storage_directory": "D:/SmartSPIM_Data",
+    "notes": null,
+    "processing_steps": null,
+    "sample_immersion": {
+      "medium": "EasyIndex",
+      "refractive_index": 1.522
+    },
+    "schema_version": "0.4.6",
+    "session_end_time": "2023-10-11T02:49:37",
+    "session_start_time": "2023-10-10T21:31:48",
+    "session_type": null,
+    "specimen_id": "",
+    "subject_id": "693980",
+    "tiles": [
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/435150/435150_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/435150/435150_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/435150/435150_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/467550/467550_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/467550/467550_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/467550/467550_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/499950/499950_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/499950/499950_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/499950/499950_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/532350/532350_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/532350/532350_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              69440,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/532350/532350_694400/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/435150/435150_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/435150/435150_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/435150/435150_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/467550/467550_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/467550/467550_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/467550/467550_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/499950/499950_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/499950/499950_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/499950/499950_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/532350/532350_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/532350/532350_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              72032,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/532350/532350_720320/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/435150/435150_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/435150/435150_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/435150/435150_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/467550/467550_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/467550/467550_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/467550/467550_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/499950/499950_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/499950/499950_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/499950/499950_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/532350/532350_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/532350/532350_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              74624,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/532350/532350_746240/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/435150/435150_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/435150/435150_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/435150/435150_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/467550/467550_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/467550/467550_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/467550/467550_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/499950/499950_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/499950/499950_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/499950/499950_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/532350/532350_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/532350/532350_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              77216,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/532350/532350_772160/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/435150/435150_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/435150/435150_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/435150/435150_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/467550/467550_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/467550/467550_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/467550/467550_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/499950/499950_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/499950/499950_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/499950/499950_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/532350/532350_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/532350/532350_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              79808,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/532350/532350_798080/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/435150/435150_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/435150/435150_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/435150/435150_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/467550/467550_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/467550/467550_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/467550/467550_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/499950/499950_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/499950/499950_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/499950/499950_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/532350/532350_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/532350/532350_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              82400,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/532350/532350_824000/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/435150/435150_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/435150/435150_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              43515,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/435150/435150_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/467550/467550_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/467550/467550_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              46755,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/467550/467550_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/499950/499950_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/499950/499950_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              49995,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/499950/499950_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "488",
+          "filter_wheel_index": 1,
+          "excitation_wavelength": 488,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 25,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_488_Em_525/532350/532350_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "561",
+          "filter_wheel_index": 2,
+          "excitation_wavelength": 561,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 16.36,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_561_Em_593/532350/532350_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      },
+      {
+        "channel": {
+          "channel_name": "639",
+          "filter_wheel_index": 4,
+          "excitation_wavelength": 639,
+          "excitation_wavelength_unit": "nanometer",
+          "excitation_power": 90,
+          "excitation_power_unit": "milliwatt"
+        },
+        "coordinate_transformations": [
+          {
+            "translation": [
+              53235,
+              84992,
+              -87.3
+            ],
+            "type": "translation"
+          },
+          {
+            "scale": [
+              1.8,
+              1.8,
+              2
+            ],
+            "type": "scale"
+          }
+        ],
+        "file_name": "Ex_639_Em_660/532350/532350_849920/",
+        "imaging_angle": 0,
+        "imaging_angle_unit": "degree",
+        "notes": "\nLaser power is in percentage of total, it needs calibration"
+      }
+    ]
+  },
+  "created": "2024-11-20T23:33:22.020212",
+  "data_description": {
+    "creation_time": "2024-11-20T21:26:38.716433Z",
+    "data_level": "derived",
+    "data_summary": null,
+    "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/data_description.py",
+    "funding_source": [
+      {
+        "fundee": "Jayaram Chandreashekar, Mathew Summers",
+        "funder": {
+          "abbreviation": "NINDS",
+          "name": "National Institute of Neurological Disorders and Stroke",
+          "registry": {
+            "abbreviation": "ROR",
+            "name": "Research Organization Registry"
+          },
+          "registry_identifier": "01s5ya894"
+        },
+        "grant_number": "NIH1U19NS123714-01"
+      }
+    ],
+    "group": "MSMA",
+    "input_data_name": "SmartSPIM_693980_2023-10-10_21-31-48",
+    "institution": {
+      "abbreviation": "AIND",
+      "name": "Allen Institute for Neural Dynamics",
+      "registry": {
+        "abbreviation": "ROR",
+        "name": "Research Organization Registry"
+      },
+      "registry_identifier": "04szwah67"
+    },
+    "investigators": [
+      {
+        "abbreviation": null,
+        "name": "Mathew Summers",
+        "registry": null,
+        "registry_identifier": null
+      },
+      {
+        "abbreviation": null,
+        "name": "Jayaram Chandrashekar",
+        "registry": null,
+        "registry_identifier": null
+      }
+    ],
+    "label": null,
+    "license": "CC-BY-4.0",
+    "modality": [
+      {
+        "abbreviation": "SPIM",
+        "name": "Selective plane illumination microscopy"
+      }
+    ],
+    "name": "SmartSPIM_693980_2023-10-10_21-31-48_stitched_2024-11-20_21-26-38",
+    "platform": {
+      "abbreviation": "SmartSPIM",
+      "name": "SmartSPIM platform"
+    },
+    "process_name": "stitched",
+    "project_name": "Thalamus in the middle",
+    "related_data": [],
+    "restrictions": null,
+    "schema_version": "1.0.0",
+    "subject_id": "693980"
+  },
+  "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/metadata.py",
+  "external_links": {
+    "Code Ocean": [
+      "0ef0c4e8-7048-4ea5-a213-10b5ceba393e"
+    ]
+  },
+  "instrument": {
+    "additional_devices": [
+      {
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Julabo",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "200F",
+        "name": null,
+        "notes": null,
+        "serial_number": "10436130",
+        "type": "Other"
+      },
+      {
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "LifeCanvas",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "Large-uncoated-glass",
+        "name": null,
+        "notes": null,
+        "serial_number": "Unknown-1",
+        "type": "Sample Chamber"
+      }
+    ],
+    "calibration_data": null,
+    "calibration_date": null,
+    "com_ports": [
+      {
+        "com_port": "COM3",
+        "hardware_name": "Laser Launch"
+      },
+      {
+        "com_port": "COM5",
+        "hardware_name": "ASI Tiger"
+      },
+      {
+        "com_port": "COM10",
+        "hardware_name": "MightyZap"
+      }
+    ],
+    "daqs": null,
+    "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/imaging/instrument.py",
+    "detectors": [
+      {
+        "cooling": "water",
+        "data_interface": "USB",
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Hamamatsu",
+          "registry": {
+            "abbreviation": "ROR",
+            "name": "Research Organization Registry"
+          },
+          "registry_identifier": "03natb733"
+        },
+        "model": "C14440-20UP",
+        "name": null,
+        "notes": null,
+        "serial_number": "220302-SYS-060443",
+        "type": "Camera"
+      }
+    ],
+    "fluorescence_filters": [
+      {
+        "center_wavelength": null,
+        "cut_off_wavelength": null,
+        "cut_on_wavelength": null,
+        "description": null,
+        "diameter": 25,
+        "filter_type": "Band pass",
+        "filter_wheel_index": 0,
+        "height": null,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Semrock",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "FF01-469/35-25",
+        "name": null,
+        "notes": null,
+        "serial_number": "Unknown-0",
+        "size_unit": "millimeter",
+        "thickness": 2,
+        "thickness_unit": "millimeter",
+        "wavelength_unit": "nanometer",
+        "width": null
+      },
+      {
+        "center_wavelength": null,
+        "cut_off_wavelength": null,
+        "cut_on_wavelength": null,
+        "description": null,
+        "diameter": 25,
+        "filter_type": "Band pass",
+        "filter_wheel_index": 1,
+        "height": null,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Semrock",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "FF01-525/45-25",
+        "name": null,
+        "notes": null,
+        "serial_number": "Unknown-1",
+        "size_unit": "millimeter",
+        "thickness": 2,
+        "thickness_unit": "millimeter",
+        "wavelength_unit": "nanometer",
+        "width": null
+      },
+      {
+        "center_wavelength": null,
+        "cut_off_wavelength": null,
+        "cut_on_wavelength": null,
+        "description": null,
+        "diameter": 25,
+        "filter_type": "Band pass",
+        "filter_wheel_index": 2,
+        "height": null,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Semrock",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "FF01-593/40-25",
+        "name": null,
+        "notes": null,
+        "serial_number": "Unknown-2",
+        "size_unit": "millimeter",
+        "thickness": 2,
+        "thickness_unit": "millimeter",
+        "wavelength_unit": "nanometer",
+        "width": null
+      },
+      {
+        "center_wavelength": null,
+        "cut_off_wavelength": null,
+        "cut_on_wavelength": null,
+        "description": null,
+        "diameter": 25,
+        "filter_type": "Band pass",
+        "filter_wheel_index": 3,
+        "height": null,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Semrock",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "FF01-624/40-25",
+        "name": null,
+        "notes": null,
+        "serial_number": "Unknown-3",
+        "size_unit": "millimeter",
+        "thickness": 2,
+        "thickness_unit": "millimeter",
+        "wavelength_unit": "nanometer",
+        "width": null
+      },
+      {
+        "center_wavelength": null,
+        "cut_off_wavelength": null,
+        "cut_on_wavelength": null,
+        "description": null,
+        "diameter": 25,
+        "filter_type": "Band pass",
+        "filter_wheel_index": 4,
+        "height": null,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Chroma",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "ET667/30m",
+        "name": null,
+        "notes": null,
+        "serial_number": "Unknown-4",
+        "size_unit": "millimeter",
+        "thickness": 2,
+        "thickness_unit": "millimeter",
+        "wavelength_unit": "nanometer",
+        "width": null
+      },
+      {
+        "center_wavelength": null,
+        "cut_off_wavelength": null,
+        "cut_on_wavelength": null,
+        "description": null,
+        "diameter": 25,
+        "filter_type": "Long pass",
+        "filter_wheel_index": 5,
+        "height": null,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Thorlabs",
+          "registry": {
+            "abbreviation": "ROR",
+            "name": "Research Organization Registry"
+          },
+          "registry_identifier": "04gsnvb07"
+        },
+        "model": "FELH0700",
+        "name": null,
+        "notes": null,
+        "serial_number": "Unknown-5",
+        "size_unit": "millimeter",
+        "thickness": 2,
+        "thickness_unit": "millimeter",
+        "wavelength_unit": "nanometer",
+        "width": null
+      }
+    ],
+    "humidity_control": false,
+    "instrument_id": "SmartSPIM1-6",
+    "instrument_type": "SmartSPIM",
+    "light_sources": [
+      {
+        "coupling": "Single-mode fiber",
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Vortran",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "max_power": 150,
+        "model": "Stradus",
+        "name": null,
+        "notes": "All lasers controlled via Vortran VersaLase System",
+        "power_unit": "milliwatt",
+        "serial_number": "VL08223M03",
+        "type": "laser",
+        "wavelength": 445,
+        "wavelength_unit": "nanometer"
+      },
+      {
+        "coupling": "Single-mode fiber",
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Vortran",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "max_power": 150,
+        "model": "Stradus",
+        "name": null,
+        "notes": "All lasers controlled via Vortran VersaLase System",
+        "power_unit": "milliwatt",
+        "serial_number": "VL08223M03",
+        "type": "laser",
+        "wavelength": 488,
+        "wavelength_unit": "nanometer"
+      },
+      {
+        "coupling": "Single-mode fiber",
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Vortran",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "max_power": 150,
+        "model": "Stradus",
+        "name": null,
+        "notes": "All lasers controlled via Vortran VersaLase System",
+        "power_unit": "milliwatt",
+        "serial_number": "VL08223M03",
+        "type": "laser",
+        "wavelength": 561,
+        "wavelength_unit": "nanometer"
+      },
+      {
+        "coupling": "Single-mode fiber",
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Vortran",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "max_power": 150,
+        "model": "Stradus",
+        "name": null,
+        "notes": "All lasers controlled via Vortran VersaLase System",
+        "power_unit": "milliwatt",
+        "serial_number": "VL08223M03",
+        "type": "laser",
+        "wavelength": 594,
+        "wavelength_unit": "nanometer"
+      },
+      {
+        "coupling": "Single-mode fiber",
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Vortran",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "max_power": 160,
+        "model": "Stradus",
+        "name": null,
+        "notes": "All lasers controlled via Vortran VersaLase System",
+        "power_unit": "milliwatt",
+        "serial_number": "VL08223M03",
+        "type": "laser",
+        "wavelength": 639,
+        "wavelength_unit": "nanometer"
+      },
+      {
+        "coupling": "Single-mode fiber",
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Vortran",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "max_power": 160,
+        "model": "Stradus",
+        "name": null,
+        "notes": "All lasers controlled via Vortran VersaLase System",
+        "power_unit": "milliwatt",
+        "serial_number": "VL08223M03",
+        "type": "laser",
+        "wavelength": 665,
+        "wavelength_unit": "nanometer"
+      }
+    ],
+    "manufacturer": {
+      "abbreviation": null,
+      "name": "LifeCanvas",
+      "registry": null,
+      "registry_identifier": null
+    },
+    "motorized_stages": [
+      {
+        "firmware": null,
+        "manufacturer": {
+          "abbreviation": "ASI",
+          "name": "Applied Scientific Instrumentation",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "LS-100",
+        "name": null,
+        "notes": "Focus stage",
+        "serial_number": "Unknown-0",
+        "travel": 100,
+        "travel_unit": "millimeter"
+      },
+      {
+        "firmware": null,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "IR Robot Co",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "L12-20F-4",
+        "name": null,
+        "notes": "Cylindrical lens #1",
+        "serial_number": "Unknown-1",
+        "travel": 41,
+        "travel_unit": "millimeter"
+      },
+      {
+        "firmware": null,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "IR Robot Co",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "L12-20F-4",
+        "name": null,
+        "notes": "Cylindrical lens #2",
+        "serial_number": "Unknown-2",
+        "travel": 41,
+        "travel_unit": "millimeter"
+      },
+      {
+        "firmware": null,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "IR Robot Co",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "L12-20F-4",
+        "name": null,
+        "notes": "Cylindrical lens #3",
+        "serial_number": "Unknown-3",
+        "travel": 41,
+        "travel_unit": "millimeter"
+      },
+      {
+        "firmware": null,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "IR Robot Co",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "L12-20F-4",
+        "name": null,
+        "notes": "Cylindrical lens #4",
+        "serial_number": "Unknown-4",
+        "travel": 41,
+        "travel_unit": "millimeter"
+      }
+    ],
+    "notes": null,
+    "objectives": [
+      {
+        "immersion": "multi",
+        "magnification": 1.6,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Thorlabs",
+          "registry": {
+            "abbreviation": "ROR",
+            "name": "Research Organization Registry"
+          },
+          "registry_identifier": "04gsnvb07"
+        },
+        "model": "TL2X-SAP",
+        "name": null,
+        "notes": "",
+        "numerical_aperture": 0.1,
+        "serial_number": "Unknown"
+      },
+      {
+        "immersion": "multi",
+        "magnification": 3.6,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Thorlabs",
+          "registry": {
+            "abbreviation": "ROR",
+            "name": "Research Organization Registry"
+          },
+          "registry_identifier": "04gsnvb07"
+        },
+        "model": "TL4X-SAP",
+        "name": null,
+        "notes": "Thorlabs TL4X-SAP with LifeCanvas dipping cap and correction optics",
+        "numerical_aperture": 0.2,
+        "serial_number": "Unknown"
+      },
+      {
+        "immersion": "water",
+        "magnification": 16,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Nikon",
+          "registry": {
+            "abbreviation": "ROR",
+            "name": "Research Organization Registry"
+          },
+          "registry_identifier": "0280y9h11"
+        },
+        "model": "MRP07220",
+        "name": null,
+        "notes": "",
+        "numerical_aperture": 0.8,
+        "serial_number": "Unknown"
+      },
+      {
+        "immersion": "water",
+        "magnification": 25,
+        "manufacturer": {
+          "abbreviation": null,
+          "name": "Nikon",
+          "registry": {
+            "abbreviation": "ROR",
+            "name": "Research Organization Registry"
+          },
+          "registry_identifier": "0280y9h11"
+        },
+        "model": "MRD77220",
+        "name": null,
+        "notes": "",
+        "numerical_aperture": 1.1,
+        "serial_number": "Unknown"
+      }
+    ],
+    "optical_tables": [
+      {
+        "length": 29.5,
+        "manufacturer": {
+          "abbreviation": "TMC",
+          "name": "Technical Manufacturing Corporation",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "63-533 micro-g",
+        "name": null,
+        "notes": null,
+        "serial_number": "2008983",
+        "table_size_unit": "inch",
+        "vibration_control": true,
+        "width": 35.5
+      }
+    ],
+    "scanning_stages": [
+      {
+        "firmware": null,
+        "manufacturer": {
+          "abbreviation": "ASI",
+          "name": "Applied Scientific Instrumentation",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "LS-50",
+        "name": null,
+        "notes": "Sample stage Z",
+        "serial_number": "Unknown-0",
+        "stage_axis_direction": "Detection axis",
+        "stage_axis_name": "Z",
+        "travel": 50,
+        "travel_unit": "millimeter"
+      },
+      {
+        "firmware": null,
+        "manufacturer": {
+          "abbreviation": "ASI",
+          "name": "Applied Scientific Instrumentation",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "LS-50",
+        "name": null,
+        "notes": "Sample stage X",
+        "serial_number": "Unknown-1",
+        "stage_axis_direction": "Illumination axis",
+        "stage_axis_name": "X",
+        "travel": 50,
+        "travel_unit": "millimeter"
+      },
+      {
+        "firmware": null,
+        "manufacturer": {
+          "abbreviation": "ASI",
+          "name": "Applied Scientific Instrumentation",
+          "registry": null,
+          "registry_identifier": null
+        },
+        "model": "LS-50",
+        "name": null,
+        "notes": "Sample stage Y",
+        "serial_number": "Unknown-2",
+        "stage_axis_direction": "Perpendicular axis",
+        "stage_axis_name": "Y",
+        "travel": 50,
+        "travel_unit": "millimeter"
+      }
+    ],
+    "schema_version": "0.7.6",
+    "temperature_control": false
+  },
+  "last_modified": "2025-02-21T04:44:08.215Z",
+  "location": "s3://aind-open-data/SmartSPIM_693980_2023-10-10_21-31-48_stitched_2024-11-20_21-26-38",
+  "metadata_status": "Unknown",
+  "name": "SmartSPIM_693980_2023-10-10_21-31-48_stitched_2024-11-20_21-26-38",
+  "procedures": {
+    "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/procedures.py",
+    "notes": null,
+    "schema_version": "0.11.2",
+    "specimen_procedures": [
+      {
+        "end_date": "2023-09-21",
+        "experimenter_full_name": "Holly Myers",
+        "hcr_series": null,
+        "immunolabeling": null,
+        "notes": "RT shield on 9/22/23 - 9/25/23",
+        "procedure_name": "SHIELD OFF",
+        "procedure_type": "Fixation",
+        "protocol_id": "none",
+        "reagents": [
+          {
+            "expiration_date": null,
+            "lot_number": "ex40",
+            "name": "SHIELD Epoxy",
+            "rrid": null,
+            "source": "LiveCanvas Technologies"
+          },
+          {
+            "expiration_date": null,
+            "lot_number": "bu12",
+            "name": "SHIELD Buffer",
+            "rrid": null,
+            "source": "LiveCanvas Technologies"
+          }
+        ],
+        "specimen_id": "693980",
+        "start_date": "2023-09-18"
+      },
+      {
+        "end_date": "2023-09-26",
+        "experimenter_full_name": "Holly Myers",
+        "hcr_series": null,
+        "immunolabeling": null,
+        "notes": "RT shield on 9/22/23 - 9/25/23",
+        "procedure_name": "SHIELD ON",
+        "procedure_type": "Fixation",
+        "protocol_id": "none",
+        "reagents": [
+          {
+            "expiration_date": null,
+            "lot_number": "on18",
+            "name": "SHIELD ON",
+            "rrid": null,
+            "source": "LiveCanvas Technologies"
+          }
+        ],
+        "specimen_id": "693980",
+        "start_date": "2023-09-22"
+      },
+      {
+        "end_date": "2023-09-27",
+        "experimenter_full_name": "Holly Myers",
+        "hcr_series": null,
+        "immunolabeling": null,
+        "notes": "None",
+        "procedure_name": "24h Delipidation",
+        "procedure_type": "Delipidation",
+        "protocol_id": "none",
+        "reagents": [
+          {
+            "expiration_date": null,
+            "lot_number": "db8",
+            "name": "Delipidation Buffer",
+            "rrid": null,
+            "source": "LiveCanvas Technologies"
+          }
+        ],
+        "specimen_id": "693980",
+        "start_date": "2023-09-26"
+      },
+      {
+        "end_date": "2023-09-29",
+        "experimenter_full_name": "Holly Myers",
+        "hcr_series": null,
+        "immunolabeling": null,
+        "notes": "None",
+        "procedure_name": "Active Delipidation",
+        "procedure_type": "Delipidation",
+        "protocol_id": "none",
+        "reagents": [
+          {
+            "expiration_date": null,
+            "lot_number": "c10",
+            "name": "Conduction Buffer",
+            "rrid": null,
+            "source": "LiveCanvas Technologies"
+          }
+        ],
+        "specimen_id": "693980",
+        "start_date": "2023-09-27"
+      },
+      {
+        "end_date": "2023-10-03",
+        "experimenter_full_name": "Holly Myers",
+        "hcr_series": null,
+        "immunolabeling": null,
+        "notes": "RT 50% easy index 9/29/23 - 10/2/23",
+        "procedure_name": "50% EasyIndex",
+        "procedure_type": "Refractive index matching",
+        "protocol_id": "none",
+        "reagents": [
+          {
+            "expiration_date": null,
+            "lot_number": "EI41",
+            "name": "EasyIndex",
+            "rrid": null,
+            "source": "LiveCanvas Technologies"
+          }
+        ],
+        "specimen_id": "693980",
+        "start_date": "2023-09-29"
+      },
+      {
+        "end_date": "2023-10-04",
+        "experimenter_full_name": "Holly Myers",
+        "hcr_series": null,
+        "immunolabeling": null,
+        "notes": "RT 50% easy index 9/29/23 - 10/2/23",
+        "procedure_name": "100% EasyIndex",
+        "procedure_type": "Refractive index matching",
+        "protocol_id": "none",
+        "reagents": [
+          {
+            "expiration_date": null,
+            "lot_number": "EI41",
+            "name": "EasyIndex",
+            "rrid": null,
+            "source": "LiveCanvas Technologies"
+          }
+        ],
+        "specimen_id": "693980",
+        "start_date": "2023-10-03"
+      }
+    ],
+    "subject_id": "693980",
+    "subject_procedures": [
+      {
+        "anaesthesia": null,
+        "animal_weight_post": null,
+        "animal_weight_prior": null,
+        "experimenter_full_name": "30509",
+        "iacuc_protocol": null,
+        "notes": null,
+        "procedure_type": "Surgery",
+        "procedures": [
+          {
+            "output_specimen_ids": [
+              "693980"
+            ],
+            "procedure_type": "Perfusion",
+            "protocol_id": "dx.doi.org/10.17504/protocols.io.bg5vjy66"
+          }
+        ],
+        "start_date": "2023-09-13",
+        "weight_unit": "gram",
+        "workstation_id": null
+      },
+      {
+        "anaesthesia": {
+          "duration": "60.0",
+          "duration_unit": "minute",
+          "level": "1.5",
+          "type": "isoflurane"
+        },
+        "animal_weight_post": "17.0",
+        "animal_weight_prior": "17.0",
+        "experimenter_full_name": "Mathew Summers",
+        "iacuc_protocol": "2109",
+        "notes": null,
+        "procedure_type": "Surgery",
+        "procedures": [
+          {
+            "bregma_to_lambda_distance": null,
+            "bregma_to_lambda_unit": "millimeter",
+            "injection_angle": "0.0",
+            "injection_angle_unit": "degrees",
+            "injection_coordinate_ap": "2.8",
+            "injection_coordinate_depth": [
+              "1.0"
+            ],
+            "injection_coordinate_ml": "1.8",
+            "injection_coordinate_reference": "Bregma",
+            "injection_coordinate_unit": "millimeter",
+            "injection_duration": null,
+            "injection_duration_unit": "minute",
+            "injection_hemisphere": "Right",
+            "injection_materials": [
+              {
+                "addgene_id": null,
+                "material_type": "Virus",
+                "name": "CVS N2cdG-H2B-GFP",
+                "tars_identifiers": {
+                  "plasmid_tars_alias": null,
+                  "prep_date": null,
+                  "prep_lot_number": "June2023_H2B-GFP",
+                  "prep_protocol": null,
+                  "prep_type": null,
+                  "virus_tars_id": null
+                },
+                "titer": 1000000000,
+                "titer_unit": "gc/mL"
+              }
+            ],
+            "injection_volume": [
+              "100.0"
+            ],
+            "injection_volume_unit": "nanoliter",
+            "instrument_id": null,
+            "procedure_type": "Nanoject injection",
+            "protocol_id": "dx.doi.org/10.17504/protocols.io.bgpujvnw",
+            "recovery_time": "5.0",
+            "recovery_time_unit": "minute",
+            "targeted_structure": "Isocortex"
+          },
+          {
+            "bregma_to_lambda_distance": null,
+            "bregma_to_lambda_unit": "millimeter",
+            "injection_angle": "0",
+            "injection_angle_unit": "degrees",
+            "injection_coordinate_ap": "2.0",
+            "injection_coordinate_depth": [
+              "0.6"
+            ],
+            "injection_coordinate_ml": "1.4",
+            "injection_coordinate_reference": "Bregma",
+            "injection_coordinate_unit": "millimeter",
+            "injection_duration": null,
+            "injection_duration_unit": "minute",
+            "injection_hemisphere": "Right",
+            "injection_materials": [
+              {
+                "addgene_id": null,
+                "material_type": "Virus",
+                "name": "CVS N2cdG-H2B-tdTomato",
+                "tars_identifiers": {
+                  "plasmid_tars_alias": null,
+                  "prep_date": null,
+                  "prep_lot_number": "June2023_H2B-tdTomato",
+                  "prep_protocol": null,
+                  "prep_type": null,
+                  "virus_tars_id": null
+                },
+                "titer": null,
+                "titer_unit": "gc/mL"
+              }
+            ],
+            "injection_volume": [
+              "100"
+            ],
+            "injection_volume_unit": "nanoliter",
+            "instrument_id": null,
+            "procedure_type": "Nanoject injection",
+            "protocol_id": "dx.doi.org/10.17504/protocols.io.bgpujvnw",
+            "recovery_time": "5.0",
+            "recovery_time_unit": "minute",
+            "targeted_structure": "Isocortex"
+          }
+        ],
+        "start_date": "2023-08-30",
+        "weight_unit": "gram",
+        "workstation_id": "SWS 5"
+      }
+    ]
+  },
+  "processing": {
+    "analyses": [],
+    "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/processing.py",
+    "notes": "This processing was generated by compiling independent processing jsons for every step",
+    "processing_pipeline": {
+      "data_processes": [
+        {
+          "code_url": "https://github.com/AllenNeuralDynamics/aind-smartspim-flatfield-estimation",
+          "code_version": "0.0.1",
+          "end_date_time": "2024-11-20T01:36:13.228271Z",
+          "input_location": "/tmp/nxf.tUOb8eJfDI/capsule/data/Ex_639_Em_660",
+          "name": "Image flat-field correction",
+          "notes": "Flatfield estimation for channel Ex_639_Em_660",
+          "output_location": "/tmp/nxf.tUOb8eJfDI/capsule/results",
+          "outputs": {
+            "flatfield_paths": [
+              "/tmp/nxf.tUOb8eJfDI/capsule/results/estimated_flat_laser_Ex_639_Em_660_side_0.tif",
+              "/tmp/nxf.tUOb8eJfDI/capsule/results/estimated_flat_laser_Ex_639_Em_660_side_1.tif"
+            ]
+          },
+          "parameters": {
+            "shading_parameters": {
+              "get_darkfield": false,
+              "max_reweight_iterations": 35,
+              "max_workers": 16,
+              "resize_mode": "skimage_dask",
+              "smoothness_darkfield": 20,
+              "smoothness_flatfield": 1,
+              "sort_intensity": true
+            }
+          },
+          "software_version": "0.0.1",
+          "start_date_time": "2024-11-20T01:23:54.493668Z"
+        },
+        {
+          "code_url": "https://github.com/AllenNeuralDynamics/aind-smartspim-flatfield-estimation",
+          "code_version": "0.0.1",
+          "end_date_time": "2024-11-20T01:48:48.034560Z",
+          "input_location": "/tmp/nxf.tUOb8eJfDI/capsule/data/Ex_561_Em_593",
+          "name": "Image flat-field correction",
+          "notes": "Flatfield estimation for channel Ex_561_Em_593",
+          "output_location": "/tmp/nxf.tUOb8eJfDI/capsule/results",
+          "outputs": {
+            "flatfield_paths": [
+              "/tmp/nxf.tUOb8eJfDI/capsule/results/estimated_flat_laser_Ex_561_Em_593_side_0.tif",
+              "/tmp/nxf.tUOb8eJfDI/capsule/results/estimated_flat_laser_Ex_561_Em_593_side_1.tif"
+            ]
+          },
+          "parameters": {
+            "shading_parameters": {
+              "get_darkfield": false,
+              "max_reweight_iterations": 35,
+              "max_workers": 16,
+              "resize_mode": "skimage_dask",
+              "smoothness_darkfield": 20,
+              "smoothness_flatfield": 1,
+              "sort_intensity": true
+            }
+          },
+          "software_version": "0.0.1",
+          "start_date_time": "2024-11-20T01:36:13.228394Z"
+        },
+        {
+          "code_url": "https://github.com/AllenNeuralDynamics/aind-smartspim-flatfield-estimation",
+          "code_version": "0.0.1",
+          "end_date_time": "2024-11-20T02:01:25.431697Z",
+          "input_location": "/tmp/nxf.tUOb8eJfDI/capsule/data/Ex_488_Em_525",
+          "name": "Image flat-field correction",
+          "notes": "Flatfield estimation for channel Ex_488_Em_525",
+          "output_location": "/tmp/nxf.tUOb8eJfDI/capsule/results",
+          "outputs": {
+            "flatfield_paths": [
+              "/tmp/nxf.tUOb8eJfDI/capsule/results/estimated_flat_laser_Ex_488_Em_525_side_0.tif",
+              "/tmp/nxf.tUOb8eJfDI/capsule/results/estimated_flat_laser_Ex_488_Em_525_side_1.tif"
+            ]
+          },
+          "parameters": {
+            "shading_parameters": {
+              "get_darkfield": false,
+              "max_reweight_iterations": 35,
+              "max_workers": 16,
+              "resize_mode": "skimage_dask",
+              "smoothness_darkfield": 20,
+              "smoothness_flatfield": 1,
+              "sort_intensity": true
+            }
+          },
+          "software_version": "0.0.1",
+          "start_date_time": "2024-11-20T01:48:48.034673Z"
+        },
+        {
+          "code_url": "https://github.com/AllenNeuralDynamics/aind-smartspim-destripe",
+          "code_version": "0.0.4",
+          "end_date_time": "2024-11-20T05:45:06.468306Z",
+          "input_location": "/tmp/nxf.k6DH0MA3yd/capsule/data/Ex_488_Em_525",
+          "name": "Image destriping",
+          "notes": "Destriping for channel Ex_488_Em_525 in zarr format",
+          "output_location": "/tmp/nxf.k6DH0MA3yd/capsule/results",
+          "outputs": {},
+          "parameters": {
+            "cells_config": {
+              "level": null,
+              "max_threshold": 3,
+              "sigma": 64,
+              "wavelet": "db3"
+            },
+            "no_cells_config": {
+              "level": null,
+              "max_threshold": 12,
+              "sigma": 128,
+              "wavelet": "db3"
+            },
+            "retrospective": true
+          },
+          "software_version": "0.0.4",
+          "start_date_time": "2024-11-20T02:55:56.025818Z"
+        },
+        {
+          "code_url": "https://github.com/AllenNeuralDynamics/aind-smartspim-destripe",
+          "code_version": "0.0.4",
+          "end_date_time": "2024-11-20T05:45:06.468306Z",
+          "input_location": "/tmp/nxf.k6DH0MA3yd/capsule/data/Ex_488_Em_525",
+          "name": "Image flat-field correction",
+          "notes": "The flats were computed from the data             with basicpy, these were applied with the destriping algorithm             and with the current dark from the microscope.\n            ",
+          "output_location": "/tmp/nxf.k6DH0MA3yd/capsule/results",
+          "outputs": {},
+          "parameters": {},
+          "software_version": "0.0.4",
+          "start_date_time": "2024-11-20T02:55:56.025818Z"
+        },
+        {
+          "code_url": "https://github.com/AllenNeuralDynamics/aind-smartspim-destripe",
+          "code_version": "0.0.4",
+          "end_date_time": "2024-11-20T06:04:45.096411Z",
+          "input_location": "/tmp/nxf.NCkf3WQR51/capsule/data/Ex_561_Em_593",
+          "name": "Image destriping",
+          "notes": "Destriping for channel Ex_561_Em_593 in zarr format",
+          "output_location": "/tmp/nxf.NCkf3WQR51/capsule/results",
+          "outputs": {},
+          "parameters": {
+            "cells_config": {
+              "level": null,
+              "max_threshold": 3,
+              "sigma": 64,
+              "wavelet": "db3"
+            },
+            "no_cells_config": {
+              "level": null,
+              "max_threshold": 12,
+              "sigma": 128,
+              "wavelet": "db3"
+            },
+            "retrospective": true
+          },
+          "software_version": "0.0.4",
+          "start_date_time": "2024-11-20T02:46:17.096076Z"
+        },
+        {
+          "code_url": "https://github.com/AllenNeuralDynamics/aind-smartspim-destripe",
+          "code_version": "0.0.4",
+          "end_date_time": "2024-11-20T06:04:45.096411Z",
+          "input_location": "/tmp/nxf.NCkf3WQR51/capsule/data/Ex_561_Em_593",
+          "name": "Image flat-field correction",
+          "notes": "The flats were computed from the data             with basicpy, these were applied with the destriping algorithm             and with the current dark from the microscope.\n            ",
+          "output_location": "/tmp/nxf.NCkf3WQR51/capsule/results",
+          "outputs": {},
+          "parameters": {},
+          "software_version": "0.0.4",
+          "start_date_time": "2024-11-20T02:46:17.096076Z"
+        },
+        {
+          "code_url": "https://github.com/AllenNeuralDynamics/aind-smartspim-destripe",
+          "code_version": "0.0.4",
+          "end_date_time": "2024-11-20T06:27:21.744195Z",
+          "input_location": "/tmp/nxf.W7eXOrr7om/capsule/data/Ex_639_Em_660",
+          "name": "Image destriping",
+          "notes": "Destriping for channel Ex_639_Em_660 in zarr format",
+          "output_location": "/tmp/nxf.W7eXOrr7om/capsule/results",
+          "outputs": {},
+          "parameters": {
+            "cells_config": {
+              "level": null,
+              "max_threshold": 3,
+              "sigma": 64,
+              "wavelet": "db3"
+            },
+            "no_cells_config": {
+              "level": null,
+              "max_threshold": 12,
+              "sigma": 128,
+              "wavelet": "db3"
+            },
+            "retrospective": true
+          },
+          "software_version": "0.0.4",
+          "start_date_time": "2024-11-20T03:30:48.440288Z"
+        },
+        {
+          "code_url": "https://github.com/AllenNeuralDynamics/aind-smartspim-destripe",
+          "code_version": "0.0.4",
+          "end_date_time": "2024-11-20T06:27:21.744195Z",
+          "input_location": "/tmp/nxf.W7eXOrr7om/capsule/data/Ex_639_Em_660",
+          "name": "Image flat-field correction",
+          "notes": "The flats were computed from the data             with basicpy, these were applied with the destriping algorithm             and with the current dark from the microscope.\n            ",
+          "output_location": "/tmp/nxf.W7eXOrr7om/capsule/results",
+          "outputs": {},
+          "parameters": {},
+          "software_version": "0.0.4",
+          "start_date_time": "2024-11-20T03:30:48.440288Z"
+        },
+        {
+          "code_url": "",
+          "code_version": "1.2.5",
+          "end_date_time": "2024-11-20T09:36:02.670119Z",
+          "input_location": "SmartSPIM_693980_2023-10-10_21-31-48",
+          "name": "Image tile alignment",
+          "notes": "Creation of stitching parameters",
+          "output_location": "/tmp/nxf.XjK0ji0Epm/capsule/results/SmartSPIM_693980_2023-10-10_21-31-48_stitch_channel_Ex_561_Em_593_params.json",
+          "outputs": {
+            "output_file": "/tmp/nxf.XjK0ji0Epm/capsule/results/SmartSPIM_693980_2023-10-10_21-31-48_stitch_channel_Ex_561_Em_593_params.json"
+          },
+          "parameters": {
+            "dataset_xml": "/tmp/nxf.XjK0ji0Epm/capsule/results/SmartSPIM_693980_2023-10-10_21-31-48_stitching_channel_Ex_561_Em_593.xml",
+            "do_detection": false,
+            "do_phase_correlation": true,
+            "do_registrations": false,
+            "memgb": 100,
+            "parallel": "16",
+            "phase_correlation_params": {
+              "downsample": 0,
+              "max_shift_in_x": 10,
+              "max_shift_in_y": 10,
+              "max_shift_in_z": 10,
+              "min_correlation": 0.6
+            },
+            "session_id": "SmartSPIM_693980_2023-10-10_21-31-48"
+          },
+          "software_version": "1.2.11",
+          "start_date_time": "2024-11-20T09:36:02.316369Z"
+        },
+        {
+          "code_url": "",
+          "code_version": "0.0.2",
+          "end_date_time": "2024-11-20T18:18:19.071074Z",
+          "input_location": "/tmp/nxf.P59DwZRILn/capsule/data/bigstitcher.xml",
+          "name": "Image tile fusing",
+          "notes": "Fusing channel Ex_561_Em_593.zarr",
+          "output_location": "/tmp/nxf.P59DwZRILn/capsule/results/Ex_561_Em_593.zarr",
+          "outputs": {},
+          "parameters": {
+            "n_workers": 16,
+            "pyramid_levels": 4,
+            "scale_factor": [
+              2,
+              2,
+              2
+            ],
+            "threads_per_worker": 1,
+            "voxel_resolution": [
+              1.8,
+              1.8,
+              2
+            ]
+          },
+          "software_version": "0.0.2",
+          "start_date_time": "2024-11-20T14:47:56.679945Z"
+        },
+        {
+          "code_url": "",
+          "code_version": "0.0.2",
+          "end_date_time": "2024-11-20T18:18:34.871059Z",
+          "input_location": "/tmp/nxf.BCQNhonQ8q/capsule/data/bigstitcher.xml",
+          "name": "Image tile fusing",
+          "notes": "Fusing channel Ex_488_Em_525.zarr",
+          "output_location": "/tmp/nxf.BCQNhonQ8q/capsule/results/Ex_488_Em_525.zarr",
+          "outputs": {},
+          "parameters": {
+            "n_workers": 16,
+            "pyramid_levels": 4,
+            "scale_factor": [
+              2,
+              2,
+              2
+            ],
+            "threads_per_worker": 1,
+            "voxel_resolution": [
+              1.8,
+              1.8,
+              2
+            ]
+          },
+          "software_version": "0.0.2",
+          "start_date_time": "2024-11-20T14:48:45.587718Z"
+        },
+        {
+          "code_url": "",
+          "code_version": "0.0.2",
+          "end_date_time": "2024-11-20T18:20:00.683918Z",
+          "input_location": "/tmp/nxf.6a51uOhF0m/capsule/data/bigstitcher.xml",
+          "name": "Image tile fusing",
+          "notes": "Fusing channel Ex_639_Em_660.zarr",
+          "output_location": "/tmp/nxf.6a51uOhF0m/capsule/results/Ex_639_Em_660.zarr",
+          "outputs": {},
+          "parameters": {
+            "n_workers": 16,
+            "pyramid_levels": 4,
+            "scale_factor": [
+              2,
+              2,
+              2
+            ],
+            "threads_per_worker": 1,
+            "voxel_resolution": [
+              1.8,
+              1.8,
+              2
+            ]
+          },
+          "software_version": "0.0.2",
+          "start_date_time": "2024-11-20T14:49:47.217475Z"
+        },
+        {
+          "code_url": "https://github.com/AllenNeuralDynamics/aind-ccf-registration",
+          "code_version": "0.0.24",
+          "end_date_time": "2024-11-20T19:57:00.518643Z",
+          "input_location": "/tmp/nxf.gbNlXrNu9v/capsule/data/fused/Ex_639_Em_660.zarr/3",
+          "name": "Image importing",
+          "notes": "Importing fused data for alignment",
+          "output_location": "/tmp/nxf.gbNlXrNu9v/capsule/data/fused/Ex_639_Em_660.zarr/3",
+          "outputs": {},
+          "parameters": {},
+          "software_version": "0.0.24",
+          "start_date_time": "2024-11-20T19:56:56.139171Z"
+        },
+        {
+          "code_url": "https://github.com/ANTsX/ANTs",
+          "code_version": "0.4.2",
+          "end_date_time": "2024-11-20T20:31:58.061388Z",
+          "input_location": "/tmp/nxf.gbNlXrNu9v/capsule/data/fused/Ex_639_Em_660.zarr/3",
+          "name": "Image atlas alignment",
+          "notes": "Template based registration: LS -> template -> Allen CCFv3 Atlas",
+          "output_location": "/tmp/nxf.gbNlXrNu9v/capsule/results/ccf_Ex_639_Em_660/metadata/registration_metadata",
+          "outputs": {},
+          "parameters": {
+            "affine_path": "/tmp/nxf.gbNlXrNu9v/capsule/results/ccf_Ex_639_Em_660/metadata/registration_metadata/moved_affine.nii.gz",
+            "ccf_anno_to_brain_path": "/tmp/nxf.gbNlXrNu9v/capsule/results/ccf_Ex_639_Em_660/metadata/registration_metadata/moved_ccf_anno_to_ls.nii.gz",
+            "moved_to_ccf_path": "../results/ccf_Ex_639_Em_660/moved_ls_to_ccf.nii.gz",
+            "moved_to_template_path": "/tmp/nxf.gbNlXrNu9v/capsule/results/ccf_Ex_639_Em_660/metadata/registration_metadata/moved_ls_to_template.nii.gz",
+            "new_spacing": [
+              25,
+              25,
+              25
+            ],
+            "rigid_path": "/tmp/nxf.gbNlXrNu9v/capsule/results/ccf_Ex_639_Em_660/metadata/registration_metadata/moved_rigid.nii.gz",
+            "spacing": [
+              0.0144,
+              0.0144,
+              0.016
+            ],
+            "template_orientations": {
+              "anterior_to_posterior": 1,
+              "right_to_left": 0,
+              "superior_to_inferior": 2
+            },
+            "unit": "millimetre"
+          },
+          "software_version": "0.0.24",
+          "start_date_time": "2024-11-20T19:57:00.525217Z"
+        },
+        {
+          "code_url": "https://github.com/AllenNeuralDynamics/aind-ccf-registration",
+          "code_version": "0.0.24",
+          "end_date_time": "2024-11-20T20:32:27.782799Z",
+          "input_location": "In memory array",
+          "name": "File format conversion",
+          "notes": "Converting registered image to OMEZarr",
+          "output_location": "/tmp/nxf.gbNlXrNu9v/capsule/results/ccf_Ex_639_Em_660/OMEZarr/image.zarr",
+          "outputs": {},
+          "parameters": {
+            "OMEZarr_params": {
+              "chunks": [
+                64,
+                64,
+                64
+              ],
+              "clevel": 1,
+              "compressor": "zstd"
+            },
+            "pixel_sizes": [
+              25,
+              25,
+              25
+            ]
+          },
+          "software_version": "0.0.24",
+          "start_date_time": "2024-11-20T20:31:58.063921Z"
+        }
+      ],
+      "note": null,
+      "pipeline_url": "https://github.com/AllenNeuralDynamics/aind-smartspim-pipeline",
+      "pipeline_version": "3.0.0",
+      "processor_full_name": "Camilo Laiton"
+    },
+    "schema_version": "1.0.0"
+  },
+  "quality_control": {
+    "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/quality_control.py",
+    "schema_version": "1.2.1",
+    "evaluations": [
+      {
+        "modality": {
+          "name": "Selective plane illumination microscopy",
+          "abbreviation": "SPIM"
+        },
+        "stage": "Processing",
+        "name": "Overall tissue quality",
+        "description": null,
+        "metrics": [
+          {
+            "name": "Tissue quality",
+            "value": {
+              "value": "Pass",
+              "options": [
+                "Pass",
+                "Fail",
+                "Pending"
+              ],
+              "status": [
+                "Pass",
+                "Fail",
+                "Pending"
+              ],
+              "type": "dropdown"
+            },
+            "status_history": [
+              {
+                "evaluator": "Mathew Summers",
+                "status": "Pass",
+                "timestamp": "2024-12-03 21:10:43.398942+00:00"
+              }
+            ],
+            "description": "Manual evaluation of tissue quality",
+            "reference": "https://aind-neuroglancer-sauujisjxq-uw.a.run.app/#!%7B%22dimensions%22:%7B%22z%22:%5B0.000002%2C%22m%22%5D%2C%22y%22:%5B0.0000018%2C%22m%22%5D%2C%22x%22:%5B0.0000018%2C%22m%22%5D%2C%22t%22:%5B0.001%2C%22s%22%5D%7D%2C%22position%22:%5B2022.30615234375%2C4607.244140625%2C4185.11669921875%2C0.5%5D%2C%22crossSectionOrientation%22:%5B-0.3981674611568451%2C-0.5399499535560608%2C-0.5968367457389832%2C0.44011661410331726%5D%2C%22crossSectionScale%22:2.718281828459046%2C%22projectionScale%22:16384%2C%22layers%22:%5B%7B%22type%22:%22image%22%2C%22source%22:%22zarr://s3://aind-open-data/SmartSPIM_693980_2023-10-10_21-31-48_stitched_2023-10-18_22-31-55/image_tile_fusing/OMEZarr/Ex_488_Em_525.zarr%22%2C%22localDimensions%22:%7B%22c%27%22:%5B1%2C%22%22%5D%7D%2C%22localPosition%22:%5B0.5%5D%2C%22tab%22:%22rendering%22%2C%22blend%22:%22additive%22%2C%22shader%22:%22#uicontrol%20vec3%20color%20color%28default=%5C%22#58fea1%5C%22%29%5Cn#uicontrol%20invlerp%20normalized%5Cnvoid%20main%28%29%20%7B%5CnemitRGB%28color%20%2A%20normalized%28%29%29%3B%5Cn%7D%22%2C%22shaderControls%22:%7B%22normalized%22:%7B%22range%22:%5B388%2C2791%5D%2C%22window%22:%5B0%2C5000%5D%7D%7D%2C%22name%22:%22Ex_488_Em_525%22%7D%2C%7B%22type%22:%22image%22%2C%22source%22:%22zarr://s3://aind-open-data/SmartSPIM_693980_2023-10-10_21-31-48_stitched_2023-10-18_22-31-55/image_tile_fusing/OMEZarr/Ex_561_Em_593.zarr%22%2C%22localDimensions%22:%7B%22c%27%22:%5B1%2C%22%22%5D%7D%2C%22localPosition%22:%5B0.5%5D%2C%22tab%22:%22rendering%22%2C%22blend%22:%22additive%22%2C%22shader%22:%22#uicontrol%20vec3%20color%20color%28default=%5C%22#f15211%5C%22%29%5Cn#uicontrol%20invlerp%20normalized%5Cnvoid%20main%28%29%20%7B%5CnemitRGB%28color%20%2A%20normalized%28%29%29%3B%5Cn%7D%22%2C%22shaderControls%22:%7B%22normalized%22:%7B%22range%22:%5B0%2C5582%5D%2C%22window%22:%5B0%2C10000%5D%7D%7D%2C%22name%22:%22Ex_561_Em_593%22%7D%2C%7B%22type%22:%22image%22%2C%22source%22:%22zarr://s3://aind-open-data/SmartSPIM_693980_2023-10-10_21-31-48_stitched_2023-10-18_22-31-55/image_tile_fusing/OMEZarr/Ex_639_Em_660.zarr%22%2C%22localDimensions%22:%7B%22c%27%22:%5B1%2C%22%22%5D%7D%2C%22localPosition%22:%5B0.5%5D%2C%22tab%22:%22rendering%22%2C%22blend%22:%22additive%22%2C%22shader%22:%22#uicontrol%20vec3%20color%20color%28default=%5C%22#f00050%5C%22%29%5Cn#uicontrol%20invlerp%20normalized%5Cnvoid%20main%28%29%20%7B%5CnemitRGB%28color%20%2A%20normalized%28%29%29%3B%5Cn%7D%22%2C%22shaderControls%22:%7B%22color%22:%22#ffffff%22%2C%22normalized%22:%7B%22range%22:%5B0%2C600%5D%7D%7D%2C%22name%22:%22Ex_639_Em_660%22%7D%5D%2C%22selectedLayer%22:%7B%22visible%22:true%2C%22layer%22:%22Ex_561_Em_593%22%7D%2C%22layout%22:%224panel%22%7D",
+            "evaluated_assets": null
+          }
+        ],
+        "tags": null,
+        "notes": "Evaluation done only in Thalamus",
+        "allow_failed_metrics": false
+      },
+      {
+        "modality": {
+          "name": "Selective plane illumination microscopy",
+          "abbreviation": "SPIM"
+        },
+        "stage": "Processing",
+        "name": "Cell detection in channel: 488",
+        "description": null,
+        "metrics": [
+          {
+            "name": "488",
+            "value": {
+              "value": "Pass",
+              "options": [
+                "Pass",
+                "Fail",
+                "Pending"
+              ],
+              "status": [
+                "Pass",
+                "Fail",
+                "Pending"
+              ],
+              "type": "dropdown"
+            },
+            "status_history": [
+              {
+                "evaluator": "Mathew Summers",
+                "status": "Pass",
+                "timestamp": "2024-12-03 21:10:43.499268+00:00"
+              }
+            ],
+            "description": "Cell detection quality",
+            "reference": "https://aind-neuroglancer-sauujisjxq-uw.a.run.app#!s3://aind-open-data/SmartSPIM_693980_2023-10-10_21-31-48_stitched_2024-11-20_21-26-38/image_cell_segmentation/Ex_488_Em_525/visualization/neuroglancer_config.json",
+            "evaluated_assets": null
+          }
+        ],
+        "tags": null,
+        "notes": "Evaluation done only in Thalamus",
+        "allow_failed_metrics": true
+      },
+      {
+        "modality": {
+          "name": "Selective plane illumination microscopy",
+          "abbreviation": "SPIM"
+        },
+        "stage": "Processing",
+        "name": "Cell detection in channel: 561",
+        "description": null,
+        "metrics": [
+          {
+            "name": "561",
+            "value": {
+              "value": "Pass",
+              "options": [
+                "Pass",
+                "Fail",
+                "Pending"
+              ],
+              "status": [
+                "Pass",
+                "Fail",
+                "Pending"
+              ],
+              "type": "dropdown"
+            },
+            "status_history": [
+              {
+                "evaluator": "Mathew Summers",
+                "status": "Pass",
+                "timestamp": "2024-12-03 21:10:43.552121+00:00"
+              }
+            ],
+            "description": "Cell detection quality",
+            "reference": "https://aind-neuroglancer-sauujisjxq-uw.a.run.app#!s3://aind-open-data/SmartSPIM_693980_2023-10-10_21-31-48_stitched_2024-11-20_21-26-38/image_cell_segmentation/Ex_561_Em_593/visualization/neuroglancer_config.json",
+            "evaluated_assets": null
+          }
+        ],
+        "tags": null,
+        "notes": "Evaluation done only in Thalamus",
+        "allow_failed_metrics": true
+      },
+      {
+        "modality": {
+          "name": "Selective plane illumination microscopy",
+          "abbreviation": "SPIM"
+        },
+        "stage": "Processing",
+        "name": "Histology coordinates channel: 488",
+        "description": "Final injection coordinates from histology",
+        "metrics": [
+          {
+            "name": "Coordinates channel 488",
+            "value": {
+              "AP": 120,
+              "ML": 293,
+              "DV": 139
+            },
+            "status_history": [
+              {
+                "evaluator": "Mathew Summers",
+                "status": "Pass",
+                "timestamp": "2024-12-03 21:10:43.556353+00:00"
+              }
+            ],
+            "description": "AP/ML/DV coordinates in CCF space",
+            "reference": null,
+            "evaluated_assets": null
+          }
+        ],
+        "tags": null,
+        "notes": "Final injection coordinates from histology",
+        "allow_failed_metrics": false
+      },
+      {
+        "modality": {
+          "name": "Selective plane illumination microscopy",
+          "abbreviation": "SPIM"
+        },
+        "stage": "Processing",
+        "name": "Histology coordinates channel: 561",
+        "description": "Final injection coordinates from histology",
+        "metrics": [
+          {
+            "name": "Coordinates channel 561",
+            "value": {
+              "AP": 115,
+              "ML": 286,
+              "DV": 101
+            },
+            "status_history": [
+              {
+                "evaluator": "Mathew Summers",
+                "status": "Pass",
+                "timestamp": "2024-12-03 21:10:43.556521+00:00"
+              }
+            ],
+            "description": "AP/ML/DV coordinates in CCF space",
+            "reference": null,
+            "evaluated_assets": null
+          }
+        ],
+        "tags": null,
+        "notes": "Final injection coordinates from histology",
+        "allow_failed_metrics": false
+      }
+    ],
+    "notes": null
+  },
+  "rig": null,
+  "schema_version": "1.0.0",
+  "session": null,
+  "subject": {
+    "background_strain": null,
+    "breeding_group": "C57BL6J(New)",
+    "date_of_birth": "2023-07-16",
+    "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/subject.py",
+    "genotype": "wt/wt",
+    "housing": null,
+    "maternal_genotype": "wt/wt",
+    "maternal_id": "668790",
+    "mgi_allele_ids": null,
+    "notes": null,
+    "paternal_genotype": "wt/wt",
+    "paternal_id": "668784",
+    "restrictions": null,
+    "rrid": null,
+    "schema_version": "0.4.2",
+    "sex": "Female",
+    "source": null,
+    "species": {
+      "abbreviation": null,
+      "name": "Mus musculus",
+      "registry": {
+        "abbreviation": "NCBI",
+        "name": "National Center for Biotechnology Information"
+      },
+      "registry_identifier": "10090"
+    },
+    "subject_id": "693980",
+    "wellness_reports": null
+  }
+}]

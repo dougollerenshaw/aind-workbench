@@ -1,0 +1,222 @@
+{
+  "subject_id": "692912",
+  "subject_procedures": [
+    {
+      "protocol_id": null,
+      "start_date": "2023-09-15",
+      "experimenters": [
+        "30509"
+      ],
+      "ethics_review_id": "2109",
+      "weight_unit": "gram",
+      "procedures": [
+        {
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.8epv51bejl1b/v6",
+          "output_specimen_ids": [
+            "692912"
+          ]
+        }
+      ]
+    },
+    {
+      "protocol_id": "dx.doi.org/10.17504/protocols.io.kqdg392o7g25/v2",
+      "start_date": "2023-08-18",
+      "experimenters": [
+        "NSB-1007"
+      ],
+      "ethics_review_id": "2109",
+      "animal_weight_prior": 23.9,
+      "animal_weight_post": 23.9,
+      "weight_unit": "gram",
+      "anaesthesia": {
+        "anaesthetic_type": "isoflurane",
+        "duration": 57.0,
+        "level": 1.5
+      },
+      "workstation_id": "SWS 5",
+      "coordinate_system": {
+        "name": "BREGMA_ARI",
+        "origin": "Bregma",
+        "axes": [
+          {
+            "name": "AP",
+            "direction": "Posterior_to_anterior"
+          },
+          {
+            "name": "ML",
+            "direction": "Left_to_right"
+          },
+          {
+            "name": "SI",
+            "direction": "Superior_to_inferior"
+          }
+        ],
+        "axis_unit": "millimeter"
+      },
+      "procedures": [
+        {
+          "injection_materials": [
+            {
+              "name": "Viral vector (Nanoject injection)"
+            }
+          ],
+          "dynamics": [
+            {
+              "profile": "Bolus",
+              "volume": 50.0,
+              "volume_unit": "nanoliter",
+              "duration": 5.0,
+              "duration_unit": "minute"
+            }
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
+          "coordinate_system_name": "BREGMA_ARI",
+          "coordinates": [
+            [
+              {
+                "translation": [
+                  2.0,
+                  0.2,
+                  1.8
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "injection_materials": [
+            {
+              "name": "Viral vector (Nanoject injection)"
+            }
+          ],
+          "dynamics": [
+            {
+              "profile": "Bolus",
+              "volume": 50.0,
+              "volume_unit": "nanoliter",
+              "duration": 5.0,
+              "duration_unit": "minute"
+            }
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
+          "coordinate_system_name": "BREGMA_ARI",
+          "coordinates": [
+            [
+              {
+                "translation": [
+                  1.6,
+                  0.2,
+                  2.0
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "specimen_procedures": [
+    {
+      "procedure_type": "Fixation",
+      "procedure_name": "SHIELD OFF",
+      "specimen_id": "692912",
+      "start_date": "2023-10-03",
+      "end_date": "2023-10-06",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "procedure_details": [
+        {
+          "name": "SHIELD Buffer",
+          "source": {},
+          "lot_number": "bu12"
+        },
+        {
+          "name": "SHIELD Epoxy",
+          "source": {},
+          "lot_number": "ex40"
+        }
+      ],
+      "notes": "4c shield on 10/6/23 - 10/8/23"
+    },
+    {
+      "procedure_type": "Fixation",
+      "procedure_name": "SHIELD ON",
+      "specimen_id": "692912",
+      "start_date": "2023-10-06",
+      "end_date": "2023-10-09",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "procedure_details": [
+        {
+          "name": "SHIELD On",
+          "source": {},
+          "lot_number": "on18"
+        }
+      ],
+      "notes": "4c shield on 10/6/23 - 10/8/23"
+    },
+    {
+      "procedure_type": "Delipidation",
+      "procedure_name": "Passive Delipidation",
+      "specimen_id": "692912",
+      "start_date": "2023-10-10",
+      "end_date": "2023-10-11",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "procedure_details": [
+        {
+          "name": "Delipidation Buffer",
+          "source": {},
+          "lot_number": "db8"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "procedure_type": "Delipidation",
+      "procedure_name": "Active Delipidation",
+      "specimen_id": "692912",
+      "start_date": "2023-10-11",
+      "end_date": "2023-10-13",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "procedure_details": [
+        {
+          "name": "Conductivity Buffer",
+          "source": {},
+          "lot_number": "c10"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "procedure_type": "Refractive index matching",
+      "procedure_name": "EasyIndex",
+      "specimen_id": "692912",
+      "start_date": "2023-10-13",
+      "end_date": "2023-10-18",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": [
+        "dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1"
+      ],
+      "procedure_details": [
+        {
+          "name": "Easy Index",
+          "source": {},
+          "lot_number": "EI41"
+        }
+      ],
+      "notes": "RT 50% easy index 10/13/23 - 10/16/23"
+    }
+  ]
+}

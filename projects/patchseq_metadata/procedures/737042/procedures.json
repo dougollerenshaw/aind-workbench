@@ -1,0 +1,364 @@
+{
+  "subject_id": "737042",
+  "subject_procedures": [
+    {
+      "protocol_id": null,
+      "start_date": "2024-07-10",
+      "experimenters": [
+        "30333"
+      ],
+      "ethics_review_id": "2109",
+      "weight_unit": "gram",
+      "procedures": [
+        {
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.8epv51bejl1b/v6",
+          "output_specimen_ids": [
+            "737042"
+          ]
+        }
+      ]
+    },
+    {
+      "protocol_id": "dx.doi.org/10.17504/protocols.io.kqdg392o7g25/v2",
+      "start_date": "2024-06-06",
+      "experimenters": [
+        "NSB-1007"
+      ],
+      "ethics_review_id": "2109",
+      "animal_weight_prior": 18.0,
+      "animal_weight_post": 17.9,
+      "weight_unit": "gram",
+      "anaesthesia": {
+        "anaesthetic_type": "isoflurane",
+        "duration": 90.0,
+        "level": 1.5
+      },
+      "workstation_id": "SWS 5",
+      "coordinate_system": {
+        "name": "BREGMA_ARI",
+        "origin": "Bregma",
+        "axes": [
+          {
+            "name": "AP",
+            "direction": "Posterior_to_anterior"
+          },
+          {
+            "name": "ML",
+            "direction": "Left_to_right"
+          },
+          {
+            "name": "SI",
+            "direction": "Superior_to_inferior"
+          }
+        ],
+        "axis_unit": "millimeter"
+      },
+      "procedures": [
+        {
+          "injection_materials": [
+            {
+              "name": "pAAV-EF1a-Cre",
+              "tars_identifiers": {
+                "virus_tars_id": "VIR300007_rAAV2-retro",
+                "plasmid_tars_alias": [
+                  "ExP300007"
+                ],
+                "prep_lot_number": "V176203",
+                "prep_date": "2024-01-01",
+                "prep_type": "Purified",
+                "prep_protocol": "MGT#1.0"
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Cre",
+                "abbreviation": null,
+                "registry": "Addgene",
+                "registry_identifier": "55636"
+              },
+              "titer": 22000000000000,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "dynamics": [
+            {
+              "profile": "Bolus",
+              "volume": 150.0,
+              "volume_unit": "nanoliter",
+              "duration": 5.0,
+              "duration_unit": "minute"
+            },
+            {
+              "profile": "Bolus",
+              "volume": 150.0,
+              "volume_unit": "nanoliter",
+              "duration": 5.0,
+              "duration_unit": "minute"
+            }
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
+          "coordinate_system_name": "BREGMA_ARI",
+          "coordinates": [
+            [
+              {
+                "translation": [
+                  1.7,
+                  0.9,
+                  -0.8
+                ]
+              }
+            ],
+            [
+              {
+                "translation": [
+                  1.7,
+                  0.9,
+                  -0.4
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "injection_materials": [
+            {
+              "name": "pAAV-EF1a-Cre",
+              "tars_identifiers": {
+                "virus_tars_id": "VIR300007_rAAV2-retro",
+                "plasmid_tars_alias": [
+                  "ExP300007"
+                ],
+                "prep_lot_number": "V176203",
+                "prep_date": "2024-01-01",
+                "prep_type": "Purified",
+                "prep_protocol": "MGT#1.0"
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Cre",
+                "abbreviation": null,
+                "registry": "Addgene",
+                "registry_identifier": "55636"
+              },
+              "titer": 22000000000000,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "dynamics": [
+            {
+              "profile": "Bolus",
+              "volume": 300.0,
+              "volume_unit": "nanoliter",
+              "duration": 5.0,
+              "duration_unit": "minute"
+            }
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
+          "coordinate_system_name": "BREGMA_ARI",
+          "coordinates": [
+            [
+              {
+                "translation": [
+                  2.1,
+                  0.33,
+                  -1.5
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "injection_materials": [
+            {
+              "name": "pAAV-EF1a-Flpo",
+              "tars_identifiers": {
+                "virus_tars_id": "VIR300025_rAAV2-retro",
+                "plasmid_tars_alias": [
+                  "ExP300025"
+                ],
+                "prep_lot_number": "V163384",
+                "prep_date": "2024-01-01"
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Flpo",
+                "abbreviation": null,
+                "registry": "Addgene",
+                "registry_identifier": "55637"
+              },
+              "titer": 23000000000000,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "dynamics": [
+            {
+              "profile": "Bolus",
+              "volume": 250.0,
+              "volume_unit": "nanoliter",
+              "duration": 5.0,
+              "duration_unit": "minute"
+            }
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
+          "coordinate_system_name": "BREGMA_ARI",
+          "coordinates": [
+            [
+              {
+                "translation": [
+                  -0.82,
+                  1.13,
+                  -3.28
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "injection_materials": [
+            {
+              "name": "pAAV-EF1a-Flpo",
+              "tars_identifiers": {
+                "virus_tars_id": "VIR300025_rAAV2-retro",
+                "plasmid_tars_alias": [
+                  "ExP300025"
+                ],
+                "prep_lot_number": "V163384",
+                "prep_date": "2024-01-01"
+              },
+              "addgene_id": {
+                "name": "pAAV-EF1a-Flpo",
+                "abbreviation": null,
+                "registry": "Addgene",
+                "registry_identifier": "55637"
+              },
+              "titer": 23000000000000,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "dynamics": [
+            {
+              "profile": "Bolus",
+              "volume": 250.0,
+              "volume_unit": "nanoliter",
+              "duration": 5.0,
+              "duration_unit": "minute"
+            }
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
+          "coordinate_system_name": "BREGMA_ARI",
+          "coordinates": [
+            [
+              {
+                "translation": [
+                  -1.82,
+                  1.6,
+                  -3.3
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "specimen_procedures": [
+    {
+      "procedure_type": "Fixation",
+      "procedure_name": "SHIELD OFF",
+      "specimen_id": "737042",
+      "start_date": "2024-07-15",
+      "end_date": "2024-07-18",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "procedure_details": [
+        {
+          "name": "SHIELD Buffer",
+          "source": {},
+          "lot_number": "bu21"
+        },
+        {
+          "name": "SHIELD Epoxy",
+          "source": {},
+          "lot_number": "ex47"
+        }
+      ],
+      "notes": "stored in 1xpbs 4c 7/19/24 - 7/22/24"
+    },
+    {
+      "procedure_type": "Fixation",
+      "procedure_name": "SHIELD ON",
+      "specimen_id": "737042",
+      "start_date": "2024-07-18",
+      "end_date": "2024-07-19",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "procedure_details": [
+        {
+          "name": "SHIELD On",
+          "source": {},
+          "lot_number": "on27"
+        }
+      ],
+      "notes": "stored in 1xpbs 4c 7/19/24 - 7/22/24"
+    },
+    {
+      "procedure_type": "Delipidation",
+      "procedure_name": "Passive Delipidation",
+      "specimen_id": "737042",
+      "start_date": "2024-07-22",
+      "end_date": "2024-07-23",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "procedure_details": [
+        {
+          "name": "Delipidation Buffer",
+          "source": {},
+          "lot_number": "d21"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "procedure_type": "Delipidation",
+      "procedure_name": "Active Delipidation",
+      "specimen_id": "737042",
+      "start_date": "2024-07-23",
+      "end_date": "2024-07-25",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": null,
+      "procedure_details": [
+        {
+          "name": "Conductivity Buffer",
+          "source": {},
+          "lot_number": "c19s106"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "procedure_type": "Refractive index matching",
+      "procedure_name": "EasyIndex",
+      "specimen_id": "737042",
+      "start_date": "2024-07-25",
+      "end_date": "2024-08-01",
+      "experimenters": [
+        "Holly Myers"
+      ],
+      "protocol_id": [
+        "dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1"
+      ],
+      "procedure_details": [
+        {
+          "name": "Easy Index",
+          "source": {},
+          "lot_number": "EI58"
+        }
+      ],
+      "notes": "RT 7/26/24 - 7/29/24"
+    }
+  ]
+}

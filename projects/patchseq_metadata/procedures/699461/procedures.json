@@ -1,0 +1,131 @@
+{
+  "subject_id": "699461",
+  "subject_procedures": [
+    {
+      "protocol_id": null,
+      "start_date": "2024-02-23",
+      "experimenters": [
+        "30785"
+      ],
+      "ethics_review_id": "2115",
+      "weight_unit": "gram",
+      "procedures": [
+        {
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.8epv51bejl1b/v6",
+          "output_specimen_ids": [
+            "699461"
+          ]
+        }
+      ]
+    },
+    {
+      "protocol_id": "dx.doi.org/10.17504/protocols.io.kqdg392o7g25/v2",
+      "start_date": "2023-11-02",
+      "experimenters": [
+        "NSB-1300"
+      ],
+      "ethics_review_id": "2115",
+      "animal_weight_prior": 2.1,
+      "animal_weight_post": 29.1,
+      "weight_unit": "gram",
+      "anaesthesia": {
+        "anaesthetic_type": "isoflurane",
+        "duration": 72.0,
+        "level": 1.5
+      },
+      "workstation_id": "SWS 5",
+      "coordinate_system": {
+        "name": "BREGMA_ARI",
+        "origin": "Bregma",
+        "axes": [
+          {
+            "name": "AP",
+            "direction": "Posterior_to_anterior"
+          },
+          {
+            "name": "ML",
+            "direction": "Left_to_right"
+          },
+          {
+            "name": "SI",
+            "direction": "Superior_to_inferior"
+          }
+        ],
+        "axis_unit": "millimeter"
+      },
+      "procedures": [
+        {
+          "injection_materials": [
+            {
+              "name": "Viral vector (Nanoject injection)"
+            }
+          ],
+          "dynamics": [
+            {
+              "profile": "Bolus",
+              "volume": 400.0,
+              "volume_unit": "nanoliter",
+              "duration": 15.0,
+              "duration_unit": "minute"
+            }
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
+          "coordinate_system_name": "BREGMA_ARI",
+          "coordinates": [
+            [
+              {
+                "translation": [
+                  -5.4,
+                  -0.85,
+                  -3.1
+                ]
+              }
+            ]
+          ]
+        },
+        {
+          "injection_materials": [
+            {
+              "name": "Viral vector (Nanoject injection)"
+            }
+          ],
+          "dynamics": [
+            {
+              "profile": "Bolus",
+              "volume": 400.0,
+              "volume_unit": "nanoliter",
+              "duration": 15.0,
+              "duration_unit": "minute"
+            }
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4",
+          "coordinate_system_name": "BREGMA_ARI",
+          "coordinates": [
+            [
+              {
+                "translation": [
+                  -5.4,
+                  0.85,
+                  -3.1
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "specimen_procedures": [
+    [
+      "object_type='Specimen procedure' procedure_type='Fixation' procedure_name='SHIELD OFF' specimen_id='699461' start_date=datetime.date(2024, 3, 29) end_date=datetime.date(2024, 4, 1) experimenters=['Holly Myers'] protocol_id=None protocol_parameters=None procedure_details=[Reagent(object_type='Reagent', name='SHIELD Buffer', source=_Lifecanvas(name='LifeCanvas', abbreviation=None, registry=None, registry_identifier=None), rrid=None, lot_number='bu19', expiration_date=None), Reagent(object_type='Reagent', name='SHIELD Epoxy', source=_Lifecanvas(name='LifeCanvas', abbreviation=None, registry=None, registry_identifier=None), rrid=None, lot_number='ex43', expiration_date=None)] notes='stored in 1xpbs in 4c 4/2/24 - 4/3/24'",
+      "object_type='Specimen procedure' procedure_type='Fixation' procedure_name='SHIELD ON' specimen_id='699461' start_date=datetime.date(2024, 4, 1) end_date=datetime.date(2024, 4, 2) experimenters=['Holly Myers'] protocol_id=None protocol_parameters=None procedure_details=[Reagent(object_type='Reagent', name='SHIELD On', source=_Lifecanvas(name='LifeCanvas', abbreviation=None, registry=None, registry_identifier=None), rrid=None, lot_number='on21', expiration_date=None)] notes='stored in 1xpbs in 4c 4/2/24 - 4/3/24'",
+      "object_type='Specimen procedure' procedure_type='Delipidation' procedure_name='Passive Delipidation' specimen_id='699461' start_date=datetime.date(2024, 4, 3) end_date=datetime.date(2024, 4, 5) experimenters=['Holly Myers'] protocol_id=None protocol_parameters=None procedure_details=[Reagent(object_type='Reagent', name='Delipidation Buffer', source=_Other(name='Other', abbreviation=None, registry=None, registry_identifier=None), rrid=None, lot_number='d18', expiration_date=None)] notes=None",
+      "object_type='Specimen procedure' procedure_type='Delipidation' procedure_name='Active Delipidation' specimen_id='699461' start_date=datetime.date(2024, 4, 5) end_date=datetime.date(2024, 4, 7) experimenters=['Holly Myers'] protocol_id=None protocol_parameters=None procedure_details=[Reagent(object_type='Reagent', name='Conductivity Buffer', source=_Other(name='Other', abbreviation=None, registry=None, registry_identifier=None), rrid=None, lot_number='c11', expiration_date=None)] notes=None",
+      "object_type='Specimen procedure' procedure_type='Refractive index matching' procedure_name='EasyIndex' specimen_id='699461' start_date=datetime.date(2024, 4, 8) end_date=datetime.date(2024, 4, 11) experimenters=['Holly Myers'] protocol_id=['dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1'] protocol_parameters=None procedure_details=[Reagent(object_type='Reagent', name='Easy Index', source=_Lifecanvas(name='LifeCanvas', abbreviation=None, registry=None, registry_identifier=None), rrid=None, lot_number='EI53', expiration_date=None)] notes=None"
+    ],
+    {
+      "batch_number": "62",
+      "date_range_tab": "Additional batch info"
+    }
+  ]
+}
