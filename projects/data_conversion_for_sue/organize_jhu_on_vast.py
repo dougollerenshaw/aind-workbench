@@ -158,20 +158,23 @@ def verify_session_names_match_data_description(metadata_dir: Path) -> bool:
 
 def find_nwb_zarr_files(vast_path: Path) -> Optional[str]:
     """
-    Find .zarr folders in the VAST path that contain "NWB" and don't have "behavior_" prefix.
+    Find behavior .zarr files in the specific sorted/session/ subdirectory.
     
     Returns:
-        Full path to the .zarr folder/file, or None if not found
+        Full path to the behavior .zarr file, or None if not found
     """
     if not vast_path.exists():
         return None
     
-    # Look for .zarr folders/files
-    for item in vast_path.iterdir():
-        if (item.name.endswith('.zarr') and 
-            'NWB' in item.name and 
-            not item.name.startswith('behavior_')):
-            return str(item)
+    # Look specifically in sorted/session/ subdirectory
+    session_dir = vast_path / "sorted" / "session"
+    if not session_dir.exists():
+        return None
+    
+    # Look for behavior_*.zarr files
+    for zarr_file in session_dir.glob("behavior_*.zarr"):
+        if "nwb" in zarr_file.name.lower():
+            return str(zarr_file)
     
     return None
 
@@ -220,18 +223,20 @@ def create_vast_inventory_csv(metadata_dir: Path, asset_inventory_df: pd.DataFra
         # Create row data
         row_data = {
             'session_folder_name': session_folder.name,
-            'session_name': session_name,
             'subject_id': subject_id,
             'vast_path': str(vast_path)
         }
         
-        # Add JSON file paths
+        # Add JSON file paths (only if they actually exist)
         json_files = ['acquisition.json', 'data_description.json', 'subject.json', 
                      'procedures.json', 'instrument.json']
         
         for json_file in json_files:
             json_path = vast_path / json_file
-            row_data[f'{json_file.replace(".json", "")}_path'] = str(json_path)
+            if json_path.exists():
+                row_data[f'{json_file.replace(".json", "")}_path'] = str(json_path)
+            else:
+                row_data[f'{json_file.replace(".json", "")}_path'] = ""
         
         # Find NWB .zarr file
         nwb_path = find_nwb_zarr_files(vast_path)
