@@ -7,6 +7,9 @@ of missing or incorrectly formatted specimen procedures.
 """
 
 import pandas as pd
+import os
+import json
+import requests
 from datetime import datetime
 from typing import Dict, List, Any, Optional
 from excel_loader import (
@@ -23,13 +26,14 @@ def get_specimen_procedures_from_spreadsheet(
     subject_id: str,
 ) -> List[Dict[str, Any]]:
     """
-    Generate specimen procedures in metadata service format from Excel spreadsheet data.
+    Generate specimen procedures from Excel spreadsheet data, representing the data faithfully
+    without forcing it into metadata service format. This allows for clean comparison.
 
     Args:
         subject_id: The subject ID to look up
 
     Returns:
-        List of specimen procedure dictionaries in the exact format returned by metadata service
+        List of specimen procedure dictionaries representing what's actually in the spreadsheet
     """
     if sheet_data is None:
         raise ValueError("Excel data not loaded")
@@ -42,18 +46,65 @@ def get_specimen_procedures_from_spreadsheet(
     if not procedures:
         return []
 
-    # Convert to metadata service format
+    # Convert to clean format representing spreadsheet data faithfully
     specimen_procedures = []
 
     for proc in procedures:
-        # Map the procedure to metadata service format
-        specimen_proc = convert_procedure_to_metadata_service_format(
-            proc, subject_id
-        )
-        if specimen_proc:
-            specimen_procedures.append(specimen_proc)
+        # Create a clean representation of what's in the spreadsheet
+        specimen_proc = {
+            "procedure_type": getattr(proc, "procedure_type", "Unknown"),
+            "procedure_name": getattr(proc, "procedure_name", "Unknown"),
+            "specimen_id": subject_id,
+            "start_date": (
+                proc.start_date.isoformat() if proc.start_date else None
+            ),
+            "end_date": proc.end_date.isoformat() if proc.end_date else None,
+            "experimenter_full_name": getattr(
+                proc, "experimenter_full_name", "Unknown"
+            ),
+            "protocol_id": getattr(proc, "protocol_id", None),
+            "reagents": convert_reagents_to_clean_format(
+                proc.procedure_details
+            ),
+            "notes": getattr(proc, "notes", None),
+            "batch_info": batch_info,  # Include batch info for reference
+        }
+
+        specimen_procedures.append(specimen_proc)
 
     return specimen_procedures
+
+
+def convert_reagents_to_clean_format(
+    procedure_details: Any,
+) -> List[Dict[str, Any]]:
+    """
+    Convert reagents to a clean format representing what's in the spreadsheet.
+
+    Args:
+        procedure_details: Procedure details from Excel loader
+
+    Returns:
+        List of reagent dictionaries
+    """
+    if not procedure_details:
+        return []
+
+    reagents = []
+
+    # Extract reagent information from procedure details
+    if hasattr(procedure_details, "reagents"):
+        for reagent in procedure_details.reagents:
+            reagent_dict = {
+                "name": getattr(reagent, "name", "Unknown"),
+                "source": getattr(reagent, "source", None),
+                "rrid": getattr(reagent, "rrid", None),
+                "lot_number": getattr(reagent, "lot_number", None),
+                "expiration_date": getattr(reagent, "expiration_date", None),
+            }
+            reagents.append(reagent_dict)
+
+    return reagents
 
 
 def convert_procedure_to_metadata_service_format(
@@ -113,6 +164,65 @@ def convert_procedure_to_metadata_service_format(
             f"Error converting procedure {getattr(proc, 'procedure_name', 'Unknown')}: {e}"
         )
         return None
+
+
+def consolidate_delipidation_procedures(
+    delipidation_procedures: List[Dict[str, Any]], subject_id: str
+) -> Dict[str, Any]:
+    """
+    Consolidate multiple Delipidation procedures into one, combining all reagents.
+
+    Args:
+        delipidation_procedures: List of Delipidation procedure dictionaries
+        subject_id: The subject ID
+
+    Returns:
+        Single consolidated Delipidation procedure dictionary
+    """
+    if not delipidation_procedures:
+        return {}
+
+    # Use the first procedure as the base
+    base_proc = delipidation_procedures[0]
+
+    # Collect all reagents from all procedures
+    all_reagents = []
+    for proc in delipidation_procedures:
+        if proc.get("reagents"):
+            all_reagents.extend(proc["reagents"])
+
+    # Find the earliest start date and latest end date
+    start_dates = [
+        proc.get("start_date")
+        for proc in delipidation_procedures
+        if proc.get("start_date")
+    ]
+    end_dates = [
+        proc.get("end_date")
+        for proc in delipidation_procedures
+        if proc.get("end_date")
+    ]
+
+    earliest_start = min(start_dates) if start_dates else None
+    latest_end = max(end_dates) if end_dates else None
+
+    # Create consolidated procedure
+    consolidated = {
+        "procedure_type": "Delipidation",
+        "procedure_name": "LifeCanvas Active Whole Mouse Brain Delipidation (UNPUBLISHED)",
+        "specimen_id": subject_id,
+        "start_date": earliest_start,
+        "end_date": latest_end,
+        "experimenter_full_name": "HollyM",  # Hardcode for now - should come from spreadsheet
+        "protocol_id": "https://www.protocols.io/view/whole-mouse-brain-delipidation-lifecanvas-active-cttawnie",
+        "reagents": all_reagents,
+        "hcr_series": None,
+        "antibodies": None,
+        "sectioning": None,
+        "notes": None,
+    }
+
+    return consolidated
 
 
 def map_procedure_type_and_name(proc_type: str, proc_name: str) -> tuple:
@@ -296,7 +406,7 @@ def check_if_subject_needs_backfill(
 def test_specimen_procedures_match(subject_id: str) -> Dict[str, Any]:
     """
     Test function to compare specimen procedures from our backfill module
-    with what's actually in the database for a given subject.
+    with what's actually in the metadata service for a given subject.
 
     Args:
         subject_id: The subject ID to test
@@ -309,10 +419,6 @@ def test_specimen_procedures_match(subject_id: str) -> Dict[str, Any]:
 
     # Get specimen procedures from our backfill module
     try:
-        from backfill_specimen_procedures import (
-            get_specimen_procedures_from_spreadsheet,
-        )
-
         spreadsheet_procedures = get_specimen_procedures_from_spreadsheet(
             subject_id
         )
@@ -323,67 +429,77 @@ def test_specimen_procedures_match(subject_id: str) -> Dict[str, Any]:
         print(f"✗ Failed to generate procedures from spreadsheet: {e}")
         return {"error": str(e)}
 
-    # Get specimen procedures from the database
+        # Get specimen procedures from the metadata service (with caching)
     try:
-        from aind_data_access_api.document_db import MetadataDbClient
+        # Check if we have cached data
+        cache_dir = f"procedures/{subject_id}"
+        cache_file = f"{cache_dir}/procedures.json.v1"
 
-        client = MetadataDbClient(
-            host="api.allenneuraldynamics.org",
-            database="metadata_index",
-            collection="data_assets",
-        )
+        if os.path.exists(cache_file):
+            print(f"✓ Using cached data from {cache_file}")
+            with open(cache_file, "r") as f:
+                cached_data = json.load(f)
+            db_procedures = cached_data.get("specimen_procedures", [])
+            asset_name = "cached_data"
+        else:
+            print(f"Querying metadata service for subject {subject_id}...")
+            print(f"  This may take 30-90 seconds...")
 
-        # Query for this subject's SmartSPIM assets
-        query = {
-            "subject.subject_id": subject_id,
-            "data_description.modality": {
-                "$elemMatch": {"$in": ["SmartSPIM"]}
-            },
-        }
+            # Create cache directory if it doesn't exist
+            os.makedirs(cache_dir, exist_ok=True)
 
-        assets = client.retrieve_docdb_records(
-            filter_query=query,
-            projection={
-                "subject_id": 1,
-                "asset_name": 1,
-                "data_level": 1,
-                "procedures": 1,
-            },
-        )
+            # Query metadata service
+            url = f"http://aind-metadata-service/procedures/{subject_id}"
+            print(f"  Sending request to: {url}")
+            response = requests.get(url, timeout=90)
+            print(f"  Response received: HTTP {response.status_code}")
 
-        if not assets:
-            print(f"✗ No SmartSPIM assets found for subject {subject_id}")
-            return {"error": "No assets found"}
+            if response.status_code == 200:
+                data = response.json()
+                db_procedures = data.get("specimen_procedures", [])
 
-        # Get the first asset with procedures
-        db_procedures = None
-        asset_name = None
-        for asset in assets:
-            if asset.get("procedures") and asset["procedures"].get(
-                "specimen_procedures"
-            ):
-                db_procedures = asset["procedures"]["specimen_procedures"]
-                asset_name = asset["asset_name"]
-                break
+                # Cache the result
+                with open(cache_file, "w") as f:
+                    json.dump(data, f, indent=2, default=str)
+                print(f"✓ Cached result to {cache_file}")
+
+            elif response.status_code == 406:
+                # Handle validation errors - extract data from response
+                data = response.json()
+                if "data" in data:
+                    db_procedures = data["data"].get("specimen_procedures", [])
+                    # Cache the extracted data
+                    with open(cache_file, "w") as f:
+                        json.dump(data["data"], f, indent=2, default=str)
+                    print(f"✓ Cached result from 406 response to {cache_file}")
+                else:
+                    db_procedures = []
+                    print(f"⚠️  Got 406 but no data field found")
+
+            else:
+                print(f"✗ HTTP {response.status_code}: {response.text}")
+                return {"error": f"HTTP {response.status_code}"}
+
+            asset_name = f"metadata_service_response"
 
         if not db_procedures:
             print(
-                f"✗ No specimen procedures found in database for subject {subject_id}"
+                f"✗ No specimen procedures found in metadata service for subject {subject_id}"
             )
-            return {"error": "No specimen procedures in database"}
+            return {"error": "No specimen procedures in metadata service"}
 
         print(
-            f"✓ Found specimen procedures in database for asset: {asset_name}"
+            f"✓ Found specimen procedures in metadata service for asset: {asset_name}"
         )
 
     except Exception as e:
-        print(f"✗ Failed to query database: {e}")
+        print(f"✗ Failed to query metadata service: {e}")
         return {"error": str(e)}
 
     # Compare the two sets of procedures
     print(f"\nComparing procedures:")
     print(f"  Spreadsheet count: {len(spreadsheet_procedures)}")
-    print(f"  Database count: {len(db_procedures)}")
+    print(f"  Metadata service count: {len(db_procedures)}")
 
     # Convert to comparable format (sort by start_date and procedure_type)
     def normalize_procedures(procedures):
@@ -424,7 +540,7 @@ def test_specimen_procedures_match(subject_id: str) -> Dict[str, Any]:
             if spreadsheet_proc != db_proc:
                 print(f"  Procedure {i+1} differs:")
                 print(f"    Spreadsheet: {spreadsheet_proc}")
-                print(f"    Database:    {db_proc}")
+                print(f"    Metadata service: {db_proc}")
                 print()
 
         # Check if counts differ
@@ -436,10 +552,10 @@ def test_specimen_procedures_match(subject_id: str) -> Dict[str, Any]:
     result = {
         "subject_id": subject_id,
         "spreadsheet_count": len(spreadsheet_procedures),
-        "database_count": len(db_procedures),
+        "metadata_service_count": len(db_procedures),
         "exact_match": exact_match,
         "spreadsheet_procedures": spreadsheet_procedures,
-        "database_procedures": db_procedures,
+        "metadata_service_procedures": db_procedures,
     }
 
     print(f"\nTest completed for subject {subject_id}")

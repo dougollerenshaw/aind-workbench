@@ -1,0 +1,235 @@
+{
+  "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/procedures.py",
+  "schema_version": "1.2.1",
+  "subject_id": "791054",
+  "subject_procedures": [
+    {
+      "procedure_type": "Surgery",
+      "start_date": "2025-06-13",
+      "experimenter_full_name": "30251",
+      "iacuc_protocol": "2414",
+      "animal_weight_prior": null,
+      "animal_weight_post": null,
+      "weight_unit": "gram",
+      "anaesthesia": null,
+      "workstation_id": null,
+      "procedures": [
+        {
+          "procedure_type": "Perfusion",
+          "output_specimen_ids": [
+            "791054"
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.8epv51bejl1b/v6"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "procedure_type": "Surgery",
+      "start_date": "2025-05-08",
+      "experimenter_full_name": "NSB-1007",
+      "iacuc_protocol": "2414",
+      "animal_weight_prior": "22.9",
+      "animal_weight_post": "26.2",
+      "weight_unit": "gram",
+      "anaesthesia": {
+        "type": "isoflurane",
+        "duration": "165.00",
+        "duration_unit": "minute",
+        "level": "1.5"
+      },
+      "workstation_id": "SWS 5",
+      "procedures": [
+        {
+          "injection_materials": [
+            {
+              "material_type": "Virus",
+              "name": "pAAV-Ef1a-DIO-ChRmine-mScarlet-WPRE",
+              "tars_identifiers": {
+                "virus_tars_id": "VIR300005_PHPeB",
+                "plasmid_tars_alias": "ExP300005",
+                "prep_lot_number": "VT6818G",
+                "prep_date": "2024-02-27",
+                "prep_type": null,
+                "prep_protocol": null
+              },
+              "addgene_id": {
+                "name": "pAAV-Ef1a-DIO-ChRmine-mScarlet-WPRE",
+                "abbreviation": null,
+                "registry": null,
+                "registry_identifier": "130998"
+              },
+              "titer": 53200000000000,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "recovery_time": "10.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "-0.91",
+          "injection_coordinate_ap": "-3.28",
+          "injection_coordinate_depth": [
+            "3.09"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": "4.41",
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": "0.0",
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Left",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "500.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        },
+        {
+          "injection_materials": [],
+          "recovery_time": "10.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "0.91",
+          "injection_coordinate_ap": "-3.28",
+          "injection_coordinate_depth": [
+            "3.09"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": "4.41",
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": "0.0",
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Right",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "500.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        }
+      ],
+      "notes": null,
+      "protocol_id": "dx.doi.org/10.17504/protocols.io.kqdg392o7g25/v2"
+    }
+  ],
+  "specimen_procedures": [
+    {
+      "procedure_type": "Delipidation",
+      "procedure_name": "LifeCanvas Active Whole Mouse Brain Delipidation (UNPUBLISHED)",
+      "specimen_id": "791054",
+      "start_date": "2025-07-01",
+      "end_date": "2025-07-10",
+      "experimenter_full_name": "HollyM",
+      "protocol_id": "https://www.protocols.io/view/whole-mouse-brain-delipidation-lifecanvas-active-cttawnie",
+      "reagents": [
+        {
+          "name": "SH-ON",
+          "source": null,
+          "rrid": null,
+          "lot_number": "on38",
+          "expiration_date": null
+        },
+        {
+          "name": "DB-500",
+          "source": null,
+          "rrid": null,
+          "lot_number": "A07T103",
+          "expiration_date": null
+        },
+        {
+          "name": "DB-500",
+          "source": null,
+          "rrid": null,
+          "lot_number": "A07T103",
+          "expiration_date": null
+        },
+        {
+          "name": "CB-450",
+          "source": null,
+          "rrid": null,
+          "lot_number": "J24S108",
+          "expiration_date": null
+        }
+      ],
+      "hcr_series": null,
+      "antibodies": null,
+      "sectioning": null,
+      "notes": null
+    },
+    {
+      "procedure_type": "Immunolabeling",
+      "procedure_name": "SmartSPIM Labeling",
+      "specimen_id": "791054",
+      "start_date": null,
+      "end_date": null,
+      "experimenter_full_name": "HollyM",
+      "protocol_id": null,
+      "reagents": [],
+      "hcr_series": null,
+      "antibodies": {
+        "rrid": null,
+        "expiration_date": null,
+        "immunolabel_class": "Primary",
+        "fluorophore": null,
+        "mass": null,
+        "mass_unit": "microgram",
+        "notes": null
+      },
+      "sectioning": null,
+      "notes": null
+    },
+    {
+      "procedure_type": "Immunolabeling",
+      "procedure_name": "SmartSPIM Labeling",
+      "specimen_id": "791054",
+      "start_date": null,
+      "end_date": null,
+      "experimenter_full_name": "HollyM",
+      "protocol_id": null,
+      "reagents": [],
+      "hcr_series": null,
+      "antibodies": {
+        "rrid": null,
+        "expiration_date": null,
+        "immunolabel_class": "Secondary",
+        "fluorophore": null,
+        "mass": null,
+        "mass_unit": "microgram",
+        "notes": null
+      },
+      "sectioning": null,
+      "notes": null
+    },
+    {
+      "procedure_type": "Refractive index matching",
+      "procedure_name": "Refractive Index Matching - EasyIndex",
+      "specimen_id": "791054",
+      "start_date": "2025-07-09",
+      "end_date": "2025-07-12",
+      "experimenter_full_name": "HollyM",
+      "protocol_id": "https://dx.doi.org/10.17504/protocols.io.kxygx965kg8j/v1",
+      "reagents": [
+        {
+          "name": "EI-500-1.52",
+          "source": null,
+          "rrid": null,
+          "lot_number": "Ei75",
+          "expiration_date": null
+        }
+      ],
+      "hcr_series": null,
+      "antibodies": null,
+      "sectioning": null,
+      "notes": null
+    }
+  ],
+  "notes": null
+}
