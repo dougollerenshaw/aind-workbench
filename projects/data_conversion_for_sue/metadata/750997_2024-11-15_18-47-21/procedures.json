@@ -1,0 +1,283 @@
+{
+  "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/procedures.py",
+  "schema_version": "1.2.1",
+  "subject_id": "750997",
+  "subject_procedures": [
+    {
+      "procedure_type": "Surgery",
+      "start_date": "2025-06-04",
+      "experimenter_full_name": "30785",
+      "iacuc_protocol": "2414",
+      "animal_weight_prior": null,
+      "animal_weight_post": null,
+      "weight_unit": "gram",
+      "anaesthesia": null,
+      "workstation_id": null,
+      "procedures": [
+        {
+          "procedure_type": "Perfusion",
+          "output_specimen_ids": [
+            "750997"
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.8epv51bejl1b/v6"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "procedure_type": "Surgery",
+      "start_date": "2024-08-05",
+      "experimenter_full_name": "NSB-949",
+      "iacuc_protocol": "2109",
+      "animal_weight_prior": "20.0",
+      "animal_weight_post": "21.0",
+      "weight_unit": "gram",
+      "anaesthesia": {
+        "type": "isoflurane",
+        "duration": "90.0",
+        "duration_unit": "minute",
+        "level": "1.5"
+      },
+      "workstation_id": "SWS 3",
+      "procedures": [
+        {
+          "procedure_type": "Headframe",
+          "headframe_type": "L-shaped",
+          "headframe_part_number": null,
+          "headframe_material": null,
+          "well_part_number": null,
+          "well_type": "No Well"
+        },
+        {
+          "injection_materials": [
+            {
+              "material_type": "Virus",
+              "name": "pGP-AAV-syn-FLEX-jGCaMP8m-WPRE",
+              "tars_identifiers": {
+                "virus_tars_id": "VIR300034_AAV5",
+                "plasmid_tars_alias": "ExP300034",
+                "prep_lot_number": "V146246",
+                "prep_date": "2024-04-05",
+                "prep_type": null,
+                "prep_protocol": null
+              },
+              "addgene_id": {
+                "name": "pGP-AAV-syn-FLEX-jGCaMP8m-WPRE",
+                "abbreviation": null,
+                "registry": {
+                  "name": "Addgene_162378",
+                  "abbreviation": null
+                },
+                "registry_identifier": "162378"
+              },
+              "titer": 24000000000000,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "recovery_time": "15.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "-0.85",
+          "injection_coordinate_ap": "-5.4",
+          "injection_coordinate_depth": [
+            "-3.1"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": "4.1",
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": "0.0",
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Left",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "400.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        },
+        {
+          "injection_materials": [
+            {
+              "material_type": "Virus",
+              "name": "pGP-AAV-syn-FLEX-jGCaMP8m-WPRE",
+              "tars_identifiers": {
+                "virus_tars_id": "VIR300034_AAV5",
+                "plasmid_tars_alias": "ExP300034",
+                "prep_lot_number": "V146246",
+                "prep_date": "2024-04-05",
+                "prep_type": null,
+                "prep_protocol": null
+              },
+              "addgene_id": {
+                "name": "pGP-AAV-syn-FLEX-jGCaMP8m-WPRE",
+                "abbreviation": null,
+                "registry": {
+                  "name": "Addgene_162378",
+                  "abbreviation": null
+                },
+                "registry_identifier": "162378"
+              },
+              "titer": 24000000000000,
+              "titer_unit": "gc/mL"
+            }
+          ],
+          "recovery_time": "15.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "0.85",
+          "injection_coordinate_ap": "-5.4",
+          "injection_coordinate_depth": [
+            "-3.1"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": "4.1",
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": "0.0",
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Right",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "400.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        },
+        {
+          "procedure_type": "Fiber implant",
+          "probes": [
+            {
+              "ophys_probe": {
+                "device_type": "Fiber optic probe",
+                "serial_number": null,
+                "manufacturer": {
+                  "name": "Neurophotometrics",
+                  "abbreviation": null,
+                  "registry": null,
+                  "registry_identifier": null
+                },
+                "model": null,
+                "path_to_cad": null,
+                "port_index": null,
+                "additional_settings": {},
+                "notes": null,
+                "core_diameter": 200,
+                "core_diameter_unit": "micrometer",
+                "numerical_aperture": 0.37,
+                "ferrule_material": "Ceramic",
+                "active_length": null,
+                "total_length": "2.5",
+                "length_unit": "millimeter",
+                "name": "Fiber_0"
+              },
+              "targeted_structure": null,
+              "stereotactic_coordinate_ap": "2.0",
+              "stereotactic_coordinate_ml": "-0.5",
+              "stereotactic_coordinate_dv": "-1.5",
+              "stereotactic_coordinate_unit": "millimeter",
+              "stereotactic_coordinate_reference": "Bregma",
+              "bregma_to_lambda_distance": "4.1",
+              "bregma_to_lambda_unit": "millimeter",
+              "angle": "0.0",
+              "angle_unit": "degrees",
+              "notes": null
+            }
+          ]
+        },
+        {
+          "procedure_type": "Fiber implant",
+          "probes": [
+            {
+              "ophys_probe": {
+                "device_type": "Fiber optic probe",
+                "serial_number": null,
+                "manufacturer": {
+                  "name": "Neurophotometrics",
+                  "abbreviation": null,
+                  "registry": null,
+                  "registry_identifier": null
+                },
+                "model": null,
+                "path_to_cad": null,
+                "port_index": null,
+                "additional_settings": {},
+                "notes": null,
+                "core_diameter": 200,
+                "core_diameter_unit": "micrometer",
+                "numerical_aperture": 0.37,
+                "ferrule_material": "Ceramic",
+                "active_length": null,
+                "total_length": "4.0",
+                "length_unit": "millimeter",
+                "name": "Fiber_1"
+              },
+              "targeted_structure": null,
+              "stereotactic_coordinate_ap": "-1.6",
+              "stereotactic_coordinate_ml": "1.6",
+              "stereotactic_coordinate_dv": "3.2",
+              "stereotactic_coordinate_unit": "millimeter",
+              "stereotactic_coordinate_reference": "Bregma",
+              "bregma_to_lambda_distance": "4.1",
+              "bregma_to_lambda_unit": "millimeter",
+              "angle": "0.0",
+              "angle_unit": "degrees",
+              "notes": null
+            }
+          ]
+        },
+        {
+          "procedure_type": "Fiber implant",
+          "probes": [
+            {
+              "ophys_probe": {
+                "device_type": "Fiber optic probe",
+                "serial_number": null,
+                "manufacturer": {
+                  "name": "Neurophotometrics",
+                  "abbreviation": null,
+                  "registry": null,
+                  "registry_identifier": null
+                },
+                "model": null,
+                "path_to_cad": null,
+                "port_index": null,
+                "additional_settings": {},
+                "notes": null,
+                "core_diameter": 200,
+                "core_diameter_unit": "micrometer",
+                "numerical_aperture": 0.37,
+                "ferrule_material": "Ceramic",
+                "active_length": null,
+                "total_length": "5.0",
+                "length_unit": "millimeter",
+                "name": "Fiber_2"
+              },
+              "targeted_structure": null,
+              "stereotactic_coordinate_ap": "-6.2",
+              "stereotactic_coordinate_ml": "-1.5",
+              "stereotactic_coordinate_dv": "4.2",
+              "stereotactic_coordinate_unit": "millimeter",
+              "stereotactic_coordinate_reference": "Bregma",
+              "bregma_to_lambda_distance": "4.1",
+              "bregma_to_lambda_unit": "millimeter",
+              "angle": "12.0",
+              "angle_unit": "degrees",
+              "notes": null
+            }
+          ]
+        }
+      ],
+      "notes": null,
+      "protocol_id": "dx.doi.org/10.17504/protocols.io.kqdg392o7g25/v2"
+    }
+  ],
+  "specimen_procedures": [],
+  "notes": null
+}

@@ -1,0 +1,124 @@
+{
+  "object_type": "Acquisition",
+  "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/acquisition.py",
+  "schema_version": "2.0.35",
+  "subject_id": "754898",
+  "specimen_id": null,
+  "acquisition_start_time": "2025-01-09T17:44:04-08:00",
+  "acquisition_end_time": "2025-01-09T18:50:18.510000-08:00",
+  "experimenters": [
+    "Sue Su"
+  ],
+  "protocol_id": null,
+  "ethics_review_id": [
+    "2115"
+  ],
+  "instrument_id": "FIP_Sue",
+  "acquisition_type": "Fiber photometry recording",
+  "notes": "Legacy fiber photometry recording session for subject 754898. Note: Actual power and exposure duration values are not available in the legacy data.",
+  "coordinate_system": null,
+  "calibrations": [],
+  "maintenance": [],
+  "data_streams": [
+    {
+      "object_type": "Data stream",
+      "stream_start_time": "2025-01-09T17:44:04-08:00",
+      "stream_end_time": "2025-01-09T18:50:18.510000-08:00",
+      "modalities": [
+        {
+          "name": "Behavior",
+          "abbreviation": "behavior"
+        },
+        {
+          "name": "Fiber photometry",
+          "abbreviation": "fib"
+        }
+      ],
+      "code": null,
+      "notes": "Fiber photometry recording session",
+      "active_devices": [
+        "470nm LED",
+        "Fiber optic patch cord",
+        "Green CMOS",
+        "Pupil camera assembly",
+        "Tongue camera assembly",
+        "Lick spout assembly",
+        "Speaker",
+        "Arduino"
+      ],
+      "configurations": [
+        {
+          "object_type": "Light emitting diode config",
+          "device_name": "470nm LED",
+          "power": null,
+          "power_unit": null
+        },
+        {
+          "object_type": "Patch cord config",
+          "device_name": "Fiber optic patch cord",
+          "channels": [
+            {
+              "object_type": "Channel",
+              "channel_name": "Fiber channel",
+              "intended_measurement": null,
+              "detector": {
+                "object_type": "Detector config",
+                "device_name": "Green CMOS",
+                "exposure_time": 0.0,
+                "exposure_time_unit": "second",
+                "trigger_type": "Internal",
+                "compression": null
+              },
+              "additional_device_names": null,
+              "light_sources": [],
+              "variable_power": false,
+              "excitation_filters": null,
+              "emission_filters": null,
+              "emission_wavelength": null,
+              "emission_wavelength_unit": null
+            }
+          ]
+        }
+      ],
+      "connections": []
+    }
+  ],
+  "stimulus_epochs": [
+    {
+      "object_type": "Stimulus epoch",
+      "stimulus_start_time": "2025-01-09T17:44:04-08:00",
+      "stimulus_end_time": "2025-01-09T18:50:18.510000-08:00",
+      "stimulus_name": "Behavioral foraging task",
+      "code": null,
+      "stimulus_modalities": [
+        "Auditory"
+      ],
+      "performance_metrics": {
+        "object_type": "Performance metrics",
+        "output_parameters": {},
+        "reward_consumed_during_epoch": "657.0",
+        "reward_consumed_unit": "microliter",
+        "trials_total": 498,
+        "trials_finished": 498,
+        "trials_rewarded": 219
+      },
+      "notes": "Behavioral foraging task during fiber photometry recording",
+      "active_devices": [
+        "Speaker"
+      ],
+      "configurations": [],
+      "training_protocol_name": null,
+      "curriculum_status": null
+    }
+  ],
+  "subject_details": {
+    "object_type": "Acquisition subject details",
+    "animal_weight_prior": null,
+    "animal_weight_post": null,
+    "weight_unit": "gram",
+    "anaesthesia": null,
+    "mouse_platform_name": "fiber_photometry_platform",
+    "reward_consumed_total": "0.657",
+    "reward_consumed_unit": "milliliter"
+  }
+}

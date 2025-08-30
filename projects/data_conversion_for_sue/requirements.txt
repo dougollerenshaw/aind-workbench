@@ -3,3 +3,4 @@ pandas>=1.3.0
 requests>=2.25.0
 numpy>=1.20.0
 scipy
+aind-data-schema>=2.0.0
