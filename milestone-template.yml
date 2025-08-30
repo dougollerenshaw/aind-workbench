@@ -1,0 +1,146 @@
+name: Planning Milestone
+description: Template for planning milestones and resource allocation
+title: "[Milestone Title]"
+labels:
+  - "milestone"
+assignees: []
+body:
+  - type: checkboxes
+    id: quarters
+    attributes:
+      label: Quarter/Iteration Coverage
+      description: Which quarters will this milestone span? (Check all that apply)
+      options:
+        - label: Q4-2025 (Oct-Dec 2025)
+        - label: Q1-2026 (Jan-Mar 2026)
+        - label: Q2-2026 (Apr-Jun 2026)
+        - label: Q3-2026 (Jul-Sep 2026)
+    validations:
+      required: true
+
+  - type: input
+    id: milestone_title
+    attributes:
+      label: Milestone Title
+      description: Brief, descriptive title for this milestone
+      placeholder: "e.g., Fiber Pipeline V2 Launch"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team/Platform
+      description: Which team/platform does this milestone belong to?
+      options:
+        - Data Infrastructure
+        - Physiology
+        - Data and Outreach
+        - Behavior
+        - Cross-team
+        - External
+    validations:
+      required: true
+
+  - type: textarea
+    id: resource_allocation
+    attributes:
+      label: Resource Allocation
+      description: |
+        List each person working on this task and their effort level:
+        Format: Name: X% effort
+      placeholder: |
+        Ahad: 50% effort
+        Arjun: 25% effort
+        Tom: 10% effort (code review only)
+      value: |
+        [Your name]: __% effort
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      options:
+        - Critical (Must Complete)
+        - High (Should Complete)
+        - Medium (Nice to Have)
+        - Low (If Time Permits)
+    validations:
+      required: true
+
+  - type: input
+    id: start_date
+    attributes:
+      label: Planned Start Date
+      description: When do you realistically plan to start this work?
+      placeholder: "2025-10-15"
+    validations:
+      required: true
+
+  - type: input
+    id: end_date
+    attributes:
+      label: Target Completion Date
+      description: When do you plan to complete this work?
+      placeholder: "2025-11-30"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: date_flexibility
+    attributes:
+      label: Date Flexibility
+      description: How flexible are these dates?
+      options:
+        - Flexible (can shift as needed)
+        - Preferred (some flexibility)
+        - Hard Deadline (dates are fixed)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Detailed Description
+      description: What exactly needs to be accomplished?
+      placeholder: "Describe the milestone, scope, and key deliverables..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: success_criteria
+    attributes:
+      label: Success Criteria
+      description: How will you know this milestone is complete?
+      placeholder: "List specific, measurable outcomes..."
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: What other work or resources does this depend on?
+      placeholder: "List any blocking dependencies or required resources..."
+
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks & Mitigation
+      description: What could prevent completion? How can risks be mitigated?
+      placeholder: "Identify potential blockers and mitigation strategies..."
+
+  - type: textarea
+    id: linked_work
+    attributes:
+      label: Linked Issues/Work
+      description: |
+        Link to specific issues that contribute to this milestone.
+        Use format: Owner/repo#issue or just #issue for same repo
+      placeholder: |
+        Related issues:
+        - aind-physio-arch#123 (fiber preprocessing)
+        - aind-behavior-pipeline#456 (NWB updates)  
+        - #789 (documentation updates)
+        
+        GitHub milestone: [link if exists]
