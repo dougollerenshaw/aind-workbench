@@ -30,10 +30,6 @@ body:
         - [ ] #789 (documentation)
         
         Note: This section starts empty and grows as implementation begins.
-      value: |
-        Implementation issues (add as created):
-        
-        Progress: 0/0 tasks complete
 
   - type: checkboxes
     id: teams
