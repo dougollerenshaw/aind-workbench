@@ -5,6 +5,24 @@ labels:
   - "milestone"
 assignees: []
 body:
+  - type: input
+    id: milestone_title
+    attributes:
+      label: Milestone Title
+      description: Brief, descriptive title for this milestone
+      placeholder: "e.g., Fiber Pipeline V2 Launch"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Detailed Description
+      description: What exactly needs to be accomplished?
+      placeholder: "Describe the milestone, scope, and key deliverables..."
+    validations:
+      required: true
+
   - type: checkboxes
     id: quarters
     attributes:
@@ -18,18 +36,17 @@ body:
     validations:
       required: true
 
-  - type: dropdown
-    id: team
+  - type: checkboxes
+    id: teams
     attributes:
-      label: Team/Platform
-      description: Which team/platform does this milestone belong to?
+      label: Teams/Platforms
+      description: Which teams will be involved in this milestone? (Check all that apply)
       options:
-        - Data Infrastructure
-        - Physiology
-        - Data and Outreach
-        - Behavior
-        - Cross-team
-        - External
+        - label: Data Infrastructure
+        - label: Physiology
+        - label: Data and Outreach
+        - label: Behavior
+        - label: External
     validations:
       required: true
 
@@ -38,7 +55,7 @@ body:
     attributes:
       label: Resource Allocation
       description: |
-        List each person working on this task and their effort level:
+        List each person working on this milestone and their effort level:
         Format: Name: X% effort
       placeholder: |
         Ahad: 50% effort
@@ -92,15 +109,6 @@ body:
       required: true
 
   - type: textarea
-    id: description
-    attributes:
-      label: Detailed Description
-      description: What exactly needs to be accomplished?
-      placeholder: "Describe the milestone, scope, and key deliverables..."
-    validations:
-      required: true
-
-  - type: textarea
     id: success_criteria
     attributes:
       label: Success Criteria
@@ -124,14 +132,21 @@ body:
   - type: textarea
     id: linked_work
     attributes:
-      label: Linked Issues/Work
+      label: Related Issues & Implementation Work
       description: |
         Link to specific issues that contribute to this milestone.
+        This section will grow as work progresses and implementation issues are created.
         Use format: Owner/repo#issue or just #issue for same repo
       placeholder: |
-        Related issues:
-        - aind-physio-arch#123 (fiber preprocessing)
-        - aind-behavior-pipeline#456 (NWB updates)  
-        - #789 (documentation updates)
+        Implementation issues (add as created):
+        - [ ] aind-physio-arch#123 (preprocessing updates)
+        - [ ] aind-behavior-pipeline#456 (NWB validation)  
+        - [ ] #789 (documentation)
         
-        GitHub milestone: [link if exists]
+        Progress: 0/0 tasks complete
+        
+        Note: This section starts empty and grows as implementation begins.
+      value: |
+        Implementation issues (add as created):
+        
+        Progress: 0/0 tasks complete
