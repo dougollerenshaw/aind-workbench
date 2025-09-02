@@ -59,6 +59,7 @@ body:
         - label: Q1-2026 (Jan-Mar 2026)
         - label: Q2-2026 (Apr-Jun 2026)
         - label: Q3-2026 (Jul-Sep 2026)
+        - label: Q4-2026 (Oct-Dec 2026)
     validations:
       required: true
 
@@ -70,6 +71,7 @@ body:
         List each person working on this milestone and their effort level:
         Format: Name: X% effort
       placeholder: |
+        List of people expected to contribute to this milestone and their relative effort over the milestone duration.
         Contributor 1: 50% effort
         Contributor 2: 25% effort
     validations:
