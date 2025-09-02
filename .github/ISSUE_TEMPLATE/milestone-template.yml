@@ -38,10 +38,12 @@ body:
       description: Which teams will be involved in this milestone? (Check all that apply)
       options:
         - label: Data Infrastructure
-        - label: Physiology
+        - label: Physiology and behavior
         - label: Data and Outreach
-        - label: Behavior
-        - label: External
+        - label: Ephys
+        - label: Analysis
+        - label: Planar Ophys
+
     validations:
       required: true
 
