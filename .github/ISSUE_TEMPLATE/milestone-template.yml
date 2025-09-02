@@ -29,8 +29,6 @@ body:
         - [ ] aind-behavior-pipeline#456 (NWB validation)  
         - [ ] #789 (documentation)
         
-        Progress: 0/0 tasks complete
-        
         Note: This section starts empty and grows as implementation begins.
       value: |
         Implementation issues (add as created):
@@ -72,11 +70,8 @@ body:
         List each person working on this milestone and their effort level:
         Format: Name: X% effort
       placeholder: |
-        Ahad: 50% effort
-        Arjun: 25% effort
-        Tom: 10% effort (code review only)
-      value: |
-        [Your name]: __% effort
+        Contributor 1: 50% effort
+        Contributor 2: 25% effort
     validations:
       required: true
 
