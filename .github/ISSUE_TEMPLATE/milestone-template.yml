@@ -32,7 +32,7 @@ body:
         Note: This section starts empty and grows as implementation begins.
 
   - type: checkboxes
-    id: teams
+    id: Team
     attributes:
       label: Teams/Platforms
       description: Which teams will be involved in this milestone? (Check all that apply)
@@ -48,7 +48,7 @@ body:
       required: true
 
   - type: checkboxes
-    id: quarters
+    id: Iteration
     attributes:
       label: Quarter/Iteration Coverage
       description: Which quarters will this milestone span? (Check all that apply)
