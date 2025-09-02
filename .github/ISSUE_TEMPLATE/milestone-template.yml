@@ -15,18 +15,27 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
-    id: quarters
+  - type: textarea
+    id: linked_work
     attributes:
-      label: Quarter/Iteration Coverage
-      description: Which quarters will this milestone span? (Check all that apply)
-      options:
-        - label: Q4-2025 (Oct-Dec 2025)
-        - label: Q1-2026 (Jan-Mar 2026)
-        - label: Q2-2026 (Apr-Jun 2026)
-        - label: Q3-2026 (Jul-Sep 2026)
-    validations:
-      required: true
+      label: Related Issues & Implementation Work
+      description: |
+        Link to specific issues that contribute to this milestone.
+        This section will grow as work progresses and implementation issues are created.
+        Use format: Owner/repo#issue or just #issue for same repo
+      placeholder: |
+        Implementation issues (add as created):
+        - [ ] aind-physio-arch#123 (preprocessing updates)
+        - [ ] aind-behavior-pipeline#456 (NWB validation)  
+        - [ ] #789 (documentation)
+        
+        Progress: 0/0 tasks complete
+        
+        Note: This section starts empty and grows as implementation begins.
+      value: |
+        Implementation issues (add as created):
+        
+        Progress: 0/0 tasks complete
 
   - type: checkboxes
     id: teams
@@ -39,6 +48,19 @@ body:
         - label: Data and Outreach
         - label: Behavior
         - label: External
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: quarters
+    attributes:
+      label: Quarter/Iteration Coverage
+      description: Which quarters will this milestone span? (Check all that apply)
+      options:
+        - label: Q4-2025 (Oct-Dec 2025)
+        - label: Q1-2026 (Jan-Mar 2026)
+        - label: Q2-2026 (Apr-Jun 2026)
+        - label: Q3-2026 (Jul-Sep 2026)
     validations:
       required: true
 
@@ -120,25 +142,3 @@ body:
       label: Risks & Mitigation
       description: What could prevent completion? How can risks be mitigated?
       placeholder: "Identify potential blockers and mitigation strategies..."
-
-  - type: textarea
-    id: linked_work
-    attributes:
-      label: Related Issues & Implementation Work
-      description: |
-        Link to specific issues that contribute to this milestone.
-        This section will grow as work progresses and implementation issues are created.
-        Use format: Owner/repo#issue or just #issue for same repo
-      placeholder: |
-        Implementation issues (add as created):
-        - [ ] aind-physio-arch#123 (preprocessing updates)
-        - [ ] aind-behavior-pipeline#456 (NWB validation)  
-        - [ ] #789 (documentation)
-        
-        Progress: 0/0 tasks complete
-        
-        Note: This section starts empty and grows as implementation begins.
-      value: |
-        Implementation issues (add as created):
-        
-        Progress: 0/0 tasks complete
