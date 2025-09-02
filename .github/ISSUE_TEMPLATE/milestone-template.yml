@@ -5,14 +5,6 @@ labels:
   - "milestone"
 assignees: []
 body:
-  - type: input
-    id: milestone_title
-    attributes:
-      label: Milestone Title
-      description: Brief, descriptive title for this milestone
-      placeholder: "e.g., Fiber Pipeline V2 Launch"
-    validations:
-      required: true
 
   - type: textarea
     id: description
