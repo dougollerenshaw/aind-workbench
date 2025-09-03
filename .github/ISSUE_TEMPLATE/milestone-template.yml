@@ -94,7 +94,7 @@ body:
       description: When do you realistically plan to start this work?
       placeholder: "2025-10-15"
     validations:
-      required: true
+      required: false
 
   - type: input
     id: end_date
@@ -103,7 +103,7 @@ body:
       description: When do you plan to complete this work?
       placeholder: "2025-11-30"
     validations:
-      required: true
+      required: false
 
   - type: dropdown
     id: date_flexibility
@@ -111,11 +111,12 @@ body:
       label: Date Flexibility
       description: How flexible are these dates?
       options:
+        - Not Specified
         - Flexible (can shift as needed)
         - Preferred (some flexibility)
         - Hard Deadline (dates are fixed)
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: success_criteria
