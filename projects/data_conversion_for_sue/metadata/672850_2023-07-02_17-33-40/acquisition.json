@@ -35,23 +35,46 @@
         }
       ],
       "code": null,
-      "notes": "Fiber photometry recording session",
+      "notes": "LED power measured at patch cable end; fib mode: Axon",
       "active_devices": [
         "470nm LED",
+        "415nm LED",
+        "565nm LED",
         "Fiber optic patch cord",
         "Green CMOS",
+        "Red CMOS",
         "Pupil camera assembly",
         "Tongue camera assembly",
         "Lick spout assembly",
         "Speaker",
-        "Arduino"
+        "Arduino",
+        "Fiber 0",
+        "Fiber 1",
+        "Fiber 2",
+        "Fiber 3",
+        "Patch Cord A",
+        "Patch Cord B",
+        "Patch Cord C",
+        "Patch Cord D"
       ],
       "configurations": [
         {
           "object_type": "Light emitting diode config",
           "device_name": "470nm LED",
-          "power": null,
-          "power_unit": null
+          "power": 60.0,
+          "power_unit": "microwatt"
+        },
+        {
+          "object_type": "Light emitting diode config",
+          "device_name": "415nm LED",
+          "power": 40.0,
+          "power_unit": "microwatt"
+        },
+        {
+          "object_type": "Light emitting diode config",
+          "device_name": "565nm LED",
+          "power": 0.0,
+          "power_unit": "microwatt"
         },
         {
           "object_type": "Patch cord config",
@@ -76,11 +99,64 @@
               "emission_filters": null,
               "emission_wavelength": null,
               "emission_wavelength_unit": null
+            },
+            {
+              "object_type": "Channel",
+              "channel_name": "Fiber channel",
+              "intended_measurement": null,
+              "detector": {
+                "object_type": "Detector config",
+                "device_name": "Red CMOS",
+                "exposure_time": 0.0,
+                "exposure_time_unit": "second",
+                "trigger_type": "Internal",
+                "compression": null
+              },
+              "additional_device_names": null,
+              "light_sources": [],
+              "variable_power": false,
+              "excitation_filters": null,
+              "emission_filters": null,
+              "emission_wavelength": null,
+              "emission_wavelength_unit": null
             }
           ]
         }
       ],
-      "connections": []
+      "connections": [
+        {
+          "object_type": "Connection",
+          "source_device": "Fiber 0",
+          "source_port": null,
+          "target_device": "Patch Cord A",
+          "target_port": null,
+          "send_and_receive": true
+        },
+        {
+          "object_type": "Connection",
+          "source_device": "Fiber 1",
+          "source_port": null,
+          "target_device": "Patch Cord B",
+          "target_port": null,
+          "send_and_receive": true
+        },
+        {
+          "object_type": "Connection",
+          "source_device": "Fiber 2",
+          "source_port": null,
+          "target_device": "Patch Cord C",
+          "target_port": null,
+          "send_and_receive": true
+        },
+        {
+          "object_type": "Connection",
+          "source_device": "Fiber 3",
+          "source_port": null,
+          "target_device": "Patch Cord D",
+          "target_port": null,
+          "send_and_receive": true
+        }
+      ]
     }
   ],
   "stimulus_epochs": [

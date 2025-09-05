@@ -545,6 +545,168 @@ def create_fip_acquisition(
             f"Cannot determine session duration for {mapped_session_name}. Session duration is required and cannot be estimated."
         )
 
+    # Determine configuration based on subject ID
+    if mapped_id == "671632":
+        # Use original simple configuration for 671632
+        active_devices = [
+            "470nm LED",
+            "Fiber optic patch cord",
+            "Green CMOS",
+            "Pupil camera assembly",
+            "Tongue camera assembly",
+            "Lick spout assembly",
+            "Speaker",
+            "Arduino",
+        ]
+        configurations = [
+            {
+                "object_type": "Light emitting diode config",
+                "device_name": "470nm LED",
+            },
+            {
+                "object_type": "Patch cord config",
+                "device_name": "Fiber optic patch cord",
+                "channels": [
+                    {
+                        "channel_name": "Fiber channel",
+                        "detector": {
+                            "object_type": "Detector config",
+                            "device_name": "Green CMOS",
+                            "exposure_time": 0,
+                            "exposure_time_unit": "second",
+                            "trigger_type": "Internal",
+                        },
+                    }
+                ],
+            },
+        ]
+        connections = []
+        notes = "Fiber photometry recording session"
+    else:
+        # Use Sue's enhanced configuration for all other sessions
+        active_devices = [
+            "470nm LED",
+            "415nm LED",
+            "565nm LED",
+            "Fiber optic patch cord",
+            "Green CMOS",
+            "Red CMOS",
+            "Pupil camera assembly",
+            "Tongue camera assembly",
+            "Lick spout assembly",
+            "Speaker",
+            "Arduino",
+            "Fiber 0",
+            "Fiber 1",
+            "Fiber 2",
+            "Fiber 3",
+            "Patch Cord A",
+            "Patch Cord B",
+            "Patch Cord C",
+            "Patch Cord D",
+        ]
+        configurations = [
+            {
+                "object_type": "Light emitting diode config",
+                "device_name": "470nm LED",
+                "power": 60,
+                "power_unit": "microwatt",
+            },
+            {
+                "object_type": "Light emitting diode config",
+                "device_name": "415nm LED",
+                "power": 40,
+                "power_unit": "microwatt",
+            },
+            {
+                "object_type": "Light emitting diode config",
+                "device_name": "565nm LED",
+                "power": 0,
+                "power_unit": "microwatt",
+            },
+            {
+                "object_type": "Patch cord config",
+                "device_name": "Fiber optic patch cord",
+                "channels": [
+                    {
+                        "object_type": "Channel",
+                        "channel_name": "Fiber channel",
+                        "intended_measurement": None,
+                        "detector": {
+                            "object_type": "Detector config",
+                            "device_name": "Green CMOS",
+                            "exposure_time": 0.0,
+                            "exposure_time_unit": "second",
+                            "trigger_type": "Internal",
+                            "compression": None,
+                        },
+                        "additional_device_names": None,
+                        "light_sources": [],
+                        "variable_power": False,
+                        "excitation_filters": None,
+                        "emission_filters": None,
+                        "emission_wavelength": None,
+                        "emission_wavelength_unit": None,
+                    },
+                    {
+                        "object_type": "Channel",
+                        "channel_name": "Fiber channel",
+                        "intended_measurement": None,
+                        "detector": {
+                            "object_type": "Detector config",
+                            "device_name": "Red CMOS",
+                            "exposure_time": 0.0,
+                            "exposure_time_unit": "second",
+                            "trigger_type": "Internal",
+                            "compression": None,
+                        },
+                        "additional_device_names": None,
+                        "light_sources": [],
+                        "variable_power": False,
+                        "excitation_filters": None,
+                        "emission_filters": None,
+                        "emission_wavelength": None,
+                        "emission_wavelength_unit": None,
+                    },
+                ],
+            },
+        ]
+        connections = [
+            {
+                "object_type": "Connection",
+                "source_device": "Fiber 0",
+                "source_port": None,
+                "target_device": "Patch Cord A",
+                "target_port": None,
+                "send_and_receive": True,
+            },
+            {
+                "object_type": "Connection",
+                "source_device": "Fiber 1",
+                "source_port": None,
+                "target_device": "Patch Cord B",
+                "target_port": None,
+                "send_and_receive": True,
+            },
+            {
+                "object_type": "Connection",
+                "source_device": "Fiber 2",
+                "source_port": None,
+                "target_device": "Patch Cord C",
+                "target_port": None,
+                "send_and_receive": True,
+            },
+            {
+                "object_type": "Connection",
+                "source_device": "Fiber 3",
+                "source_port": None,
+                "target_device": "Patch Cord D",
+                "target_port": None,
+                "send_and_receive": True,
+            },
+        ]
+        notes = "LED power measured at patch cable end; fib mode: Axon"
+
     return Acquisition(
         subject_id=mapped_id,
         acquisition_start_time=session_datetime,
@@ -559,39 +721,10 @@ def create_fip_acquisition(
                 stream_start_time=session_datetime,
                 stream_end_time=stream_end_time,
                 modalities=[Modality.BEHAVIOR, Modality.FIB],
-                active_devices=[
-                    "470nm LED",
-                    "Fiber optic patch cord",
-                    "Green CMOS",
-                    "Pupil camera assembly",
-                    "Tongue camera assembly",
-                    "Lick spout assembly",
-                    "Speaker",
-                    "Arduino",
-                ],
-                configurations=[
-                    {
-                        "object_type": "Light emitting diode config",
-                        "device_name": "470nm LED",
-                    },
-                    {
-                        "object_type": "Patch cord config",
-                        "device_name": "Fiber optic patch cord",
-                        "channels": [
-                            {
-                                "channel_name": "Fiber channel",
-                                "detector": {
-                                    "object_type": "Detector config",
-                                    "device_name": "Green CMOS",
-                                    "exposure_time": 0,
-                                    "exposure_time_unit": "second",
-                                    "trigger_type": "Internal",
-                                },
-                            }
-                        ],
-                    },
-                ],
-                notes="Fiber photometry recording session",
+                active_devices=active_devices,
+                configurations=configurations,
+                connections=connections,
+                notes=notes,
             )
         ],
         stimulus_epochs=[
