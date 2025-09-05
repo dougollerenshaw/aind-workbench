@@ -50,7 +50,7 @@ body:
   - type: checkboxes
     id: Iteration
     attributes:
-      label: Quarter/Iteration Coverage
+      label: Quarter/Iteration
       description: Which quarters will this milestone span? (Check all that apply)
       options:
         - label: Q4-2025 (Oct-Dec 2025)
