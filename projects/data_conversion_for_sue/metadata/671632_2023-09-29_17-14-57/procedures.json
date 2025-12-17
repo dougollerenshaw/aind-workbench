@@ -1,0 +1,180 @@
+{
+  "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/procedures.py",
+  "schema_version": "1.2.1",
+  "subject_id": "671632",
+  "subject_procedures": [
+    {
+      "procedure_type": "Surgery",
+      "start_date": "2023-10-17",
+      "experimenter_full_name": "30361",
+      "iacuc_protocol": "2115",
+      "animal_weight_prior": null,
+      "animal_weight_post": null,
+      "weight_unit": "gram",
+      "anaesthesia": null,
+      "workstation_id": null,
+      "procedures": [
+        {
+          "procedure_type": "Perfusion",
+          "output_specimen_ids": [
+            "671632"
+          ],
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.8epv51bejl1b/v6"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "procedure_type": "Surgery",
+      "start_date": "2023-04-26",
+      "experimenter_full_name": "NSB-1007",
+      "iacuc_protocol": "2115",
+      "animal_weight_prior": "18.5",
+      "animal_weight_post": "20.3",
+      "weight_unit": "gram",
+      "anaesthesia": {
+        "type": "isoflurane",
+        "duration": "123.00",
+        "duration_unit": "minute",
+        "level": "1.5"
+      },
+      "workstation_id": "SWS 5",
+      "procedures": [
+        {
+          "procedure_type": "Headframe",
+          "headframe_type": "AI Straight bar",
+          "headframe_part_number": null,
+          "headframe_material": null,
+          "well_part_number": null,
+          "well_type": "No Well"
+        },
+        {
+          "injection_materials": [],
+          "recovery_time": "15.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "-0.5",
+          "injection_coordinate_ap": "1.8",
+          "injection_coordinate_depth": [
+            "-1.6"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": "4.365",
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": "0.0",
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Left",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "300.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        },
+        {
+          "procedure_type": "Fiber implant",
+          "probes": [
+            {
+              "ophys_probe": {
+                "device_type": "Fiber optic probe",
+                "serial_number": null,
+                "manufacturer": null,
+                "model": null,
+                "path_to_cad": null,
+                "port_index": null,
+                "additional_settings": {},
+                "notes": null,
+                "core_diameter_unit": "micrometer",
+                "ferrule_material": null,
+                "active_length": null,
+                "total_length": "2.0",
+                "length_unit": "millimeter",
+                "name": "Fiber_0"
+              },
+              "targeted_structure": null,
+              "stereotactic_coordinate_ap": "1.8",
+              "stereotactic_coordinate_ml": "-0.5",
+              "stereotactic_coordinate_dv": "-1.4",
+              "stereotactic_coordinate_unit": "millimeter",
+              "stereotactic_coordinate_reference": "Bregma",
+              "bregma_to_lambda_distance": "4.365",
+              "bregma_to_lambda_unit": "millimeter",
+              "angle": "0.0",
+              "angle_unit": "degrees",
+              "notes": null
+            }
+          ]
+        },
+        {
+          "injection_materials": [],
+          "recovery_time": "15.0",
+          "recovery_time_unit": "minute",
+          "injection_duration": null,
+          "injection_duration_unit": "minute",
+          "instrument_id": null,
+          "injection_coordinate_ml": "-2.3",
+          "injection_coordinate_ap": "-6.35",
+          "injection_coordinate_depth": [
+            "-2.7"
+          ],
+          "injection_coordinate_unit": "millimeter",
+          "injection_coordinate_reference": "Bregma",
+          "bregma_to_lambda_distance": "4.365",
+          "bregma_to_lambda_unit": "millimeter",
+          "injection_angle": "0.0",
+          "injection_angle_unit": "degrees",
+          "targeted_structure": null,
+          "injection_hemisphere": "Left",
+          "procedure_type": "Nanoject injection",
+          "injection_volume": [
+            "400.0"
+          ],
+          "injection_volume_unit": "nanoliter",
+          "protocol_id": "dx.doi.org/10.17504/protocols.io.bp2l6nr7kgqe/v4"
+        },
+        {
+          "procedure_type": "Fiber implant",
+          "probes": [
+            {
+              "ophys_probe": {
+                "device_type": "Fiber optic probe",
+                "serial_number": null,
+                "manufacturer": null,
+                "model": null,
+                "path_to_cad": null,
+                "port_index": null,
+                "additional_settings": {},
+                "notes": null,
+                "core_diameter_unit": "micrometer",
+                "ferrule_material": null,
+                "active_length": null,
+                "total_length": "3.0",
+                "length_unit": "millimeter",
+                "name": "Fiber_1"
+              },
+              "targeted_structure": null,
+              "stereotactic_coordinate_ap": "-6.35",
+              "stereotactic_coordinate_ml": "-2.3",
+              "stereotactic_coordinate_dv": "-2.5",
+              "stereotactic_coordinate_unit": "millimeter",
+              "stereotactic_coordinate_reference": "Bregma",
+              "bregma_to_lambda_distance": "4.365",
+              "bregma_to_lambda_unit": "millimeter",
+              "angle": "0.0",
+              "angle_unit": "degrees",
+              "notes": null
+            }
+          ]
+        }
+      ],
+      "notes": null,
+      "protocol_id": "dx.doi.org/10.17504/protocols.io.kqdg392o7g25/v2"
+    }
+  ],
+  "specimen_procedures": [],
+  "notes": null
+}

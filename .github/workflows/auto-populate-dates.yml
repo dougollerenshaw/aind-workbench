@@ -1,0 +1,60 @@
+name: Auto-populate Quarter Dates
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  populate-dates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            // Only process issues with "milestone" label
+            const labels = context.payload.issue.labels.map(l => l.name);
+            if (!labels.includes('milestone')) return;
+            
+            const quarters = {
+              '25Q3': ['2025-07-01', '2025-09-30'],
+              '25Q4': ['2025-10-01', '2025-12-31'],
+              '26Q1': ['2026-01-01', '2026-03-31'],
+              '26Q2': ['2026-04-01', '2026-06-30'],
+              '26Q3': ['2026-07-01', '2026-09-30'],
+              '26Q4': ['2026-10-01', '2026-12-31']
+            };
+            
+            const body = context.payload.issue.body;
+            
+            // Find which quarter was selected in template
+            let selectedQuarter = null;
+            for (const quarter in quarters) {
+              if (body.includes(`- [x] ${quarter}`)) {
+                selectedQuarter = quarter;
+                break;
+              }
+            }
+            
+            // Find start/end dates in template
+            const startMatch = body.match(/Planned Start Date.*?(\d{4}-\d{2}-\d{2})/);
+            const endMatch = body.match(/Target Completion Date.*?(\d{4}-\d{2}-\d{2})/);
+            
+            // Only auto-populate if dates are placeholders and quarter is selected
+            const hasPlaceholderDates = startMatch?.[1] === '2025-10-15' && endMatch?.[1] === '2025-11-30';
+            
+            if (selectedQuarter && hasPlaceholderDates) {
+              const [start, end] = quarters[selectedQuarter];
+              
+              const newBody = body
+                .replace('2025-10-15', start)
+                .replace('2025-11-30', end);
+              
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: newBody
+              });
+              
+              console.log(`Updated dates for ${selectedQuarter}: ${start} to ${end}`);
+            }
