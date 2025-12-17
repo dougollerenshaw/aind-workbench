@@ -1,0 +1,5 @@
+flask
+aind-data-access-api
+pandas
+tabulate
+json5

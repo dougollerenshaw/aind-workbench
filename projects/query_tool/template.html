@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AIND DocDB Query Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: auto;
+            min-height: 40px;
+            max-height: 500px;
+            font-family: monospace;
+            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .results {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            white-space: pre;
+            min-height: 100px;
+            overflow-x: auto;
+        }
+        .error {
+            background-color: #ffebee;
+            border-color: #f44336;
+            color: #c62828;
+        }
+        .example {
+            background-color: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        .loading {
+            display: none;
+            color: #666;
+            font-style: italic;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .tab {
+            padding: 8px 16px;
+            background-color: #e0e0e0;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px 4px 0 0;
+        }
+        .tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .result-view {
+            display: none;
+        }
+        .result-view.active {
+            display: block;
+        }
+        .tree-node, .tree-leaf {
+            font-family: monospace;
+        }
+        .tree-children {
+            padding-left: 32px;
+        }
+        details summary {
+            color: #000;
+            cursor: pointer;
+        }
+        .tree-leaf {
+            color: #000;
+        }
+        .tree-leaf .value {
+            color: #10b981;
+        }
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <h1>AIND DocDB Query Tool</h1>
+    <p>Query the AIND metadata database (data_assets collection)</p>
+    
+    <div class="container">
+        <h3>Query (MongoDB aggregation pipeline as JSON array)</h3>
+        <div class="example">
+            <strong>Examples:</strong><br>
+            <em>Aggregation pipeline (array surrounded by square brackets):</em><br>
+            <code>[{"$match": {"data_description.project_name": "Cognitive flexibility in patch foraging"}}, {"$limit": 2}]</code><br><br>
+            <em>Single document (automatically converted to aggregation pipeline):</em><br>
+            <code>{"name": "behavior_754574_2024-11-22_09-39-39"}</code>
+        </div>
+        <p style="font-size: 12px; margin-top: 4px; margin-bottom: 8px;">Press Enter to run the query. Use Shift+Enter to add a new line.</p>
+        <textarea id="query" placeholder='Enter an aggregation pipeline (JSON array) or a single document. Arrays run as-is; single documents are treated as {"$match": doc} with an automatic limit. JSON5 is accepted (unquoted keys, single quotes).'>[{"$match": {"data_description.project_name": "Cognitive flexibility in patch foraging"}}, {"$limit": 2}]</textarea>
+    </div>
+    
+    <button id="runBtn">Run Query</button>
+    <span class="loading" id="loading">Running query...</span>
+    
+    <div class="container" style="margin-top: 30px;">
+        <h3>Results</h3>
+        <div class="tabs">
+            <button class="tab active" data-view="tree">Tree</button>
+            <button class="tab" data-view="json">JSON</button>
+        </div>
+        <div class="controls">
+            <label><input type="checkbox" id="expand-all"> Expand all</label>
+        </div>
+        <div id="tree-view" class="results result-view active">No results yet. Run a query above.</div>
+        <div id="json-view" class="results result-view">No results yet. Run a query above.</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        var treeView = document.getElementById('tree-view');
+        var jsonView = document.getElementById('json-view');
+        var runBtn = document.getElementById('runBtn');
+        var loading = document.getElementById('loading');
+        var queryInput = document.getElementById('query');
+        var expandAllToggle = document.getElementById('expand-all');
+        var lastResults = null;
+        var lastCount = null;
+
+        function switchTab(viewName) {
+        var tabs = document.querySelectorAll('.tab');
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].classList.toggle('active', tabs[i].dataset.view === viewName);
+        }
+        var views = document.querySelectorAll('.result-view');
+        for (var j = 0; j < views.length; j++) {
+            views[j].classList.toggle('active', views[j].id === viewName + '-view');
+        }
+        }
+
+        function isObject(value) {
+            return value !== null && typeof value === 'object' && !Array.isArray(value);
+        }
+
+        function formatScalar(value) {
+            if (typeof value === 'string') return '"' + value + '"';
+            if (value === null) return 'null';
+            return String(value);
+        }
+
+        function buildTreeNode(value, label, depth) {
+            if (typeof depth === 'undefined') depth = 0;
+            if (Array.isArray(value) || isObject(value)) {
+                var details = document.createElement('details');
+                // Auto-expand first level (depth 0), otherwise respect expand-all toggle
+                details.open = depth === 0 || expandAllToggle.checked;
+                var summary = document.createElement('summary');
+                summary.textContent = label;
+                details.appendChild(summary);
+
+                var children = document.createElement('div');
+                children.className = 'tree-children';
+
+                if (Array.isArray(value)) {
+                    for (var idx = 0; idx < value.length; idx++) {
+                        children.appendChild(buildTreeNode(value[idx], '[' + idx + ']', depth + 1));
+                    }
+                } else {
+                    var entries = Object.entries(value);
+                    for (var i = 0; i < entries.length; i++) {
+                        var k = entries[i][0];
+                        var v = entries[i][1];
+                        children.appendChild(buildTreeNode(v, k, depth + 1));
+                    }
+                }
+
+                details.appendChild(children);
+                return details;
+            }
+
+            var leaf = document.createElement('div');
+            leaf.className = 'tree-leaf';
+            var labelSpan = document.createElement('span');
+            labelSpan.textContent = label + ': ';
+            var valueSpan = document.createElement('span');
+            valueSpan.className = 'value';
+            valueSpan.textContent = formatScalar(value);
+            leaf.appendChild(labelSpan);
+            leaf.appendChild(valueSpan);
+            return leaf;
+        }
+
+        function renderJsonTree(data, count) {
+            treeView.innerHTML = '';
+            if (data === null || data === undefined) {
+                treeView.textContent = 'No results.';
+                return;
+            }
+            var container = document.createElement('div');
+            if (Array.isArray(data)) {
+                if (data.length === 0) {
+                    container.textContent = '[] (no documents)';
+                } else {
+                    for (var idx = 0; idx < data.length; idx++) {
+                        container.appendChild(buildTreeNode(data[idx], 'doc ' + idx));
+                    }
+                }
+            } else if (isObject(data)) {
+                container.appendChild(buildTreeNode(data, 'root'));
+            } else {
+                container.textContent = formatScalar(data);
+            }
+            treeView.appendChild(container);
+            if (typeof count === 'number') {
+                var countDiv = document.createElement('div');
+                countDiv.style.marginTop = '8px';
+                countDiv.textContent = '(' + count + ' documents returned)';
+                treeView.appendChild(countDiv);
+            }
+        }
+
+        function renderRawJson(data, count) {
+            if (data === null || data === undefined) {
+                jsonView.textContent = 'No results.';
+                return;
+            }
+            var jsonText = JSON.stringify(data, null, 2);
+            var countText = '';
+            if (typeof count === 'number') {
+                countText = '\n\n(' + count + ' documents returned)';
+            }
+            jsonView.textContent = jsonText + countText;
+        }
+
+        function runQuery() {
+            var query = queryInput.value;
+
+            treeView.textContent = '';
+            jsonView.textContent = '';
+            treeView.classList.remove('error');
+            jsonView.classList.remove('error');
+
+            runBtn.disabled = true;
+            loading.style.display = 'inline';
+
+            fetch('/query', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ pipeline: query })
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                if (data.error) {
+                    treeView.textContent = 'Error: ' + data.error;
+                    treeView.classList.add('error');
+                    jsonView.textContent = 'Error: ' + data.error;
+                    jsonView.classList.add('error');
+                } else {
+                    lastResults = data.results;
+                    lastCount = data.count;
+                    renderJsonTree(lastResults, lastCount);
+                    renderRawJson(lastResults, lastCount);
+                }
+            })
+            .catch(function(e) {
+                treeView.textContent = 'Error running query: ' + e.message;
+                treeView.classList.add('error');
+                jsonView.textContent = 'Error running query: ' + e.message;
+                jsonView.classList.add('error');
+            })
+            .finally(function() {
+                runBtn.disabled = false;
+                loading.style.display = 'none';
+            });
+        }
+
+        var tabButtons = document.querySelectorAll('.tab');
+        for (var i = 0; i < tabButtons.length; i++) {
+            (function(tab) {
+                tab.addEventListener('click', function(e) { switchTab(tab.dataset.view); });
+            })(tabButtons[i]);
+        }
+
+        runBtn.addEventListener('click', runQuery);
+
+        queryInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                runQuery();
+            }
+        });
+
+        queryInput.addEventListener('focus', function(e) {
+            e.target.select();
+        });
+
+        function autoResizeTextarea() {
+            // Reset height to get accurate scrollHeight
+            queryInput.style.height = '40px';
+            var maxHeight = 500; // matches max-height in CSS
+            var scrollHeight = queryInput.scrollHeight;
+            queryInput.style.height = Math.min(scrollHeight, maxHeight) + 'px';
+        }
+
+        queryInput.addEventListener('input', autoResizeTextarea);
+        queryInput.addEventListener('paste', function() {
+            setTimeout(autoResizeTextarea, 10);
+        });
+        // Resize on initial load
+        setTimeout(autoResizeTextarea, 100);
+
+        expandAllToggle.addEventListener('change', function() {
+            if (lastResults !== null) {
+                renderJsonTree(lastResults, lastCount);
+            }
+        });
+        }); // end DOMContentLoaded
+    </script>
+</body>
+</html>
