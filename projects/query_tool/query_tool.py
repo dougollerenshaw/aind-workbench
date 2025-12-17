@@ -39,9 +39,11 @@ def query():
         except json.JSONDecodeError:
             parsed = json5.loads(pipeline_str)
 
+        default_limit_applied = False
         if isinstance(parsed, dict):
             # Accept MongoDB "find by example" documents by wrapping into a pipeline
             pipeline = [{"$match": parsed}, {"$limit": DEFAULT_LIMIT}]
+            default_limit_applied = True
         elif isinstance(parsed, list):
             pipeline = parsed
         else:
@@ -71,6 +73,8 @@ def query():
         return jsonify({
             'results': results,
             'count': len(results) if isinstance(results, list) else 0,
+            'default_limit_applied': default_limit_applied,
+            'default_limit': DEFAULT_LIMIT if default_limit_applied else None,
             'table_html': table_html,
             'markdown': markdown
         })

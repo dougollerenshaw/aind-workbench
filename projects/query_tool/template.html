@@ -162,6 +162,8 @@
         var expandAllToggle = document.getElementById('expand-all');
         var lastResults = null;
         var lastCount = null;
+        var lastDefaultLimitApplied = false;
+        var lastDefaultLimit = null;
 
         function switchTab(viewName) {
         var tabs = document.querySelectorAll('.tab');
@@ -226,11 +228,29 @@
             return leaf;
         }
 
-        function renderJsonTree(data, count) {
+        function renderJsonTree(data, count, defaultLimitApplied, defaultLimit) {
             treeView.innerHTML = '';
             if (data === null || data === undefined) {
                 treeView.textContent = 'No results.';
                 return;
+            }
+            // Add count at the top
+            if (typeof count === 'number') {
+                var countDiv = document.createElement('div');
+                countDiv.style.marginBottom = '12px';
+                countDiv.style.fontWeight = 'bold';
+                countDiv.textContent = count + ' documents returned';
+                treeView.appendChild(countDiv);
+                
+                // Add note if default limit was applied
+                if (defaultLimitApplied && defaultLimit) {
+                    var noteDiv = document.createElement('div');
+                    noteDiv.style.marginBottom = '12px';
+                    noteDiv.style.fontSize = '13px';
+                    noteDiv.style.color = '#666';
+                    noteDiv.textContent = 'Note: Default limit of ' + defaultLimit + ' applied. To see more results, run an aggregation pipeline with a custom $limit stage.';
+                    treeView.appendChild(noteDiv);
+                }
             }
             var container = document.createElement('div');
             if (Array.isArray(data)) {
@@ -247,15 +267,9 @@
                 container.textContent = formatScalar(data);
             }
             treeView.appendChild(container);
-            if (typeof count === 'number') {
-                var countDiv = document.createElement('div');
-                countDiv.style.marginTop = '8px';
-                countDiv.textContent = '(' + count + ' documents returned)';
-                treeView.appendChild(countDiv);
-            }
         }
 
-        function renderRawJson(data, count) {
+        function renderRawJson(data, count, defaultLimitApplied, defaultLimit) {
             if (data === null || data === undefined) {
                 jsonView.textContent = 'No results.';
                 return;
@@ -263,9 +277,13 @@
             var jsonText = JSON.stringify(data, null, 2);
             var countText = '';
             if (typeof count === 'number') {
-                countText = '\n\n(' + count + ' documents returned)';
+                countText = count + ' documents returned\n';
+                if (defaultLimitApplied && defaultLimit) {
+                    countText = countText + 'Note: Default limit of ' + defaultLimit + ' applied. To see more results, run an aggregation pipeline with a custom $limit stage.\n';
+                }
+                countText = countText + '\n';
             }
-            jsonView.textContent = jsonText + countText;
+            jsonView.textContent = countText + jsonText;
         }
 
         function runQuery() {
@@ -296,8 +314,10 @@
                 } else {
                     lastResults = data.results;
                     lastCount = data.count;
-                    renderJsonTree(lastResults, lastCount);
-                    renderRawJson(lastResults, lastCount);
+                    lastDefaultLimitApplied = data.default_limit_applied || false;
+                    lastDefaultLimit = data.default_limit || null;
+                    renderJsonTree(lastResults, lastCount, lastDefaultLimitApplied, lastDefaultLimit);
+                    renderRawJson(lastResults, lastCount, lastDefaultLimitApplied, lastDefaultLimit);
                 }
             })
             .catch(function(e) {
@@ -349,7 +369,7 @@
 
         expandAllToggle.addEventListener('change', function() {
             if (lastResults !== null) {
-                renderJsonTree(lastResults, lastCount);
+                renderJsonTree(lastResults, lastCount, lastDefaultLimitApplied, lastDefaultLimit);
             }
         });
         }); // end DOMContentLoaded
