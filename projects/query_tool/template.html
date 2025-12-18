@@ -137,6 +137,43 @@
             gap: 5px;
             cursor: pointer;
         }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .share-btn {
+            background-color: #2196F3;
+        }
+        .share-btn:hover {
+            background-color: #0b7dda;
+        }
+        .share-link-container {
+            display: none;
+            background-color: #e8f5e9;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            border: 1px solid #4CAF50;
+        }
+        .share-link-container.show {
+            display: block;
+        }
+        .share-link {
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            background-color: white;
+            padding: 8px;
+            border-radius: 3px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+        }
+        .copy-btn {
+            background-color: #4CAF50;
+            padding: 6px 12px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -169,8 +206,17 @@
         <textarea id="query" placeholder='Enter an aggregation pipeline (JSON array) or a single document. Arrays run as-is; single documents are treated as {"$match": doc} with an automatic limit. JSON5 is accepted (unquoted keys, single quotes).'>[{"$match": {"data_description.project_name": "Cognitive flexibility in patch foraging"}}, {"$limit": 2}]</textarea>
     </div>
     
-    <button id="runBtn">Run Query</button>
-    <span class="loading" id="loading">Running query...</span>
+    <div class="button-group">
+        <button id="runBtn">Run Query</button>
+        <button id="shareBtn" class="share-btn">Generate Share Link</button>
+        <span class="loading" id="loading">Running query...</span>
+    </div>
+    
+    <div class="share-link-container" id="shareLinkContainer">
+        <strong>Shareable link:</strong>
+        <div class="share-link" id="shareLink"></div>
+        <button class="copy-btn" id="copyBtn">Copy to Clipboard</button>
+    </div>
     
     <div class="container" style="margin-top: 30px;">
         <h3>Results</h3>
@@ -193,10 +239,50 @@
         var loading = document.getElementById('loading');
         var queryInput = document.getElementById('query');
         var expandAllToggle = document.getElementById('expand-all');
+        var shareBtn = document.getElementById('shareBtn');
+        var shareLinkContainer = document.getElementById('shareLinkContainer');
+        var shareLink = document.getElementById('shareLink');
+        var copyBtn = document.getElementById('copyBtn');
         var lastResults = null;
         var lastCount = null;
         var lastDefaultLimitApplied = false;
         var lastDefaultLimit = null;
+        
+        // Parse URL parameters on page load
+        function getUrlParams() {
+            var params = {};
+            var search = window.location.search.substring(1);
+            if (search) {
+                var pairs = search.split('&');
+                for (var i = 0; i < pairs.length; i++) {
+                    var pair = pairs[i].split('=');
+                    params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+                }
+            }
+            return params;
+        }
+        
+        // Load state from URL if present
+        var urlParams = getUrlParams();
+        var hasUrlParams = false;
+        if (urlParams.query) {
+            queryInput.value = urlParams.query;
+            hasUrlParams = true;
+        }
+        if (urlParams.env) {
+            var envRadio = document.querySelector('input[name="environment"][value="' + urlParams.env + '"]');
+            if (envRadio) {
+                envRadio.checked = true;
+                hasUrlParams = true;
+            }
+        }
+        if (urlParams.db) {
+            var dbRadio = document.querySelector('input[name="dbversion"][value="' + urlParams.db + '"]');
+            if (dbRadio) {
+                dbRadio.checked = true;
+                hasUrlParams = true;
+            }
+        }
 
         function switchTab(viewName) {
         var tabs = document.querySelectorAll('.tab');
@@ -413,6 +499,73 @@
                 renderJsonTree(lastResults, lastCount, lastDefaultLimitApplied, lastDefaultLimit);
             }
         });
+        
+        // Generate share link
+        shareBtn.addEventListener('click', function() {
+            var query = queryInput.value;
+            var environment = document.querySelector('input[name="environment"]:checked').value;
+            var dbversion = document.querySelector('input[name="dbversion"]:checked').value;
+            
+            var baseUrl = window.location.origin + window.location.pathname;
+            var params = [];
+            params.push('query=' + encodeURIComponent(query));
+            params.push('env=' + encodeURIComponent(environment));
+            params.push('db=' + encodeURIComponent(dbversion));
+            
+            var fullUrl = baseUrl + '?' + params.join('&');
+            shareLink.textContent = fullUrl;
+            shareLinkContainer.classList.add('show');
+        });
+        
+        // Copy share link to clipboard
+        copyBtn.addEventListener('click', function() {
+            var linkText = shareLink.textContent;
+            
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(linkText).then(function() {
+                    var originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(function() {
+                        copyBtn.textContent = originalText;
+                    }, 2000);
+                }).catch(function(err) {
+                    // Fall back to manual selection method
+                    fallbackCopy(linkText);
+                });
+            } else {
+                // Fall back for older browsers
+                fallbackCopy(linkText);
+            }
+        });
+        
+        function fallbackCopy(text) {
+            // Create a temporary textarea
+            var textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // For mobile devices
+            
+            try {
+                var successful = document.execCommand('copy');
+                if (successful) {
+                    var originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(function() {
+                        copyBtn.textContent = originalText;
+                    }, 2000);
+                } else {
+                    alert('Please manually select and copy the link');
+                }
+            } catch (err) {
+                alert('Copy failed. Please select and copy manually.');
+            }
+            
+            document.body.removeChild(textarea);
+        }
         }); // end DOMContentLoaded
     </script>
 </body>
