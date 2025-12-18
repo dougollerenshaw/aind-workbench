@@ -15,12 +15,21 @@ source .venv/bin/activate
 uv sync
 ```
 
-3. Run the app (ensures the uv environment is used):
+3. Run the app:
 ```bash
 uv run python query_tool.py
 ```
 
 4. Open your browser to: `http://localhost:5000`
+
+### Command-line options:
+```bash
+uv run python query_tool.py --host 0.0.0.0 --port 5000 --default_limit 100
+```
+
+- `--host`: Host address to bind to (default: `0.0.0.0`)
+- `--port`: Port to bind to (default: `5000`)
+- `--default_limit`: Default limit for single document queries (default: `100`)
 
 ## Remote access from your Mac (VM running the app)
 
@@ -47,9 +56,9 @@ Pick the VPN-reachable address (often `10.x.x.x`).
 ### Custom host/port (optional)
 You can override host/port when launching:
 ```bash
-QUERY_TOOL_HOST=0.0.0.0 QUERY_TOOL_PORT=5001 uv run python query_tool.py
+uv run python query_tool.py --port 8080
 ```
-Then browse to `http://<VM_IP>:5001`.
+Then browse to `http://<VM_IP>:8080`.
 
 ## Input format tips
 - Accepts standard JSON arrays (aggregation pipelines).

@@ -239,11 +239,12 @@
                 var countDiv = document.createElement('div');
                 countDiv.style.marginBottom = '12px';
                 countDiv.style.fontWeight = 'bold';
-                countDiv.textContent = count + ' documents returned';
+                var docWord = count === 1 ? 'document' : 'documents';
+                countDiv.textContent = count + ' ' + docWord + ' returned';
                 treeView.appendChild(countDiv);
                 
-                // Add note if default limit was applied
-                if (defaultLimitApplied && defaultLimit) {
+                // Add note if default limit was applied AND we hit the limit
+                if (defaultLimitApplied && defaultLimit && count === defaultLimit) {
                     var noteDiv = document.createElement('div');
                     noteDiv.style.marginBottom = '12px';
                     noteDiv.style.fontSize = '13px';
@@ -277,8 +278,9 @@
             var jsonText = JSON.stringify(data, null, 2);
             var countText = '';
             if (typeof count === 'number') {
-                countText = count + ' documents returned\n';
-                if (defaultLimitApplied && defaultLimit) {
+                var docWord = count === 1 ? 'document' : 'documents';
+                countText = count + ' ' + docWord + ' returned\n';
+                if (defaultLimitApplied && defaultLimit && count === defaultLimit) {
                     countText = countText + 'Note: Default limit of ' + defaultLimit + ' applied. To see more results, run an aggregation pipeline with a custom $limit stage.\n';
                 }
                 countText = countText + '\n';

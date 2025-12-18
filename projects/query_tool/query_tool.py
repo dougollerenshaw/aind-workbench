@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 from flask import Flask, render_template_string, request, jsonify
@@ -13,10 +14,6 @@ client = MetadataDbClient(
     database="metadata_index",
     collection="data_assets",
 )
-
-HOST = os.getenv("QUERY_TOOL_HOST", "0.0.0.0")
-PORT = int(os.getenv("QUERY_TOOL_PORT", "5000"))
-DEFAULT_LIMIT = int(os.getenv("QUERY_TOOL_DEFAULT_LIMIT", "100"))
 
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'template.html')
 
@@ -40,9 +37,10 @@ def query():
             parsed = json5.loads(pipeline_str)
 
         default_limit_applied = False
+        default_limit = app.config.get('DEFAULT_LIMIT', 100)
         if isinstance(parsed, dict):
             # Accept MongoDB "find by example" documents by wrapping into a pipeline
-            pipeline = [{"$match": parsed}, {"$limit": DEFAULT_LIMIT}]
+            pipeline = [{"$match": parsed}, {"$limit": default_limit}]
             default_limit_applied = True
         elif isinstance(parsed, list):
             pipeline = parsed
@@ -74,7 +72,7 @@ def query():
             'results': results,
             'count': len(results) if isinstance(results, list) else 0,
             'default_limit_applied': default_limit_applied,
-            'default_limit': DEFAULT_LIMIT if default_limit_applied else None,
+            'default_limit': default_limit if default_limit_applied else None,
             'table_html': table_html,
             'markdown': markdown
         })
@@ -83,4 +81,20 @@ def query():
         return jsonify({'error': str(e)}), 400
 
 if __name__ == "__main__":
-    app.run(host=HOST, port=PORT, debug=True)
+    parser = argparse.ArgumentParser(description='AIND DocDB Query Tool')
+    parser.add_argument('--host', type=str, default='0.0.0.0', 
+                        help='Host address to bind to (default: 0.0.0.0)')
+    parser.add_argument('--port', type=int, default=5000,
+                        help='Port to bind to (default: 5000)')
+    parser.add_argument('--default_limit', type=int, default=100,
+                        help='Default limit for single document queries (default: 100)')
+    
+    args = parser.parse_args()
+    
+    # Store configuration in Flask app config
+    app.config['DEFAULT_LIMIT'] = args.default_limit
+    
+    print(f"Starting AIND DocDB Query Tool on {args.host}:{args.port}")
+    print(f"Default limit for single document queries: {args.default_limit}")
+    
+    app.run(host=args.host, port=args.port, debug=True)
