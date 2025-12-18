@@ -117,11 +117,44 @@
             margin-bottom: 8px;
             font-size: 13px;
         }
+        .db-selector {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        .db-selector-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .db-selector-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <h1>AIND DocDB Query Tool</h1>
     <p>Query the AIND metadata database (data_assets collection)</p>
+    
+    <div class="db-selector">
+        <div class="db-selector-group">
+            <strong>Environment:</strong>
+            <label><input type="radio" name="environment" value="prod" checked> Production</label>
+            <label><input type="radio" name="environment" value="dev"> Development</label>
+        </div>
+        <div class="db-selector-group">
+            <strong>Database:</strong>
+            <label><input type="radio" name="dbversion" value="v1" checked> V1 (metadata_index)</label>
+            <label><input type="radio" name="dbversion" value="v2"> V2 (metadata_index_v2)</label>
+        </div>
+    </div>
     
     <div class="container">
         <h3>Query (MongoDB aggregation pipeline as JSON array)</h3>
@@ -290,6 +323,8 @@
 
         function runQuery() {
             var query = queryInput.value;
+            var environment = document.querySelector('input[name="environment"]:checked').value;
+            var dbversion = document.querySelector('input[name="dbversion"]:checked').value;
 
             treeView.textContent = '';
             jsonView.textContent = '';
@@ -302,7 +337,11 @@
             fetch('/query', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ pipeline: query })
+                body: JSON.stringify({ 
+                    pipeline: query,
+                    environment: environment,
+                    dbversion: dbversion
+                })
             })
             .then(function(response) {
                 return response.json();

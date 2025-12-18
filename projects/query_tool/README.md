@@ -30,6 +30,8 @@ uv run python query_tool.py --host 0.0.0.0 --port 5000 --default_limit 100
 - `--host`: Host address to bind to (default: `0.0.0.0`)
 - `--port`: Port to bind to (default: `5000`)
 - `--default_limit`: Default limit for single document queries (default: `100`)
+- `--prod_host`: MongoDB production host (default: `api.allenneuraldynamics.org`)
+- `--dev_host`: MongoDB development host (default: `api.allenneuraldynamics-test.org`)
 
 ## Remote access from your Mac (VM running the app)
 
@@ -67,9 +69,10 @@ Then browse to `http://<VM_IP>:8080`.
 
 ## Usage
 
+- Select the database environment (Production/Development) and version (V1/V2) using the radio buttons
 - Paste a MongoDB aggregation pipeline (as a JSON array) into the text box
-- Click "Run Query" or press Ctrl+Enter
-- View results in JSON, Table, or Markdown format
+- Click "Run Query" or press Enter
+- View results in Tree or JSON format
 
 ## Example Queries
 

@@ -8,14 +8,36 @@ import json5
 
 app = Flask(__name__)
 
-# Initialize the MongoDB client
-client = MetadataDbClient(
-    host="api.allenneuraldynamics.org",
-    database="metadata_index",
-    collection="data_assets",
-)
-
 TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), 'template.html')
+
+def get_mongodb_client(environment='prod', dbversion='v1'):
+    """
+    Create a MongoDB client based on environment and database version.
+    
+    Args:
+        environment: 'prod' or 'dev'
+        dbversion: 'v1' or 'v2'
+    
+    Returns:
+        MetadataDbClient instance
+    """
+    # Determine host based on environment
+    if environment == 'prod':
+        host = app.config.get('PROD_HOST', 'api.allenneuraldynamics.org')
+    else:  # dev
+        host = app.config.get('DEV_HOST', 'api.allenneuraldynamics-test.org')
+    
+    # Determine database based on version
+    if dbversion == 'v1':
+        database = 'metadata_index'
+    else:  # v2
+        database = 'metadata_index_v2'
+    
+    return MetadataDbClient(
+        host=host,
+        database=database,
+        collection='data_assets',
+    )
 
 @app.route('/')
 def index():
@@ -29,6 +51,11 @@ def query():
     try:
         data = request.json
         pipeline_str = data.get('pipeline', '[]')
+        environment = data.get('environment', 'prod')
+        dbversion = data.get('dbversion', 'v1')
+
+        # Create MongoDB client based on selected environment and database version
+        client = get_mongodb_client(environment, dbversion)
 
         # Parse the pipeline; allow relaxed JSON (JSON5) for Mongo-style input
         try:
@@ -88,13 +115,21 @@ if __name__ == "__main__":
                         help='Port to bind to (default: 5000)')
     parser.add_argument('--default_limit', type=int, default=100,
                         help='Default limit for single document queries (default: 100)')
+    parser.add_argument('--prod_host', type=str, default='api.allenneuraldynamics.org',
+                        help='MongoDB production host (default: api.allenneuraldynamics.org)')
+    parser.add_argument('--dev_host', type=str, default='api.allenneuraldynamics-test.org',
+                        help='MongoDB development host (default: api.allenneuraldynamics-test.org)')
     
     args = parser.parse_args()
     
     # Store configuration in Flask app config
     app.config['DEFAULT_LIMIT'] = args.default_limit
+    app.config['PROD_HOST'] = args.prod_host
+    app.config['DEV_HOST'] = args.dev_host
     
     print(f"Starting AIND DocDB Query Tool on {args.host}:{args.port}")
     print(f"Default limit for single document queries: {args.default_limit}")
+    print(f"Production MongoDB: {args.prod_host}")
+    print(f"Development MongoDB: {args.dev_host}")
     
     app.run(host=args.host, port=args.port, debug=True)
