@@ -1,0 +1,7 @@
+flask>=3.0.0
+matplotlib>=3.8.0
+numpy>=1.24.0
+aind-data-access-api
+
+[dev]
+pytest>=7.0.0

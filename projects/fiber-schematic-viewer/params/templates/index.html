@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiber Schematic Viewer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Fiber Schematic Viewer</h1>
+            <p>Automated fiber implant location diagrams from AIND metadata</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <label for="subjectId">Enter Mouse Subject ID:</label>
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="subjectId" 
+                        placeholder="e.g., 802252"
+                        autocomplete="off"
+                    >
+                    <button id="generateBtn">Generate Schematic</button>
+                </div>
+                <div id="status" class="status hidden"></div>
+            </div>
+
+            <div id="resultSection" class="result-section hidden">
+                <div class="schematic-header">
+                    <h2>Fiber Implant Schematic</h2>
+                    <button id="downloadBtn" class="download-btn">Download PNG</button>
+                </div>
+                <div class="schematic-container">
+                    <img id="schematicImage" alt="Fiber Schematic">
+                </div>
+                <div id="fiberInfo" class="fiber-info"></div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Allen Institute for Neural Dynamics | Fiber Photometry Platform</p>
+        </footer>
+    </div>
+
+    <script>
+        const subjectIdInput = document.getElementById('subjectId');
+        const generateBtn = document.getElementById('generateBtn');
+        const status = document.getElementById('status');
+        const resultSection = document.getElementById('resultSection');
+        const schematicImage = document.getElementById('schematicImage');
+        const fiberInfo = document.getElementById('fiberInfo');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        let currentImageData = null;
+        let currentSubjectId = null;
+
+        // Generate schematic on button click or Enter key
+        generateBtn.addEventListener('click', generateSchematic);
+        subjectIdInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                generateSchematic();
+            }
+        });
+
+        // Download button handler
+        downloadBtn.addEventListener('click', downloadSchematic);
+
+        async function generateSchematic() {
+            const subjectId = subjectIdInput.value.trim();
+            
+            if (!subjectId) {
+                showStatus('Please enter a subject ID', 'error');
+                return;
+            }
+
+            // Show loading state
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            showStatus('Querying metadata and generating schematic...', 'info');
+            resultSection.classList.add('hidden');
+
+            try {
+                const response = await fetch('generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ subject_id: subjectId }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Success - display schematic
+                    currentImageData = data.image;
+                    currentSubjectId = data.subject_id;
+                    
+                    schematicImage.src = `data:image/png;base64,${data.image}`;
+                    resultSection.classList.remove('hidden');
+                    
+                    fiberInfo.textContent = `Found ${data.fiber_count} fiber implant(s) for subject ${data.subject_id}`;
+                    
+                    showStatus('Schematic generated successfully!', 'success');
+                } else {
+                    // Error from server
+                    showStatus(`Error: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`Network error: ${error.message}`, 'error');
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Schematic';
+            }
+        }
+
+        function downloadSchematic() {
+            if (!currentImageData || !currentSubjectId) return;
+            
+            const link = document.createElement('a');
+            link.href = `data:image/png;base64,${currentImageData}`;
+            link.download = `fiber_schematic_${currentSubjectId}.png`;
+            link.click();
+        }
+
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.classList.remove('hidden');
+            
+            // Auto-hide success messages after 3 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    status.classList.add('hidden');
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>

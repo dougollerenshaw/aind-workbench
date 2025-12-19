@@ -420,7 +420,7 @@
             runBtn.disabled = true;
             loading.style.display = 'inline';
 
-            fetch('/query', {
+            fetch('query', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ 

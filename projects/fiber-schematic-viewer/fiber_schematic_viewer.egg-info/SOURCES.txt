@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+fiber_schematic_viewer.egg-info/PKG-INFO
+fiber_schematic_viewer.egg-info/SOURCES.txt
+fiber_schematic_viewer.egg-info/dependency_links.txt
+fiber_schematic_viewer.egg-info/requires.txt
+fiber_schematic_viewer.egg-info/top_level.txt

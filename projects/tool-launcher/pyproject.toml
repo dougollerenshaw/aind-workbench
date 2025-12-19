@@ -1,0 +1,21 @@
+[project]
+name = "tool-launcher"
+version = "0.1.0"
+description = "Multi-tool Flask app launcher for AIND tools"
+requires-python = ">=3.9"
+dependencies = [
+    "flask>=3.0.0",
+    "werkzeug>=3.0.0",
+    # Dependencies for query_tool
+    "aind-data-access-api",
+    "pandas",
+    "tabulate",
+    "json5",
+    # Dependencies for fiber-schematic-viewer
+    "matplotlib>=3.8.0",
+    "numpy>=1.24.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
