@@ -1,0 +1,13 @@
+[project]
+name = "test-upgrader"
+version = "0.1.0"
+description = "Test script for AIND metadata upgrader"
+requires-python = ">=3.8"
+dependencies = [
+    "aind-data-access-api",
+    "aind-metadata-upgrader",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

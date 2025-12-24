@@ -22,3 +22,7 @@ data/
 
 # ds_store
 .DS_Store
+
+# Claude files
+claude.md
+claude.local.md

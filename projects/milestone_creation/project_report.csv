@@ -1,0 +1,449 @@
+Team,Category,Title,Issue #,Iteration,Start Date,End Date,State,Description,Resource Allocation,Priority,Success Criteria,Dependencies,Risks & Mitigation,Related Issues,URL
+Data and Outreach,Currently Underway,Protocol backlog,59,_No response_,2025-09-01,2025-12-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/59
+Data and Outreach,Currently Underway,write paper on data platform,8,_No response_,2025-01-01,2025-12-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/8
+Data and Outreach,Currently Underway,Prepare for UW CNC Fall Workshop,58,_No response_,2025-09-08,2025-10-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/58
+Data and Outreach,Upcoming (Next 30 days),Design and Scope Data Challenge,61,_No response_,2025-10-01,2025-12-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/61
+Infrastructure,Upcoming (Next 30 days),Continuous Learning/Side Projects,161,_No response_,2025-10-01,2025-12-31,open,"It is important to carve out time for continuous education and side projects. This may include earning AWS certificates, Cornerstone training, seminar attendance, workshops, python training, etc.","Jon Young: 10%
+Mekhla Kapoor: 10%
+Yosef Bedaso: 10%
+Helen Lin: 10%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None","- [ ] Certificates achieved, etc.",_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/161
+Infrastructure,Upcoming (Next 30 days),Chronic Ephys Data Collection Support,156,_No response_,2025-10-01,2025-12-31,open,There is a project to collect chronic ephys data from many weeks straight. This has required a restructuring of our data infrastructure.,Jon Young: 40 hours,"Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",_No response_,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [ ] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/156
+Infrastructure,Upcoming (Next 30 days),Analysis Pipeline Support,155,_No response_,2025-10-01,2025-12-31,open,Help with the Analysis Pipeline,"Helen Lin: 5%
+Yosef Bedaso: 5%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",_No response_,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/155
+Infrastructure,Upcoming (Next 30 days),Data Cleanup and Other Support Requests,160,_No response_,2025-10-01,2025-12-31,open,"We need to set aside time for tasks such as moving data from the private bucket to the open bucket, cleaning up VAST, and other small support requests we get from Scientists. We can also include Scientific Computing Office Hours in this.","Jon Young: 5%
+Mekhla Kapoor: 5%
+Yosef Bedaso: 5%
+Helen Lin: 5%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",_No response_,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/160
+Infrastructure,Upcoming (Next 30 days),aind-data-transfer-service UI,159,_No response_,2025-10-01,2025-12-31,open,"The data transfer service has a simple UI for users to submit or view jobs. Jobs can be submitted through REST API or attaching a csv or excel sheet. ,We would like to add UI features to make it easier for users to submit jobs through a form. We also want admins to be able to cancel existing jobs.",Helen Lin: 20%,"Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",_No response_,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/159
+Infrastructure,Upcoming (Next 30 days),aind-qc-portal support,158,_No response_,2025-10-01,2025-12-31,open,Members of the Data Infrastructure team can start contributing to the aind-qc-portal codebase.,"Jon Young: 5%
+Mekhla Kapoor: 20%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",_No response_,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/158
+Infrastructure,Upcoming (Next 30 days),Horta Cloud and Code Ocean Support,157,_No response_,2025-10-01,2025-12-31,open,We will need to address issues with Horta Cloud and Code Ocean as they crop up.,Yosef Bedaso: 20%,"Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",_No response_,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/157
+Infrastructure,Upcoming (Next 30 days),Data Access API Support,154,_No response_,2025-10-01,2025-12-31,open,Placeholder to indicate that we need to address issues that crop up with our data access services.,Helen Lin: 10%,"Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",_No response_,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/154
+Infrastructure,Upcoming (Next 30 days),Vector Embeddings Generation and Deployment,153,_No response_,2025-10-01,2025-12-31,open,We want to automate the vector embeddings generation and update process so that assets are continually vectorized. The vector embeddings also need to be deployed in production once everything is tested.,Helen Lin: 20%,"Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",_No response_,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/153
+Infrastructure,Upcoming (Next 30 days),MCP Server Deployment,152,_No response_,2025-10-01,2025-12-31,open,We want an MCP Server Deployed.,Helen Lin: 20%,"Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",_No response_,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/152
+Infrastructure,Upcoming (Next 30 days),Data Asset Summary API Endpoint,151,_No response_,2025-10-01,2025-12-31,open,We want to have an AI model generate a summary for each data asset in our DocumentDB through a REST API endpoint.,"Helen Lin: 10%
+Yosef Bedaso: 5%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",- [ ] Authenticated users can query a REST API endpoint to get an AI generated summary of a data asset.,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [ ] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/151
+Infrastructure,Upcoming (Next 30 days),Auto-Deployments for Cloud and On-Prem Services,150,_No response_,2025-10-01,2025-12-31,open,"We are currently manually deploying updates to aind-metadata-service, aind-data-transfer-service, and terraform scripts manually. To mitigate the risks associated with manual updates, we'd like to have a github action build and deploy changes to those services.","Jon Young: 5%
+Yosef Bedaso: 10%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None","- [ ] Terraform scripts are applied when a pull request is merged
+- [ ] Deployment scripts for our core on-premise services run in a github action",_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/150
+Infrastructure,Upcoming (Next 30 days),Observability Stack Deployment,149,_No response_,2025-10-01,2025-12-31,open,We'd like to start using the Grafana dashboards SIPE has set up to view the health of our on-prem services easily.,"Jon Young: 10%
+Yosef Bedaso: 10%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None","- [ ] aind-metadata-service metrics and logs are viewable in Grafana
+- [ ] aind-data-transfer-service metrics and logs are viewable in Grafana
+- [ ] aind-airflow-service metrics and logs are viewable in Grafana
+- [ ] Cloudwatch logs are searchable in Grafana",_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/149
+Infrastructure,Upcoming (Next 30 days),AWS SSO and IAMRA,148,_No response_,2025-10-01,2025-12-31,open,"We are currently using long-term credentials for certain users. This is bad practice and we'd like to switch to authenticating users with a different method. Ideally, SSO would be used. However, we can look at other methods such as IAM Roles Anywhere.","Jon Young: 5%
+Yosef Bedaso: 15%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",_No response_,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/148
+Infrastructure,Upcoming (Next 30 days),Brain Knowledge Platform (BKP) Alignment,147,_No response_,2025-10-01,2025-12-31,open,"AIND and AIBS would like to align as much as possible on how data is collected and cataloged. For 2025, we will need to set time aside for designing a common architecture and regular meetings with Brain Science Engineers.",Jon Young: 20%,"Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",- [ ] A decision is made how to align common data infrastructure.,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/147
+Infrastructure,Upcoming (Next 30 days),aind-data-transfer-lite,146,_No response_,2025-10-01,2025-12-31,open,External collaborators need an easy way to upload data to our AWS buckets.,"Jon Young: 5%
+Yosef Bedaso: 5%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",- [ ] Users at UPenn have uploaded data to our Cloud environment,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/146
+Infrastructure,Upcoming (Next 30 days),Update aind-metadata-service to generate aind-data-schema 2.0 metadata,145,_No response_,2025-10-01,2025-12-31,open,The aind-metadata-service repo will need to be overhauled to output aind-data-schema v2.0 compliant metadata.,"Jon Young: 5%
+Mekhla Kapoor: 10%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None","- [ ] Users can retrieve subject 2.0 metadata
+- [ ] Users can retrieve procedures 2.0 metadata
+- [ ] Other endpoints are updated as needed",_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/145
+Infrastructure,Upcoming (Next 30 days),Metadata Service 1.0,144,_No response_,2025-10-01,2025-12-31,open,We are overhauling the architecture to make it more robust and more performant.,"Jon Young: 5%
+Yosef Bedaso: 5%
+Mekhla Kapoor: 10%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None","- [x] All microservices are published
+- [x] Metadata Service is using microservice architecture",_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/144
+Infrastructure,Upcoming (Next 30 days),Update aind-metadata-mapper to generate aind-metadata-service 2.0 metadata,143,_No response_,2025-10-01,2025-12-31,open,The aind-metadata-mapper repo will need to be overhauled to output aind-data-schema v2.0 compliant metadata,"Jon Young: 5%
+Mekhla Kapoor: 20%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",_No response_,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/143
+Infrastructure,Upcoming (Next 30 days),Dataverse client/Metadata Service Integration,142,_No response_,2025-10-01,2025-12-31,open,"A decision has been made to move forward with replacing SLIMS with PowerApps and Dataverse. Once data has been migrated, we will need a client that can pull data from Dataverse, and we'll need to integrate that data into our metadata service.","Jon Young: 10%
+Mekhla Kapoor: 10%
+Yosef Bedaso: 5%","Critical (Must Complete)
+### Planned Start Date
+_No response_
+### Target Completion Date
+_No response_
+### Date Flexibility
+None",- [ ] aind-metadata-service pulls data from Dataverse that is currently being pulled from SLIMS,_No response_,_No response_,"_No response_
+### Teams/Platforms
+- [x] Data Infrastructure
+- [ ] Physiology and behavior
+- [ ] Data and Outreach
+- [ ] Ephys
+- [ ] Analysis
+- [ ] Planar Ophys
+### Quarter/Iteration
+- [x] Q4-2025 (Oct-Dec 2025)
+- [ ] Q1-2026 (Jan-Mar 2026)
+- [ ] Q2-2026 (Apr-Jun 2026)
+- [ ] Q3-2026 (Jul-Sep 2026)
+- [ ] Q4-2026 (Oct-Dec 2026)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/142
+Physiology and Behavior,Currently Underway,Combine existing VR Foraging capsules into a full production pipeline,166,_No response_,2025-07-01,2025-09-30,open,Combine the raw and processing VR Foraging NWB packaging capsules into a pipeline which will output a final NWB plus relevant metadata.,Ahad: 20 hours,Critical (Must Complete),_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/166
+Physiology and Behavior,Currently Underway,Create Pavlovian Conditioning Behavior-only processing pipeline,169,_No response_,2025-09-01,2025-09-30,open,"We need to create a processing pipeline for Pavlovian Conditioning data. This is actually two separate things:
+1) a pipeline to process legacy (pre-Harp) data, which used software timestamps
+2) a pipeline to process current data, which uses Harp timestamps.
+In both cases, this is separate from the fiber processing pipeline. The fiber data should be processed with the fiber-specific pipeline",Ahad: 40 hours,Critical (Must Complete),"- [ ] All existing Pav data is processed and NWBs are created
+- [ ] Pipeline exists for processing current and future Pav data (NWBs exist)
+- [ ] Pipeline contains QC
+- [ ] The fiber data can be processed independent of the behavior data using existing fiber pipeline",_No response_,_No response_,"[Project Planning](https://alleninstitute.sharepoint.com/:w:/s/NeuralDynamics/EewRqUqV-oRAuXcRfO5m5dYB3daX-B2mIKRHDkW7TRaZXg?e=S3evNf)
+[Original ticket](https://github.com/orgs/AllenNeuralDynamics/projects/75/views/1?filterQuery=pavlovian&pane=issue&itemId=119548626&issue=AllenNeuralDynamics%7Caind-physio-arch%7C772)",https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/169
+Physiology and Behavior,Upcoming (Next 30 days),Behavior: Project specific metadata mappers,638,_No response_,2025-10-01,2025-12-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-physio-arch/issues/638
+Physiology and Behavior,Upcoming (Next 30 days),Fiber: Clean up existing metadata in DocDB,641,_No response_,2025-10-01,2025-12-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-physio-arch/issues/641
+Physiology and Behavior,Upcoming (Next 30 days),2P Ophys: Metadata clean up,534,_No response_,2025-10-01,2025-12-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-physio-arch/issues/534
+Physiology and Behavior,Upcoming (Next 30 days),2p Ophys: Pipeline validation,634,_No response_,2025-10-01,2025-12-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-physio-arch/issues/634
+Physiology and Behavior,Upcoming (Next 30 days),Behavior Dashboard,132,_No response_,2025-10-01,2025-12-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/132
+Physiology and Behavior,Upcoming (Next 30 days),Analysis Tools,133,_No response_,2025-10-01,2025-12-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/133
+Physiology and Behavior,Upcoming (Next 30 days),Pophys Dashboard,131,_No response_,2025-10-01,2025-12-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/131
+Unknown,Currently Underway,Fiber pipeline clean up and splitting of pipelines,533,_No response_,2025-02-28,2025-09-04,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-physio-arch/issues/533
+Unknown,Upcoming (Next 30 days),Migrate waterlog backend to DataVerse,93,_No response_,2025-10-01,2025-12-31,open,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,_No response_,https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/93
