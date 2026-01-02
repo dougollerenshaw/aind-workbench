@@ -8,7 +8,8 @@ import io
 import base64
 from flask import Flask, render_template, request, jsonify
 import matplotlib
-matplotlib.use('Agg')  # Non-interactive backend
+
+matplotlib.use("Agg")  # Non-interactive backend
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.patches import Circle
@@ -18,75 +19,115 @@ from typing import List, Dict, Optional
 # Import configuration
 import config
 
-app = Flask(__name__, 
-            template_folder='params/templates',
-            static_folder='params/static')
+app = Flask(__name__, template_folder="params/templates", static_folder="params/static")
 
 
 def get_procedures_for_subject(subject_id: str, db_host: str) -> Optional[Dict]:
     """
     Search for procedures record for a subject across multiple databases.
-    
+
     Search order:
-    1. metadata_index_v2 (DocDB)
-    2. metadata_index (DocDB V1)
+    1. metadata_index (DocDB V1) - checked first since some records may have failed to upgrade
+    2. metadata_index_v2 (DocDB)
     3. Metadata service (stub for now - slow)
-    
+
     Args:
         subject_id: Subject ID to search for
         db_host: MongoDB host
-        
+
     Returns:
         Procedures dictionary if found, None otherwise
     """
     from aind_data_access_api.document_db import MetadataDbClient
-    
-    # Stage 1: Try V2 database first
-    print(f"[Stage 1] Searching for subject {subject_id} in metadata_index_v2...")
-    try:
-        client_v2 = MetadataDbClient(
-            host=db_host,
-            database='metadata_index_v2',
-            collection='data_assets',
-        )
-        
-        pipeline = [
-            {"$match": {"subject.subject_id": subject_id}},
-            {"$project": {"procedures": 1, "subject.subject_id": 1}},
-            {"$limit": 1}
-        ]
-        
-        records = client_v2.aggregate_docdb_records(pipeline)
-        
-        if records and len(records) > 0:
-            print(f"[Stage 1] Found record in V2 database")
-            return {'procedures': records[0].get('procedures', {})}
-    except Exception as e:
-        print(f"[Stage 1] Error querying V2 database: {e}")
-    
-    # Stage 2: Try V1 database
-    print(f"[Stage 2] Searching for subject {subject_id} in metadata_index (V1)...")
+
+    # Stage 1: Try V1 database first (records that failed to upgrade may only be in v1)
+    print(f"[Stage 1] Searching for subject {subject_id} in metadata_index (V1)...")
     try:
         client_v1 = MetadataDbClient(
             host=db_host,
-            database='metadata_index',
-            collection='data_assets',
+            database="metadata_index",
+            collection="data_assets",
         )
-        
+
+        # Try multiple query patterns - v1 might have subject_id in different locations
+        # Also handle both string and numeric subject_id
+        try:
+            subject_id_num = int(subject_id)
+        except ValueError:
+            subject_id_num = None
+
+        # Try subject.subject_id first (most common)
+        pipeline = [
+            {
+                "$match": {
+                    "$or": [
+                        {"subject.subject_id": subject_id},
+                        {"subject.subject_id": subject_id_num},
+                    ]
+                }
+            },
+            {"$project": {"procedures": 1, "subject.subject_id": 1, "name": 1}},
+            {"$limit": 10},  # Get more records to find one with procedures
+        ]
+
+        records = client_v1.aggregate_docdb_records(pipeline)
+
+        if records and len(records) > 0:
+            print(f"[Stage 1] Found {len(records)} record(s) in V1 database")
+            # Find first record that has procedures
+            for record in records:
+                procedures = record.get("procedures")
+                if procedures:
+                    print(f"[Stage 1] Found record with procedures: {record.get('name', 'unknown')}")
+                    return {"procedures": procedures}
+            # If no record has procedures, log it
+            print(f"[Stage 1] Found records but none have procedures data")
+            print(f"[Stage 1] Sample record names: {[r.get('name', 'unknown') for r in records[:3]]}")
+        else:
+            # Fallback: try searching by name pattern (v1 asset names often include subject_id)
+            print(f"[Stage 1] No records found by subject_id, trying name pattern search...")
+            pipeline_name = [
+                {"$match": {"name": {"$regex": f"^{subject_id}_|_{subject_id}_|behavior_{subject_id}"}}},
+                {"$project": {"procedures": 1, "name": 1, "subject.subject_id": 1}},
+                {"$limit": 10},
+            ]
+            records_name = client_v1.aggregate_docdb_records(pipeline_name)
+            if records_name and len(records_name) > 0:
+                print(f"[Stage 1] Found {len(records_name)} record(s) by name pattern")
+                for record in records_name:
+                    procedures = record.get("procedures")
+                    if procedures:
+                        print(f"[Stage 1] Found record with procedures: {record.get('name', 'unknown')}")
+                        return {"procedures": procedures}
+    except Exception as e:
+        print(f"[Stage 1] Error querying V1 database: {e}")
+        import traceback
+
+        traceback.print_exc()
+
+    # Stage 2: Try V2 database
+    print(f"[Stage 2] Searching for subject {subject_id} in metadata_index_v2...")
+    try:
+        client_v2 = MetadataDbClient(
+            host=db_host,
+            database="metadata_index_v2",
+            collection="data_assets",
+        )
+
         pipeline = [
             {"$match": {"subject.subject_id": subject_id}},
             {"$project": {"procedures": 1, "subject.subject_id": 1}},
-            {"$limit": 1}
+            {"$limit": 1},
         ]
-        
-        records = client_v1.aggregate_docdb_records(pipeline)
-        
+
+        records = client_v2.aggregate_docdb_records(pipeline)
+
         if records and len(records) > 0:
-            print(f"[Stage 2] Found record in V1 database")
-            return {'procedures': records[0].get('procedures', {})}
+            print(f"[Stage 2] Found record in V2 database")
+            return {"procedures": records[0].get("procedures", {})}
     except Exception as e:
-        print(f"[Stage 2] Error querying V1 database: {e}")
-    
+        print(f"[Stage 2] Error querying V2 database: {e}")
+
     # Stage 3: Try metadata service (stub for now - will be slow)
     print(f"[Stage 3] Would query metadata service for subject {subject_id} (not implemented yet)")
     # TODO: Implement metadata service query here
@@ -94,441 +135,446 @@ def get_procedures_for_subject(subject_id: str, db_host: str) -> Optional[Dict]:
     # from aind_data_access_api.metadata_service import MetadataServiceClient
     # client = MetadataServiceClient()
     # procedures = client.get_procedures(subject_id)
-    
+
     print(f"No procedures record found for subject {subject_id} in any database")
     return None
 
 
 class FiberSchematicGenerator:
     """Generate fiber implant schematics from procedures metadata."""
-    
+
+    @staticmethod
+    def safe_float(value, default=0.0):
+        """Safely convert value to float, handling None and invalid values."""
+        if value is None:
+            return default
+        try:
+            return float(value)
+        except (ValueError, TypeError):
+            return default
+
     def extract_fiber_implants(self, procedures_data: Dict) -> List[Dict]:
         """
         Extract fiber implant information from procedures.json data.
         Handles both V1 and V2 database schemas.
-        
+
         Args:
             procedures_data: Parsed procedures.json data
-            
+
         Returns:
             List of fiber implant dictionaries with standardized fields
         """
         fibers = []
-        
+
         # Navigate through the procedures structure
-        subject_procedures = procedures_data.get('procedures', {}).get('subject_procedures', [])
-        
+        subject_procedures = procedures_data.get("procedures", {}).get("subject_procedures", [])
+
         for surgery in subject_procedures:
             # Check both V1 (procedure_type) and V2 (object_type) schemas
-            surgery_type = surgery.get('procedure_type') or surgery.get('object_type')
-            
-            if surgery_type == 'Surgery':
-                procedures = surgery.get('procedures', [])
-                
+            surgery_type = surgery.get("procedure_type") or surgery.get("object_type")
+
+            if surgery_type == "Surgery":
+                procedures = surgery.get("procedures", [])
+
                 for procedure in procedures:
                     # Check both V1 and V2 schemas for procedure type
-                    proc_type = procedure.get('procedure_type') or procedure.get('object_type')
-                    
+                    proc_type = procedure.get("procedure_type") or procedure.get("object_type")
+
                     # V1: procedure_type == 'Fiber implant'
-                    if proc_type == 'Fiber implant':
-                        probes = procedure.get('probes', [])
-                        
+                    if proc_type == "Fiber implant":
+                        probes = procedure.get("probes", [])
+
                         for probe in probes:
+                            # Safely get ophys_probe - it might be missing or not a dict
+                            ophys_probe = probe.get("ophys_probe", {})
+                            if not isinstance(ophys_probe, dict):
+                                ophys_probe = {}
+
                             fiber_info = {
-                                'name': probe['ophys_probe'].get('name', 'Unknown'),
-                                'ap': float(probe.get('stereotactic_coordinate_ap', 0)),
-                                'ml': float(probe.get('stereotactic_coordinate_ml', 0)),
-                                'dv': float(probe.get('stereotactic_coordinate_dv', 0)),
-                                'angle': float(probe.get('angle', 0)),
-                                'unit': probe.get('stereotactic_coordinate_unit', 'millimeter'),
-                                'reference': probe.get('stereotactic_coordinate_reference', 'Bregma'),
-                                'targeted_structure': probe.get('targeted_structure', 'Unknown'),
+                                "name": ophys_probe.get("name", "Unknown"),
+                                "ap": self.safe_float(probe.get("stereotactic_coordinate_ap")),
+                                "ml": self.safe_float(probe.get("stereotactic_coordinate_ml")),
+                                "dv": self.safe_float(probe.get("stereotactic_coordinate_dv")),
+                                "angle": self.safe_float(probe.get("angle")),
+                                "unit": probe.get("stereotactic_coordinate_unit", "millimeter"),
+                                "reference": probe.get("stereotactic_coordinate_reference", "Bregma"),
+                                "targeted_structure": probe.get("targeted_structure", "Unknown"),
                             }
                             fibers.append(fiber_info)
-                    
+
                     # V2: object_type == 'Probe implant' with implanted_device.object_type == 'Fiber probe'
-                    elif proc_type == 'Probe implant':
-                        implanted_device = procedure.get('implanted_device', {})
-                        device_type = implanted_device.get('object_type', '')
-                        
-                        if device_type == 'Fiber probe':
+                    elif proc_type == "Probe implant":
+                        implanted_device = procedure.get("implanted_device", {})
+                        device_type = implanted_device.get("object_type", "")
+
+                        if device_type == "Fiber probe":
                             # In V2, coordinates are in device_config.transform
-                            device_config = procedure.get('device_config', {})
-                            
+                            device_config = procedure.get("device_config", {})
+
                             # Default values
                             ml = 0
                             dv = 0
                             ap = 0
                             angle = 0
-                            
+
                             # Extract coordinates from transform array
-                            transform = device_config.get('transform', [])
-                            
+                            transform = device_config.get("transform", [])
+
                             for transform_obj in transform:
-                                obj_type = transform_obj.get('object_type', '')
-                                
+                                obj_type = transform_obj.get("object_type", "")
+
                                 # Translation contains [AP, ML, DV]
-                                if obj_type == 'Translation':
-                                    translation = transform_obj.get('translation', [])
-                                    if len(translation) >= 3:
-                                        ap = float(translation[0])  # Anterior-Posterior
-                                        ml = float(translation[1])  # Medial-Lateral
-                                        dv = float(translation[2])  # Dorsal-Ventral
-                                
+                                if obj_type == "Translation":
+                                    translation = transform_obj.get("translation", [])
+                                    if isinstance(translation, list) and len(translation) >= 3:
+                                        ap = self.safe_float(translation[0])  # Anterior-Posterior
+                                        ml = self.safe_float(translation[1])  # Medial-Lateral
+                                        dv = self.safe_float(translation[2])  # Dorsal-Ventral
+
                                 # Rotation contains angles
-                                elif obj_type == 'Rotation':
-                                    angles = transform_obj.get('angles', [])
-                                    if angles:
+                                elif obj_type == "Rotation":
+                                    angles = transform_obj.get("angles", [])
+                                    if isinstance(angles, list) and angles:
                                         # Use first non-zero angle if available
                                         for a in angles:
-                                            if a != 0:
-                                                angle = float(a)
+                                            if a is not None and a != 0:
+                                                angle = self.safe_float(a)
                                                 break
-                            
+
                             # Get targeted structure
-                            primary_target = device_config.get('primary_targeted_structure', {})
-                            target_name = primary_target.get('name', 'Unknown')
-                            
+                            primary_target = device_config.get("primary_targeted_structure", {})
+                            target_name = primary_target.get("name", "Unknown")
+
                             fiber_info = {
-                                'name': device_config.get('device_name', 'Unknown'),
-                                'ap': ap,
-                                'ml': ml,
-                                'dv': dv,
-                                'angle': angle,
-                                'unit': 'millimeter',
-                                'reference': device_config.get('coordinate_system', {}).get('origin', 'Bregma'),
-                                'targeted_structure': target_name,
+                                "name": device_config.get("device_name", "Unknown"),
+                                "ap": ap,
+                                "ml": ml,
+                                "dv": dv,
+                                "angle": angle,
+                                "unit": "millimeter",
+                                "reference": device_config.get("coordinate_system", {}).get("origin", "Bregma"),
+                                "targeted_structure": target_name,
                             }
                             fibers.append(fiber_info)
-        
+
         return fibers
-    
+
     def create_skull_outline(self, ax: plt.Axes):
         """Draw a stylized mouse skull outline (top-down view)."""
         # Main skull oval
         skull = patches.Ellipse(
-            (0, 0), 
-            width=config.SKULL_WIDTH_MM, 
+            (0, 0),
+            width=config.SKULL_WIDTH_MM,
             height=config.SKULL_LENGTH_MM,
-            facecolor=config.SKULL_FILL_COLOR, 
+            facecolor=config.SKULL_FILL_COLOR,
             edgecolor=config.SKULL_EDGE_COLOR,
             linewidth=2,
             alpha=config.SKULL_ALPHA,
-            zorder=1
+            zorder=1,
         )
         ax.add_patch(skull)
-        
+
         # Bregma marker (origin)
         bregma = Circle(
-            (0, 0), 
-            radius=config.BREGMA_RADIUS, 
-            facecolor=config.BREGMA_COLOR, 
-            edgecolor=config.BREGMA_EDGE_COLOR, 
-            linewidth=1.5, 
-            zorder=5
+            (0, 0),
+            radius=config.BREGMA_RADIUS,
+            facecolor=config.BREGMA_COLOR,
+            edgecolor=config.BREGMA_EDGE_COLOR,
+            linewidth=1.5,
+            zorder=5,
         )
         ax.add_patch(bregma)
         ax.text(
-            0, -0.8, 'Bregma', 
-            ha='center', va='top', 
-            fontsize=config.REFERENCE_FONTSIZE, 
-            fontweight='bold', 
-            color=config.BREGMA_EDGE_COLOR
+            0,
+            -0.8,
+            "Bregma",
+            ha="center",
+            va="top",
+            fontsize=config.REFERENCE_FONTSIZE,
+            fontweight="bold",
+            color=config.BREGMA_EDGE_COLOR,
         )
-        
+
         # Lambda marker (posterior reference point, typically ~4mm behind Bregma)
         lambda_ap = -4.0
         lambda_marker = Circle(
-            (0, lambda_ap), 
-            radius=config.LAMBDA_RADIUS, 
-            facecolor=config.LAMBDA_COLOR, 
-            edgecolor=config.LAMBDA_EDGE_COLOR, 
-            linewidth=1.5, 
-            zorder=5, 
-            alpha=0.7
+            (0, lambda_ap),
+            radius=config.LAMBDA_RADIUS,
+            facecolor=config.LAMBDA_COLOR,
+            edgecolor=config.LAMBDA_EDGE_COLOR,
+            linewidth=1.5,
+            zorder=5,
+            alpha=0.7,
         )
         ax.add_patch(lambda_marker)
         ax.text(
-            0, lambda_ap - 0.6, 'Lambda', 
-            ha='center', va='top', 
-            fontsize=config.REFERENCE_FONTSIZE, 
-            color=config.LAMBDA_EDGE_COLOR, 
-            alpha=0.7
+            0,
+            lambda_ap - 0.6,
+            "Lambda",
+            ha="center",
+            va="top",
+            fontsize=config.REFERENCE_FONTSIZE,
+            color=config.LAMBDA_EDGE_COLOR,
+            alpha=0.7,
         )
-        
+
         # Add coordinate grid
         self._add_coordinate_grid(ax)
-    
+
     def _add_coordinate_grid(self, ax: plt.Axes):
         """Add a subtle coordinate grid for reference."""
         # Vertical gridlines (ML axis)
         for ml in range(-6, 7, 2):
             ax.axvline(
-                ml, 
-                color=config.GRID_COLOR, 
-                linestyle=config.GRID_LINESTYLE, 
-                linewidth=0.5, 
-                alpha=config.GRID_ALPHA
+                ml, color=config.GRID_COLOR, linestyle=config.GRID_LINESTYLE, linewidth=0.5, alpha=config.GRID_ALPHA
             )
-        
+
         # Horizontal gridlines (AP axis)
         for ap in range(-10, 11, 2):
             ax.axhline(
-                ap, 
-                color=config.GRID_COLOR, 
-                linestyle=config.GRID_LINESTYLE, 
-                linewidth=0.5, 
-                alpha=config.GRID_ALPHA
+                ap, color=config.GRID_COLOR, linestyle=config.GRID_LINESTYLE, linewidth=0.5, alpha=config.GRID_ALPHA
             )
-    
+
     def draw_fiber(self, ax: plt.Axes, fiber: Dict, fiber_index: int):
         """Draw a single fiber implant on the schematic."""
-        ml = fiber['ml']
-        ap = fiber['ap']
-        angle = fiber['angle']
-        name = fiber['name']
-        
+        # Ensure all values are floats (matplotlib requires numeric types)
+        ml = self.safe_float(fiber.get("ml", 0))
+        ap = self.safe_float(fiber.get("ap", 0))
+        angle = self.safe_float(fiber.get("angle", 0))
+        name = fiber.get("name", "Unknown")
+
         # Choose color
         color = config.FIBER_COLORS[fiber_index % len(config.FIBER_COLORS)]
-        
+
         # Draw fiber insertion point
         fiber_point = Circle(
-            (ml, ap), 
-            radius=config.FIBER_MARKER_RADIUS, 
-            facecolor=color, 
-            edgecolor='black',
-            linewidth=2, 
-            zorder=10
+            (ml, ap), radius=config.FIBER_MARKER_RADIUS, facecolor=color, edgecolor="black", linewidth=2, zorder=10
         )
         ax.add_patch(fiber_point)
-        
+
         # Draw angle indicator if fiber is angled
         if abs(angle) > 1:
             length = 1.5  # Length of angle indicator line
             angle_rad = np.radians(angle)
             dx = length * np.sin(angle_rad)
             dy = 0
-            
-            ax.plot(
-                [ml, ml + dx], [ap, ap + dy], 
-                color=color, linewidth=2, alpha=0.7, zorder=9
-            )
-            
+
+            ax.plot([ml, ml + dx], [ap, ap + dy], color=color, linewidth=2, alpha=0.7, zorder=9)
+
             ax.text(
-                ml + dx * 1.2, ap + dy, f'{angle}°', 
-                fontsize=7, color=color, fontweight='bold',
-                ha='center', va='center'
+                ml + dx * 1.2,
+                ap + dy,
+                f"{angle}°",
+                fontsize=7,
+                color=color,
+                fontweight="bold",
+                ha="center",
+                va="center",
             )
-        
+
         # Label the fiber - position based on left/right side to avoid overlap
         label_offset_y = 0.9
         if ml < 0:  # Left side - align to right corner
-            ha = 'right'
+            ha = "right"
         else:  # Right side - align to left corner
-            ha = 'left'
-        
+            ha = "left"
+
         ax.text(
-            ml, ap + label_offset_y, name, 
-            ha=ha, va='bottom', 
+            ml,
+            ap + label_offset_y,
+            name,
+            ha=ha,
+            va="bottom",
             fontsize=config.FIBER_LABEL_FONTSIZE,
-            fontweight='bold', color='black',
-            bbox=dict(
-                boxstyle='round,pad=0.3', 
-                facecolor=color, alpha=0.7, edgecolor='black'
-            )
+            fontweight="bold",
+            color="black",
+            bbox=dict(boxstyle="round,pad=0.3", facecolor=color, alpha=0.7, edgecolor="black"),
         )
-    
+
     def create_schematic(self, fibers: List[Dict], subject_id: str) -> str:
         """
         Create the complete fiber implant schematic.
         Returns base64-encoded PNG image.
         """
         # Create figure
-        fig, ax = plt.subplots(
-            figsize=(config.FIGURE_WIDTH, config.FIGURE_HEIGHT)
-        )
-        
+        fig, ax = plt.subplots(figsize=(config.FIGURE_WIDTH, config.FIGURE_HEIGHT))
+
         # Draw skull outline
         self.create_skull_outline(ax)
-        
+
         # Draw each fiber
         for idx, fiber in enumerate(fibers):
             self.draw_fiber(ax, fiber, idx)
-        
+
         # Set up axes
-        ax.set_xlim(
-            -config.SKULL_WIDTH_MM/2 - 2, 
-            config.SKULL_WIDTH_MM/2 + 2
-        )
-        ax.set_ylim(
-            -config.SKULL_LENGTH_MM/2 - 2, 
-            config.SKULL_LENGTH_MM/2 + 2
-        )
-        ax.set_aspect('equal')
-        
+        ax.set_xlim(-config.SKULL_WIDTH_MM / 2 - 2, config.SKULL_WIDTH_MM / 2 + 2)
+        ax.set_ylim(-config.SKULL_LENGTH_MM / 2 - 2, config.SKULL_LENGTH_MM / 2 + 2)
+        ax.set_aspect("equal")
+
         # Labels
-        ax.set_xlabel(
-            'Medial-Lateral (mm)', 
-            fontsize=config.LABEL_FONTSIZE, 
-            fontweight='bold'
-        )
-        ax.set_ylabel(
-            'Anterior-Posterior (mm)', 
-            fontsize=config.LABEL_FONTSIZE, 
-            fontweight='bold'
-        )
-        
+        ax.set_xlabel("Medial-Lateral (mm)", fontsize=config.LABEL_FONTSIZE, fontweight="bold")
+        ax.set_ylabel("Anterior-Posterior (mm)", fontsize=config.LABEL_FONTSIZE, fontweight="bold")
+
         # Title
-        title = f'Fiber Implant Locations - Top View\nSubject: {subject_id}'
-        ax.set_title(
-            title, 
-            fontsize=config.TITLE_FONTSIZE, 
-            fontweight='bold', 
-            pad=20
-        )
-        
+        title = f"Fiber Implant Locations - Top View\nSubject: {subject_id}"
+        ax.set_title(title, fontsize=config.TITLE_FONTSIZE, fontweight="bold", pad=20)
+
         # Add legend with fiber details
         legend_text = self._create_legend_text(fibers)
         ax.text(
-            0.02, 0.98, legend_text, 
+            0.02,
+            0.98,
+            legend_text,
             transform=ax.transAxes,
-            fontsize=config.LEGEND_FONTSIZE, 
-            verticalalignment='top',
-            bbox=dict(
-                boxstyle='round', facecolor='white', 
-                alpha=0.8, edgecolor='gray'
-            )
+            fontsize=config.LEGEND_FONTSIZE,
+            verticalalignment="top",
+            bbox=dict(boxstyle="round", facecolor="white", alpha=0.8, edgecolor="gray"),
         )
-        
+
         # Grid
-        ax.grid(True, alpha=config.GRID_ALPHA, linestyle='--')
-        
+        ax.grid(True, alpha=config.GRID_ALPHA, linestyle="--")
+
         # Tight layout
         plt.tight_layout()
-        
+
         # Save to bytes buffer
         buf = io.BytesIO()
-        plt.savefig(buf, format='png', dpi=config.DPI, bbox_inches='tight')
+        plt.savefig(buf, format="png", dpi=config.DPI, bbox_inches="tight")
         buf.seek(0)
         plt.close()
-        
+
         # Encode as base64
-        img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+        img_base64 = base64.b64encode(buf.read()).decode("utf-8")
         return img_base64
-    
+
     def _create_legend_text(self, fibers: List[Dict]) -> str:
         """Create legend text with fiber details."""
-        lines = ['Fiber Details:\n']
+        lines = ["Fiber Details:\n"]
         for fiber in fibers:
-            lines.append(
-                f"{fiber['name']}: "
-                f"AP={fiber['ap']:.2f}, "
-                f"ML={fiber['ml']:.2f}, "
-                f"DV={fiber['dv']:.2f} mm"
-            )
-            if abs(fiber['angle']) > 1:
-                lines.append(f"  ∠{fiber['angle']}°")
-        return '\n'.join(lines)
+            # Ensure all values are floats for formatting
+            ap = self.safe_float(fiber.get("ap", 0))
+            ml = self.safe_float(fiber.get("ml", 0))
+            dv = self.safe_float(fiber.get("dv", 0))
+            angle = self.safe_float(fiber.get("angle", 0))
+            name = fiber.get("name", "Unknown")
+
+            lines.append(f"{name}: AP={ap:.2f}, ML={ml:.2f}, DV={dv:.2f} mm")
+            if abs(angle) > 1:
+                lines.append(f"  ∠{angle}°")
+        return "\n".join(lines)
 
 
 # Flask routes
 
-@app.route('/')
+
+@app.route("/")
 def index():
     """Render the main page."""
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/generate', methods=['POST'])
+@app.route("/generate", methods=["POST"])
 def generate_schematic():
     """Generate schematic for a given subject ID."""
     try:
         data = request.get_json()
-        subject_id = data.get('subject_id', '').strip()
-        
+        subject_id = data.get("subject_id", "").strip()
+
         if not subject_id:
-            return jsonify({'error': 'Subject ID is required'}), 400
-        
+            return jsonify({"error": "Subject ID is required"}), 400
+
         # Search for procedures across multiple databases
-        db_host = app.config.get('DB_HOST', 'api.allenneuraldynamics.org')
+        db_host = app.config.get("DB_HOST", "api.allenneuraldynamics.org")
         procedures_data = get_procedures_for_subject(subject_id, db_host)
-        
+
         if not procedures_data:
-            return jsonify({
-                'error': f'Could not find a procedures record for subject {subject_id}. '
-                         f'This subject may not have any data assets in the database yet.'
-            }), 404
-        
+            return (
+                jsonify(
+                    {
+                        "error": f"Could not find a procedures record for subject {subject_id}. "
+                        f"This subject may not have any data assets in the database yet."
+                    }
+                ),
+                404,
+            )
+
         # Generate schematic
         generator = FiberSchematicGenerator()
-        fibers = generator.extract_fiber_implants(procedures_data)
-        
+        try:
+            fibers = generator.extract_fiber_implants(procedures_data)
+        except Exception as e:
+            import traceback
+            import sys
+
+            print(f"ERROR in extract_fiber_implants: {e}", file=sys.stderr)
+            print(traceback.format_exc(), file=sys.stderr)
+            sys.stderr.flush()
+            raise
+
         if not fibers:
-            return jsonify({
-                'error': f'Found procedures record for subject {subject_id}, but no fiber implants were found in the procedures data. '
-                         f'This subject may not have had fiber implant surgery yet.'
-            }), 404
-        
+            return (
+                jsonify(
+                    {
+                        "error": f"Found procedures record for subject {subject_id}, but no fiber implants were found in the procedures data. "
+                        f"This subject may not have had fiber implant surgery yet."
+                    }
+                ),
+                404,
+            )
+
         # Create schematic image
-        img_base64 = generator.create_schematic(fibers, subject_id)
-        
-        return jsonify({
-            'success': True,
-            'image': img_base64,
-            'fiber_count': len(fibers),
-            'subject_id': subject_id
-        })
-        
+        try:
+            img_base64 = generator.create_schematic(fibers, subject_id)
+        except Exception as e:
+            import traceback
+            import sys
+
+            print(f"ERROR in create_schematic: {e}", file=sys.stderr)
+            print(traceback.format_exc(), file=sys.stderr)
+            sys.stderr.flush()
+            raise
+
+        return jsonify({"success": True, "image": img_base64, "fiber_count": len(fibers), "subject_id": subject_id})
+
     except Exception as e:
-        print(f"Error generating schematic: {e}")
-        return jsonify({'error': f'Error generating schematic: {str(e)}'}), 500
+        import traceback
+        import sys
+
+        error_traceback = traceback.format_exc()
+        # Print to stderr to ensure it shows up in logs
+        print(f"Error generating schematic: {e}", file=sys.stderr)
+        print(f"Full traceback:\n{error_traceback}", file=sys.stderr)
+        sys.stderr.flush()
+        return jsonify({"error": f"Error generating schematic: {str(e)}"}), 500
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Fiber Schematic Viewer')
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Fiber Schematic Viewer")
     parser.add_argument(
-        '--host', 
-        type=str, 
-        default=config.HOST,
-        help=f'Host address to bind to (default: {config.HOST})'
+        "--host", type=str, default=config.HOST, help=f"Host address to bind to (default: {config.HOST})"
+    )
+    parser.add_argument("--port", type=int, default=config.PORT, help=f"Port to bind to (default: {config.PORT})")
+    parser.add_argument(
+        "--debug", action="store_true", default=config.DEBUG, help=f"Enable debug mode (default: {config.DEBUG})"
     )
     parser.add_argument(
-        '--port', 
-        type=int, 
-        default=config.PORT,
-        help=f'Port to bind to (default: {config.PORT})'
+        "--db_host",
+        type=str,
+        default="api.allenneuraldynamics.org",
+        help="MongoDB host (default: api.allenneuraldynamics.org)",
     )
     parser.add_argument(
-        '--debug', 
-        action='store_true',
-        default=config.DEBUG,
-        help=f'Enable debug mode (default: {config.DEBUG})'
+        "--database", type=str, default="metadata_index", help="MongoDB database name (default: metadata_index)"
     )
-    parser.add_argument(
-        '--db_host', 
-        type=str, 
-        default='api.allenneuraldynamics.org',
-        help='MongoDB host (default: api.allenneuraldynamics.org)'
-    )
-    parser.add_argument(
-        '--database', 
-        type=str, 
-        default='metadata_index',
-        help='MongoDB database name (default: metadata_index)'
-    )
-    
+
     args = parser.parse_args()
-    
+
     # Store configuration in Flask app config
-    app.config['DB_HOST'] = args.db_host
-    app.config['DATABASE'] = args.database
-    
+    app.config["DB_HOST"] = args.db_host
+    app.config["DATABASE"] = args.database
+
     print(f"Starting Fiber Schematic Viewer on {args.host}:{args.port}")
     print(f"MongoDB: {args.db_host}/{args.database}")
     print(f"Access at: http://localhost:{args.port}")
-    
-    app.run(
-        host=args.host, 
-        port=args.port, 
-        debug=args.debug
-    )
+
+    app.run(host=args.host, port=args.port, debug=args.debug)
