@@ -23,7 +23,7 @@ Then visit: `http://your-vm-ip:8081`
 
 ## Usage
 
-1. Enter a mouse subject ID (e.g., "802252")
+1. Enter a mouse subject ID (e.g., "775741")
 2. Press Enter or click "Generate Schematic"
 3. View the automatically generated fiber implant schematic
 4. Download or print the high-resolution PNG

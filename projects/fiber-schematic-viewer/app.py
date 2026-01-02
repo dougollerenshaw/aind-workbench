@@ -190,6 +190,11 @@ class FiberSchematicGenerator:
                             if not isinstance(ophys_probe, dict):
                                 ophys_probe = {}
 
+                            # Extract targeted structure - handle both string and object
+                            targeted_structure = probe.get("targeted_structure", "Unknown")
+                            if isinstance(targeted_structure, dict):
+                                targeted_structure = targeted_structure.get("name", "Unknown")
+
                             fiber_info = {
                                 "name": ophys_probe.get("name", "Unknown"),
                                 "ap": self.safe_float(probe.get("stereotactic_coordinate_ap")),
@@ -198,7 +203,7 @@ class FiberSchematicGenerator:
                                 "angle": self.safe_float(probe.get("angle")),
                                 "unit": probe.get("stereotactic_coordinate_unit", "millimeter"),
                                 "reference": probe.get("stereotactic_coordinate_reference", "Bregma"),
-                                "targeted_structure": probe.get("targeted_structure", "Unknown"),
+                                "targeted_structure": targeted_structure,
                             }
                             fibers.append(fiber_info)
 
@@ -352,26 +357,6 @@ class FiberSchematicGenerator:
         )
         ax.add_patch(fiber_point)
 
-        # Draw angle indicator if fiber is angled
-        if abs(angle) > 1:
-            length = 1.5  # Length of angle indicator line
-            angle_rad = np.radians(angle)
-            dx = length * np.sin(angle_rad)
-            dy = 0
-
-            ax.plot([ml, ml + dx], [ap, ap + dy], color=color, linewidth=2, alpha=0.7, zorder=9)
-
-            ax.text(
-                ml + dx * 1.2,
-                ap + dy,
-                f"{angle}°",
-                fontsize=7,
-                color=color,
-                fontweight="bold",
-                ha="center",
-                va="center",
-            )
-
         # Label the fiber - position based on left/right side to avoid overlap
         label_offset_y = 0.9
         if ml < 0:  # Left side - align to right corner
@@ -419,17 +404,42 @@ class FiberSchematicGenerator:
         title = f"Fiber Implant Locations - Top View\nSubject: {subject_id}"
         ax.set_title(title, fontsize=config.TITLE_FONTSIZE, fontweight="bold", pad=20)
 
-        # Add legend with fiber details
-        legend_text = self._create_legend_text(fibers)
-        ax.text(
-            0.02,
-            0.98,
-            legend_text,
-            transform=ax.transAxes,
-            fontsize=config.LEGEND_FONTSIZE,
-            verticalalignment="top",
-            bbox=dict(boxstyle="round", facecolor="white", alpha=0.8, edgecolor="gray"),
-        )
+        # Add legend with fiber details (color-coded)
+        # Reverse the list so Fiber_0 appears at the top
+        legend_items = self._create_legend_text(fibers)
+
+        # Keep the header at the top, reverse the fiber entries
+        header = legend_items[0]  # "Fiber Details:"
+        fiber_entries = legend_items[1:]  # All fiber boxes
+        fiber_entries.reverse()  # Reverse so lower indices are first
+        legend_items = [header] + fiber_entries
+
+        legend_y = 0.98
+        line_height_header = 0.045
+        line_height_fiber = 0.08  # More space for multi-line fiber boxes
+
+        for idx, (text, color) in enumerate(legend_items):
+            is_header = idx == 0
+            line_height = line_height_header if is_header else line_height_fiber
+
+            ax.text(
+                0.02,
+                legend_y,
+                text,
+                transform=ax.transAxes,
+                fontsize=config.LEGEND_FONTSIZE,
+                verticalalignment="top",
+                color=color,
+                fontweight="bold" if color != "black" else "normal",
+                bbox=dict(
+                    boxstyle="round,pad=0.4",
+                    facecolor="white",
+                    alpha=0.9,
+                    edgecolor="gray" if color == "black" else color,
+                    linewidth=1.5 if color != "black" else 1,
+                ),
+            )
+            legend_y -= line_height
 
         # Grid
         ax.grid(True, alpha=config.GRID_ALPHA, linestyle="--")
@@ -447,10 +457,15 @@ class FiberSchematicGenerator:
         img_base64 = base64.b64encode(buf.read()).decode("utf-8")
         return img_base64
 
-    def _create_legend_text(self, fibers: List[Dict]) -> str:
-        """Create legend text with fiber details."""
-        lines = ["Fiber Details:\n"]
-        for fiber in fibers:
+    def _create_legend_text(self, fibers: List[Dict]) -> List[tuple]:
+        """
+        Create legend data with fiber details and colors.
+        Returns list of (text, color) tuples.
+        """
+        legend_items = [("Fiber Details:", "black")]
+        for idx, fiber in enumerate(fibers):
+            color = config.FIBER_COLORS[idx % len(config.FIBER_COLORS)]
+
             # Ensure all values are floats for formatting
             ap = self.safe_float(fiber.get("ap", 0))
             ml = self.safe_float(fiber.get("ml", 0))
@@ -458,10 +473,19 @@ class FiberSchematicGenerator:
             angle = self.safe_float(fiber.get("angle", 0))
             name = fiber.get("name", "Unknown")
 
-            lines.append(f"{name}: AP={ap:.2f}, ML={ml:.2f}, DV={dv:.2f} mm")
+            # Combine coordinates and target in one text block
+            text = f"{name}: AP={ap:.2f}, ML={ml:.2f}, DV={dv:.2f} mm"
             if abs(angle) > 1:
-                lines.append(f"  ∠{angle}°")
-        return "\n".join(lines)
+                text += f" ∠{angle}°"
+
+            # Add target on a new line
+            target = fiber.get("targeted_structure", "Unknown")
+            if not target or target == "" or target.lower() == "root":
+                target = "Unknown"
+            text += f"\nTarget: {target}"
+
+            legend_items.append((text, color))
+        return legend_items
 
 
 # Flask routes
