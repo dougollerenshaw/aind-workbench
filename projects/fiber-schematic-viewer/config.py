@@ -8,16 +8,17 @@ SKULL_LENGTH_MM = 25
 SKULL_WIDTH_MM = 15
 
 # Fiber marker colors (supports up to 8 fibers)
+# Consistent order: red, green, blue, orange, then additional colors
 # Use hex color codes: https://htmlcolorcodes.com/
 FIBER_COLORS = [
-    '#FF6B6B',  # Red
-    '#4ECDC4',  # Teal
-    '#45B7D1',  # Blue
-    '#FFA07A',  # Light Salmon
-    '#98D8C8',  # Mint
-    '#F7DC6F',  # Yellow
-    '#BB8FCE',  # Purple
-    '#85C1E2',  # Sky Blue
+    '#FF6B6B',  # Red (Fiber_0)
+    '#4CAF50',  # Green (Fiber_1)
+    '#2196F3',  # Blue (Fiber_2)
+    '#FF9800',  # Orange (Fiber_3)
+    '#9C27B0',  # Purple (Fiber_4)
+    '#00BCD4',  # Cyan (Fiber_5)
+    '#FFC107',  # Amber (Fiber_6)
+    '#795548',  # Brown (Fiber_7)
 ]
 
 # Fiber marker size

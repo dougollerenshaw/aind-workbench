@@ -26,6 +26,7 @@
                     <button id="generateBtn">Generate Schematic</button>
                 </div>
                 <div id="status" class="status hidden"></div>
+                <div id="fiberCount" class="fiber-count hidden"></div>
             </div>
 
             <div id="resultSection" class="result-section hidden">
@@ -36,13 +37,9 @@
                 <div class="schematic-container">
                     <img id="schematicImage" alt="Fiber Schematic">
                 </div>
-                <div id="fiberInfo" class="fiber-info"></div>
             </div>
         </main>
 
-        <footer>
-            <p>Allen Institute for Neural Dynamics | Fiber Photometry Platform</p>
-        </footer>
     </div>
 
     <script>
@@ -51,7 +48,7 @@
         const status = document.getElementById('status');
         const resultSection = document.getElementById('resultSection');
         const schematicImage = document.getElementById('schematicImage');
-        const fiberInfo = document.getElementById('fiberInfo');
+        const fiberCount = document.getElementById('fiberCount');
         const downloadBtn = document.getElementById('downloadBtn');
 
         let currentImageData = null;
@@ -81,6 +78,7 @@
             generateBtn.textContent = 'Generating...';
             showStatus('Querying metadata and generating schematic...', 'info');
             resultSection.classList.add('hidden');
+            fiberCount.classList.add('hidden');  // Clear previous fiber count
 
             try {
                 const response = await fetch('generate', {
@@ -101,7 +99,8 @@
                     schematicImage.src = `data:image/png;base64,${data.image}`;
                     resultSection.classList.remove('hidden');
                     
-                    fiberInfo.textContent = `Found ${data.fiber_count} fiber implant(s) for subject ${data.subject_id}`;
+                    fiberCount.textContent = `Found ${data.fiber_count} fiber implant(s) for subject ${data.subject_id}`;
+                    fiberCount.classList.remove('hidden');
                     
                     showStatus('Schematic generated successfully!', 'success');
                 } else {
@@ -129,13 +128,7 @@
             status.textContent = message;
             status.className = `status ${type}`;
             status.classList.remove('hidden');
-            
-            // Auto-hide success messages after 3 seconds
-            if (type === 'success') {
-                setTimeout(() => {
-                    status.classList.add('hidden');
-                }, 3000);
-            }
+            // Success messages now persist (no auto-hide)
         }
     </script>
 </body>

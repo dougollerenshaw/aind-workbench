@@ -125,6 +125,20 @@ button:disabled {
     border-left: 4px solid #c62828;
 }
 
+.fiber-count {
+    margin-top: 15px;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    background: #e8f5e9;
+    color: #388e3c;
+    border-left: 4px solid #388e3c;
+}
+
+.fiber-count.hidden {
+    display: none;
+}
+
 .result-section {
     margin-top: 40px;
 }
@@ -162,25 +176,6 @@ button:disabled {
     height: auto;
     border-radius: 4px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.fiber-info {
-    margin-top: 20px;
-    padding: 16px;
-    background: #f8f9fa;
-    border-radius: 6px;
-    text-align: center;
-    font-weight: 500;
-    color: #555;
-}
-
-footer {
-    background: #f8f9fa;
-    padding: 20px;
-    text-align: center;
-    color: #666;
-    font-size: 0.9em;
-    border-top: 1px solid #e0e0e0;
 }
 
 /* Responsive design */

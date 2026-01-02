@@ -12,7 +12,7 @@ import matplotlib
 matplotlib.use("Agg")  # Non-interactive backend
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.patches import Circle
+from matplotlib.patches import Circle, FancyBboxPatch
 import numpy as np
 from typing import List, Dict, Optional
 
@@ -248,7 +248,7 @@ class FiberSchematicGenerator:
 
                             # Get targeted structure
                             primary_target = device_config.get("primary_targeted_structure", {})
-                            target_name = primary_target.get("name", "Unknown")
+                            target_name = primary_target.get("name", "Not specified in surgical request form")
 
                             fiber_info = {
                                 "name": device_config.get("device_name", "Unknown"),
@@ -381,6 +381,19 @@ class FiberSchematicGenerator:
         Create the complete fiber implant schematic.
         Returns base64-encoded PNG image.
         """
+        # Sort fibers by name (Fiber_0, Fiber_1, Fiber_2...) to ensure consistent order
+        def get_fiber_index(fiber):
+            name = fiber.get("name", "Unknown")
+            # Extract number from "Fiber_0", "Fiber_1", etc.
+            try:
+                if "_" in name:
+                    return int(name.split("_")[-1])
+                return 999  # Put unknown names at end
+            except (ValueError, IndexError):
+                return 999
+
+        sorted_fibers = sorted(fibers, key=get_fiber_index)
+
         # Create figure
         fig, ax = plt.subplots(figsize=(config.FIGURE_WIDTH, config.FIGURE_HEIGHT))
 
@@ -388,7 +401,7 @@ class FiberSchematicGenerator:
         self.create_skull_outline(ax)
 
         # Draw each fiber
-        for idx, fiber in enumerate(fibers):
+        for idx, fiber in enumerate(sorted_fibers):
             self.draw_fiber(ax, fiber, idx)
 
         # Set up axes
@@ -404,24 +417,15 @@ class FiberSchematicGenerator:
         title = f"Fiber Implant Locations - Top View\nSubject: {subject_id}"
         ax.set_title(title, fontsize=config.TITLE_FONTSIZE, fontweight="bold", pad=20)
 
-        # Add legend with fiber details (color-coded)
-        # Reverse the list so Fiber_0 appears at the top
-        legend_items = self._create_legend_text(fibers)
+        # Add legend with fiber details (color-coded text, no box)
+        # Use the same sorted_fibers from above
+        legend_items = self._create_legend_text(sorted_fibers)
 
-        # Keep the header at the top, reverse the fiber entries
-        header = legend_items[0]  # "Fiber Details:"
-        fiber_entries = legend_items[1:]  # All fiber boxes
-        fiber_entries.reverse()  # Reverse so lower indices are first
-        legend_items = [header] + fiber_entries
-
+        # Add colored text lines
         legend_y = 0.98
-        line_height_header = 0.045
-        line_height_fiber = 0.08  # More space for multi-line fiber boxes
+        line_spacing = 0.035
 
-        for idx, (text, color) in enumerate(legend_items):
-            is_header = idx == 0
-            line_height = line_height_header if is_header else line_height_fiber
-
+        for text, color in legend_items:
             ax.text(
                 0.02,
                 legend_y,
@@ -431,15 +435,11 @@ class FiberSchematicGenerator:
                 verticalalignment="top",
                 color=color,
                 fontweight="bold" if color != "black" else "normal",
-                bbox=dict(
-                    boxstyle="round,pad=0.4",
-                    facecolor="white",
-                    alpha=0.9,
-                    edgecolor="gray" if color == "black" else color,
-                    linewidth=1.5 if color != "black" else 1,
-                ),
+                family="monospace",
             )
-            legend_y -= line_height
+            # Count newlines for proper spacing
+            num_lines = text.count("\n") + 1
+            legend_y -= line_spacing * num_lines
 
         # Grid
         ax.grid(True, alpha=config.GRID_ALPHA, linestyle="--")
@@ -481,7 +481,7 @@ class FiberSchematicGenerator:
             # Add target on a new line
             target = fiber.get("targeted_structure", "Unknown")
             if not target or target == "" or target.lower() == "root":
-                target = "Unknown"
+                target = "Not specified in surgical request form"
             text += f"\nTarget: {target}"
 
             legend_items.append((text, color))
