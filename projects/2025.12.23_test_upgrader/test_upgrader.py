@@ -10,7 +10,7 @@ client = MetadataDbClient(
 
 # Get the specific asset that failed to upgrade
 # asset_name = "behavior_754571_2024-09-19_10-59-38"
-asset_name = "behavior_745306_2024-10-17_13-33-18"
+asset_name = "behavior_789908_2025-09-23_20-11-30"
 pipeline = [{"$match": {"name": asset_name}}, {"$limit": 1}]
 
 results = client.aggregate_docdb_records(pipeline)
