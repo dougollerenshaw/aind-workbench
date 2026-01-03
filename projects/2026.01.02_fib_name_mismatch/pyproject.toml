@@ -1,0 +1,19 @@
+[project]
+name = "fib-name-mismatch"
+version = "0.1.0"
+description = "Script to identify processed sessions with incorrect FIB modality"
+requires-python = ">=3.8"
+dependencies = [
+    "aind-data-access-api",
+    "tqdm",
+    "pandas",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["fib_name_mismatch"]
+
+
