@@ -67,39 +67,23 @@ In the Dogwood instrument, there are 7 Lumencor Celesta lasers available:
 - 640nm
 - 730nm
 
-**For Gene & Barcode Sequencing, which laser is used for each base?**
-- Base G (Guanine): Which laser wavelength? _______ nm
-- Base T (Thymine): Which laser wavelength? _______ nm
-- Base A (Adenine): Which laser wavelength? _______ nm
-- Base C (Cytosine): Which laser wavelength? _______ nm
-- DAPI: Which laser wavelength? _______ nm (likely 365nm or 440nm)
+**For Gene & Barcode Sequencing, which laser wavelength is used for each base?**
+- Base G (Guanine): _______ nm
+- Base T (Thymine): _______ nm
+- Base A (Adenine): _______ nm
+- Base C (Cytosine): _______ nm
+- DAPI: _______ nm (likely 365nm or 440nm)
 
-**Current placeholders:**
-```
-"PLACEHOLDER_LASER_G"
-"PLACEHOLDER_LASER_T"
-"PLACEHOLDER_LASER_A"
-"PLACEHOLDER_LASER_C"
-"PLACEHOLDER_LASER_DAPI"
-```
+**Note:** Device names follow the pattern "Lumencor Celesta {wavelength}nm" and will be auto-generated from the wavelengths above.
 
-### Question 3.2: What are the actual laser device names?
+### Question 3.2: Which emission filters and wavelengths are used for each channel?
 
-From the instrument JSON, the laser device names follow the pattern:
-- "Lumencor Celesta 365nm"
-- "Lumencor Celesta 440nm"
-- etc.
-
-Once you know which wavelengths are used (from Q3.1), the device names can be automatically filled in.
-
-### Question 3.3: Which emission filters are used for each channel?
-
-The Dogwood instrument has 8 emission filters (E1-E8). For each base/dye:
-- Base G: Which emission filter? _______ (E1-E8)
-- Base T: Which emission filter? _______ (E1-E8)
-- Base A: Which emission filter? _______ (E1-E8)
-- Base C: Which emission filter? _______ (E1-E8)
-- DAPI: Which emission filter? _______ (E1-E8)
+The Dogwood instrument has 8 emission filters. For each base/dye, specify which filter is used:
+- Base G: Filter _______ (E1-E8), peak emission wavelength: _______ nm
+- Base T: Filter _______ (E1-E8), peak emission wavelength: _______ nm
+- Base A: Filter _______ (E1-E8), peak emission wavelength: _______ nm
+- Base C: Filter _______ (E1-E8), peak emission wavelength: _______ nm
+- DAPI: Filter _______ (E1-E8), peak emission wavelength: _______ nm (likely ~450-460nm)
 
 **Available filters from instrument:**
 - E1: FF01-441/511/593/684/817 (DAPI/GFP/Red/Cy5/Cy7)
@@ -111,27 +95,7 @@ The Dogwood instrument has 8 emission filters (E1-E8). For each base/dye:
 - E7: 69401m (DAPI/GFP/TxRed)
 - E8: ZET532/640m (Alexa532/Cy5)
 
-**Current placeholders:**
-```
-"PLACEHOLDER_EMISSION_FILTER_G"
-"PLACEHOLDER_EMISSION_FILTER_T"
-"PLACEHOLDER_EMISSION_FILTER_A"
-"PLACEHOLDER_EMISSION_FILTER_C"
-"PLACEHOLDER_EMISSION_FILTER_DAPI"
-```
-
-### Question 3.4: What are the emission wavelengths?
-
-For each channel, what is the peak emission wavelength detected by the camera?
-- Base G: _______ nm
-- Base T: _______ nm
-- Base A: _______ nm
-- Base C: _______ nm
-- DAPI: _______ nm (likely ~450-460nm)
-
-**Current placeholder:** `9999` (for all channels)
-
-### Question 3.5: What are the laser power settings?
+### Question 3.3: What are the laser power settings?
 
 For each laser used during acquisition:
 - Base G laser: _______ mW
@@ -140,29 +104,15 @@ For each laser used during acquisition:
 - Base C laser: _______ mW
 - DAPI laser: _______ mW
 
-**Current placeholder:** `9999.0` (for all lasers)
-
-### Question 3.6: Hybridization probes - which fluorophores?
+### Question 3.4: Hybridization probes - which fluorophores?
 
 For the hybridization cycle, which fluorophores are conjugated to each probe?
-- Probe XC2758: Which fluorophore? _______ (e.g., GFP, Alexa488, FITC, etc.)
-- Probe XC2759: Which fluorophore? _______ (e.g., Cy3, Texas Red, etc.)
-- Probe XC2760: Which fluorophore? _______ (e.g., Cy5, Alexa647, etc.)
-- Probe YS221: Which fluorophore? _______ 
+- Probe XC2758: _______ (e.g., GFP, Alexa488, FITC, etc.)
+- Probe XC2759: _______ (e.g., Cy3, Texas Red, etc.)
+- Probe XC2760: _______ (e.g., Cy5, Alexa647, etc.)
+- Probe YS221: _______ 
 
-This will determine which lasers and filters are used for the hybridization channels.
-
-**Current placeholders:**
-```
-"PLACEHOLDER_LASER_GFP"
-"PLACEHOLDER_LASER_HYB_2"
-"PLACEHOLDER_LASER_HYB_3"
-"PLACEHOLDER_LASER_HYB_4"
-"PLACEHOLDER_EMISSION_FILTER_GFP"
-"PLACEHOLDER_EMISSION_FILTER_HYB_2"
-"PLACEHOLDER_EMISSION_FILTER_HYB_3"
-"PLACEHOLDER_EMISSION_FILTER_HYB_4"
-```
+**Note:** Once fluorophores are identified, the corresponding laser wavelengths and emission filters can be determined from the microscope configuration.
 
 ---
 
