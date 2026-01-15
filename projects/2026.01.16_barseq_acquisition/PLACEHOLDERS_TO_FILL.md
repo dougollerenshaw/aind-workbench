@@ -208,38 +208,3 @@ For each experiment, what were the approximate start and end times for each phas
 
 **Note:** If exact times are not recorded, approximate durations are acceptable. For example, "gene sequencing took approximately 3 hours starting around 10am".
 
----
-
-## How to Use This Document
-
-1. **Assign sections** to appropriate team members:
-   - Section 1 (Personnel): Lab manager or PI
-   - Section 2 (Specimens): Person who processed the tissue
-   - Section 3 (Hardware): Microscope operator or imaging specialist
-   - Section 4 (Camera): Microscope operator
-   - Section 5 (Timing): Person who performed the acquisition or lab notebook
-
-2. **Fill in the blanks** with actual values
-
-3. **Return answers** to the metadata coordinator
-
-4. **Update the generator scripts** with real values by modifying the parameters in:
-   - `generate_780345_acquisition.py`
-   - `generate_780346_acquisition.py`
-
-5. **Re-run the generators** to create final acquisition JSON files
-
----
-
-## Priority Order
-
-If you need to fill in placeholders incrementally:
-
-1. **HIGH PRIORITY:** Hardware configuration (Q3.1-3.6) - needed for schema validation
-2. **MEDIUM PRIORITY:** Personnel and IACUC (Q1.1-1.2) - needed for metadata completeness
-3. **MEDIUM PRIORITY:** Specimen IDs (Q2.1) - needed for data organization
-4. **LOW PRIORITY:** Camera settings (Q4.1) - can use reasonable defaults if needed
-5. **LOW PRIORITY:** Exact timing (Q5.1) - can use approximate times if exact times not recorded
-
----
-

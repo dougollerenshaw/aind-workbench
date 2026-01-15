@@ -49,12 +49,12 @@ def create_barseq_acquisition(
 ) -> Acquisition:
     """
     Create a BARseq acquisition metadata object.
-    
+
     BARseq imaging workflow:
     1. Gene Sequencing (7 cycles) - Reads 7-base gene barcodes (109-gene codebook)
     2. Barcode Sequencing (15 cycles) - Reads 30-base Sindbis virus barcodes
     3. Hybridization (1 cycle) - Fluorescent probe visualization for anatomical reference
-    
+
     Parameters
     ----------
     subject_id : str
@@ -95,13 +95,13 @@ def create_barseq_acquisition(
         IACUC protocol number(s)
     notes : str, optional
         Additional notes
-        
+
     Returns
     -------
     Acquisition
         Complete acquisition metadata object
     """
-    
+
     # Use placeholder times if not provided
     placeholder_dt = datetime(2099, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
     gene_seq_start_time = gene_seq_start_time or placeholder_dt
@@ -110,7 +110,7 @@ def create_barseq_acquisition(
     barcode_seq_end_time = barcode_seq_end_time or placeholder_dt
     hyb_start_time = hyb_start_time or placeholder_dt
     hyb_end_time = hyb_end_time or placeholder_dt
-    
+
     # Create detector config
     detector = DetectorConfig(
         device_name="Camera-1",
@@ -118,38 +118,38 @@ def create_barseq_acquisition(
         exposure_time_unit=exposure_time_unit,
         trigger_type=TriggerType.INTERNAL,
     )
-    
+
     # Gene sequencing channels (G, T, A, C, DAPI)
     # Based on instrument notes: geneseq cycles use G/T/A/C/DAPI channels
     gene_channels = _create_gene_sequencing_channels(detector)
-    
+
     # Barcode sequencing channels (G, T, A, C)
     # Based on instrument notes: bcseq cycles use GTAC channels (no DAPI after first cycle)
     barcode_channels = _create_barcode_sequencing_channels(detector)
-    
+
     # Hybridization channels (GFP, G, TxRed, Cy5, DAPI, DIC)
     # Based on instrument notes: hyb cycles use GFP/G/TxRed/Cy5/DAPI/DIC channels
     hyb_channels = _create_hybridization_channels(detector)
-    
+
     # Create ImagingConfigs
     gene_imaging_config = ImagingConfig(
         device_name="Ti2-E__0",
         channels=gene_channels,
         images=[],
     )
-    
+
     barcode_imaging_config = ImagingConfig(
         device_name="Ti2-E__0",
         channels=barcode_channels,
         images=[],
     )
-    
+
     hyb_imaging_config = ImagingConfig(
         device_name="Ti2-E__0",
         channels=hyb_channels,
         images=[],
     )
-    
+
     # DataStream 1: Gene Sequencing
     gene_stream = DataStream(
         stream_start_time=gene_seq_start_time,
@@ -179,7 +179,7 @@ def create_barseq_acquisition(
             f"Sequencing: Illumina MiSeq Reagent Nano Kit v2, primer YS220."
         ),
     )
-    
+
     # DataStream 2: Barcode Sequencing
     barcode_stream = DataStream(
         stream_start_time=barcode_seq_start_time,
@@ -206,7 +206,7 @@ def create_barseq_acquisition(
             f"Used for neural projection tracing. Sequencing primer: XCAI5."
         ),
     )
-    
+
     # DataStream 3: Hybridization
     hyb_stream = DataStream(
         stream_start_time=hyb_start_time,
@@ -234,7 +234,7 @@ def create_barseq_acquisition(
             f"plus DAPI and DIC for anatomical reference and cell identification."
         ),
     )
-    
+
     # Build acquisition notes
     acq_notes = (
         f"BARseq acquisition of Locus Coeruleus for noradrenergic neuron projection mapping. "
@@ -243,7 +243,7 @@ def create_barseq_acquisition(
     )
     if notes:
         acq_notes += f" {notes}"
-    
+
     # Create acquisition
     acquisition = Acquisition(
         subject_id=subject_id,
@@ -253,7 +253,8 @@ def create_barseq_acquisition(
         acquisition_start_time=min(gene_seq_start_time, barcode_seq_start_time, hyb_start_time),
         acquisition_end_time=max(gene_seq_end_time, barcode_seq_end_time, hyb_end_time),
         acquisition_type="BarcodeSequencing",
-        protocol_id=protocol_id or [
+        protocol_id=protocol_id
+        or [
             "dx.doi.org/10.17504/protocols.io.n2bvj82q5gk5/v1",
             "dx.doi.org/10.17504/protocols.io.81wgbp4j3vpk/v2",
         ],
@@ -262,22 +263,46 @@ def create_barseq_acquisition(
         data_streams=[gene_stream, barcode_stream, hyb_stream],
         notes=acq_notes,
     )
-    
+
     return acquisition
 
 
 def _create_gene_sequencing_channels(detector: DetectorConfig) -> List[Channel]:
     """Create channels for gene sequencing (G, T, A, C, DAPI)."""
     channels = []
-    
+
     # Bases G, T, A, C
     for base in ["G", "T", "A", "C"]:
-        channels.append(Channel(
-            channel_name=f"Gene_{base}",
-            intended_measurement=f"Gene sequencing - DNA base {base}",
+        channels.append(
+            Channel(
+                channel_name=f"Gene_{base}",
+                intended_measurement=f"Gene sequencing - DNA base {base}",
+                light_sources=[
+                    LaserConfig(
+                        device_name=f"PLACEHOLDER_LASER_{base}",
+                        wavelength=9999,
+                        wavelength_unit=SizeUnit.NM,
+                        power=9999.0,
+                        power_unit=PowerUnit.MW,
+                    ),
+                ],
+                emission_filters=[
+                    DeviceConfig(device_name=f"PLACEHOLDER_FILTER_{base}"),
+                ],
+                detector=detector,
+                emission_wavelength=9999,
+                emission_wavelength_unit=SizeUnit.NM,
+            )
+        )
+
+    # DAPI channel
+    channels.append(
+        Channel(
+            channel_name="Gene_DAPI",
+            intended_measurement="DAPI nuclear counterstain",
             light_sources=[
                 LaserConfig(
-                    device_name=f"PLACEHOLDER_LASER_{base}",
+                    device_name="PLACEHOLDER_LASER_DAPI",
                     wavelength=9999,
                     wavelength_unit=SizeUnit.NM,
                     power=9999.0,
@@ -285,69 +310,51 @@ def _create_gene_sequencing_channels(detector: DetectorConfig) -> List[Channel]:
                 ),
             ],
             emission_filters=[
-                DeviceConfig(device_name=f"PLACEHOLDER_FILTER_{base}"),
+                DeviceConfig(device_name="PLACEHOLDER_FILTER_DAPI"),
             ],
             detector=detector,
             emission_wavelength=9999,
             emission_wavelength_unit=SizeUnit.NM,
-        ))
-    
-    # DAPI channel
-    channels.append(Channel(
-        channel_name="Gene_DAPI",
-        intended_measurement="DAPI nuclear counterstain",
-        light_sources=[
-            LaserConfig(
-                device_name="PLACEHOLDER_LASER_DAPI",
-                wavelength=9999,
-                wavelength_unit=SizeUnit.NM,
-                power=9999.0,
-                power_unit=PowerUnit.MW,
-            ),
-        ],
-        emission_filters=[
-            DeviceConfig(device_name="PLACEHOLDER_FILTER_DAPI"),
-        ],
-        detector=detector,
-        emission_wavelength=9999,
-        emission_wavelength_unit=SizeUnit.NM,
-    ))
-    
+        )
+    )
+
     return channels
 
 
 def _create_barcode_sequencing_channels(detector: DetectorConfig) -> List[Channel]:
     """Create channels for barcode sequencing (G, T, A, C)."""
     channels = []
-    
+
     for base in ["G", "T", "A", "C"]:
-        channels.append(Channel(
-            channel_name=f"Barcode_{base}",
-            intended_measurement=f"Barcode sequencing - DNA base {base}",
-            light_sources=[
-                LaserConfig(
-                    device_name=f"PLACEHOLDER_LASER_{base}",
-                    wavelength=9999,
-                    wavelength_unit=SizeUnit.NM,
-                    power=9999.0,
-                    power_unit=PowerUnit.MW,
-                ),
-            ],
-            emission_filters=[
-                DeviceConfig(device_name=f"PLACEHOLDER_FILTER_{base}"),
-            ],
-            detector=detector,
-            emission_wavelength=9999,
-            emission_wavelength_unit=SizeUnit.NM,
-        ))
-    
+        channels.append(
+            Channel(
+                channel_name=f"Barcode_{base}",
+                intended_measurement=f"Barcode sequencing - DNA base {base}",
+                light_sources=[
+                    LaserConfig(
+                        device_name=f"PLACEHOLDER_LASER_{base}",
+                        wavelength=9999,
+                        wavelength_unit=SizeUnit.NM,
+                        power=9999.0,
+                        power_unit=PowerUnit.MW,
+                    ),
+                ],
+                emission_filters=[
+                    DeviceConfig(device_name=f"PLACEHOLDER_FILTER_{base}"),
+                ],
+                detector=detector,
+                emission_wavelength=9999,
+                emission_wavelength_unit=SizeUnit.NM,
+            )
+        )
+
     return channels
 
 
 def _create_hybridization_channels(detector: DetectorConfig) -> List[Channel]:
     """Create channels for hybridization (4 probes + DAPI)."""
     channels = []
-    
+
     # Hybridization probes - based on instrument notes mentioning GFP/G/TxRed/Cy5
     probe_info = [
         ("Hyb_Probe1_GFP", "Hybridization probe (likely GFP-like)", "HYB_1"),
@@ -355,14 +362,38 @@ def _create_hybridization_channels(detector: DetectorConfig) -> List[Channel]:
         ("Hyb_Probe3_TxRed", "Hybridization probe (likely Texas Red-like)", "HYB_3"),
         ("Hyb_Probe4_Cy5", "Hybridization probe (likely Cy5-like)", "HYB_4"),
     ]
-    
+
     for channel_name, measurement, laser_suffix in probe_info:
-        channels.append(Channel(
-            channel_name=channel_name,
-            intended_measurement=measurement,
+        channels.append(
+            Channel(
+                channel_name=channel_name,
+                intended_measurement=measurement,
+                light_sources=[
+                    LaserConfig(
+                        device_name=f"PLACEHOLDER_LASER_{laser_suffix}",
+                        wavelength=9999,
+                        wavelength_unit=SizeUnit.NM,
+                        power=9999.0,
+                        power_unit=PowerUnit.MW,
+                    ),
+                ],
+                emission_filters=[
+                    DeviceConfig(device_name=f"PLACEHOLDER_FILTER_{laser_suffix}"),
+                ],
+                detector=detector,
+                emission_wavelength=9999,
+                emission_wavelength_unit=SizeUnit.NM,
+            )
+        )
+
+    # DAPI channel
+    channels.append(
+        Channel(
+            channel_name="Hyb_DAPI",
+            intended_measurement="DAPI nuclear counterstain",
             light_sources=[
                 LaserConfig(
-                    device_name=f"PLACEHOLDER_LASER_{laser_suffix}",
+                    device_name="PLACEHOLDER_LASER_DAPI",
                     wavelength=9999,
                     wavelength_unit=SizeUnit.NM,
                     power=9999.0,
@@ -370,34 +401,14 @@ def _create_hybridization_channels(detector: DetectorConfig) -> List[Channel]:
                 ),
             ],
             emission_filters=[
-                DeviceConfig(device_name=f"PLACEHOLDER_FILTER_{laser_suffix}"),
+                DeviceConfig(device_name="PLACEHOLDER_FILTER_DAPI"),
             ],
             detector=detector,
             emission_wavelength=9999,
             emission_wavelength_unit=SizeUnit.NM,
-        ))
-    
-    # DAPI channel
-    channels.append(Channel(
-        channel_name="Hyb_DAPI",
-        intended_measurement="DAPI nuclear counterstain",
-        light_sources=[
-            LaserConfig(
-                device_name="PLACEHOLDER_LASER_DAPI",
-                wavelength=9999,
-                wavelength_unit=SizeUnit.NM,
-                power=9999.0,
-                power_unit=PowerUnit.MW,
-            ),
-        ],
-        emission_filters=[
-            DeviceConfig(device_name="PLACEHOLDER_FILTER_DAPI"),
-        ],
-        detector=detector,
-        emission_wavelength=9999,
-        emission_wavelength_unit=SizeUnit.NM,
-    ))
-    
+        )
+    )
+
     # Note: DIC is transmitted light and wouldn't be in fluorescence channel list
-    
+
     return channels
