@@ -99,7 +99,16 @@
                     schematicImage.src = `data:image/png;base64,${data.image}`;
                     resultSection.classList.remove('hidden');
                     
-                    fiberCount.textContent = `Found ${data.fiber_count} fiber implant(s) for subject ${data.subject_id}`;
+                    // Build message with cache info
+                    let message = `Found ${data.fiber_count} fiber implant(s) for subject ${data.subject_id}`;
+                    if (data.from_cache) {
+                        const ageHours = data.cache_age_hours.toFixed(1);
+                        message += ` (from cache, age: ${ageHours}h)`;
+                    } else {
+                        message += ' (from metadata service)';
+                    }
+                    
+                    fiberCount.textContent = message;
                     fiberCount.classList.remove('hidden');
                     
                     showStatus('Schematic generated successfully!', 'success');

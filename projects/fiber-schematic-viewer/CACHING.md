@@ -8,27 +8,26 @@ Added file-based caching to dramatically speed up repeated queries to the metada
 
 - **First query (cache miss):** ~30-40 seconds (queries metadata service)
 - **Cached queries (cache hit):** < 0.1 seconds (reads from disk)
-- **Cache TTL:** 1 week by default (configurable)
+- **Cache persistence:** Never expires (persists indefinitely)
 
 ## How It Works
 
-1. **Cache Check:** Before querying metadata service, check if cached data exists and is not expired
+1. **Cache Check:** Before querying metadata service, check if cached data exists
 2. **Cache Miss:** Query metadata service, then save result to cache
 3. **Cache Hit:** Return cached data immediately
 
 ## Configuration
 
 ```bash
-# Use default cache settings (1 week TTL)
+# Use default cache directory
 python app.py
 
-# Custom cache directory and TTL
-python app.py --cache-dir /tmp/procedures_cache --cache-ttl 24
+# Custom cache directory
+python app.py --cache-dir /tmp/procedures_cache
 ```
 
 Options:
 - `--cache-dir`: Directory to store cached procedures (default: `.cache/procedures`)
-- `--cache-ttl`: Cache time-to-live in hours (default: 168 = 1 week)
 
 ## Cache Structure
 
@@ -43,7 +42,7 @@ Each file contains the full procedures JSON response from the metadata service.
 
 ## Cache Invalidation
 
-The cache automatically expires after the TTL period. To manually clear the cache:
+The cache never expires automatically. To refresh data:
 
 ```bash
 # Clear all cached procedures
@@ -65,9 +64,10 @@ rm .cache/procedures/775741.json
 **Pros:**
 - Dramatically faster for repeated queries
 - Reduces load on metadata service
-- Persists across restarts
+- Persists indefinitely across restarts
+- No expiration checks (simpler logic)
 
 **Cons:**
-- Stale data possible (mitigated by TTL)
+- Stale data possible (requires manual invalidation)
 - Disk space usage (minimal - ~10KB per subject)
-- Manual cache clearing needed if procedures are updated
+- Must manually delete cache files if procedures are updated

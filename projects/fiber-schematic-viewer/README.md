@@ -18,15 +18,16 @@ uv pip install flask matplotlib numpy
 # Start the Flask app on port 8081
 python app.py
 
-# With custom cache settings
-python app.py --cache-dir /path/to/cache --cache-ttl 72
+# With custom cache directory
+python app.py --cache-dir /path/to/cache
 ```
 
 Then visit: `http://your-vm-ip:8081`
 
 Options:
 - `--cache-dir`: Cache directory path (default: `.cache/procedures`)
-- `--cache-ttl`: Cache time-to-live in hours (default: 168 = 1 week)
+
+**Note:** Cache never expires. To refresh data for a subject, delete the cached file: `rm .cache/procedures/<subject_id>.json`
 
 ## Usage
 
@@ -46,7 +47,7 @@ Options:
 **Performance**: 
 - First query: ~30-40 seconds (metadata service)
 - Cached queries: < 0.1 seconds
-- Cache TTL: 1 week (configurable)
+- Cache never expires (persistent across restarts)
 
 ## Customization
 

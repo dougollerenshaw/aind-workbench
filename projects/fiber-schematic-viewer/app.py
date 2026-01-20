@@ -31,17 +31,16 @@ def get_cache_path(subject_id: str, cache_dir: str) -> Path:
     return Path(cache_dir) / f"{subject_id}.json"
 
 
-def get_cached_procedures(subject_id: str, cache_dir: str, cache_ttl_hours: int) -> Optional[Dict]:
+def get_cached_procedures(subject_id: str, cache_dir: str) -> Optional[tuple]:
     """
     Try to get procedures from cache.
     
     Args:
         subject_id: Subject ID
         cache_dir: Cache directory path
-        cache_ttl_hours: Cache time-to-live in hours
         
     Returns:
-        Cached procedures dict if found and not expired, None otherwise
+        Tuple of (cached procedures dict, cache_age_hours) if found, None otherwise
     """
     cache_path = get_cache_path(subject_id, cache_dir)
     
@@ -49,23 +48,18 @@ def get_cached_procedures(subject_id: str, cache_dir: str, cache_ttl_hours: int)
         return None
     
     try:
-        # Check if cache is expired
-        cache_age_seconds = time.time() - cache_path.stat().st_mtime
-        cache_age_hours = cache_age_seconds / 3600
-        
-        if cache_age_hours > cache_ttl_hours:
-            print(f"Cache expired for subject {subject_id} (age: {cache_age_hours:.1f}h)")
-            return None
-        
         # Load from cache
         with open(cache_path, 'r') as f:
             data = json.load(f)
         
-        print(f"Cache hit for subject {subject_id} (age: {cache_age_hours:.1f}h)")
-        return data
+        # Calculate cache age for logging
+        cache_age_seconds = time.time() - cache_path.stat().st_mtime
+        cache_age_hours = cache_age_seconds / 3600
+        print(f"  Found in cache (age: {cache_age_hours:.1f}h)")
+        return (data, cache_age_hours)
         
     except Exception as e:
-        print(f"Error reading cache for subject {subject_id}: {e}")
+        print(f"  Error reading cache: {e}")
         return None
 
 
@@ -94,9 +88,8 @@ def save_to_cache(subject_id: str, procedures_data: Dict, cache_dir: str) -> Non
 def get_procedures_for_subject(
     subject_id: str, 
     db_host: str = None,
-    cache_dir: str = None,
-    cache_ttl_hours: int = 168
-) -> Optional[Dict]:
+    cache_dir: str = None
+) -> Optional[tuple]:
     """
     Get procedures for a subject from cache or metadata service.
 
@@ -104,10 +97,10 @@ def get_procedures_for_subject(
         subject_id: Subject ID to search for
         db_host: Unused (kept for backward compatibility)
         cache_dir: Cache directory path (default: .cache/procedures)
-        cache_ttl_hours: Cache time-to-live in hours (default: 168 = 1 week)
 
     Returns:
-        Procedures dictionary if found, None otherwise
+        Tuple of (procedures dictionary, cache_info dict) if found, None otherwise
+        cache_info contains: {"from_cache": bool, "cache_age_hours": float or None}
     """
     from aind_metadata_service_client import Configuration, ApiClient, DefaultApi
     
@@ -116,11 +109,14 @@ def get_procedures_for_subject(
         cache_dir = ".cache/procedures"
     
     # Try cache first
-    cached_data = get_cached_procedures(subject_id, cache_dir, cache_ttl_hours)
-    if cached_data:
-        return cached_data
+    print(f"Checking cache for subject {subject_id}...")
+    cached_result = get_cached_procedures(subject_id, cache_dir)
+    if cached_result:
+        data, cache_age = cached_result
+        cache_info = {"from_cache": True, "cache_age_hours": cache_age}
+        return (data, cache_info)
     
-    print(f"Querying metadata service for subject {subject_id}...")
+    print(f"Not found in cache, querying metadata service...")
 
     # Configure API client for internal metadata service
     configuration = Configuration(host="http://aind-metadata-service")
@@ -142,7 +138,8 @@ def get_procedures_for_subject(
                 
                 result = {"procedures": procedures_dict}
                 save_to_cache(subject_id, result, cache_dir)
-                return result
+                cache_info = {"from_cache": False, "cache_age_hours": None}
+                return (result, cache_info)
 
     except Exception as e:
         # Check if it's a validation error with response body
@@ -155,7 +152,8 @@ def get_procedures_for_subject(
                     print(f"Found procedures for subject {subject_id} (with validation warnings)")
                     result = {"procedures": body_json}
                     save_to_cache(subject_id, result, cache_dir)
-                    return result
+                    cache_info = {"from_cache": False, "cache_age_hours": None}
+                    return (result, cache_info)
             except:
                 pass
 
@@ -534,10 +532,9 @@ def generate_schematic():
 
         # Query metadata service for procedures (with caching)
         cache_dir = app.config.get("CACHE_DIR", ".cache/procedures")
-        cache_ttl = app.config.get("CACHE_TTL_HOURS", 168)
-        procedures_data = get_procedures_for_subject(subject_id, cache_dir=cache_dir, cache_ttl_hours=cache_ttl)
+        result = get_procedures_for_subject(subject_id, cache_dir=cache_dir)
 
-        if not procedures_data:
+        if not result:
             return (
                 jsonify(
                     {
@@ -547,6 +544,9 @@ def generate_schematic():
                 ),
                 404,
             )
+
+        # Unpack result
+        procedures_data, cache_info = result
 
         # Generate schematic
         generator = FiberSchematicGenerator()
@@ -584,7 +584,25 @@ def generate_schematic():
             sys.stderr.flush()
             raise
 
-        return jsonify({"success": True, "image": img_base64, "fiber_count": len(fibers), "subject_id": subject_id})
+        # Convert base64 bytes to string if needed
+        if isinstance(img_base64, bytes):
+            img_str = img_base64.decode('utf-8')
+        else:
+            img_str = img_base64
+
+        # Return success with cache info
+        response_data = {
+            "image": img_str,
+            "fiber_count": len(fibers),
+            "subject_id": subject_id,
+            "from_cache": cache_info["from_cache"],
+        }
+        
+        # Add cache age if from cache
+        if cache_info["from_cache"]:
+            response_data["cache_age_hours"] = cache_info["cache_age_hours"]
+        
+        return jsonify(response_data)
 
     except Exception as e:
         import traceback
@@ -613,23 +631,16 @@ if __name__ == "__main__":
         default=".cache/procedures",
         help="Cache directory for procedures data (default: .cache/procedures)"
     )
-    parser.add_argument(
-        "--cache-ttl",
-        type=int,
-        default=168,
-        help="Cache TTL in hours (default: 168 = 1 week)"
-    )
 
     args = parser.parse_args()
 
     # Store configuration in Flask app config
     app.config["CACHE_DIR"] = args.cache_dir
-    app.config["CACHE_TTL_HOURS"] = args.cache_ttl
 
     print(f"Starting Fiber Schematic Viewer on {args.host}:{args.port}")
     print(f"Using AIND Metadata Service for procedure data")
     print(f"Cache directory: {args.cache_dir}")
-    print(f"Cache TTL: {args.cache_ttl} hours")
+    print(f"Cache: Never expires (delete files manually to invalidate)")
     print(f"Access at: http://localhost:{args.port}")
 
     app.run(host=args.host, port=args.port, debug=args.debug)
