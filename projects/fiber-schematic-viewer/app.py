@@ -22,121 +22,57 @@ import config
 app = Flask(__name__, template_folder="params/templates", static_folder="params/static")
 
 
-def get_procedures_for_subject(subject_id: str, db_host: str) -> Optional[Dict]:
+def get_procedures_for_subject(subject_id: str, db_host: str = None) -> Optional[Dict]:
     """
-    Search for procedures record for a subject across multiple databases.
-
-    Search order:
-    1. metadata_index (DocDB V1) - checked first since some records may have failed to upgrade
-    2. metadata_index_v2 (DocDB)
-    3. Metadata service (stub for now - slow)
+    Get procedures for a subject from the metadata service.
 
     Args:
         subject_id: Subject ID to search for
-        db_host: MongoDB host
+        db_host: Unused (kept for backward compatibility)
 
     Returns:
         Procedures dictionary if found, None otherwise
     """
-    from aind_data_access_api.document_db import MetadataDbClient
+    from aind_metadata_service_client import Configuration, ApiClient, DefaultApi
+    import json
 
-    # Stage 1: Try V1 database first (records that failed to upgrade may only be in v1)
-    print(f"[Stage 1] Searching for subject {subject_id} in metadata_index (V1)...")
+    print(f"Querying metadata service for subject {subject_id}...")
+
+    # Configure API client for internal metadata service
+    configuration = Configuration(host="http://aind-metadata-service")
+
     try:
-        client_v1 = MetadataDbClient(
-            host=db_host,
-            database="metadata_index",
-            collection="data_assets",
-        )
+        with ApiClient(configuration) as api_client:
+            api_instance = DefaultApi(api_client)
 
-        # Try multiple query patterns - v1 might have subject_id in different locations
-        # Also handle both string and numeric subject_id
-        try:
-            subject_id_num = int(subject_id)
-        except ValueError:
-            subject_id_num = None
+            # Query metadata service for procedures
+            response = api_instance.get_procedures(subject_id=subject_id)
 
-        # Try subject.subject_id first (most common)
-        pipeline = [
-            {
-                "$match": {
-                    "$or": [
-                        {"subject.subject_id": subject_id},
-                        {"subject.subject_id": subject_id_num},
-                    ]
-                }
-            },
-            {"$project": {"procedures": 1, "subject.subject_id": 1, "name": 1}},
-            {"$limit": 10},  # Get more records to find one with procedures
-        ]
+            if response:
+                print(f"Found procedures for subject {subject_id}")
+                # Convert response to dict
+                if hasattr(response, "to_dict"):
+                    procedures_dict = response.to_dict()
+                else:
+                    procedures_dict = response
+                return {"procedures": procedures_dict}
 
-        records = client_v1.aggregate_docdb_records(pipeline)
-
-        if records and len(records) > 0:
-            print(f"[Stage 1] Found {len(records)} record(s) in V1 database")
-            # Find first record that has procedures
-            for record in records:
-                procedures = record.get("procedures")
-                if procedures:
-                    print(f"[Stage 1] Found record with procedures: {record.get('name', 'unknown')}")
-                    return {"procedures": procedures}
-            # If no record has procedures, log it
-            print(f"[Stage 1] Found records but none have procedures data")
-            print(f"[Stage 1] Sample record names: {[r.get('name', 'unknown') for r in records[:3]]}")
-        else:
-            # Fallback: try searching by name pattern (v1 asset names often include subject_id)
-            print(f"[Stage 1] No records found by subject_id, trying name pattern search...")
-            pipeline_name = [
-                {"$match": {"name": {"$regex": f"^{subject_id}_|_{subject_id}_|behavior_{subject_id}"}}},
-                {"$project": {"procedures": 1, "name": 1, "subject.subject_id": 1}},
-                {"$limit": 10},
-            ]
-            records_name = client_v1.aggregate_docdb_records(pipeline_name)
-            if records_name and len(records_name) > 0:
-                print(f"[Stage 1] Found {len(records_name)} record(s) by name pattern")
-                for record in records_name:
-                    procedures = record.get("procedures")
-                    if procedures:
-                        print(f"[Stage 1] Found record with procedures: {record.get('name', 'unknown')}")
-                        return {"procedures": procedures}
     except Exception as e:
-        print(f"[Stage 1] Error querying V1 database: {e}")
-        import traceback
+        # Check if it's a validation error with response body
+        # (metadata service may return 400 with valid data due to schema validation issues)
+        if hasattr(e, "body") and e.body:
+            try:
+                body_json = json.loads(e.body)
+                # If we got procedures data despite validation error, use it
+                if "subject_procedures" in body_json:
+                    print(f"Found procedures for subject {subject_id} (with validation warnings)")
+                    return {"procedures": body_json}
+            except:
+                pass
 
-        traceback.print_exc()
+        print(f"Error querying metadata service: {e}")
 
-    # Stage 2: Try V2 database
-    print(f"[Stage 2] Searching for subject {subject_id} in metadata_index_v2...")
-    try:
-        client_v2 = MetadataDbClient(
-            host=db_host,
-            database="metadata_index_v2",
-            collection="data_assets",
-        )
-
-        pipeline = [
-            {"$match": {"subject.subject_id": subject_id}},
-            {"$project": {"procedures": 1, "subject.subject_id": 1}},
-            {"$limit": 1},
-        ]
-
-        records = client_v2.aggregate_docdb_records(pipeline)
-
-        if records and len(records) > 0:
-            print(f"[Stage 2] Found record in V2 database")
-            return {"procedures": records[0].get("procedures", {})}
-    except Exception as e:
-        print(f"[Stage 2] Error querying V2 database: {e}")
-
-    # Stage 3: Try metadata service (stub for now - will be slow)
-    print(f"[Stage 3] Would query metadata service for subject {subject_id} (not implemented yet)")
-    # TODO: Implement metadata service query here
-    # This will be slow (~30 seconds) but will find subjects that haven't run experiments yet
-    # from aind_data_access_api.metadata_service import MetadataServiceClient
-    # client = MetadataServiceClient()
-    # procedures = client.get_procedures(subject_id)
-
-    print(f"No procedures record found for subject {subject_id} in any database")
+    print(f"No procedures found for subject {subject_id}")
     return None
 
 
@@ -155,8 +91,8 @@ class FiberSchematicGenerator:
 
     def extract_fiber_implants(self, procedures_data: Dict) -> List[Dict]:
         """
-        Extract fiber implant information from procedures.json data.
-        Handles both V1 and V2 database schemas.
+        Extract fiber implant information from procedures data.
+        Handles both V1 and V2 metadata schemas.
 
         Args:
             procedures_data: Parsed procedures.json data
@@ -507,16 +443,15 @@ def generate_schematic():
         if not subject_id:
             return jsonify({"error": "Subject ID is required"}), 400
 
-        # Search for procedures across multiple databases
-        db_host = app.config.get("DB_HOST", "api.allenneuraldynamics.org")
-        procedures_data = get_procedures_for_subject(subject_id, db_host)
+        # Query metadata service for procedures
+        procedures_data = get_procedures_for_subject(subject_id)
 
         if not procedures_data:
             return (
                 jsonify(
                     {
                         "error": f"Could not find a procedures record for subject {subject_id}. "
-                        f"This subject may not have any data assets in the database yet."
+                        f"This subject may not have surgical procedures recorded yet."
                     }
                 ),
                 404,
@@ -581,24 +516,11 @@ if __name__ == "__main__":
     parser.add_argument(
         "--debug", action="store_true", default=config.DEBUG, help=f"Enable debug mode (default: {config.DEBUG})"
     )
-    parser.add_argument(
-        "--db_host",
-        type=str,
-        default="api.allenneuraldynamics.org",
-        help="MongoDB host (default: api.allenneuraldynamics.org)",
-    )
-    parser.add_argument(
-        "--database", type=str, default="metadata_index", help="MongoDB database name (default: metadata_index)"
-    )
 
     args = parser.parse_args()
 
-    # Store configuration in Flask app config
-    app.config["DB_HOST"] = args.db_host
-    app.config["DATABASE"] = args.database
-
     print(f"Starting Fiber Schematic Viewer on {args.host}:{args.port}")
-    print(f"MongoDB: {args.db_host}/{args.database}")
+    print(f"Using AIND Metadata Service for procedure data")
     print(f"Access at: http://localhost:{args.port}")
 
     app.run(host=args.host, port=args.port, debug=args.debug)

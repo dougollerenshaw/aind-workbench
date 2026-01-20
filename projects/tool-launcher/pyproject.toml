@@ -12,6 +12,7 @@ dependencies = [
     "tabulate",
     "json5",
     # Dependencies for fiber-schematic-viewer
+    "aind-metadata-service-client",
     "matplotlib>=3.8.0",
     "numpy>=1.24.0",
 ]

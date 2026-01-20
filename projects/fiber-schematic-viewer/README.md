@@ -30,10 +30,12 @@ Then visit: `http://your-vm-ip:8081`
 
 ## How it works
 
-- Queries AIND document database for subject procedures
+- Queries AIND Metadata Service for subject procedures from source systems
 - Extracts fiber implant coordinates (AP, ML, DV, angles)
 - Generates anatomical skull diagram with fiber locations
 - All colors and visual parameters are configurable in `config.py`
+
+**Note**: Queries take ~30-40 seconds as they pull from the authoritative metadata service, which aggregates data from surgical records and other source systems.
 
 ## Customization
 

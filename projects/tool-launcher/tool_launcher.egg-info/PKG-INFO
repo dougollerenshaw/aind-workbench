@@ -9,5 +9,6 @@ Requires-Dist: aind-data-access-api
 Requires-Dist: pandas
 Requires-Dist: tabulate
 Requires-Dist: json5
+Requires-Dist: aind-metadata-service-client
 Requires-Dist: matplotlib>=3.8.0
 Requires-Dist: numpy>=1.24.0
