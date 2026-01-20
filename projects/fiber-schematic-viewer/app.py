@@ -6,6 +6,10 @@ Generates fiber implant schematics from AIND metadata.
 import argparse
 import io
 import base64
+import json
+import os
+import time
+from pathlib import Path
 from flask import Flask, render_template, request, jsonify
 import matplotlib
 
@@ -22,20 +26,100 @@ import config
 app = Flask(__name__, template_folder="params/templates", static_folder="params/static")
 
 
-def get_procedures_for_subject(subject_id: str, db_host: str = None) -> Optional[Dict]:
+def get_cache_path(subject_id: str, cache_dir: str) -> Path:
+    """Get the cache file path for a subject."""
+    return Path(cache_dir) / f"{subject_id}.json"
+
+
+def get_cached_procedures(subject_id: str, cache_dir: str, cache_ttl_hours: int) -> Optional[Dict]:
     """
-    Get procedures for a subject from the metadata service.
+    Try to get procedures from cache.
+    
+    Args:
+        subject_id: Subject ID
+        cache_dir: Cache directory path
+        cache_ttl_hours: Cache time-to-live in hours
+        
+    Returns:
+        Cached procedures dict if found and not expired, None otherwise
+    """
+    cache_path = get_cache_path(subject_id, cache_dir)
+    
+    if not cache_path.exists():
+        return None
+    
+    try:
+        # Check if cache is expired
+        cache_age_seconds = time.time() - cache_path.stat().st_mtime
+        cache_age_hours = cache_age_seconds / 3600
+        
+        if cache_age_hours > cache_ttl_hours:
+            print(f"Cache expired for subject {subject_id} (age: {cache_age_hours:.1f}h)")
+            return None
+        
+        # Load from cache
+        with open(cache_path, 'r') as f:
+            data = json.load(f)
+        
+        print(f"Cache hit for subject {subject_id} (age: {cache_age_hours:.1f}h)")
+        return data
+        
+    except Exception as e:
+        print(f"Error reading cache for subject {subject_id}: {e}")
+        return None
+
+
+def save_to_cache(subject_id: str, procedures_data: Dict, cache_dir: str) -> None:
+    """
+    Save procedures data to cache.
+    
+    Args:
+        subject_id: Subject ID
+        procedures_data: Procedures dictionary to cache
+        cache_dir: Cache directory path
+    """
+    try:
+        cache_path = get_cache_path(subject_id, cache_dir)
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        with open(cache_path, 'w') as f:
+            json.dump(procedures_data, f, indent=2)
+        
+        print(f"Cached procedures for subject {subject_id}")
+        
+    except Exception as e:
+        print(f"Error saving cache for subject {subject_id}: {e}")
+
+
+def get_procedures_for_subject(
+    subject_id: str, 
+    db_host: str = None,
+    cache_dir: str = None,
+    cache_ttl_hours: int = 168
+) -> Optional[Dict]:
+    """
+    Get procedures for a subject from cache or metadata service.
 
     Args:
         subject_id: Subject ID to search for
         db_host: Unused (kept for backward compatibility)
+        cache_dir: Cache directory path (default: .cache/procedures)
+        cache_ttl_hours: Cache time-to-live in hours (default: 168 = 1 week)
 
     Returns:
         Procedures dictionary if found, None otherwise
     """
     from aind_metadata_service_client import Configuration, ApiClient, DefaultApi
-    import json
-
+    
+    # Set default cache directory
+    if cache_dir is None:
+        cache_dir = ".cache/procedures"
+    
+    # Try cache first
+    cached_data = get_cached_procedures(subject_id, cache_dir, cache_ttl_hours)
+    if cached_data:
+        return cached_data
+    
     print(f"Querying metadata service for subject {subject_id}...")
 
     # Configure API client for internal metadata service
@@ -55,7 +139,10 @@ def get_procedures_for_subject(subject_id: str, db_host: str = None) -> Optional
                     procedures_dict = response.to_dict()
                 else:
                     procedures_dict = response
-                return {"procedures": procedures_dict}
+                
+                result = {"procedures": procedures_dict}
+                save_to_cache(subject_id, result, cache_dir)
+                return result
 
     except Exception as e:
         # Check if it's a validation error with response body
@@ -66,7 +153,9 @@ def get_procedures_for_subject(subject_id: str, db_host: str = None) -> Optional
                 # If we got procedures data despite validation error, use it
                 if "subject_procedures" in body_json:
                     print(f"Found procedures for subject {subject_id} (with validation warnings)")
-                    return {"procedures": body_json}
+                    result = {"procedures": body_json}
+                    save_to_cache(subject_id, result, cache_dir)
+                    return result
             except:
                 pass
 
@@ -443,8 +532,10 @@ def generate_schematic():
         if not subject_id:
             return jsonify({"error": "Subject ID is required"}), 400
 
-        # Query metadata service for procedures
-        procedures_data = get_procedures_for_subject(subject_id)
+        # Query metadata service for procedures (with caching)
+        cache_dir = app.config.get("CACHE_DIR", ".cache/procedures")
+        cache_ttl = app.config.get("CACHE_TTL_HOURS", 168)
+        procedures_data = get_procedures_for_subject(subject_id, cache_dir=cache_dir, cache_ttl_hours=cache_ttl)
 
         if not procedures_data:
             return (
@@ -516,11 +607,29 @@ if __name__ == "__main__":
     parser.add_argument(
         "--debug", action="store_true", default=config.DEBUG, help=f"Enable debug mode (default: {config.DEBUG})"
     )
+    parser.add_argument(
+        "--cache-dir",
+        type=str,
+        default=".cache/procedures",
+        help="Cache directory for procedures data (default: .cache/procedures)"
+    )
+    parser.add_argument(
+        "--cache-ttl",
+        type=int,
+        default=168,
+        help="Cache TTL in hours (default: 168 = 1 week)"
+    )
 
     args = parser.parse_args()
 
+    # Store configuration in Flask app config
+    app.config["CACHE_DIR"] = args.cache_dir
+    app.config["CACHE_TTL_HOURS"] = args.cache_ttl
+
     print(f"Starting Fiber Schematic Viewer on {args.host}:{args.port}")
     print(f"Using AIND Metadata Service for procedure data")
+    print(f"Cache directory: {args.cache_dir}")
+    print(f"Cache TTL: {args.cache_ttl} hours")
     print(f"Access at: http://localhost:{args.port}")
 
     app.run(host=args.host, port=args.port, debug=args.debug)

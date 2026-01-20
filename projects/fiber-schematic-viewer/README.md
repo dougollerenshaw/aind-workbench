@@ -17,9 +17,16 @@ uv pip install flask matplotlib numpy
 ```bash
 # Start the Flask app on port 8081
 python app.py
+
+# With custom cache settings
+python app.py --cache-dir /path/to/cache --cache-ttl 72
 ```
 
 Then visit: `http://your-vm-ip:8081`
+
+Options:
+- `--cache-dir`: Cache directory path (default: `.cache/procedures`)
+- `--cache-ttl`: Cache time-to-live in hours (default: 168 = 1 week)
 
 ## Usage
 
@@ -31,11 +38,15 @@ Then visit: `http://your-vm-ip:8081`
 ## How it works
 
 - Queries AIND Metadata Service for subject procedures from source systems
+- **Caches results locally** for fast repeated access
 - Extracts fiber implant coordinates (AP, ML, DV, angles)
 - Generates anatomical skull diagram with fiber locations
 - All colors and visual parameters are configurable in `config.py`
 
-**Note**: Queries take ~30-40 seconds as they pull from the authoritative metadata service, which aggregates data from surgical records and other source systems.
+**Performance**: 
+- First query: ~30-40 seconds (metadata service)
+- Cached queries: < 0.1 seconds
+- Cache TTL: 1 week (configurable)
 
 ## Customization
 

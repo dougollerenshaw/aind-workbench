@@ -11,6 +11,9 @@ env/
 venv/
 ENV/
 
+# Cache directories
+.cache/
+
 # Credentials and secrets
 *.pem
 *.key
