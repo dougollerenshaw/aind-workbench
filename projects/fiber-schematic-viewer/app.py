@@ -7,7 +7,6 @@ import argparse
 import io
 import base64
 import json
-import os
 import time
 from pathlib import Path
 from flask import Flask, render_template, request, jsonify
@@ -16,9 +15,9 @@ import matplotlib
 matplotlib.use("Agg")  # Non-interactive backend
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.patches import Circle, FancyBboxPatch
+from matplotlib.patches import Circle
 import numpy as np
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 
 # Import configuration
 import config
@@ -178,8 +177,7 @@ class FiberSchematicGenerator:
 
     def extract_fiber_implants(self, procedures_data: Dict) -> List[Dict]:
         """
-        Extract fiber implant information from procedures data.
-        Handles both V1 and V2 metadata schemas.
+        Extract fiber implant information from procedures data (V2 schema from metadata service).
 
         Args:
             procedures_data: Parsed procedures.json data
@@ -193,50 +191,21 @@ class FiberSchematicGenerator:
         subject_procedures = procedures_data.get("procedures", {}).get("subject_procedures", [])
 
         for surgery in subject_procedures:
-            # Check both V1 (procedure_type) and V2 (object_type) schemas
-            surgery_type = surgery.get("procedure_type") or surgery.get("object_type")
+            surgery_type = surgery.get("object_type")
 
             if surgery_type == "Surgery":
                 procedures = surgery.get("procedures", [])
 
                 for procedure in procedures:
-                    # Check both V1 and V2 schemas for procedure type
-                    proc_type = procedure.get("procedure_type") or procedure.get("object_type")
+                    proc_type = procedure.get("object_type")
 
-                    # V1: procedure_type == 'Fiber implant'
-                    if proc_type == "Fiber implant":
-                        probes = procedure.get("probes", [])
-
-                        for probe in probes:
-                            # Safely get ophys_probe - it might be missing or not a dict
-                            ophys_probe = probe.get("ophys_probe", {})
-                            if not isinstance(ophys_probe, dict):
-                                ophys_probe = {}
-
-                            # Extract targeted structure - handle both string and object
-                            targeted_structure = probe.get("targeted_structure", "Unknown")
-                            if isinstance(targeted_structure, dict):
-                                targeted_structure = targeted_structure.get("name", "Unknown")
-
-                            fiber_info = {
-                                "name": ophys_probe.get("name", "Unknown"),
-                                "ap": self.safe_float(probe.get("stereotactic_coordinate_ap")),
-                                "ml": self.safe_float(probe.get("stereotactic_coordinate_ml")),
-                                "dv": self.safe_float(probe.get("stereotactic_coordinate_dv")),
-                                "angle": self.safe_float(probe.get("angle")),
-                                "unit": probe.get("stereotactic_coordinate_unit", "millimeter"),
-                                "reference": probe.get("stereotactic_coordinate_reference", "Bregma"),
-                                "targeted_structure": targeted_structure,
-                            }
-                            fibers.append(fiber_info)
-
-                    # V2: object_type == 'Probe implant' with implanted_device.object_type == 'Fiber probe'
-                    elif proc_type == "Probe implant":
+                    # V2 schema: Probe implant with Fiber probe device
+                    if proc_type == "Probe implant":
                         implanted_device = procedure.get("implanted_device", {})
                         device_type = implanted_device.get("object_type", "")
 
                         if device_type == "Fiber probe":
-                            # In V2, coordinates are in device_config.transform
+                            # Coordinates are in device_config.transform
                             device_config = procedure.get("device_config", {})
 
                             # Default values
