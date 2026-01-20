@@ -1,58 +1,55 @@
 # Fiber Schematic Viewer
 
-Automated generation of fiber implant location schematics from AIND metadata.
+Web app that generates fiber implant location schematics from AIND metadata.
 
 ## Setup
 
 ```bash
-# Install dependencies with uv
 uv pip install -e .
-
-# Or install directly
-uv pip install flask matplotlib numpy
 ```
 
 ## Running
 
 ```bash
-# Start the Flask app on port 8081
+# Start on port 8081
 python app.py
 
-# With custom cache directory
-python app.py --cache-dir /path/to/cache
+# Custom port/cache
+python app.py --port 8080 --cache-dir /path/to/cache
 ```
 
-Then visit: `http://your-vm-ip:8081`
+Then visit `http://your-vm-ip:8081`
 
-Options:
-- `--cache-dir`: Cache directory path (default: `.cache/procedures`)
-
-**Note:** Cache never expires. To refresh data for a subject, delete the cached file: `rm .cache/procedures/<subject_id>.json`
-
-## Usage
+## How to Use
 
 1. Enter a mouse subject ID (e.g., "775741")
-2. Press Enter or click "Generate Schematic"
-3. View the automatically generated fiber implant schematic
-4. Download or print the high-resolution PNG
+2. Click "Generate Schematic"
+3. View/download the fiber implant diagram
 
-## How it works
+## How It Works
 
-- Queries AIND Metadata Service for subject procedures from source systems
-- **Caches results locally** for fast repeated access
-- Extracts fiber implant coordinates (AP, ML, DV, angles)
-- Generates anatomical skull diagram with fiber locations
-- All colors and visual parameters are configurable in `config.py`
+Queries the AIND Metadata Service for procedures data, extracts fiber coordinates, and generates a top-down skull schematic showing implant locations.
 
-**Performance**: 
-- First query: ~30-40 seconds (metadata service)
-- Cached queries: < 0.1 seconds
-- Cache never expires (persistent across restarts)
+**Performance:**
+- First query: ~30-40 seconds
+- Repeat queries: < 0.1 seconds (cached)
+
+## Cache
+
+Results are cached at `.cache/procedures/` as JSON files (one per subject). Cache never expires.
+
+To refresh data for a subject:
+```bash
+rm .cache/procedures/<subject_id>.json
+```
 
 ## Customization
 
-Edit `config.py` to change:
-- Fiber marker colors
-- Skull dimensions
-- Bregma/Lambda marker colors
-- Font sizes and styles
+Edit `config.py` to change colors, fonts, or dimensions.
+
+## Files
+
+- `app.py` - Main Flask application
+- `config.py` - Visual configuration
+- `params/templates/index.html` - Frontend
+- `params/static/style.css` - Styles
