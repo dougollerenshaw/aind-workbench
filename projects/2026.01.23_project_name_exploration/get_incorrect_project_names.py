@@ -98,25 +98,29 @@ def main():
 
     client = MetadataDbClient(host="api.allenneuraldynamics.org", database="metadata_index", collection="data_assets")
 
-    filter_query = {
-        "$and": [
-            {"data_description.project_name": {"$nin": [None, *EXPECTED_PROJECT_NAMES]}},
-            {"location": {"$not": {"$regex": "codeocean"}}},
-        ]
-    }
+    pipeline = [
+        {
+            "$match": {
+                "$and": [
+                    {"data_description.project_name": {"$nin": [None, *EXPECTED_PROJECT_NAMES]}},
+                    {"location": {"$not": {"$regex": "codeocean"}}},
+                ]
+            }
+        },
+        {"$sample": {"size": args.limit or 20000}},
+        {
+            "$project": {
+                "_id": 1,
+                "name": 1,
+                "location": 1,
+                "created": 1,
+                "data_description": 1,
+                "session": 1,
+            }
+        },
+    ]
 
-    projection = {
-        "_id": 1,
-        "name": 1,
-        "location": 1,
-        "created": 1,
-        "data_description": 1,
-        "session": 1,
-    }
-
-    results = list(
-        client.retrieve_docdb_records(filter_query=filter_query, projection=projection, limit=args.limit or 20000)
-    )
+    results = list(client.aggregate_docdb_records(pipeline=pipeline))
 
     df = pd.DataFrame(results)
 
