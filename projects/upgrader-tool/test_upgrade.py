@@ -2,6 +2,7 @@
 pytest tests for upgrade.py
 Run with: uv run pytest test_upgrade.py -v
 """
+
 import json
 import pytest
 from upgrade import upgrade_asset
@@ -98,12 +99,12 @@ def test_successful_asset_has_data_fields(successful_asset):
 def test_successful_asset_data_is_json_serializable(successful_asset):
     """Test that data fields are JSON serializable"""
     result = upgrade_asset(successful_asset["name"])
-    
+
     try:
         json.dumps(result["original_data"], default=str)
     except Exception as e:
         pytest.fail(f"original_data is not JSON serializable: {e}")
-    
+
     try:
         json.dumps(result["upgraded_data"], default=str)
     except Exception as e:

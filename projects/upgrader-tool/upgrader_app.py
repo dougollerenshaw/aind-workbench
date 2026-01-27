@@ -127,6 +127,40 @@ HTML_TEMPLATE = """
             margin-top: 0;
             color: #004085;
         }
+        /* Tree view styles (from query tool) */
+        .tree-node, .tree-leaf {
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .tree-children {
+            padding-left: 24px;
+        }
+        details summary {
+            color: #000;
+            cursor: pointer;
+            user-select: none;
+        }
+        .tree-leaf {
+            color: #000;
+            padding: 2px 0;
+        }
+        .tree-leaf .value {
+            color: #10b981;
+        }
+        .json-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            max-height: 600px;
+            overflow-y: auto;
+            font-family: monospace;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -145,6 +179,76 @@ HTML_TEMPLATE = """
     </div>
 
     <script>
+        // Tree view helper functions (from query tool)
+        function isObject(value) {
+            return value !== null && typeof value === 'object' && !Array.isArray(value);
+        }
+
+        function formatScalar(value) {
+            if (typeof value === 'string') return '"' + value + '"';
+            if (value === null) return 'null';
+            return String(value);
+        }
+
+        function buildTreeNode(value, label, depth) {
+            if (typeof depth === 'undefined') depth = 0;
+            if (Array.isArray(value) || isObject(value)) {
+                var details = document.createElement('details');
+                // Collapse all by default
+                details.open = false;
+                var summary = document.createElement('summary');
+                summary.textContent = label;
+                details.appendChild(summary);
+
+                var children = document.createElement('div');
+                children.className = 'tree-children';
+
+                if (Array.isArray(value)) {
+                    for (var idx = 0; idx < value.length; idx++) {
+                        children.appendChild(buildTreeNode(value[idx], '[' + idx + ']', depth + 1));
+                    }
+                } else {
+                    var entries = Object.entries(value);
+                    for (var i = 0; i < entries.length; i++) {
+                        var k = entries[i][0];
+                        var v = entries[i][1];
+                        children.appendChild(buildTreeNode(v, k, depth + 1));
+                    }
+                }
+
+                details.appendChild(children);
+                return details;
+            }
+
+            var leaf = document.createElement('div');
+            leaf.className = 'tree-leaf';
+            var labelSpan = document.createElement('span');
+            labelSpan.textContent = label + ': ';
+            var valueSpan = document.createElement('span');
+            valueSpan.className = 'value';
+            valueSpan.textContent = formatScalar(value);
+            leaf.appendChild(labelSpan);
+            leaf.appendChild(valueSpan);
+            return leaf;
+        }
+
+        function renderJsonTree(containerId, data) {
+            var container = document.getElementById(containerId);
+            container.innerHTML = '';
+            if (data === null || data === undefined) {
+                container.textContent = 'No data.';
+                return;
+            }
+            
+            // Build tree starting from root
+            var entries = Object.entries(data);
+            for (var i = 0; i < entries.length; i++) {
+                var k = entries[i][0];
+                var v = entries[i][1];
+                container.appendChild(buildTreeNode(v, k, 0));
+            }
+        }
+
         function checkUpgrade() {
             const assetId = document.getElementById('assetId').value.trim();
             const resultsDiv = document.getElementById('results');
@@ -294,23 +398,19 @@ HTML_TEMPLATE = """
             
             // Add side-by-side comparison view (for successful upgrades)
             if (data.success && data.original_data && data.upgraded_data) {
-                html += '<details style="margin-top: 20px;"><summary style="cursor: pointer; font-weight: bold; font-size: 16px;">Show Full Asset Comparison</summary>';
-                html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px;">';
+                html += '<details open style="margin-top: 20px;"><summary style="cursor: pointer; font-weight: bold; font-size: 16px;">Full Asset Comparison</summary>';
+                html += '<div class="comparison-grid">';
                 
                 // Original data
                 html += '<div>';
                 html += '<h4 style="margin-top: 0;">Original (v1)</h4>';
-                html += '<pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; max-height: 600px; overflow-y: auto; font-size: 12px;">';
-                html += JSON.stringify(data.original_data, null, 2);
-                html += '</pre>';
+                html += '<div id="original-json-tree" class="json-container"></div>';
                 html += '</div>';
                 
                 // Upgraded data
                 html += '<div>';
                 html += '<h4 style="margin-top: 0;">Upgraded (v2)</h4>';
-                html += '<pre style="background: #e8f5e9; padding: 10px; border-radius: 4px; overflow-x: auto; max-height: 600px; overflow-y: auto; font-size: 12px;">';
-                html += JSON.stringify(data.upgraded_data, null, 2);
-                html += '</pre>';
+                html += '<div id="upgraded-json-tree" class="json-container"></div>';
                 html += '</div>';
                 
                 html += '</div>';
@@ -319,16 +419,23 @@ HTML_TEMPLATE = """
             
             // Show original data for failed upgrades
             if (!data.success && data.original_data) {
-                html += '<details style="margin-top: 20px;"><summary style="cursor: pointer; font-weight: bold; font-size: 16px;">Show Original Asset Data</summary>';
+                html += '<details open style="margin-top: 20px;"><summary style="cursor: pointer; font-weight: bold; font-size: 16px;">Original Asset Data</summary>';
                 html += '<div style="margin-top: 10px;">';
-                html += '<pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; max-height: 600px; overflow-y: auto; font-size: 12px;">';
-                html += JSON.stringify(data.original_data, null, 2);
-                html += '</pre>';
+                html += '<div id="failed-original-json-tree" class="json-container"></div>';
                 html += '</div>';
                 html += '</details>';
             }
             
             resultsDiv.innerHTML = html;
+            
+            // Render JSON trees after HTML is inserted
+            if (data.success && data.original_data && data.upgraded_data) {
+                renderJsonTree('original-json-tree', data.original_data);
+                renderJsonTree('upgraded-json-tree', data.upgraded_data);
+            }
+            if (!data.success && data.original_data) {
+                renderJsonTree('failed-original-json-tree', data.original_data);
+            }
         }
         
         // Allow Enter key to trigger check
