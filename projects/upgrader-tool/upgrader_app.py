@@ -159,7 +159,8 @@ HTML_TEMPLATE = """
             
             resultsDiv.innerHTML = '<div class="loading">Checking upgrade...</div>';
             
-            fetch('/check_upgrade', {
+            // Use relative path so it works regardless of mount point
+            fetch('check_upgrade', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
