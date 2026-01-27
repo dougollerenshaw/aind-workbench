@@ -1,6 +1,6 @@
 import argparse
 from flask import Flask, render_template_string, request, jsonify
-from upgrade import upgrade_asset
+from upgrade import upgrade_asset, upgrade_asset_by_field
 
 app = Flask(__name__)
 
@@ -311,130 +311,128 @@ HTML_TEMPLATE = """
             html += `<div><strong>Created:</strong> ${data.created}</div>`;
             html += '</div>';
             
-            // Upgrade result
+            // Upgrade result summary
             if (data.success) {
                 html += '<div class="success">';
-                html += '<h3>All Files Upgraded Successfully!</h3>';
+                html += '<h3>All Fields Upgraded Successfully!</h3>';
                 html += '<p>This asset can be fully upgraded to schema v2.</p>';
                 html += '</div>';
-                
-                // Show what was upgraded
-                if (data.upgraded_files && data.upgraded_files.length > 0) {
-                    html += '<div class="upgrade-details">';
-                    html += '<h4>Files That Changed:</h4>';
-                    html += '<ul>';
-                    data.upgraded_files.forEach(file => {
-                        html += `<li>${file}</li>`;
-                    });
-                    html += '</ul>';
-                    html += '</div>';
-                }
-                
-                // Show unchanged files
-                if (data.unchanged_files && data.unchanged_files.length > 0) {
-                    html += '<div class="info">';
-                    html += '<h4>Files Already Up-to-Date:</h4>';
-                    html += '<ul>';
-                    data.unchanged_files.forEach(file => {
-                        html += `<li>${file}</li>`;
-                    });
-                    html += '</ul>';
-                    html += '</div>';
-                }
+            } else if (data.partial_success) {
+                html += '<div class="error">';
+                html += '<h3>Partial Upgrade Success</h3>';
+                html += `<p>${data.successful_fields.length} fields upgraded successfully, ${data.failed_fields.length} fields failed.</p>`;
+                html += '</div>';
             } else {
-                // Partial or complete failure
-                if (data.partial_success) {
-                    html += '<div class="error">';
-                    html += '<h3>Partial Upgrade Failure</h3>';
-                    html += '<p>Some files can be upgraded, but others have errors.</p>';
-                    html += '</div>';
-                } else {
-                    html += '<div class="error">';
-                    html += '<h3>Upgrade Failed</h3>';
-                    html += '<p>Unable to upgrade this asset to schema v2.</p>';
-                    html += '</div>';
-                }
-                
-                // Show successful upgrades if any
-                if (data.upgraded_files && data.upgraded_files.length > 0) {
-                    html += '<div class="success">';
-                    html += '<h4>Successfully Upgraded:</h4>';
-                    html += '<ul>';
-                    data.upgraded_files.forEach(file => {
-                        html += `<li>${file}</li>`;
-                    });
-                    html += '</ul>';
-                    html += '</div>';
-                }
-                
-                // Show unchanged files if any
-                if (data.unchanged_files && data.unchanged_files.length > 0) {
-                    html += '<div class="info">';
-                    html += '<h4>Already Up-to-Date:</h4>';
-                    html += '<ul>';
-                    data.unchanged_files.forEach(file => {
-                        html += `<li>${file}</li>`;
-                    });
-                    html += '</ul>';
-                    html += '</div>';
-                }
-                
-                // Show all errors
-                if (data.errors && data.errors.length > 0) {
-                    html += '<div class="error">';
-                    html += '<h4>Failed Files:</h4>';
-                    data.errors.forEach(err => {
-                        html += '<div style="margin-bottom: 20px; border-left: 3px solid #dc3545; padding-left: 10px;">';
-                        html += `<h5 style="margin: 5px 0;">${err.file}</h5>`;
-                        html += `<p style="margin: 5px 0;"><strong>Error:</strong> ${err.error}</p>`;
+                html += '<div class="error">';
+                html += '<h3>Upgrade Failed</h3>';
+                html += '<p>The full asset could not be upgraded.</p>';
+                if (data.overall_error) {
+                    html += '<div style="margin-top: 10px;"><strong>Error:</strong> ' + data.overall_error + '</div>';
+                    if (data.overall_traceback) {
                         html += '<details style="margin-top: 10px;"><summary style="cursor: pointer; font-weight: bold;">Show Full Traceback</summary>';
-                        html += `<pre style="font-size: 12px; overflow-x: auto;">${err.traceback}</pre>`;
+                        html += '<pre style="font-size: 12px; overflow-x: auto; background: #f8f9fa; padding: 10px; border-radius: 4px;">' + data.overall_traceback + '</pre>';
                         html += '</details>';
-                        html += '</div>';
-                    });
-                    html += '</div>';
+                    }
                 }
+                html += '</div>';
             }
             
-            // Add side-by-side comparison view (for successful upgrades)
-            if (data.success && data.original_data && data.upgraded_data) {
-                html += '<details open style="margin-top: 20px;"><summary style="cursor: pointer; font-weight: bold; font-size: 16px;">Full Asset Comparison</summary>';
-                html += '<div class="comparison-grid">';
-                
-                // Original data
-                html += '<div>';
-                html += '<h4 style="margin-top: 0;">Original (v1)</h4>';
-                html += '<div id="original-json-tree" class="json-container"></div>';
-                html += '</div>';
-                
-                // Upgraded data
-                html += '<div>';
-                html += '<h4 style="margin-top: 0;">Upgraded (v2)</h4>';
-                html += '<div id="upgraded-json-tree" class="json-container"></div>';
-                html += '</div>';
-                
-                html += '</div>';
-                html += '</details>';
-            }
-            
-            // Show original data for failed upgrades
-            if (!data.success && data.original_data) {
-                html += '<details open style="margin-top: 20px;"><summary style="cursor: pointer; font-weight: bold; font-size: 16px;">Original Asset Data</summary>';
+            // Show per-field results
+            if (data.field_results) {
+                html += '<details open style="margin-top: 20px;"><summary style="cursor: pointer; font-weight: bold; font-size: 16px;">Field-by-Field View</summary>';
                 html += '<div style="margin-top: 10px;">';
-                html += '<div id="failed-original-json-tree" class="json-container"></div>';
+                
+                // Iterate through each field
+                Object.keys(data.field_results).sort().forEach(fieldName => {
+                    const fieldResult = data.field_results[fieldName];
+                    
+                    html += '<details open style="margin: 15px 0; border: 1px solid #ddd; border-radius: 4px; padding: 10px;">';
+                    if (fieldResult.success === true) {
+                        let displayName = fieldName;
+                        if (fieldResult.converted_to) {
+                            displayName += ` → ${fieldResult.converted_to}`;
+                        }
+                        html += `<summary style="cursor: pointer; font-weight: bold; color: #155724; background: #d4edda; padding: 8px; border-radius: 4px;">[SUCCESS] ${displayName}</summary>`;
+                    } else if (fieldResult.success === false) {
+                        html += `<summary style="cursor: pointer; font-weight: bold; color: #721c24; background: #f8d7da; padding: 8px; border-radius: 4px;">[FAILED] ${fieldName}</summary>`;
+                    } else {
+                        // success === null, just showing info
+                        html += `<summary style="cursor: pointer; font-weight: bold; color: #6c757d; background: #e9ecef; padding: 8px; border-radius: 4px;">${fieldName}</summary>`;
+                    }
+                    
+                    html += '<div style="margin-top: 10px;">';
+                    
+                    if (fieldResult.success === true) {
+                        // Show side-by-side comparison for successful upgrades
+                        html += '<div class="comparison-grid">';
+                        html += '<div>';
+                        html += '<h4 style="margin-top: 0;">Original (v1)</h4>';
+                        html += `<div id="${fieldName}-original-tree" class="json-container"></div>`;
+                        html += '</div>';
+                        html += '<div>';
+                        let upgradedLabel = 'Upgraded (v2)';
+                        if (fieldResult.converted_to) {
+                            upgradedLabel += ` - ${fieldResult.converted_to}`;
+                        }
+                        html += `<h4 style="margin-top: 0;">${upgradedLabel}</h4>`;
+                        html += `<div id="${fieldName}-upgraded-tree" class="json-container"></div>`;
+                        html += '</div>';
+                        html += '</div>';
+                    } else if (fieldResult.success === false) {
+                        // Show error for failed fields
+                        html += '<div class="error" style="margin-bottom: 10px;">';
+                        html += `<strong>Error:</strong> ${fieldResult.error}`;
+                        if (fieldResult.traceback) {
+                            html += '<details style="margin-top: 10px;"><summary style="cursor: pointer; font-weight: bold;">Show Full Traceback</summary>';
+                            html += `<pre style="font-size: 12px; overflow-x: auto; background: #f8f9fa; padding: 10px; border-radius: 4px;">${fieldResult.traceback}</pre>`;
+                            html += '</details>';
+                        }
+                        html += '</div>';
+                        
+                        // Show original data for failed fields
+                        html += '<div>';
+                        html += '<h4 style="margin-top: 0;">Original (v1)</h4>';
+                        html += `<div id="${fieldName}-failed-tree" class="json-container"></div>`;
+                        html += '</div>';
+                    } else {
+                        // success === null, show info message and original data
+                        if (fieldResult.info) {
+                            html += '<div style="margin-bottom: 10px; padding: 10px; background: #f8f9fa; border-radius: 4px;">';
+                            html += `<strong>Note:</strong> ${fieldResult.info}`;
+                            html += '</div>';
+                        }
+                        
+                        // Show original data
+                        html += '<div>';
+                        html += '<h4 style="margin-top: 0;">Original (v1)</h4>';
+                        html += `<div id="${fieldName}-info-tree" class="json-container"></div>`;
+                        html += '</div>';
+                    }
+                    
+                    html += '</div>';
+                    html += '</details>';
+                });
+                
                 html += '</div>';
                 html += '</details>';
             }
             
             resultsDiv.innerHTML = html;
             
-            // Render JSON trees after HTML is inserted
-            if (data.success && data.original_data && data.upgraded_data) {
-                renderJsonTree('original-json-tree', data.original_data);
-                renderJsonTree('upgraded-json-tree', data.upgraded_data);
-            }
-            if (!data.success && data.original_data) {
-                renderJsonTree('failed-original-json-tree', data.original_data);
+            // Render JSON trees for each field
+            if (data.field_results) {
+                Object.keys(data.field_results).forEach(fieldName => {
+                    const fieldResult = data.field_results[fieldName];
+                    if (fieldResult.success === true) {
+                        renderJsonTree(`${fieldName}-original-tree`, fieldResult.original);
+                        renderJsonTree(`${fieldName}-upgraded-tree`, fieldResult.upgraded);
+                    } else if (fieldResult.success === false) {
+                        renderJsonTree(`${fieldName}-failed-tree`, fieldResult.original);
+                    } else {
+                        // success === null (info only)
+                        renderJsonTree(`${fieldName}-info-tree`, fieldResult.original);
+                    }
+                });
             }
         }
         
@@ -468,33 +466,15 @@ def check_upgrade():
     print(f"Checking upgrade for: {asset_identifier}")
     print(f"{'='*60}")
 
-    # Call the standalone upgrade function
-    result = upgrade_asset(asset_identifier)
+    # Call the standalone upgrade function (field-by-field approach)
+    result = upgrade_asset_by_field(asset_identifier)
 
-    if "error" in result and "traceback" not in result:
+    if "error" in result and "field_results" not in result:
         # Asset not found error
         return jsonify(result), 404
 
-    if result["success"]:
-        return jsonify(result)
-    else:
-        # Failed upgrade - format errors for display
-        errors = [{"file": "Full Asset", "error": result["error"], "traceback": result["traceback"]}]
-
-        return jsonify(
-            {
-                "success": False,
-                "partial_success": False,
-                "asset_id": result.get("asset_id"),
-                "asset_name": result.get("asset_name"),
-                "created": result.get("created"),
-                "upgraded_files": [],
-                "unchanged_files": [],
-                "failed_files": ["Full Asset"],
-                "errors": errors,
-                "original_data": result.get("original_data"),  # Include original data for viewing
-            }
-        )
+    # Return the per-field results
+    return jsonify(result)
 
 
 if __name__ == "__main__":
