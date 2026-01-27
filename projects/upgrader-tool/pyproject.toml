@@ -9,3 +9,8 @@ dependencies = [
     "aind-metadata-upgrader>=0.6.1",
     "flask>=3.1.2",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]

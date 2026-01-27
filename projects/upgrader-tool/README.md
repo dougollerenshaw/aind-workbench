@@ -9,10 +9,39 @@ A Flask web application for testing whether AIND metadata assets can successfull
 - View detailed error messages if upgrade fails
 - See which metadata files were upgraded
 - Full error traceback for debugging
+- Side-by-side comparison of original vs upgraded JSON
+
+## Testing Before Deployment
+
+**ALWAYS run tests before committing:**
+
+```bash
+uv run pytest test_upgrade.py -v
+```
+
+This validates:
+- Both test assets work correctly
+- Results are JSON serializable
+- No crashes or exceptions
+- Expected success/failure outcomes
+- Invalid asset handling
 
 ## Usage
 
-### Standalone
+### Command Line
+
+```bash
+# Test a specific asset
+uv run python upgrade.py --name behavior_775743_2025-03-21_08-54-07
+
+# Or by ID
+uv run python upgrade.py --id <uuid>
+
+# Get JSON output
+uv run python upgrade.py --name <asset> --json
+```
+
+### Standalone Web App
 
 ```bash
 uv run python upgrader_app.py

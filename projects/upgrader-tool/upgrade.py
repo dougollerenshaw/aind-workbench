@@ -88,8 +88,9 @@ def upgrade_asset(asset_identifier: str):
         result["success"] = True
         result["upgraded_files"] = upgraded_files
         result["unchanged_files"] = unchanged_files
-        result["original_data"] = asset_data
-        result["upgraded_data"] = upgraded_data
+        # Convert to JSON-serializable format
+        result["original_data"] = json.loads(json.dumps(asset_data, default=str))
+        result["upgraded_data"] = json.loads(json.dumps(upgraded_data, default=str))
 
         print(f"\n[SUCCESS] Upgrade completed")
         print(f"  Changed: {', '.join(upgraded_files) if upgraded_files else 'None'}")
@@ -102,8 +103,8 @@ def upgrade_asset(asset_identifier: str):
         result["error"] = error_str
         result["traceback"] = tb
         # Include original data even on failure for comparison
-        if 'asset_data' in locals():
-            result["original_data"] = asset_data
+        if "asset_data" in locals():
+            result["original_data"] = json.loads(json.dumps(asset_data, default=str))
 
         print(f"\n[FAILED] Upgrade failed")
         print(f"Error: {error_str}")
