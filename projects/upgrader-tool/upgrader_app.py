@@ -213,37 +213,85 @@ HTML_TEMPLATE = """
             // Upgrade result
             if (data.success) {
                 html += '<div class="success">';
-                html += '<h3>✓ Upgrade Successful!</h3>';
-                html += '<p>This asset can be upgraded to schema v2.</p>';
+                html += '<h3>All Files Upgraded Successfully!</h3>';
+                html += '<p>This asset can be fully upgraded to schema v2.</p>';
                 html += '</div>';
                 
                 // Show what was upgraded
                 if (data.upgraded_files && data.upgraded_files.length > 0) {
                     html += '<div class="upgrade-details">';
-                    html += '<h4>Upgraded Files:</h4>';
+                    html += '<h4>Files That Changed:</h4>';
+                    html += '<ul>';
                     data.upgraded_files.forEach(file => {
-                        html += `<div class="upgrade-item">${file}</div>`;
+                        html += `<li>${file}</li>`;
                     });
+                    html += '</ul>';
+                    html += '</div>';
+                }
+                
+                // Show unchanged files
+                if (data.unchanged_files && data.unchanged_files.length > 0) {
+                    html += '<div class="info">';
+                    html += '<h4>Files Already Up-to-Date:</h4>';
+                    html += '<ul>';
+                    data.unchanged_files.forEach(file => {
+                        html += `<li>${file}</li>`;
+                    });
+                    html += '</ul>';
                     html += '</div>';
                 }
             } else {
-                html += '<div class="error">';
-                html += '<h3>✗ Upgrade Failed</h3>';
-                html += `<p><strong>Error:</strong> ${data.error_message}</p>`;
-                html += '</div>';
-                
-                // Show which file failed
-                if (data.failed_file) {
-                    html += '<div class="info">';
-                    html += `<strong>Failed during:</strong> ${data.failed_file} upgrade`;
+                // Partial or complete failure
+                if (data.partial_success) {
+                    html += '<div class="error">';
+                    html += '<h3>Partial Upgrade Failure</h3>';
+                    html += '<p>Some files can be upgraded, but others have errors.</p>';
+                    html += '</div>';
+                } else {
+                    html += '<div class="error">';
+                    html += '<h3>Upgrade Failed</h3>';
+                    html += '<p>Unable to upgrade this asset to schema v2.</p>';
                     html += '</div>';
                 }
                 
-                // Show full traceback
-                if (data.traceback) {
-                    html += '<details><summary style="cursor: pointer; font-weight: bold;">Show Full Error Details</summary>';
-                    html += `<pre>${data.traceback}</pre>`;
-                    html += '</details>';
+                // Show successful upgrades if any
+                if (data.upgraded_files && data.upgraded_files.length > 0) {
+                    html += '<div class="success">';
+                    html += '<h4>Successfully Upgraded:</h4>';
+                    html += '<ul>';
+                    data.upgraded_files.forEach(file => {
+                        html += `<li>${file}</li>`;
+                    });
+                    html += '</ul>';
+                    html += '</div>';
+                }
+                
+                // Show unchanged files if any
+                if (data.unchanged_files && data.unchanged_files.length > 0) {
+                    html += '<div class="info">';
+                    html += '<h4>Already Up-to-Date:</h4>';
+                    html += '<ul>';
+                    data.unchanged_files.forEach(file => {
+                        html += `<li>${file}</li>`;
+                    });
+                    html += '</ul>';
+                    html += '</div>';
+                }
+                
+                // Show all errors
+                if (data.errors && data.errors.length > 0) {
+                    html += '<div class="error">';
+                    html += '<h4>Failed Files:</h4>';
+                    data.errors.forEach(err => {
+                        html += '<div style="margin-bottom: 20px; border-left: 3px solid #dc3545; padding-left: 10px;">';
+                        html += `<h5 style="margin: 5px 0;">${err.file}</h5>`;
+                        html += `<p style="margin: 5px 0;"><strong>Error:</strong> ${err.error}</p>`;
+                        html += '<details style="margin-top: 10px;"><summary style="cursor: pointer; font-weight: bold;">Show Full Traceback</summary>';
+                        html += `<pre style="font-size: 12px; overflow-x: auto;">${err.traceback}</pre>`;
+                        html += '</details>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
                 }
             }
             
@@ -309,65 +357,98 @@ def check_upgrade():
         asset_name = asset_data.get('name', 'Unknown')
         created = asset_data.get('created', 'Unknown')
         
-        # Try to upgrade
-        try:
-            upgrader = Upgrade(asset_data)
-            upgraded_data = upgrader.upgrade()
-            
-            # Find what was upgraded
-            upgraded_files = []
-            for key in upgraded_data.keys():
-                if key in asset_data and upgraded_data[key] != asset_data[key]:
-                    upgraded_files.append(key)
-                elif key not in asset_data:
-                    upgraded_files.append(f"{key} (new)")
-            
-            # Log success to terminal
-            print(f"\n✓ UPGRADE SUCCESSFUL for {asset_id}")
-            print(f"Upgraded files: {', '.join(upgraded_files) if upgraded_files else 'None (already up-to-date)'}")
+        # Identify all metadata files present
+        metadata_files = [
+            'acquisition', 'data_description', 'instrument', 'procedures',
+            'processing', 'rig', 'session', 'subject', 'quality_control'
+        ]
+        present_files = [f for f in metadata_files if f in asset_data]
+        
+        print(f"Found metadata files: {', '.join(present_files)}")
+        
+        # Try to upgrade each file independently to catch ALL errors
+        results = {}
+        all_errors = []
+        
+        for file_key in present_files:
+            try:
+                print(f"  Attempting to upgrade {file_key}...")
+                # Create a minimal asset with just this file
+                test_asset = {
+                    '_id': asset_id,
+                    'name': asset_name,
+                    file_key: asset_data[file_key]
+                }
+                upgrader = Upgrade(test_asset)
+                upgraded = upgrader.upgrade()
+                
+                # Check if it actually changed
+                changed = upgraded.get(file_key) != asset_data[file_key]
+                results[file_key] = {
+                    'success': True,
+                    'changed': changed
+                }
+                print(f"    [OK] {file_key}: {'upgraded' if changed else 'no changes needed'}")
+                
+            except Exception as e:
+                error_str = str(e)
+                tb = traceback.format_exc()
+                results[file_key] = {
+                    'success': False,
+                    'error': error_str,
+                    'traceback': tb
+                }
+                all_errors.append({
+                    'file': file_key,
+                    'error': error_str,
+                    'traceback': tb
+                })
+                print(f"    [FAILED] {file_key}")
+                print(f"      Error: {error_str}")
+        
+        # Determine overall success
+        failed_files = [f for f, r in results.items() if not r['success']]
+        upgraded_files = [f for f, r in results.items() if r['success'] and r.get('changed', False)]
+        unchanged_files = [f for f, r in results.items() if r['success'] and not r.get('changed', False)]
+        
+        if not failed_files:
+            # All files upgraded successfully
+            print(f"\n[SUCCESS] ALL FILES UPGRADED SUCCESSFULLY for {asset_id}")
+            print(f"  Upgraded: {', '.join(upgraded_files) if upgraded_files else 'None'}")
+            print(f"  No changes: {', '.join(unchanged_files) if unchanged_files else 'None'}")
             
             return jsonify({
                 'success': True,
                 'asset_id': asset_id,
                 'asset_name': asset_name,
                 'created': created,
-                'upgraded_files': upgraded_files
+                'upgraded_files': upgraded_files,
+                'unchanged_files': unchanged_files,
+                'results': results
             })
-            
-        except Exception as e:
-            # Parse the error to find which file failed
-            error_str = str(e)
-            tb = traceback.format_exc()
-            
-            # Log to terminal
-            print(f"\n❌ UPGRADE FAILED for {asset_id}")
-            print(f"Error: {error_str}")
-            print(f"\nFull traceback:")
-            print(tb)
-            
-            # Try to extract which file was being upgraded
-            failed_file = None
-            if 'Upgrading' in tb:
-                lines = tb.split('\n')
-                for line in lines:
-                    if 'Upgrading' in line:
-                        failed_file = line.strip()
-                        break
+        else:
+            # Some files failed
+            print(f"\n[PARTIAL] PARTIAL UPGRADE for {asset_id}")
+            print(f"  Succeeded: {', '.join([f for f, r in results.items() if r['success']])}")
+            print(f"  Failed: {', '.join(failed_files)}")
             
             return jsonify({
                 'success': False,
+                'partial_success': len(upgraded_files) > 0 or len(unchanged_files) > 0,
                 'asset_id': asset_id,
                 'asset_name': asset_name,
                 'created': created,
-                'error_message': error_str,
-                'failed_file': failed_file,
-                'traceback': tb
+                'upgraded_files': upgraded_files,
+                'unchanged_files': unchanged_files,
+                'failed_files': failed_files,
+                'errors': all_errors,
+                'results': results
             })
             
     except Exception as e:
         # Catch-all for any other errors (DB connection, etc.)
         tb = traceback.format_exc()
-        print(f"\n❌ UNEXPECTED ERROR")
+        print(f"\n[ERROR] UNEXPECTED ERROR")
         print(f"Error: {str(e)}")
         print(f"\nFull traceback:")
         print(tb)
