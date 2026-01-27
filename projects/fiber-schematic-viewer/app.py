@@ -239,7 +239,7 @@ class FiberSchematicGenerator:
                                                 break
 
                             # Get targeted structure
-                            primary_target = device_config.get("primary_targeted_structure", {})
+                            primary_target = device_config.get("primary_targeted_structure") or {}
                             target_name = primary_target.get("name", "Not specified in surgical request form")
 
                             fiber_info = {
@@ -249,7 +249,7 @@ class FiberSchematicGenerator:
                                 "dv": dv,
                                 "angle": angle,
                                 "unit": "millimeter",
-                                "reference": device_config.get("coordinate_system", {}).get("origin", "Bregma"),
+                                "reference": (device_config.get("coordinate_system") or {}).get("origin", "Bregma"),
                                 "targeted_structure": target_name,
                             }
                             fibers.append(fiber_info)
@@ -493,6 +493,7 @@ def index():
 def generate_schematic():
     """Generate schematic for a given subject ID."""
     try:
+        start_time = time.time()
         data = request.get_json()
         subject_id = data.get("subject_id", "").strip()
 
@@ -501,7 +502,10 @@ def generate_schematic():
 
         # Query metadata service for procedures (with caching)
         cache_dir = app.config.get("CACHE_DIR", ".cache/procedures")
+        t0 = time.time()
         result = get_procedures_for_subject(subject_id, cache_dir=cache_dir)
+        t1 = time.time()
+        print(f"[TIMING] Get procedures: {(t1-t0)*1000:.1f}ms")
 
         if not result:
             return (
@@ -520,7 +524,10 @@ def generate_schematic():
         # Generate schematic
         generator = FiberSchematicGenerator()
         try:
+            t0 = time.time()
             fibers = generator.extract_fiber_implants(procedures_data)
+            t1 = time.time()
+            print(f"[TIMING] Extract fibers: {(t1-t0)*1000:.1f}ms")
         except Exception as e:
             import traceback
             import sys
@@ -543,7 +550,10 @@ def generate_schematic():
 
         # Create schematic image
         try:
+            t0 = time.time()
             img_base64 = generator.create_schematic(fibers, subject_id)
+            t1 = time.time()
+            print(f"[TIMING] Create schematic: {(t1-t0)*1000:.1f}ms")
         except Exception as e:
             import traceback
             import sys
@@ -570,6 +580,9 @@ def generate_schematic():
         # Add cache age if from cache
         if cache_info["from_cache"]:
             response_data["cache_age_hours"] = cache_info["cache_age_hours"]
+        
+        total_time = time.time() - start_time
+        print(f"[TIMING] TOTAL request time: {total_time*1000:.1f}ms")
         
         return jsonify(response_data)
 

@@ -25,6 +25,9 @@ from app import app as fiber_app
 query_app.config['APPLICATION_ROOT'] = '/query_tool'
 fiber_app.config['APPLICATION_ROOT'] = '/fiber_schematic_viewer'
 
+# Configure fiber app cache directory (absolute path)
+fiber_app.config['CACHE_DIR'] = str(PROJECTS_DIR / 'fiber-schematic-viewer' / '.cache' / 'procedures')
+
 # Create a simple root app with tool directory
 root_app = Flask(__name__)
 
@@ -61,6 +64,7 @@ if __name__ == '__main__':
     print(f"Available tools:")
     print(f"  - Query Tool: http://localhost:{args.port}/query_tool")
     print(f"  - Fiber Schematic Viewer: http://localhost:{args.port}/fiber_schematic_viewer")
+    print(f"Fiber Schematic Viewer cache directory: {fiber_app.config['CACHE_DIR']}")
     
     run_simple(
         args.host, 

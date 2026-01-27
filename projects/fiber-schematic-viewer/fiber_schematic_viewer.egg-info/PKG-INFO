@@ -7,5 +7,7 @@ Requires-Dist: flask>=3.0.0
 Requires-Dist: matplotlib>=3.8.0
 Requires-Dist: numpy>=1.24.0
 Requires-Dist: aind-metadata-service-client
+Requires-Dist: aind-data-access-api
+Requires-Dist: tqdm>=4.65.0
 Provides-Extra: dev
 Requires-Dist: pytest>=7.0.0; extra == "dev"

@@ -2,6 +2,8 @@ flask>=3.0.0
 matplotlib>=3.8.0
 numpy>=1.24.0
 aind-metadata-service-client
+aind-data-access-api
+tqdm>=4.65.0
 
 [dev]
 pytest>=7.0.0
