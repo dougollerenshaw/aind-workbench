@@ -6,7 +6,6 @@ Mounts multiple Flask apps at different URL paths on a single port.
 import sys
 import os
 from pathlib import Path
-import importlib.util
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.serving import run_simple
 from flask import Flask
@@ -14,21 +13,15 @@ from flask import Flask
 # Get the projects directory
 PROJECTS_DIR = Path(__file__).parent.parent
 
-
-def load_app_from_file(file_path, app_name='app'):
-    """Load a Flask app from a Python file"""
-    spec = importlib.util.spec_from_file_location(f"module_{file_path.stem}", file_path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return getattr(module, app_name)
-
-
-# Load Flask apps
+# Add tool directories to path
 sys.path.insert(0, str(PROJECTS_DIR / 'query_tool'))
-from query_tool import app as query_app
+sys.path.insert(0, str(PROJECTS_DIR / 'fiber-schematic-viewer'))
+sys.path.insert(0, str(PROJECTS_DIR / 'upgrader-tool'))
 
-fiber_app = load_app_from_file(PROJECTS_DIR / 'fiber-schematic-viewer' / 'app.py')
-upgrader_app = load_app_from_file(PROJECTS_DIR / 'upgrader-tool' / 'app.py')
+# Import the Flask apps from each tool
+from query_tool import app as query_app
+from app import app as fiber_app
+from upgrader_app import app as upgrader_app
 
 # Configure apps to know their mount points
 query_app.config['APPLICATION_ROOT'] = '/query_tool'

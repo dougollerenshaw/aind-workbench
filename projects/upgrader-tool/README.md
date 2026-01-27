@@ -15,7 +15,7 @@ A Flask web application for testing whether AIND metadata assets can successfull
 ### Standalone
 
 ```bash
-uv run python app.py
+uv run python upgrader_app.py
 ```
 
 Then visit http://localhost:5001
