@@ -1,9 +1,6 @@
 import argparse
-import json
-import traceback
 from flask import Flask, render_template_string, request, jsonify
-from aind_data_access_api.document_db import MetadataDbClient
-from aind_metadata_upgrader.upgrade import Upgrade
+from upgrade import upgrade_asset
 
 app = Flask(__name__)
 
@@ -310,15 +307,6 @@ HTML_TEMPLATE = """
 """
 
 
-def get_mongodb_client():
-    """Create a MongoDB client for production v1 database"""
-    return MetadataDbClient(
-        host="api.allenneuraldynamics.org",
-        database="metadata_index",
-        collection="data_assets"
-    )
-
-
 @app.route('/')
 def index():
     return render_template_string(HTML_TEMPLATE)
@@ -326,142 +314,45 @@ def index():
 
 @app.route('/check_upgrade', methods=['POST'])
 def check_upgrade():
-    try:
-        data = request.json
-        asset_identifier = data.get('asset_id', '').strip()
-        print(f"\n{'='*60}")
-        print(f"Checking upgrade for: {asset_identifier}")
-        print(f"{'='*60}")
+    """Check if an asset can be upgraded"""
+    data = request.json
+    asset_identifier = data.get('asset_id', '').strip()
+    
+    if not asset_identifier:
+        return jsonify({'error': 'Asset ID or name is required'}), 400
+    
+    print(f"\n{'='*60}")
+    print(f"Checking upgrade for: {asset_identifier}")
+    print(f"{'='*60}")
+    
+    # Call the standalone upgrade function
+    result = upgrade_asset(asset_identifier)
+    
+    if 'error' in result and 'traceback' not in result:
+        # Asset not found error
+        return jsonify(result), 404
+    
+    if result['success']:
+        return jsonify(result)
+    else:
+        # Failed upgrade - format errors for display
+        errors = [{
+            'file': 'Full Asset',
+            'error': result['error'],
+            'traceback': result['traceback']
+        }]
         
-        if not asset_identifier:
-            return jsonify({'error': 'Asset ID or name is required'}), 400
-        
-        # Connect to database
-        client = get_mongodb_client()
-        
-        # Try to find asset by ID or name
-        if len(asset_identifier) == 36 and '-' in asset_identifier:
-            # Looks like a UUID
-            query = {"_id": asset_identifier}
-        else:
-            # Assume it's a name
-            query = {"name": asset_identifier}
-        
-        records = client.retrieve_docdb_records(filter_query=query, limit=1)
-        
-        if not records:
-            return jsonify({'error': f'Asset not found: {asset_identifier}'}), 404
-        
-        asset_data = records[0]
-        asset_id = asset_data.get('_id', 'Unknown')
-        asset_name = asset_data.get('name', 'Unknown')
-        created = asset_data.get('created', 'Unknown')
-        
-        # First, try to upgrade the complete asset to see if it works
-        print(f"Attempting full asset upgrade...")
-        try:
-            upgrader = Upgrade(asset_data)
-            upgraded_data = upgrader.upgrade_metadata()
-            
-            # Success! Find what changed
-            metadata_files = [
-                'acquisition', 'data_description', 'instrument', 'procedures',
-                'processing', 'rig', 'session', 'subject', 'quality_control'
-            ]
-            upgraded_files = []
-            unchanged_files = []
-            
-            for key in metadata_files:
-                if key in upgraded_data:
-                    if key in asset_data and upgraded_data[key] != asset_data[key]:
-                        upgraded_files.append(key)
-                    elif key in asset_data:
-                        unchanged_files.append(key)
-                    # Note: some files like 'session' might not be in upgraded_data if converted to 'acquisition'
-            
-            # Check for conversions (session -> acquisition)
-            if 'session' in asset_data and 'session' not in upgraded_data and 'acquisition' in upgraded_data:
-                upgraded_files.append('session (converted to acquisition)')
-            
-            print(f"\n[SUCCESS] FULL ASSET UPGRADE SUCCESSFUL for {asset_id}")
-            print(f"  Upgraded: {', '.join(upgraded_files) if upgraded_files else 'None'}")
-            print(f"  No changes: {', '.join(unchanged_files) if unchanged_files else 'None'}")
-            
-            return jsonify({
-                'success': True,
-                'asset_id': asset_id,
-                'asset_name': asset_name,
-                'created': created,
-                'upgraded_files': upgraded_files,
-                'unchanged_files': unchanged_files
-            })
-            
-        except Exception as e:
-            # Full upgrade failed - now try to isolate which file(s) are problematic
-            print(f"\n[FAILED] Full upgrade failed, isolating problem files...")
-            print(f"Error: {str(e)}")
-            
-            # Parse the error to see if we can identify the problematic file
-            error_str = str(e)
-            full_tb = traceback.format_exc()
-            
-            # Try upgrading with different file combinations to isolate the issue
-            results = {}
-            all_errors = [{
-                'file': 'Full Asset',
-                'error': error_str,
-                'traceback': full_tb
-            }]
-            
-            # List present metadata files
-            metadata_files = [
-                'acquisition', 'data_description', 'instrument', 'procedures',
-                'processing', 'rig', 'session', 'subject', 'quality_control'
-            ]
-            present_files = [f for f in metadata_files if f in asset_data]
-            print(f"Present metadata files: {', '.join(present_files)}")
-            
-            # Mark all as failed for now (since full upgrade failed)
-            for file_key in present_files:
-                results[file_key] = {
-                    'success': False,
-                    'error': 'Full asset upgrade failed (see Full Asset error)',
-                    'traceback': None
-                }
-            
-            results['_full_asset'] = {
-                'success': False,
-                'error': error_str,
-                'traceback': full_tb
-            }
-            
-            print(f"\n[FAILED] Asset cannot be upgraded")
-            print(f"  Present files: {', '.join(present_files)}")
-            
-            return jsonify({
-                'success': False,
-                'partial_success': False,
-                'asset_id': asset_id,
-                'asset_name': asset_name,
-                'created': created,
-                'upgraded_files': [],
-                'unchanged_files': [],
-                'failed_files': present_files,
-                'errors': all_errors,
-                'results': results
-            })
-            
-    except Exception as e:
-        # Catch-all for any other errors (DB connection, etc.)
-        tb = traceback.format_exc()
-        print(f"\n[ERROR] UNEXPECTED ERROR")
-        print(f"Error: {str(e)}")
-        print(f"\nFull traceback:")
-        print(tb)
         return jsonify({
-            'error': str(e),
-            'traceback': tb
-        }), 400
+            'success': False,
+            'partial_success': False,
+            'asset_id': result.get('asset_id'),
+            'asset_name': result.get('asset_name'),
+            'created': result.get('created'),
+            'upgraded_files': [],
+            'unchanged_files': [],
+            'failed_files': ['Full Asset'],
+            'errors': errors
+        })
 
 
 if __name__ == "__main__":

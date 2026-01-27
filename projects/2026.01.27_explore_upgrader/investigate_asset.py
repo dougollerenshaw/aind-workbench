@@ -37,11 +37,11 @@ def investigate_upgrade(asset_id: str):
         if key not in ["_id", "name", "created", "location", "external_links"]:
             print(f"  - {key}")
 
-    # Try to run the upgrader
+    # Try to run the upgrader (automatically upgrades everything in __init__)
     print(f"\nAttempting to upgrade...")
     try:
         upgrader = Upgrade(asset_data)
-        upgraded_data = upgrader.upgrade_metadata()
+        upgraded_data = upgrader.metadata.model_dump()
 
         print(f"\nUpgrade successful!")
         print(f"Upgraded keys: {list(upgraded_data.keys())}")
