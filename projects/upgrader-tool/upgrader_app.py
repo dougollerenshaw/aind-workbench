@@ -361,7 +361,7 @@ def check_upgrade():
         print(f"Attempting full asset upgrade...")
         try:
             upgrader = Upgrade(asset_data)
-            upgraded_data = upgrader.upgrade()
+            upgraded_data = upgrader.upgrade_metadata()
             
             # Success! Find what changed
             metadata_files = [

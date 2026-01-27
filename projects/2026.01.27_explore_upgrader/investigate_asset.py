@@ -41,7 +41,7 @@ def investigate_upgrade(asset_id: str):
     print(f"\nAttempting to upgrade...")
     try:
         upgrader = Upgrade(asset_data)
-        upgraded_data = upgrader.upgrade()
+        upgraded_data = upgrader.upgrade_metadata()
 
         print(f"\nUpgrade successful!")
         print(f"Upgraded keys: {list(upgraded_data.keys())}")
