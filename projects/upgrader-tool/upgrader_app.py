@@ -166,10 +166,28 @@ HTML_TEMPLATE = """
                 },
                 body: JSON.stringify({ asset_id: assetId })
             })
-            .then(response => response.json())
+            .then(response => {
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json();
+                } else {
+                    // Not JSON, probably an HTML error page
+                    return response.text().then(text => {
+                        throw new Error(`Server returned non-JSON response (status ${response.status}). Check terminal for errors.`);
+                    });
+                }
+            })
             .then(data => {
                 if (data.error) {
-                    resultsDiv.innerHTML = `<div class="error"><strong>Error:</strong> ${data.error}</div>`;
+                    let errorHtml = `<div class="error"><strong>Error:</strong> ${data.error}`;
+                    if (data.traceback) {
+                        errorHtml += '<details><summary style="cursor: pointer; margin-top: 10px; font-weight: bold;">Show Full Traceback</summary>';
+                        errorHtml += `<pre>${data.traceback}</pre>`;
+                        errorHtml += '</details>';
+                    }
+                    errorHtml += '</div>';
+                    resultsDiv.innerHTML = errorHtml;
                 } else {
                     displayResults(data);
                 }
@@ -262,6 +280,9 @@ def check_upgrade():
     try:
         data = request.json
         asset_identifier = data.get('asset_id', '').strip()
+        print(f"\n{'='*60}")
+        print(f"Checking upgrade for: {asset_identifier}")
+        print(f"{'='*60}")
         
         if not asset_identifier:
             return jsonify({'error': 'Asset ID or name is required'}), 400
@@ -300,6 +321,10 @@ def check_upgrade():
                 elif key not in asset_data:
                     upgraded_files.append(f"{key} (new)")
             
+            # Log success to terminal
+            print(f"\n✓ UPGRADE SUCCESSFUL for {asset_id}")
+            print(f"Upgraded files: {', '.join(upgraded_files) if upgraded_files else 'None (already up-to-date)'}")
+            
             return jsonify({
                 'success': True,
                 'asset_id': asset_id,
@@ -312,6 +337,12 @@ def check_upgrade():
             # Parse the error to find which file failed
             error_str = str(e)
             tb = traceback.format_exc()
+            
+            # Log to terminal
+            print(f"\n❌ UPGRADE FAILED for {asset_id}")
+            print(f"Error: {error_str}")
+            print(f"\nFull traceback:")
+            print(tb)
             
             # Try to extract which file was being upgraded
             failed_file = None
@@ -333,7 +364,16 @@ def check_upgrade():
             })
             
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        # Catch-all for any other errors (DB connection, etc.)
+        tb = traceback.format_exc()
+        print(f"\n❌ UNEXPECTED ERROR")
+        print(f"Error: {str(e)}")
+        print(f"\nFull traceback:")
+        print(tb)
+        return jsonify({
+            'error': str(e),
+            'traceback': tb
+        }), 400
 
 
 if __name__ == "__main__":
