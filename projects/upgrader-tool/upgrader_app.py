@@ -292,6 +292,42 @@ HTML_TEMPLATE = """
                 }
             }
             
+            // Add side-by-side comparison view (for successful upgrades)
+            if (data.success && data.original_data && data.upgraded_data) {
+                html += '<details style="margin-top: 20px;"><summary style="cursor: pointer; font-weight: bold; font-size: 16px;">Show Full Asset Comparison</summary>';
+                html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px;">';
+                
+                // Original data
+                html += '<div>';
+                html += '<h4 style="margin-top: 0;">Original (v1)</h4>';
+                html += '<pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; max-height: 600px; overflow-y: auto; font-size: 12px;">';
+                html += JSON.stringify(data.original_data, null, 2);
+                html += '</pre>';
+                html += '</div>';
+                
+                // Upgraded data
+                html += '<div>';
+                html += '<h4 style="margin-top: 0;">Upgraded (v2)</h4>';
+                html += '<pre style="background: #e8f5e9; padding: 10px; border-radius: 4px; overflow-x: auto; max-height: 600px; overflow-y: auto; font-size: 12px;">';
+                html += JSON.stringify(data.upgraded_data, null, 2);
+                html += '</pre>';
+                html += '</div>';
+                
+                html += '</div>';
+                html += '</details>';
+            }
+            
+            // Show original data for failed upgrades
+            if (!data.success && data.original_data) {
+                html += '<details style="margin-top: 20px;"><summary style="cursor: pointer; font-weight: bold; font-size: 16px;">Show Original Asset Data</summary>';
+                html += '<div style="margin-top: 10px;">';
+                html += '<pre style="background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; max-height: 600px; overflow-y: auto; font-size: 12px;">';
+                html += JSON.stringify(data.original_data, null, 2);
+                html += '</pre>';
+                html += '</div>';
+                html += '</details>';
+            }
+            
             resultsDiv.innerHTML = html;
         }
         
@@ -307,64 +343,61 @@ HTML_TEMPLATE = """
 """
 
 
-@app.route('/')
+@app.route("/")
 def index():
     return render_template_string(HTML_TEMPLATE)
 
 
-@app.route('/check_upgrade', methods=['POST'])
+@app.route("/check_upgrade", methods=["POST"])
 def check_upgrade():
     """Check if an asset can be upgraded"""
     data = request.json
-    asset_identifier = data.get('asset_id', '').strip()
-    
+    asset_identifier = data.get("asset_id", "").strip()
+
     if not asset_identifier:
-        return jsonify({'error': 'Asset ID or name is required'}), 400
-    
+        return jsonify({"error": "Asset ID or name is required"}), 400
+
     print(f"\n{'='*60}")
     print(f"Checking upgrade for: {asset_identifier}")
     print(f"{'='*60}")
-    
+
     # Call the standalone upgrade function
     result = upgrade_asset(asset_identifier)
-    
-    if 'error' in result and 'traceback' not in result:
+
+    if "error" in result and "traceback" not in result:
         # Asset not found error
         return jsonify(result), 404
-    
-    if result['success']:
+
+    if result["success"]:
         return jsonify(result)
     else:
         # Failed upgrade - format errors for display
-        errors = [{
-            'file': 'Full Asset',
-            'error': result['error'],
-            'traceback': result['traceback']
-        }]
-        
-        return jsonify({
-            'success': False,
-            'partial_success': False,
-            'asset_id': result.get('asset_id'),
-            'asset_name': result.get('asset_name'),
-            'created': result.get('created'),
-            'upgraded_files': [],
-            'unchanged_files': [],
-            'failed_files': ['Full Asset'],
-            'errors': errors
-        })
+        errors = [{"file": "Full Asset", "error": result["error"], "traceback": result["traceback"]}]
+
+        return jsonify(
+            {
+                "success": False,
+                "partial_success": False,
+                "asset_id": result.get("asset_id"),
+                "asset_name": result.get("asset_name"),
+                "created": result.get("created"),
+                "upgraded_files": [],
+                "unchanged_files": [],
+                "failed_files": ["Full Asset"],
+                "errors": errors,
+                "original_data": result.get("original_data"),  # Include original data for viewing
+            }
+        )
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='AIND Metadata Upgrader Tool')
-    parser.add_argument('--host', type=str, default='0.0.0.0',
-                        help='Host address to bind to (default: 0.0.0.0)')
-    parser.add_argument('--port', type=int, default=5001,
-                        help='Port to bind to (default: 5001)')
-    
+    parser = argparse.ArgumentParser(description="AIND Metadata Upgrader Tool")
+    parser.add_argument("--host", type=str, default="0.0.0.0", help="Host address to bind to (default: 0.0.0.0)")
+    parser.add_argument("--port", type=int, default=5001, help="Port to bind to (default: 5001)")
+
     args = parser.parse_args()
-    
+
     print(f"Starting AIND Metadata Upgrader Tool on {args.host}:{args.port}")
     print(f"Access at: http://localhost:{args.port}")
-    
+
     app.run(host=args.host, port=args.port, debug=True)
