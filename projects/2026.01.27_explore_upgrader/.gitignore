@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+
+# Output files
+*.json
+*.csv
+!pyproject.toml
+
+# UV lock file is committed
+!uv.lock

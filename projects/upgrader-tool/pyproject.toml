@@ -1,0 +1,11 @@
+[project]
+name = "upgrader-tool"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aind-data-access-api>=1.9.2",
+    "aind-metadata-upgrader>=0.6.1",
+    "flask>=3.1.2",
+]
