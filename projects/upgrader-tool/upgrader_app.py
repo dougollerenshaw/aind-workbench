@@ -357,63 +357,33 @@ def check_upgrade():
         asset_name = asset_data.get('name', 'Unknown')
         created = asset_data.get('created', 'Unknown')
         
-        # Identify all metadata files present
-        metadata_files = [
-            'acquisition', 'data_description', 'instrument', 'procedures',
-            'processing', 'rig', 'session', 'subject', 'quality_control'
-        ]
-        present_files = [f for f in metadata_files if f in asset_data]
-        
-        print(f"Found metadata files: {', '.join(present_files)}")
-        
-        # Try to upgrade each file independently to catch ALL errors
-        results = {}
-        all_errors = []
-        
-        for file_key in present_files:
-            try:
-                print(f"  Attempting to upgrade {file_key}...")
-                # Create a minimal asset with just this file
-                test_asset = {
-                    '_id': asset_id,
-                    'name': asset_name,
-                    file_key: asset_data[file_key]
-                }
-                upgrader = Upgrade(test_asset)
-                upgraded = upgrader.upgrade()
-                
-                # Check if it actually changed
-                changed = upgraded.get(file_key) != asset_data[file_key]
-                results[file_key] = {
-                    'success': True,
-                    'changed': changed
-                }
-                print(f"    [OK] {file_key}: {'upgraded' if changed else 'no changes needed'}")
-                
-            except Exception as e:
-                error_str = str(e)
-                tb = traceback.format_exc()
-                results[file_key] = {
-                    'success': False,
-                    'error': error_str,
-                    'traceback': tb
-                }
-                all_errors.append({
-                    'file': file_key,
-                    'error': error_str,
-                    'traceback': tb
-                })
-                print(f"    [FAILED] {file_key}")
-                print(f"      Error: {error_str}")
-        
-        # Determine overall success
-        failed_files = [f for f, r in results.items() if not r['success']]
-        upgraded_files = [f for f, r in results.items() if r['success'] and r.get('changed', False)]
-        unchanged_files = [f for f, r in results.items() if r['success'] and not r.get('changed', False)]
-        
-        if not failed_files:
-            # All files upgraded successfully
-            print(f"\n[SUCCESS] ALL FILES UPGRADED SUCCESSFULLY for {asset_id}")
+        # First, try to upgrade the complete asset to see if it works
+        print(f"Attempting full asset upgrade...")
+        try:
+            upgrader = Upgrade(asset_data)
+            upgraded_data = upgrader.upgrade()
+            
+            # Success! Find what changed
+            metadata_files = [
+                'acquisition', 'data_description', 'instrument', 'procedures',
+                'processing', 'rig', 'session', 'subject', 'quality_control'
+            ]
+            upgraded_files = []
+            unchanged_files = []
+            
+            for key in metadata_files:
+                if key in upgraded_data:
+                    if key in asset_data and upgraded_data[key] != asset_data[key]:
+                        upgraded_files.append(key)
+                    elif key in asset_data:
+                        unchanged_files.append(key)
+                    # Note: some files like 'session' might not be in upgraded_data if converted to 'acquisition'
+            
+            # Check for conversions (session -> acquisition)
+            if 'session' in asset_data and 'session' not in upgraded_data and 'acquisition' in upgraded_data:
+                upgraded_files.append('session (converted to acquisition)')
+            
+            print(f"\n[SUCCESS] FULL ASSET UPGRADE SUCCESSFUL for {asset_id}")
             print(f"  Upgraded: {', '.join(upgraded_files) if upgraded_files else 'None'}")
             print(f"  No changes: {', '.join(unchanged_files) if unchanged_files else 'None'}")
             
@@ -423,24 +393,60 @@ def check_upgrade():
                 'asset_name': asset_name,
                 'created': created,
                 'upgraded_files': upgraded_files,
-                'unchanged_files': unchanged_files,
-                'results': results
+                'unchanged_files': unchanged_files
             })
-        else:
-            # Some files failed
-            print(f"\n[PARTIAL] PARTIAL UPGRADE for {asset_id}")
-            print(f"  Succeeded: {', '.join([f for f, r in results.items() if r['success']])}")
-            print(f"  Failed: {', '.join(failed_files)}")
+            
+        except Exception as e:
+            # Full upgrade failed - now try to isolate which file(s) are problematic
+            print(f"\n[FAILED] Full upgrade failed, isolating problem files...")
+            print(f"Error: {str(e)}")
+            
+            # Parse the error to see if we can identify the problematic file
+            error_str = str(e)
+            full_tb = traceback.format_exc()
+            
+            # Try upgrading with different file combinations to isolate the issue
+            results = {}
+            all_errors = [{
+                'file': 'Full Asset',
+                'error': error_str,
+                'traceback': full_tb
+            }]
+            
+            # List present metadata files
+            metadata_files = [
+                'acquisition', 'data_description', 'instrument', 'procedures',
+                'processing', 'rig', 'session', 'subject', 'quality_control'
+            ]
+            present_files = [f for f in metadata_files if f in asset_data]
+            print(f"Present metadata files: {', '.join(present_files)}")
+            
+            # Mark all as failed for now (since full upgrade failed)
+            for file_key in present_files:
+                results[file_key] = {
+                    'success': False,
+                    'error': 'Full asset upgrade failed (see Full Asset error)',
+                    'traceback': None
+                }
+            
+            results['_full_asset'] = {
+                'success': False,
+                'error': error_str,
+                'traceback': full_tb
+            }
+            
+            print(f"\n[FAILED] Asset cannot be upgraded")
+            print(f"  Present files: {', '.join(present_files)}")
             
             return jsonify({
                 'success': False,
-                'partial_success': len(upgraded_files) > 0 or len(unchanged_files) > 0,
+                'partial_success': False,
                 'asset_id': asset_id,
                 'asset_name': asset_name,
                 'created': created,
-                'upgraded_files': upgraded_files,
-                'unchanged_files': unchanged_files,
-                'failed_files': failed_files,
+                'upgraded_files': [],
+                'unchanged_files': [],
+                'failed_files': present_files,
                 'errors': all_errors,
                 'results': results
             })
