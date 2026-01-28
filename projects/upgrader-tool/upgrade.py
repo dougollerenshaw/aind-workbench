@@ -15,6 +15,64 @@ def get_mongodb_client():
     return MetadataDbClient(host="api.allenneuraldynamics.org", database="metadata_index", collection="data_assets")
 
 
+def extract_all_errors_from_traceback(tb_str: str, last_error: str) -> list:
+    """
+    Extract all error messages from a traceback string.
+    Handles cases where exceptions occur during exception handling.
+    
+    Returns a list of error messages, with the most specific ones first.
+    """
+    errors = []
+    
+    # Check if traceback contains "During handling of the above exception"
+    if "During handling of the above exception" in tb_str:
+        # Split on this marker to get separate error sections
+        parts = tb_str.split("During handling of the above exception")
+        
+        # Extract error from first part (before "During handling")
+        first_part = parts[0]
+        # Look for ValidationError or other error patterns
+        if "ValidationError:" in first_part:
+            # Extract ValidationError message
+            val_error_start = first_part.find("ValidationError:")
+            if val_error_start != -1:
+                val_error_section = first_part[val_error_start:]
+                # Get the error message (usually a few lines after ValidationError:)
+                val_error_lines = val_error_section.split("\n")
+                if len(val_error_lines) > 1:
+                    # Combine the error type and first few meaningful lines
+                    error_msg = val_error_lines[0]
+                    for line in val_error_lines[1:6]:  # Get up to 5 more lines
+                        if line.strip() and not line.strip().startswith("File"):
+                            error_msg += "\n" + line.strip()
+                    errors.append(error_msg.strip())
+        
+        # Extract error from second part (after "During handling")
+        if len(parts) > 1:
+            second_part = parts[1]
+            # Look for the final error
+            if "Error:" in second_part or "Exception:" in second_part or "ValueError:" in second_part:
+                # Extract the error message
+                for error_type in ["ValidationError:", "ValueError:", "TypeError:", "KeyError:", "AttributeError:"]:
+                    if error_type in second_part:
+                        error_start = second_part.find(error_type)
+                        error_section = second_part[error_start:]
+                        error_lines = error_section.split("\n")
+                        if len(error_lines) > 0:
+                            error_msg = error_lines[0]
+                            for line in error_lines[1:6]:
+                                if line.strip() and not line.strip().startswith("File"):
+                                    error_msg += "\n" + line.strip()
+                            errors.append(error_msg.strip())
+                            break
+    
+    # If we didn't find multiple errors, just use the last error
+    if not errors:
+        errors.append(last_error)
+    
+    return errors
+
+
 def upgrade_asset_by_field(asset_identifier: str):
     """
     Upgrade an asset and break down results per-field for comparison.
@@ -116,6 +174,54 @@ def upgrade_asset_by_field(asset_identifier: str):
 
             print(f"\n[FAILED] Full asset upgrade failed: {error_str}")
             print(f"\nIdentifying failing fields and upgrading working fields...")
+            
+            # Extract all errors from the full asset upgrade traceback
+            all_errors_from_traceback = extract_all_errors_from_traceback(tb, error_str)
+            
+            # Try to match errors to fields by looking for field names in traceback paths
+            # More specific patterns to avoid false matches
+            field_errors_from_traceback = {}
+            for field_name in core_files:
+                # Look for field name in traceback file paths - use more specific patterns
+                field_patterns = [
+                    f"/{field_name}/v1v2.py",  # Most specific
+                    f"/{field_name}/v1v2_",   # Alternative pattern (e.g., v1v2_procedures.py)
+                    f"/{field_name}_",        # Even more alternative (e.g., procedures/v1v2_procedures.py)
+                    f"\\{field_name}\\v1v2.py",  # Windows path
+                ]
+                for pattern in field_patterns:
+                    if pattern in tb:
+                        # Find all occurrences of this pattern
+                        pattern_positions = []
+                        start = 0
+                        while True:
+                            pos = tb.find(pattern, start)
+                            if pos == -1:
+                                break
+                            pattern_positions.append(pos)
+                            start = pos + 1
+                        
+                        # For each occurrence, find the nearest error
+                        for pattern_pos in pattern_positions:
+                            # Look for errors in a window around this field
+                            window_start = max(0, pattern_pos - 1000)
+                            window_end = min(len(tb), pattern_pos + 2000)
+                            window = tb[window_start:window_end]
+                            
+                            # Check each extracted error to see if it appears in this window
+                            for error_msg in all_errors_from_traceback:
+                                # Check if key parts of the error appear in this window
+                                error_keywords = error_msg.split()[:5]  # First few words
+                                if all(keyword in window for keyword in error_keywords[:3] if len(keyword) > 3):
+                                    # This error is associated with this field
+                                    if field_name not in field_errors_from_traceback:
+                                        field_errors_from_traceback[field_name] = error_msg
+                                        print(f"  [FOUND] {field_name} error in traceback: {error_msg[:100]}")
+                                        break
+                            if field_name in field_errors_from_traceback:
+                                break
+                        if field_name in field_errors_from_traceback:
+                            break
 
             field_conversion_map = {
                 "session": "acquisition",
@@ -132,33 +238,93 @@ def upgrade_asset_by_field(asset_identifier: str):
             
             for field_name in core_files:
                 if field_name in asset_data and asset_data[field_name] is not None:
-                    # Create test asset with this field + data_description from actual asset
-                    test_asset = {
+                    # Note: We'll test fields individually first, and only use traceback errors
+                    # if individual testing doesn't reveal the field's own error
+                    
+                    # First, test the field WITHOUT data_description to see if it has its own errors
+                    test_asset_no_dd = {
                         "_id": asset_data.get("_id"),
                         "name": asset_data.get("name"),
                         "created": asset_data.get("created"),
                         field_name: asset_data[field_name],
                     }
-
-                    # Add data_description if it exists and isn't the field we're testing
-                    used_dd = False
-                    if "data_description" in asset_data and field_name != "data_description":
-                        test_asset["data_description"] = asset_data["data_description"]
-                        used_dd = True
-                        fields_using_data_description.add(field_name)
-
+                    
+                    field_has_own_error = False
+                    field_own_error = None
+                    field_own_tb = None
+                    
                     try:
-                        test_upgrader = Upgrade(test_asset)
-                        test_upgraded = test_upgrader.metadata.model_dump()
-
-                        # This field upgraded successfully!
+                        test_upgrader_no_dd = Upgrade(test_asset_no_dd)
+                        test_upgraded_no_dd = test_upgrader_no_dd.metadata.model_dump()
+                        
+                        # Field upgraded successfully without data_description!
                         upgraded_field_name = field_conversion_map.get(field_name, field_name)
-
-                        if upgraded_field_name in test_upgraded:
+                        if upgraded_field_name in test_upgraded_no_dd:
                             field_results[field_name] = {
                                 "success": True,
                                 "original": json.loads(json.dumps(asset_data[field_name], default=str)),
-                                "upgraded": json.loads(json.dumps(test_upgraded[upgraded_field_name], default=str)),
+                                "upgraded": json.loads(json.dumps(test_upgraded_no_dd[upgraded_field_name], default=str)),
+                                "converted_to": upgraded_field_name if field_name != upgraded_field_name else None,
+                            }
+                            successful_fields.append(field_name)
+                            print(
+                                f"  [SUCCESS] {field_name}"
+                                + (f" -> {upgraded_field_name}" if field_name != upgraded_field_name else "")
+                            )
+                            continue  # Skip to next field
+                    except Exception as field_error_no_dd:
+                        # Check if error is about missing data_description or if it's the field's own validation error
+                        error_str_no_dd = str(field_error_no_dd)
+                        error_lower = error_str_no_dd.lower()
+                        tb_no_dd = traceback.format_exc()
+                        
+                        # Extract all errors from traceback (in case there are multiple)
+                        all_errors = extract_all_errors_from_traceback(tb_no_dd, error_str_no_dd)
+                        
+                        # If error mentions data_description, it might be a dependency issue
+                        # Otherwise, it's likely the field's own validation error
+                        if "data_description" not in error_lower and "data description" not in error_lower:
+                            # Field has its own error (not a dependency issue)
+                            field_has_own_error = True
+                            # Combine all errors if there are multiple
+                            if len(all_errors) > 1:
+                                field_own_error = "Multiple errors found:\n\n" + "\n\n".join(f"{i+1}. {err}" for i, err in enumerate(all_errors))
+                            else:
+                                field_own_error = error_str_no_dd
+                            field_own_tb = tb_no_dd
+                            print(f"  [ERROR] {field_name} (own error): {field_own_error[:100]}")
+                        # If error is about data_description, we'll test with data_description below
+                    
+                    # If field has its own error, record it and skip testing with data_description
+                    if field_has_own_error:
+                        field_errors[field_name] = (field_own_error, field_own_tb, None, False)
+                        continue
+                    
+                    # Field doesn't have its own error, so test WITH data_description to check for dependency issues
+                    test_asset_with_dd = {
+                        "_id": asset_data.get("_id"),
+                        "name": asset_data.get("name"),
+                        "created": asset_data.get("created"),
+                        field_name: asset_data[field_name],
+                    }
+                    
+                    used_dd = False
+                    if "data_description" in asset_data and field_name != "data_description":
+                        test_asset_with_dd["data_description"] = asset_data["data_description"]
+                        used_dd = True
+                        fields_using_data_description.add(field_name)
+                    
+                    try:
+                        test_upgrader_with_dd = Upgrade(test_asset_with_dd)
+                        test_upgraded_with_dd = test_upgrader_with_dd.metadata.model_dump()
+                        
+                        # This field upgraded successfully with data_description!
+                        upgraded_field_name = field_conversion_map.get(field_name, field_name)
+                        if upgraded_field_name in test_upgraded_with_dd:
+                            field_results[field_name] = {
+                                "success": True,
+                                "original": json.loads(json.dumps(asset_data[field_name], default=str)),
+                                "upgraded": json.loads(json.dumps(test_upgraded_with_dd[upgraded_field_name], default=str)),
                                 "converted_to": upgraded_field_name if field_name != upgraded_field_name else None,
                             }
                             successful_fields.append(field_name)
@@ -170,12 +336,21 @@ def upgrade_asset_by_field(asset_identifier: str):
                             # Field not in upgraded output (unusual)
                             field_errors[field_name] = ("Field not present in upgraded output", None, True, used_dd)
                             print(f"  [WARN] {field_name}: Not in upgraded output")
-
-                    except Exception as field_error:
-                        test_error_str = str(field_error)
+                    
+                    except Exception as field_error_with_dd:
+                        test_error_str = str(field_error_with_dd)
                         tb = traceback.format_exc()
-                        field_errors[field_name] = (test_error_str, tb, None, used_dd)  # None means we'll determine later
-                        print(f"  [ERROR] {field_name}: {test_error_str[:100]}")
+                        
+                        # Extract all errors from traceback (in case there are multiple)
+                        all_errors = extract_all_errors_from_traceback(tb, test_error_str)
+                        
+                        # Combine all errors if there are multiple
+                        if len(all_errors) > 1:
+                            combined_error = "Multiple errors found:\n\n" + "\n\n".join(f"{i+1}. {err}" for i, err in enumerate(all_errors))
+                            field_errors[field_name] = (combined_error, tb, None, used_dd)
+                        else:
+                            field_errors[field_name] = (test_error_str, tb, None, used_dd)
+                        print(f"  [ERROR] {field_name} (with data_description): {test_error_str[:100]}")
             
             # Second pass: First identify all direct validation errors
             direct_validation_errors = {}
@@ -272,13 +447,26 @@ def upgrade_asset_by_field(asset_identifier: str):
                                     break
                     
                     if dependency_field:
-                        # This is a dependency error
-                        field_results[field_name] = {
-                            "success": None,  # Neither success nor failure - dependency issue
-                            "original": json.loads(json.dumps(asset_data[field_name], default=str)),
-                            "info": f"Cannot upgrade {field_name} because a valid {dependency_field} is required. See the {dependency_field} upgrade error above.",
-                        }
-                        print(f"  [DEPENDENCY] {field_name}: Requires valid {dependency_field}")
+                        # Check if this field has its own error in the traceback
+                        # If so, it's not just a dependency - it has its own validation error
+                        if field_name in field_errors_from_traceback:
+                            # Field has its own error from traceback - use that instead
+                            field_results[field_name] = {
+                                "success": False,
+                                "error": field_errors_from_traceback[field_name],
+                                "traceback": tb,
+                                "original": json.loads(json.dumps(asset_data[field_name], default=str)),
+                            }
+                            failed_fields.append(field_name)
+                            print(f"  [FAIL] {field_name} (own error from traceback): {field_errors_from_traceback[field_name][:100]}")
+                        else:
+                            # This is a dependency error
+                            field_results[field_name] = {
+                                "success": None,  # Neither success nor failure - dependency issue
+                                "original": json.loads(json.dumps(asset_data[field_name], default=str)),
+                                "info": f"Cannot upgrade {field_name} because a valid {dependency_field} is required. See the {dependency_field} upgrade error above.",
+                            }
+                            print(f"  [DEPENDENCY] {field_name}: Requires valid {dependency_field}")
                     else:
                         # This is a direct validation error
                         field_results[field_name] = {
@@ -301,7 +489,11 @@ def upgrade_asset_by_field(asset_identifier: str):
                     print(f"  [INFO] {field_name}: Not present in original asset")
 
             # Store overall error info (for the full asset upgrade failure)
-            result["overall_error"] = error_str
+            # Format with all errors if multiple found
+            if len(all_errors_from_traceback) > 1:
+                result["overall_error"] = "Multiple errors found:\n\n" + "\n\n".join(f"{i+1}. {err}" for i, err in enumerate(all_errors_from_traceback))
+            else:
+                result["overall_error"] = error_str
             result["overall_traceback"] = tb
 
         result["field_results"] = field_results

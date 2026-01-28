@@ -376,7 +376,11 @@ HTML_TEMPLATE = """
                 html += '<h3>Upgrade Failed</h3>';
                 html += '<p>The full asset could not be upgraded.</p>';
                 if (data.overall_error) {
-                    html += '<div style="margin-top: 10px;"><strong>Error:</strong> ' + data.overall_error + '</div>';
+                    // Format error with proper line breaks
+                    const errorText = String(data.overall_error || '');
+                    const nl = String.fromCharCode(10);
+                    const formattedError = errorText.split(nl).join('<br>');
+                    html += '<div style="margin-top: 10px;"><strong>Error:</strong><br><div style="margin-top: 5px; white-space: pre-wrap; font-family: monospace; font-size: 12px;">' + formattedError + '</div></div>';
                     if (data.overall_traceback) {
                         html += '<details style="margin-top: 10px;"><summary style="cursor: pointer; font-weight: bold;">Show Full Traceback</summary>';
                         html += '<pre style="font-size: 12px; overflow-x: auto; background: #f8f9fa; padding: 10px; border-radius: 4px;">' + data.overall_traceback + '</pre>';
@@ -430,7 +434,11 @@ HTML_TEMPLATE = """
                     } else if (fieldResult.success === false) {
                         // Show error for failed fields
                         html += '<div class="error" style="margin-bottom: 10px;">';
-                        html += `<strong>Error:</strong> ${fieldResult.error}`;
+                        // Format error with proper line breaks
+                        const errorText = String(fieldResult.error || '');
+                        const nl = String.fromCharCode(10);
+                        const formattedFieldError = errorText.split(nl).join('<br>');
+                        html += `<strong>Error:</strong><br><div style="margin-top: 5px; white-space: pre-wrap; font-family: monospace; font-size: 12px;">${formattedFieldError}</div>`;
                         if (fieldResult.traceback) {
                             html += '<details style="margin-top: 10px;"><summary style="cursor: pointer; font-weight: bold;">Show Full Traceback</summary>';
                             html += `<pre style="font-size: 12px; overflow-x: auto; background: #f8f9fa; padding: 10px; border-radius: 4px;">${fieldResult.traceback}</pre>`;
