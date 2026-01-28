@@ -161,6 +161,46 @@ HTML_TEMPLATE = """
             gap: 20px;
             margin-top: 10px;
         }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .share-btn {
+            background-color: #28a745;
+        }
+        .share-btn:hover {
+            background-color: #218838;
+        }
+        .share-link-container {
+            display: none;
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            border: 1px solid #4CAF50;
+        }
+        .share-link-container.show {
+            display: block;
+        }
+        .share-link {
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            background-color: white;
+            padding: 8px;
+            border-radius: 3px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+        }
+        .copy-btn {
+            background-color: #4CAF50;
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+        .copy-btn:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -173,7 +213,16 @@ HTML_TEMPLATE = """
             <input type="text" id="assetId" placeholder="e.g., 733a1052-683c-46d2-96ca-8f89bd270192 or behavior_689727_2024-02-07_15-01-36">
         </div>
         
-        <button onclick="checkUpgrade()">Check Upgrade</button>
+        <div class="button-group">
+            <button onclick="checkUpgrade()">Check Upgrade</button>
+            <button onclick="generateShareLink()" class="share-btn">Generate Share Link</button>
+        </div>
+        
+        <div class="share-link-container" id="shareLinkContainer">
+            <strong>Shareable link:</strong>
+            <div class="share-link" id="shareLink"></div>
+            <button class="copy-btn" onclick="copyShareLink()" id="copyBtn">Copy to Clipboard</button>
+        </div>
         
         <div id="results"></div>
     </div>
@@ -439,6 +488,91 @@ HTML_TEMPLATE = """
         // Allow Enter key to trigger check
         document.getElementById('assetId').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
+                checkUpgrade();
+            }
+        });
+        
+        // Generate share link
+        function generateShareLink() {
+            const assetId = document.getElementById('assetId').value.trim();
+            if (!assetId) {
+                alert('Please enter an asset ID or name first');
+                return;
+            }
+            
+            const baseUrl = window.location.origin + window.location.pathname;
+            const fullUrl = baseUrl + '?asset_id=' + encodeURIComponent(assetId);
+            
+            document.getElementById('shareLink').textContent = fullUrl;
+            document.getElementById('shareLinkContainer').classList.add('show');
+        }
+        
+        // Copy share link to clipboard
+        function copyShareLink() {
+            const linkText = document.getElementById('shareLink').textContent;
+            
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(linkText).then(function() {
+                    const copyBtn = document.getElementById('copyBtn');
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(function() {
+                        copyBtn.textContent = originalText;
+                    }, 2000);
+                }).catch(function(err) {
+                    // Fall back to manual selection method
+                    fallbackCopy(linkText);
+                });
+            } else {
+                // Fall back for older browsers
+                fallbackCopy(linkText);
+            }
+        }
+        
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                const copyBtn = document.getElementById('copyBtn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(function() {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            } catch (err) {
+                alert('Failed to copy link. Please copy manually: ' + text);
+            }
+            document.body.removeChild(textArea);
+        }
+        
+        // Parse URL parameters on page load
+        function getUrlParams() {
+            const params = {};
+            const search = window.location.search.substring(1);
+            if (search) {
+                const pairs = search.split('&');
+                for (let i = 0; i < pairs.length; i++) {
+                    const pair = pairs[i].split('=');
+                    params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+                }
+            }
+            return params;
+        }
+        
+        // Auto-load asset from URL if present
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = getUrlParams();
+            if (params.asset_id) {
+                document.getElementById('assetId').value = params.asset_id;
+                // Auto-run the upgrade
                 checkUpgrade();
             }
         });
