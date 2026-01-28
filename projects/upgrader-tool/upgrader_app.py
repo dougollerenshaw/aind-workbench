@@ -356,8 +356,8 @@ HTML_TEMPLATE = """
                     } else if (fieldResult.success === false) {
                         html += `<summary style="cursor: pointer; font-weight: bold; color: #721c24; background: #f8d7da; padding: 8px; border-radius: 4px;">[FAILED] ${fieldName}</summary>`;
                     } else {
-                        // success === null, just showing info
-                        html += `<summary style="cursor: pointer; font-weight: bold; color: #6c757d; background: #e9ecef; padding: 8px; border-radius: 4px;">${fieldName}</summary>`;
+                        // success === null, dependency issue or info
+                        html += `<summary style="cursor: pointer; font-weight: bold; color: #0c5460; background: #d1ecf1; padding: 8px; border-radius: 4px;">[DEPENDENCY] ${fieldName}</summary>`;
                     }
                     
                     html += '<div style="margin-top: 10px;">';
