@@ -172,35 +172,6 @@ HTML_TEMPLATE = """
         .share-btn:hover {
             background-color: #218838;
         }
-        .share-link-container {
-            display: none;
-            background-color: #e7f3ff;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 20px;
-            border: 1px solid #4CAF50;
-        }
-        .share-link-container.show {
-            display: block;
-        }
-        .share-link {
-            font-family: monospace;
-            font-size: 12px;
-            word-break: break-all;
-            background-color: white;
-            padding: 8px;
-            border-radius: 3px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-        }
-        .copy-btn {
-            background-color: #4CAF50;
-            padding: 6px 12px;
-            font-size: 14px;
-        }
-        .copy-btn:hover {
-            background-color: #45a049;
-        }
     </style>
 </head>
 <body>
@@ -214,14 +185,8 @@ HTML_TEMPLATE = """
         </div>
         
         <div class="button-group">
-            <button onclick="checkUpgrade()">Check Upgrade</button>
-            <button onclick="generateShareLink()" class="share-btn">Generate Share Link</button>
-        </div>
-        
-        <div class="share-link-container" id="shareLinkContainer">
-            <strong>Shareable link:</strong>
-            <div class="share-link" id="shareLink"></div>
-            <button class="copy-btn" onclick="copyShareLink()" id="copyBtn">Copy to Clipboard</button>
+            <button id="checkBtn" onclick="checkUpgrade()" disabled>Check Upgrade</button>
+            <button id="shareBtn" onclick="copyShareLink()" class="share-btn" disabled>Copy Shareable URL</button>
         </div>
         
         <div id="results"></div>
@@ -304,8 +269,13 @@ HTML_TEMPLATE = """
             
             if (!assetId) {
                 resultsDiv.innerHTML = '<div class="error">Please enter an asset ID or name</div>';
+                document.getElementById('shareBtn').disabled = true;
                 return;
             }
+            
+            // Update the browser URL
+            const newUrl = window.location.pathname + '?asset_id=' + encodeURIComponent(assetId);
+            window.history.pushState({asset_id: assetId}, '', newUrl);
             
             resultsDiv.innerHTML = '<div class="loading">Checking upgrade...</div>';
             
@@ -339,12 +309,16 @@ HTML_TEMPLATE = """
                     }
                     errorHtml += '</div>';
                     resultsDiv.innerHTML = errorHtml;
+                    // Disable share button on error
+                    document.getElementById('shareBtn').disabled = true;
                 } else {
                     displayResults(data);
                 }
             })
             .catch(error => {
                 resultsDiv.innerHTML = `<div class="error"><strong>Error:</strong> ${error.message}</div>`;
+                // Disable share button on error
+                document.getElementById('shareBtn').disabled = true;
             });
         }
         
@@ -476,6 +450,9 @@ HTML_TEMPLATE = """
             
             resultsDiv.innerHTML = html;
             
+            // Enable the share button now that we have valid results
+            document.getElementById('shareBtn').disabled = false;
+            
             // Render JSON trees for each field
             if (data.field_results) {
                 Object.keys(data.field_results).forEach(fieldName => {
@@ -493,6 +470,12 @@ HTML_TEMPLATE = """
             }
         }
         
+        // Enable/disable Check Upgrade button based on input
+        document.getElementById('assetId').addEventListener('input', function(e) {
+            const assetId = e.target.value.trim();
+            document.getElementById('checkBtn').disabled = !assetId;
+        });
+        
         // Allow Enter key to trigger check
         document.getElementById('assetId').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -500,41 +483,22 @@ HTML_TEMPLATE = """
             }
         });
         
-        // Generate share link
-        function generateShareLink() {
-            const assetId = document.getElementById('assetId').value.trim();
-            if (!assetId) {
-                alert('Please enter an asset ID or name first');
-                return;
-            }
-            
-            const baseUrl = window.location.origin + window.location.pathname;
-            const fullUrl = baseUrl + '?asset_id=' + encodeURIComponent(assetId);
-            
-            document.getElementById('shareLink').textContent = fullUrl;
-            document.getElementById('shareLinkContainer').classList.add('show');
-        }
-        
-        // Copy share link to clipboard
+        // Copy current URL to clipboard
         function copyShareLink() {
-            const linkText = document.getElementById('shareLink').textContent;
+            const currentUrl = window.location.href;
+            const nl = String.fromCharCode(10);
             
             // Try modern clipboard API first
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(linkText).then(function() {
-                    const copyBtn = document.getElementById('copyBtn');
-                    const originalText = copyBtn.textContent;
-                    copyBtn.textContent = 'Copied!';
-                    setTimeout(function() {
-                        copyBtn.textContent = originalText;
-                    }, 2000);
+                navigator.clipboard.writeText(currentUrl).then(function() {
+                    alert('Copied to clipboard:' + nl + nl + currentUrl);
                 }).catch(function(err) {
                     // Fall back to manual selection method
-                    fallbackCopy(linkText);
+                    fallbackCopy(currentUrl);
                 });
             } else {
                 // Fall back for older browsers
-                fallbackCopy(linkText);
+                fallbackCopy(currentUrl);
             }
         }
         
@@ -547,16 +511,12 @@ HTML_TEMPLATE = """
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
+            const nl = String.fromCharCode(10);
             try {
                 document.execCommand('copy');
-                const copyBtn = document.getElementById('copyBtn');
-                const originalText = copyBtn.textContent;
-                copyBtn.textContent = 'Copied!';
-                setTimeout(function() {
-                    copyBtn.textContent = originalText;
-                }, 2000);
+                alert('Copied to clipboard:' + nl + nl + text);
             } catch (err) {
-                alert('Failed to copy link. Please copy manually: ' + text);
+                alert('Failed to copy URL. Please copy manually:' + nl + nl + text);
             }
             document.body.removeChild(textArea);
         }
@@ -580,6 +540,8 @@ HTML_TEMPLATE = """
             const params = getUrlParams();
             if (params.asset_id) {
                 document.getElementById('assetId').value = params.asset_id;
+                // Enable the Check Upgrade button since we have text
+                document.getElementById('checkBtn').disabled = false;
                 // Auto-run the upgrade
                 checkUpgrade();
             }
