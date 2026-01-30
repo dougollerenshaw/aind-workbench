@@ -10,7 +10,7 @@ This tool provides both a command-line interface and web UI for testing metadata
 
 ### Two-Step Approach
 
-The upgrade process (`upgrade.py::upgrade_asset_by_field`) works as follows:
+The upgrade process (`upgrade.py::upgrade_asset`) works as follows:
 
 1. **Step 1: Try Full Asset Upgrade**
    - Attempt to upgrade the entire asset with all metadata files
@@ -45,8 +45,15 @@ These conversions are tracked in results with a `converted_to` field.
 
 Core upgrade logic module with the following functions:
 
-- **`get_mongodb_client()`**: Returns MongoDB client for metadata index
-- **`upgrade_asset_by_field(asset_identifier: str) -> dict`**: Main function that implements the two-step upgrade approach
+- **`fetch_asset(asset_identifier: str, identifier_type: str = "unknown") -> dict | None`**: Fetches asset from MongoDB
+  - `identifier_type` can be "unknown" (default), "id", or "name"
+  - If "unknown", tries name first, then ID
+  - Returns asset data dict or None if not found
+  
+- **`upgrade_asset(asset_identifier: str, identifier_type: str = "unknown") -> dict`**: Main function that implements the two-step upgrade approach
+  - `identifier_type` can be "unknown" (default), "id", or "name"
+  - Step 1: Try full asset upgrade
+  - Step 2: If that fails, test each field individually
   - Returns dict with:
     - `success`: Overall upgrade success (bool)
     - `partial_success`: Some fields succeeded, some failed (bool)
@@ -54,9 +61,6 @@ Core upgrade logic module with the following functions:
     - `successful_fields`: List of field names that upgraded
     - `failed_fields`: List of field names that failed
     - `overall_error` and `overall_traceback`: Full asset error info if applicable
-- **`upgrade_asset(asset_identifier: str) -> dict`**: Simple full-asset upgrade without field breakdown
-  - Used for basic upgrade testing
-  - Returns dict with success status, original_data, and upgraded_data or error
 
 ### `upgrader_app.py`
 
@@ -64,7 +68,7 @@ Flask web application that provides the UI:
 
 - **Backend Routes:**
   - `/`: Main page with search form
-  - `/check`: API endpoint that calls `upgrade_asset_by_field()` and returns JSON results
+  - `/check`: API endpoint that calls `upgrade_asset()` and returns JSON results
   
 - **Frontend Features:**
   - Collapsible tree view for JSON comparison (using `<details>` HTML elements)
@@ -129,7 +133,7 @@ The test suite (`test_upgrade.py`) validates:
 ```bash
 # Test a specific asset with field breakdown
 cd projects/upgrader-tool
-uv run python -c "from upgrade import upgrade_asset_by_field; import json; result = upgrade_asset_by_field('behavior_746346_2025-03-12_17-21-50'); print(json.dumps(result, indent=2, default=str))"
+uv run python -c "from upgrade import upgrade_asset; import json; result = upgrade_asset('behavior_746346_2025-03-12_17-21-50'); print(json.dumps(result, indent=2, default=str))"
 
 # Or use the simple CLI
 uv run python upgrade.py --name behavior_775743_2025-03-21_08-54-07
@@ -177,12 +181,12 @@ To integrate this functionality into another application:
 
 1. **Import the upgrade logic:**
    ```python
-   from upgrade import upgrade_asset_by_field
+   from upgrade import upgrade_asset
    ```
 
 2. **Call for any asset:**
    ```python
-   result = upgrade_asset_by_field("asset_name_or_id")
+   result = upgrade_asset("asset_name_or_id")
    ```
 
 3. **Parse the results:**

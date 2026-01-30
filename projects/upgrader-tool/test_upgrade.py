@@ -3,12 +3,12 @@ Tests for upgrade.py functionality.
 """
 
 import pytest
-from upgrade import upgrade_asset_by_field
+from upgrade import upgrade_asset
 
 
 def test_successful_asset():
     """Test an asset that should upgrade successfully."""
-    result = upgrade_asset_by_field("single-plane-ophys_705363_2024-01-10_15-46-42")
+    result = upgrade_asset("single-plane-ophys_705363_2024-01-10_15-46-42")
 
     assert result["success"] is True
     assert len(result["successful_fields"]) > 0
@@ -17,7 +17,7 @@ def test_successful_asset():
 
 def test_partially_failing_asset():
     """Test an asset that partially fails - some fields upgrade, others don't."""
-    result = upgrade_asset_by_field("behavior_746346_2025-03-12_17-21-50")
+    result = upgrade_asset("behavior_746346_2025-03-12_17-21-50")
 
     assert result["success"] is False
     assert result["partial_success"] is True
@@ -34,7 +34,7 @@ def test_partially_failing_asset():
 
 def test_field_results_structure():
     """Test that field results have the correct structure."""
-    result = upgrade_asset_by_field("behavior_746346_2025-03-12_17-21-50")
+    result = upgrade_asset("behavior_746346_2025-03-12_17-21-50")
 
     field_results = result.get("field_results", {})
     assert len(field_results) > 0
@@ -56,7 +56,7 @@ def test_field_results_structure():
 
 def test_field_conversion():
     """Test that field name conversions (session->acquisition, rig->instrument) are recorded."""
-    result = upgrade_asset_by_field("single-plane-ophys_705363_2024-01-10_15-46-42")
+    result = upgrade_asset("single-plane-ophys_705363_2024-01-10_15-46-42")
 
     field_results = result.get("field_results", {})
 
@@ -75,7 +75,7 @@ def test_field_conversion():
 
 def test_skip_missing_fields():
     """Test that fields not present in original asset are skipped entirely."""
-    result = upgrade_asset_by_field("behavior_746346_2025-03-12_17-21-50")
+    result = upgrade_asset("behavior_746346_2025-03-12_17-21-50")
 
     field_results = result.get("field_results", {})
 

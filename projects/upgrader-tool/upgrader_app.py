@@ -1,6 +1,6 @@
 import argparse
 from flask import Flask, render_template_string, request, jsonify
-from upgrade import upgrade_asset, upgrade_asset_by_field
+from upgrade import upgrade_asset
 
 app = Flask(__name__)
 
@@ -571,7 +571,7 @@ def check_upgrade():
     print(f"{'='*60}")
 
     # Call the standalone upgrade function (field-by-field approach)
-    result = upgrade_asset_by_field(asset_identifier)
+    result = upgrade_asset(asset_identifier)
 
     if "error" in result and "field_results" not in result:
         # Asset not found error

@@ -11,12 +11,35 @@ from aind_data_access_api.document_db import MetadataDbClient
 from aind_metadata_upgrader.upgrade import Upgrade
 
 
-def get_mongodb_client():
-    """Get MongoDB client for metadata index"""
-    return MetadataDbClient(host="api.allenneuraldynamics.org", database="metadata_index", collection="data_assets")
+def fetch_asset(asset_identifier: str, identifier_type: str = "unknown"):
+    """
+    Fetch an asset from MongoDB by ID or name.
+    
+    Args:
+        asset_identifier: Asset ID (UUID) or asset name
+        identifier_type: One of "unknown", "id", or "name". If "unknown", tries name first, then ID.
+        
+    Returns:
+        dict: Asset data from MongoDB, or None if not found
+    """
+    client = MetadataDbClient(host="api.allenneuraldynamics.org", database="metadata_index", collection="data_assets")
+    
+    # Try name if identifier_type is "unknown" or "name"
+    if identifier_type in ("unknown", "name"):
+        records = client.retrieve_docdb_records(filter_query={"name": asset_identifier}, limit=1)
+        if records:
+            return records[0]
+    
+    # Try ID if identifier_type is "unknown" or "id"
+    if identifier_type in ("unknown", "id"):
+        records = client.retrieve_docdb_records(filter_query={"_id": asset_identifier}, limit=1)
+        if records:
+            return records[0]
+    
+    return None
 
 
-def upgrade_asset_by_field(asset_identifier: str):
+def upgrade_asset(asset_identifier: str, identifier_type: str = "unknown"):
     """
     Upgrade an asset and break down results per-field for comparison.
 
@@ -24,28 +47,23 @@ def upgrade_asset_by_field(asset_identifier: str):
     1. Try to upgrade the whole asset
     2. If that fails, test each field individually with skip_metadata_validation=True
 
+    Args:
+        asset_identifier: Asset ID (UUID) or asset name
+        identifier_type: One of "unknown", "id", or "name"
+
     Returns:
         dict: Result with per-field comparison showing original vs upgraded (or error)
     """
     result = {"asset_identifier": asset_identifier, "success": False}
 
     try:
-        # Connect and fetch asset
-        client = get_mongodb_client()
+        # Fetch asset from MongoDB
+        asset_data = fetch_asset(asset_identifier, identifier_type)
 
-        # Try by ID first (UUID format)
-        if len(asset_identifier) == 36 and "-" in asset_identifier:
-            records = client.retrieve_docdb_records(filter_query={"_id": asset_identifier}, limit=1)
-        else:
-            # Try by name
-            records = client.retrieve_docdb_records(filter_query={"name": asset_identifier}, limit=1)
-
-        if not records:
+        if not asset_data:
             result["error"] = f"Asset not found: {asset_identifier}"
             print(f"\n[ERROR] Asset not found: {asset_identifier}")
             return result
-
-        asset_data = records[0]
         result["asset_id"] = asset_data.get("_id", "N/A")
         result["asset_name"] = asset_data.get("name", "N/A")
         result["created"] = asset_data.get("created", "N/A")
@@ -199,65 +217,6 @@ def upgrade_asset_by_field(asset_identifier: str):
     return result
 
 
-def upgrade_asset(asset_identifier: str):
-    """
-    Upgrade a single asset by ID or name.
-
-    Returns:
-        dict: Result with success status, asset info, and upgrade details or errors
-    """
-    result = {"asset_identifier": asset_identifier, "success": False}
-
-    try:
-        # Connect and fetch asset
-        client = get_mongodb_client()
-
-        # Try to find asset by ID or name
-        if len(asset_identifier) == 36 and "-" in asset_identifier:
-            query = {"_id": asset_identifier}
-        else:
-            query = {"name": asset_identifier}
-
-        records = client.retrieve_docdb_records(filter_query=query, limit=1)
-
-        if not records:
-            result["error"] = f"Asset not found: {asset_identifier}"
-            return result
-
-        asset_data = records[0]
-        result["asset_id"] = asset_data.get("_id", "Unknown")
-        result["asset_name"] = asset_data.get("name", "Unknown")
-        result["created"] = str(asset_data.get("created", "Unknown"))
-
-        # Try to upgrade
-        print(f"\nUpgrading asset: {result['asset_id']}")
-        print(f"Name: {result['asset_name']}")
-        print(f"Created: {result['created']}")
-
-        upgrader = Upgrade(asset_data)
-        upgraded_data = upgrader.metadata.model_dump()
-
-        result["success"] = True
-        result["original_data"] = json.loads(json.dumps(asset_data, default=str))
-        result["upgraded_data"] = json.loads(json.dumps(upgraded_data, default=str))
-
-        print(f"\n[SUCCESS] Upgrade completed")
-
-    except Exception as e:
-        error_str = str(e)
-        tb = traceback.format_exc()
-
-        result["error"] = error_str
-        result["traceback"] = tb
-        if "asset_data" in locals():
-            result["original_data"] = json.loads(json.dumps(asset_data, default=str))
-
-        print(f"\n[FAILED] Upgrade failed")
-        print(f"Error: {error_str}")
-
-    return result
-
-
 def main():
     parser = argparse.ArgumentParser(description="Test AIND metadata upgrade for a specific asset")
     group = parser.add_mutually_exclusive_group(required=True)
@@ -267,8 +226,14 @@ def main():
 
     args = parser.parse_args()
 
-    asset_identifier = args.id or args.name
-    result = upgrade_asset(asset_identifier)
+    if args.id:
+        asset_identifier = args.id
+        identifier_type = "id"
+    else:
+        asset_identifier = args.name
+        identifier_type = "name"
+    
+    result = upgrade_asset(asset_identifier, identifier_type)
 
     if args.json:
         print(json.dumps(result, indent=2, default=str))
