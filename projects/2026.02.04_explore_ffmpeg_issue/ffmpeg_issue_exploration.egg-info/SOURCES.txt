@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+ffmpeg_issue_exploration.egg-info/PKG-INFO
+ffmpeg_issue_exploration.egg-info/SOURCES.txt
+ffmpeg_issue_exploration.egg-info/dependency_links.txt
+ffmpeg_issue_exploration.egg-info/requires.txt
+ffmpeg_issue_exploration.egg-info/top_level.txt

@@ -1,0 +1,15 @@
+[project]
+name = "ffmpeg-issue-exploration"
+version = "0.1.0"
+description = "Scripts to identify and process behavior videos affected by ffmpeg metadata issue"
+requires-python = ">=3.8"
+dependencies = [
+    "aind-data-access-api",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = []
