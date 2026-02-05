@@ -1,4 +1,3 @@
-README.md
 pyproject.toml
 ffmpeg_issue_exploration.egg-info/PKG-INFO
 ffmpeg_issue_exploration.egg-info/SOURCES.txt

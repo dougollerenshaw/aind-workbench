@@ -3,4 +3,4 @@ Name: ffmpeg-issue-exploration
 Version: 0.1.0
 Summary: Scripts to identify and process behavior videos affected by ffmpeg metadata issue
 Requires-Python: >=3.8
-Requires-Dist: requests
+Requires-Dist: aind-data-access-api
