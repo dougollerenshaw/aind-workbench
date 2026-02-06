@@ -2,15 +2,15 @@
 """
 Simple script to export affected assets to CSV.
 
-Finds assets with aind-behavior-video-transformation version < 0.2.2
+Finds assets with aind-behavior-video-transformation version < 0.2.1
 and outputs their details to a CSV file.
 
 Usage:
     python export_affected_assets.py --output affected_assets.csv
 """
 
-import csv
 import argparse
+import pandas as pd
 from aind_data_access_api.document_db import MetadataDbClient
 
 
@@ -81,51 +81,24 @@ def export_to_csv(assets, output_file):
     """
     print(f"Writing to {output_file}...")
 
-    with open(output_file, "w", newline="") as f:
-        writer = csv.writer(f)
+    # Process assets to flatten the data
+    processed_assets = []
+    for asset in assets:
+        compression_requested = asset.get("compression_requested")
+        processed_assets.append({
+            "asset_id": asset.get("_id", ""),
+            "asset_name": asset.get("name", ""),
+            "s3_location": asset.get("location", ""),
+            "code_url": asset.get("code_url", ""),
+            "software_version": asset.get("software_version", ""),
+            "start_date_time": asset.get("start_date_time", ""),
+            "has_compression_requested": compression_requested is not None,
+            "compression_enum": compression_requested.get("compression_enum", "") if isinstance(compression_requested, dict) else "",
+        })
 
-        # Header
-        writer.writerow(
-            [
-                "asset_id",
-                "asset_name",
-                "s3_location",
-                "code_url",
-                "software_version",
-                "start_date_time",
-                "has_compression_requested",
-                "compression_enum",
-            ]
-        )
-
-        # Data rows
-        for asset in assets:
-            s3_location = asset.get("location", "")
-            code_url = asset.get("code_url", "")
-            software_version = asset.get("software_version", "")
-            start_date_time = asset.get("start_date_time", "")
-
-            # Check if compression_requested exists
-            compression_requested = asset.get("compression_requested")
-            has_compression_requested = compression_requested is not None
-
-            # Extract compression_enum if present
-            compression_enum = ""
-            if compression_requested and isinstance(compression_requested, dict):
-                compression_enum = compression_requested.get("compression_enum", "")
-
-            writer.writerow(
-                [
-                    asset.get("_id", ""),
-                    asset.get("name", ""),
-                    s3_location,
-                    code_url,
-                    software_version,
-                    start_date_time,
-                    has_compression_requested,
-                    compression_enum,
-                ]
-            )
+    # Convert to DataFrame and save
+    df = pd.DataFrame(processed_assets)
+    df.to_csv(output_file, index=False)
 
     print(f"Successfully wrote {len(assets)} records to {output_file}")
 
