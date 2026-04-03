@@ -76,7 +76,7 @@
                "abbreviation": "BARseq"
             }
          ],
-         "notes": "Acquired externally by BARseq imaging team."
+         "notes": "Acquired by the Allen Institute for Brain Science BARseq imaging team."
       }
    ],
    "stimulus_epochs": [],

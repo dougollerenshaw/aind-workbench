@@ -90,7 +90,7 @@ def build_acquisition(subject_id: str) -> Acquisition:
                 stream_start_time=params["acquisition_start"],
                 stream_end_time=params["acquisition_end"],
                 modalities=[Modality.BARSEQ],
-                notes="Acquired externally by BARseq imaging team.",
+                notes="Acquired by the Allen Institute for Brain Science BARseq imaging team.",
             )
         ],
     )
