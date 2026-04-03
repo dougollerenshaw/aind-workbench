@@ -1,0 +1,12 @@
+[project]
+name = "barseq-blackbox-acquisition"
+version = "0.1.0"
+description = "Generates acquisition.json metadata for BARseq blackbox acquisitions (subjects 780345 and 780346)"
+requires-python = ">=3.10"
+dependencies = [
+    "aind-data-schema",
+    "aind-data-schema-models",
+]
+
+[tool.uv.sources]
+aind-data-schema = { git = "https://github.com/AllenNeuralDynamics/aind-data-schema", branch = "barseq_blackbox_acquisition" }
