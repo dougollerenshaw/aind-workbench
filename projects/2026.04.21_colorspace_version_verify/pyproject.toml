@@ -1,0 +1,9 @@
+[project]
+name = "colorspace-version-verify"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "aind-data-access-api[document_db]",
+    "pandas",
+    "tabulate",
+]

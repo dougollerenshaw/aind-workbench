@@ -1,0 +1,11 @@
+[project]
+name = "2026-04-10-attach-co-assets"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "codeocean>=0.15.0",
+    "python-dotenv>=1.2.2",
+    "requests>=2.33.1",
+    "tqdm>=4.67.3",
+]
