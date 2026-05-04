@@ -29,7 +29,7 @@ jobs:
       service-token: ${{ secrets.SERVICE_TOKEN }}
 """
 
-REPOS = [
+# REPOS = [
     # "aind-data-schema",
     # "aind-data-schema-models",
     # "aind-metadata-upgrader",
@@ -42,7 +42,41 @@ REPOS = [
     # "zombie-squirrel",
     # "aind-software-docs",
     # "aind-data-mcp",
-    "milestone-testing",
+#     "milestone-testing",
+# ]
+
+REPOS = [
+    # "aind-behavior-utils",
+    "aind-bonsai-behavior-nwb",
+    "aind-dynamic-foraging-pipeline",
+    "aind-dynamic-foraging-qc",
+    "aind-ephys-ibl-gui-conversion",
+    "aind-ephys-results-collector",
+    "aind-fiber-photometry-pipeline",
+    "aind-fiber-photometry-standalone-pipeline",
+    "aind-file-standards",
+    "aind-fip-dff",
+    "aind-fip-nwb-base-capsule",
+    "aind-fip-qc-raw",
+    "aind-log-utils",
+    "aind-metadata-manager",
+    "aind-metadata-mapper",
+    "aind-nwb-utils",
+    "aind-ophys-camstim-behavior-qc",
+    "aind-ophys-classifier",
+    "aind-ophys-motion-correction",
+    "aind-ophys-movie-qc",
+    "aind-ophys-nwb",
+    "aind-pavlovian-behavior-capsule",
+    "aind-physio-arch",
+    "aind-pophys-converter",
+    "aind-pophys-converter-capsule",
+    "aind-pophys-pipeline",
+    "aind-running-speed-nwb",
+    "aind-scientific-computing",
+    "aind-vr-foraging-pipeline",
+    "aind-vr-foraging-processing-nwb-packaging",
+    "isi_segmentation",
 ]
 
 ORG = "AllenNeuralDynamics"
@@ -73,6 +107,16 @@ def process_repo(gh, user_login, repo_name):
             print(f"  Repo not found: {ORG}/{repo_name} — skipping.")
         else:
             print(f"  GitHub error on {repo_name}: {e}")
+        return
+
+    # Skip if an open PR with our branch name already exists
+    try:
+        for pr in upstream.get_pulls(state="open"):
+            if pr.head.ref == BRANCH:
+                print(f"  Open PR already exists: {pr.html_url} — skipping.")
+                return
+    except GithubException as e:
+        print(f"  Couldn't check existing PRs on {repo_name}: {e}")
         return
 
     tmpdir = tempfile.mkdtemp()

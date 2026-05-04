@@ -1,0 +1,9 @@
+[project]
+name = "get-all-non-open-asset-names"
+version = "0.1.0"
+description = "Query DocDB for all assets NOT in the aind-open-data bucket"
+requires-python = ">=3.8"
+dependencies = [
+    "aind-data-access-api",
+    "pandas",
+]

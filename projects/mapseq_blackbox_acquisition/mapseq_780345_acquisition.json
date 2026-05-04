@@ -1,0 +1,79 @@
+{
+   "object_type": "Acquisition",
+   "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/acquisition.py",
+   "schema_version": "2.5.0",
+   "subject_id": "780345",
+   "specimen_id": [
+      "780345_map001",
+      "780345_map002",
+      "780345_map003",
+      "780345_map004",
+      "780345_map005",
+      "780345_map006",
+      "780345_map007",
+      "780345_map008",
+      "780345_map009",
+      "780345_map010",
+      "780345_map011",
+      "780345_map012",
+      "780345_map013",
+      "780345_map014",
+      "780345_map015",
+      "780345_map016",
+      "780345_map017",
+      "780345_map018",
+      "780345_map019",
+      "780345_map020",
+      "780345_map021",
+      "780345_map022",
+      "780345_map023",
+      "780345_map024",
+      "780345_map025",
+      "780345_map026",
+      "780345_map027",
+      "780345_map028",
+      "780345_map029",
+      "780345_map030",
+      "780345_map031",
+      "780345_map032",
+      "780345_map033",
+      "780345_map034",
+      "780345_map035",
+      "780345_map036",
+      "780345_map037",
+      "780345_map038",
+      "780345_map039",
+      "780345_spinal"
+   ],
+   "acquisition_start_time": "2025-03-24T12:00:00-07:00",
+   "acquisition_start_tz": "America/Los_Angeles",
+   "acquisition_end_time": "2025-10-30T12:00:00-07:00",
+   "experimenters": [
+      "Cold Spring Harbor Laboratory (CSHL) MAPseq team"
+   ],
+   "protocol_id": [],
+   "ethics_review_id": null,
+   "instrument_id": null,
+   "acquisition_type": "BarcodeSequencing",
+   "notes": "MAPseq was performed off-site at Cold Spring Harbor Laboratory. The acquisition_start_time represents the date the tissue was mailed to CSHL; the acquisition_end_time represents the date the final processed results were received.",
+   "coordinate_system": null,
+   "calibrations": [],
+   "maintenance": [],
+   "data_streams": [
+      {
+         "object_type": "External data stream",
+         "stream_start_time": "2025-03-24T12:00:00-07:00",
+         "stream_end_time": "2025-10-30T12:00:00-07:00",
+         "modalities": [
+            {
+               "name": "Multiplexed analysis of projections by sequencing",
+               "abbreviation": "MAPseq"
+            }
+         ],
+         "notes": "Acquired off-site at Cold Spring Harbor Laboratory."
+      }
+   ],
+   "stimulus_epochs": [],
+   "manipulations": [],
+   "subject_details": null
+}

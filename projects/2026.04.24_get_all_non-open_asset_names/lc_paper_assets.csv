@@ -1,0 +1,851 @@
+asset_name,capsule_names,co_asset_ids,bucket,bucket_status
+260113_percentile_meshes,"LC somatodendritic morphology analysis, LC-NE_retrograde_viral_labelling_analyses, LCNE_transcriptomics, LC_H2B_points_to_mesh, aind-beh-physiology-publication",c712751d-f744-4fe8-9657-93a7084eab22,unresolved (no DocDB record),CO PRIVATE
+669489_2023-06-24_14-56-01_nwb_2025-09-05_16-22-39,"aind-beh-physiology-publication, aind-stan-sim-beh",436f82f0-b822-4c4f-a6f2-de574cd10e9f,aind-open-data,OPEN
+669489_2023-06-26_16-23-02_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",73a1281c-776d-4b1c-900f-a0cccc62dd5e,aind-open-data,OPEN
+669489_2023-06-27_14-20-19_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",ee446658-d3f4-44fd-bf66-6a1fecc0e856,aind-open-data,OPEN
+669489_2023-06-28_13-10-12_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",b3890be9-8f36-4aec-9959-92eaaaed8b83,aind-open-data,OPEN
+669489_2023-06-29_16-16-02_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",619adbe8-883d-4898-8414-cfa004d6efa5,aind-open-data,OPEN
+669489_2023-06-30_12-51-58_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",f5329d8b-4122-4e4e-bfe3-277b764de7be,aind-open-data,OPEN
+669489_2023-07-01_16-31-54_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",0a92cda5-b35e-4f78-8106-d164b7595fde,aind-open-data,OPEN
+669489_2023-07-02_12-49-06_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",5e9a2478-ce49-498b-b871-4eb3f33031a6,aind-open-data,OPEN
+669489_2023-07-03_11-31-11_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",9cc71538-23e3-4e40-92c0-36eeda16c9d3,aind-open-data,OPEN
+669489_2023-07-04_14-24-45_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",270cd8e6-9015-4058-8259-3f32ee3c0e74,aind-open-data,OPEN
+669489_2023-07-05_15-44-55_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",47f3bc2c-7ed7-4157-b220-ba7e32c52cc7,aind-open-data,OPEN
+669489_2023-07-06_13-50-08_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",4727ee24-04ae-48e5-9adb-8ae609b62cf6,aind-open-data,OPEN
+669489_2023-07-07_15-15-49_nwb_2025-09-05_16-22-40,"aind-beh-physiology-publication, aind-stan-sim-beh",1f3045c6-e2d6-45f9-9027-d8ffae12e11a,aind-open-data,OPEN
+669489_2023-07-08_17-24-38_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",06fcc54c-8fcd-4c3c-918c-11bad4c20c12,aind-open-data,OPEN
+669489_2023-07-10_14-24-28_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",1600f74d-04f1-4c79-9033-be5120235333,aind-open-data,OPEN
+669489_2023-07-11_16-43-36_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",86880d16-effd-4cf9-b4cf-175852a54d73,aind-open-data,OPEN
+669489_2023-07-12_15-26-19_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",96c25648-133a-491e-b872-e59dcb9f7173,aind-open-data,OPEN
+669489_stan_model,aind-beh-physiology-publication,58f25b9f-16dc-436a-81f0-f21a54d46ed3,aind-scratch-data,AIND PRIVATE
+669492_2023-06-24_17-28-24_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",63496414-6e09-480f-b0c1-44b4cc9006cb,aind-open-data,OPEN
+669492_2023-06-26_19-14-31_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",8300170b-5009-4fe0-8cfa-8fd73325a8bf,aind-open-data,OPEN
+669492_2023-06-29_18-28-17_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",735a08e3-d891-45dd-8c89-17a93225d442,aind-open-data,OPEN
+669492_2023-06-30_15-51-45_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",80570e34-f51a-4d3f-a44a-faac43f5c315,aind-open-data,OPEN
+669492_2023-07-01_19-25-23_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",296c0f88-3e7b-4b93-9463-b8947be81c6b,aind-open-data,OPEN
+669492_2023-07-02_16-02-53_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",6ce3d8c0-699e-4485-8446-1ac2cc52c30a,aind-open-data,OPEN
+669492_2023-07-03_15-55-33_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",510c24f4-bd64-473d-846e-11c7dc82bae3,aind-open-data,OPEN
+669492_2023-07-04_17-17-58_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",2c894454-a741-4c21-85e1-5f371d863dd7,aind-open-data,OPEN
+669492_2023-07-05_18-51-39_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",bbd86cb8-b0f0-4283-b015-d8ca12dbfb52,aind-open-data,OPEN
+669492_2023-07-06_16-39-19_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",ca16a672-8498-47fb-a69f-95e3c0d9516f,aind-open-data,OPEN
+669492_2023-07-07_17-52-04_nwb_2025-09-05_16-22-41,"aind-beh-physiology-publication, aind-stan-sim-beh",1712560f-a346-4f53-bf28-390b0d8db1ff,aind-open-data,OPEN
+669492_2023-07-08_19-35-55_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",bc69355c-d781-4560-8bad-146a32de6465,aind-open-data,OPEN
+669492_2023-07-10_17-03-12_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",d4b4a843-5d26-4c7e-8350-77c2a3283884,aind-open-data,OPEN
+669492_2023-07-11_19-01-10_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",a72f5ef4-7aad-4117-8426-61df870c22c9,aind-open-data,OPEN
+669492_2023-07-12_17-52-57_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",fc8be684-e871-4ca5-8176-205e63b899e9,aind-open-data,OPEN
+669492_stan_model,aind-beh-physiology-publication,25b0c219-4fb3-4afa-a30d-7d919641b7f7,aind-scratch-data,AIND PRIVATE
+672850_2023-06-24_18-44-33_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",187a0b9e-3f19-40ad-b432-556392cc16a6,aind-open-data,OPEN
+672850_2023-06-25_15-46-13_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",4aad664f-e0a1-460f-a4c1-fef438b2d3b5,aind-open-data,OPEN
+672850_2023-06-27_18-42-38_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",c4b6f78a-077b-47de-8cf0-91f5390e9d59,aind-open-data,OPEN
+672850_2023-06-28_17-35-53_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",20dd139d-524d-49b2-a663-9b4c25f01c81,aind-open-data,OPEN
+672850_2023-06-29_19-35-01_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",025eeb6a-418c-41b7-bdbb-1c4dc6fec3ad,aind-open-data,OPEN
+672850_2023-06-30_17-33-06_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",e0e74079-bf58-48e9-846b-c97cbebc1dbe,aind-open-data,OPEN
+672850_2023-07-01_20-36-42_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",9ce53d50-bb1c-4fa0-a157-e5e164a654f3,aind-open-data,OPEN
+672850_2023-07-02_17-33-40_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",66774132-26d7-4f1b-93c9-934d5db1b278,aind-open-data,OPEN
+672850_2023-07-03_17-29-31_nwb_2025-09-05_16-22-42,"aind-beh-physiology-publication, aind-stan-sim-beh",f91e615d-2475-4a17-bac4-70a9d0d7190b,aind-open-data,OPEN
+672850_2023-07-05_20-11-38_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",eee7cb9c-640c-4d62-92a7-207e57e3e264,aind-open-data,OPEN
+672850_2023-07-06_18-10-32_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",50f2b673-d495-45bd-8044-e7c1d594983b,aind-open-data,OPEN
+672850_2023-07-08_20-31-04_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",ae1c1431-f896-48b8-87bc-943d0af9c8be,aind-open-data,OPEN
+672850_2023-07-10_18-13-18_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",4fecd72e-ee67-4581-983c-ddc4a1e04921,aind-open-data,OPEN
+672850_2023-07-11_20-02-00_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",6fae2cd0-1bbd-43f9-8f5e-4dbd863004b1,aind-open-data,OPEN
+672850_2023-07-12_19-10-01_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",3f4e6f07-9cf6-4ab6-b2e6-ad709b3cf90c,aind-open-data,OPEN
+672850_stan_model,aind-beh-physiology-publication,ffdbd0e8-1758-48c6-bfd2-cfc3b8baad61,aind-scratch-data,AIND PRIVATE
+699461_2023-12-17_16-36-41_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",068e8a0b-831d-4675-aa47-f91011bfd2c2,aind-open-data,OPEN
+699461_2023-12-18_11-13-29_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",df24c5e0-e564-4ad6-a2cc-4ff21e52d133,aind-open-data,OPEN
+699461_2023-12-19_11-14-31_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",6f6a0be4-831b-4609-b493-4ae4f1c36a26,aind-open-data,OPEN
+699461_2023-12-20_09-12-11_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",9aef60a1-2664-4ee4-9c00-7fbb4312abc4,aind-open-data,OPEN
+699461_2023-12-22_09-00-05_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",ad89fb0d-afb9-418c-9940-e91b7a13d925,aind-open-data,OPEN
+699461_2024-01-02_11-04-31_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",f9edb577-8ce5-4cd4-94ac-6823148a69d2,aind-open-data,OPEN
+699461_2024-01-03_10-39-12_nwb_2025-09-05_16-22-43,"aind-beh-physiology-publication, aind-stan-sim-beh",f71e829d-20a4-41e7-a29b-ebd2bb60b258,aind-open-data,OPEN
+699461_2024-01-04_09-43-43_nwb_2025-09-05_16-22-44,"aind-beh-physiology-publication, aind-stan-sim-beh",f2ebab7c-98d1-4710-b07f-077ab9545f15,aind-open-data,OPEN
+699461_2024-01-05_09-56-43_nwb_2025-09-05_16-22-44,"aind-beh-physiology-publication, aind-stan-sim-beh",f6c4a082-4957-4af0-ace7-181d4cc7208a,aind-open-data,OPEN
+699461_2024-01-06_12-15-46_nwb_2025-09-05_16-22-44,"aind-beh-physiology-publication, aind-stan-sim-beh",7cd91467-eac2-47ab-afaf-15b3979ba661,aind-open-data,OPEN
+699461_2024-01-07_11-08-00_nwb_2025-09-05_16-22-44,"aind-beh-physiology-publication, aind-stan-sim-beh",e5e43e14-a47a-47fa-a19d-af6edfda309a,aind-open-data,OPEN
+699461_2024-01-16_10-21-19_nwb_2025-09-05_16-22-44,"aind-beh-physiology-publication, aind-stan-sim-beh",152bc28b-f50f-417c-b35e-14c56eba1204,aind-open-data,OPEN
+699461_2024-01-17_08-56-16_nwb_2025-09-05_16-22-44,"aind-beh-physiology-publication, aind-stan-sim-beh",6b6e32e9-f853-475a-b8ac-4486699faaa2,aind-open-data,OPEN
+699461_stan_model,aind-beh-physiology-publication,5f78761e-df8e-46a7-b9ab-50857acf2b4f,aind-scratch-data,AIND PRIVATE
+699462_2024-01-03_12-05-59_nwb_2025-09-05_16-22-44,"aind-beh-physiology-publication, aind-stan-sim-beh",9f38136d-a9d8-4b25-b976-c3e209e14826,aind-open-data,OPEN
+699462_2024-01-04_11-39-29_nwb_2025-09-05_16-22-44,"aind-beh-physiology-publication, aind-stan-sim-beh",17075886-c8b9-45f4-af99-b6fbef9c267c,aind-open-data,OPEN
+699462_2024-01-06_13-39-52_nwb_2025-09-05_16-22-44,"aind-beh-physiology-publication, aind-stan-sim-beh",af290b12-e120-458a-ad7e-d57c0f661d48,aind-open-data,OPEN
+699462_2024-01-07_13-20-27_nwb_2025-09-05_16-22-44,"aind-beh-physiology-publication, aind-stan-sim-beh",e8d9c088-033d-42cf-96c3-71e88025d4b6,aind-open-data,OPEN
+699462_2024-01-08_11-59-21_nwb_2025-09-05_16-22-44,"aind-beh-physiology-publication, aind-stan-sim-beh",669672c2-f5af-4fbb-9d0f-5b6a4c63f4e9,aind-open-data,OPEN
+699462_2024-01-09_11-34-51_nwb_2025-09-05_16-22-45,"aind-beh-physiology-publication, aind-stan-sim-beh",df8859d3-b648-45d5-a5d6-8ea15ec43807,aind-open-data,OPEN
+699462_2024-01-11_10-59-40_nwb_2025-09-05_16-22-45,"aind-beh-physiology-publication, aind-stan-sim-beh",264485bb-16bf-4716-9f19-a51ce88eb666,aind-open-data,OPEN
+699462_2024-01-12_11-40-23_nwb_2025-09-05_16-22-45,"aind-beh-physiology-publication, aind-stan-sim-beh",cd1ca66f-6932-44e3-b746-f9b1cd4e28d3,aind-open-data,OPEN
+699462_2024-01-13_15-11-33_nwb_2025-09-05_16-22-45,"aind-beh-physiology-publication, aind-stan-sim-beh",a211f111-71f9-4fdd-b664-ea8ff37b1394,aind-open-data,OPEN
+699462_2024-01-14_15-41-48_nwb_2025-09-05_16-22-45,"aind-beh-physiology-publication, aind-stan-sim-beh",b03ce4a3-bdab-417d-9ed5-9aa8147dd052,aind-open-data,OPEN
+699462_2024-01-16_12-10-12_nwb_2025-09-05_16-22-45,"aind-beh-physiology-publication, aind-stan-sim-beh",1c37a305-08d7-48c2-a326-2559a15af595,aind-open-data,OPEN
+699462_2024-01-17_10-36-54_nwb_2025-09-05_16-22-45,"aind-beh-physiology-publication, aind-stan-sim-beh",fdfcf9f4-71da-44a1-9d2b-43e930d50d74,aind-open-data,OPEN
+699462_stan_model,aind-beh-physiology-publication,1f4e1497-2979-4a39-8444-8d1e56dcf43c,aind-scratch-data,AIND PRIVATE
+699472_2023-12-21_11-59-56_nwb_2025-09-05_16-22-45,"aind-beh-physiology-publication, aind-stan-sim-beh",c76c9462-9ea7-41a1-9817-7fe72fd11747,aind-open-data,OPEN
+699472_2023-12-22_10-25-19_nwb_2025-09-05_16-22-45,"aind-beh-physiology-publication, aind-stan-sim-beh",68052dea-67fb-48f7-b11c-48c818fc7e4b,aind-open-data,OPEN
+699472_2024-01-02_13-53-59_nwb_2025-09-05_16-22-45,"aind-beh-physiology-publication, aind-stan-sim-beh",3d0118cf-23ef-4114-859c-46e9c3d65106,aind-open-data,OPEN
+699472_2024-01-03_15-13-23_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",4ca95909-5779-468f-babe-b8b975334f22,aind-open-data,OPEN
+699472_2024-01-04_15-04-09_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",9afb2617-39ff-4cb8-8f9a-2ca3bcb029fa,aind-open-data,OPEN
+699472_2024-01-05_12-52-27_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",f839fce7-e6c3-404f-9596-9eecf9cf3d8e,aind-open-data,OPEN
+699472_2024-01-06_14-52-56_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",98d3fc40-da1b-4af0-92dc-624516353e6a,aind-open-data,OPEN
+699472_2024-01-07_14-33-13_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",8522704e-920a-4c31-a805-1494d6cc1c94,aind-open-data,OPEN
+699472_2024-01-08_13-49-33_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",603c1e32-bffa-488e-921f-5976a76b190d,aind-open-data,OPEN
+699472_2024-01-09_13-30-56_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",f09c9bb2-c9c4-49fc-94ba-bf77a1ec5f05,aind-open-data,OPEN
+699472_2024-01-10_13-36-09_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",6c55522a-27ae-423f-a1a1-66ed99ba610d,aind-open-data,OPEN
+699472_2024-01-11_13-08-25_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",da994948-95c2-4caa-8ae4-9bc134ca26be,aind-open-data,OPEN
+699472_2024-01-12_12-53-40_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",6f9f0545-2765-490e-bcdb-1b879fb9967d,aind-open-data,OPEN
+699472_2024-01-13_16-41-33_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",45da6036-ce28-45a2-920d-169ee82f73b1,aind-open-data,OPEN
+699472_2024-01-14_16-58-42_nwb_2025-09-05_16-22-46,"aind-beh-physiology-publication, aind-stan-sim-beh",91013215-6d80-4576-97b9-056b5f3778c4,aind-open-data,OPEN
+699472_2024-01-17_13-42-09_nwb_2025-09-05_16-22-47,"aind-beh-physiology-publication, aind-stan-sim-beh",87390625-25a8-4a0f-9081-9ee189a13b45,aind-open-data,OPEN
+699472_stan_model,aind-beh-physiology-publication,86944a67-9de1-47be-b393-95f0edaf7e39,aind-scratch-data,AIND PRIVATE
+701707_2023-12-21_13-37-55_nwb_2025-09-05_16-22-47,"aind-beh-physiology-publication, aind-stan-sim-beh",be456a3d-64fa-4318-877e-8d493c8cb2bf,aind-open-data,OPEN
+701707_2023-12-22_15-14-39_nwb_2025-09-05_16-22-47,"aind-beh-physiology-publication, aind-stan-sim-beh",7d04dc75-d419-4bd9-aaeb-3f8aa358463e,aind-open-data,OPEN
+701707_2024-01-03_16-52-16_nwb_2025-09-05_16-22-47,"aind-beh-physiology-publication, aind-stan-sim-beh",7152dc99-6e4b-45a5-bab6-1008d19fa6cf,aind-open-data,OPEN
+701707_2024-01-04_16-39-43_nwb_2025-09-05_16-22-47,"aind-beh-physiology-publication, aind-stan-sim-beh",0b1f32ce-8e37-43df-84b4-c83bfd95ee9c,aind-open-data,OPEN
+701707_2024-01-05_14-41-22_nwb_2025-09-05_16-22-47,"aind-beh-physiology-publication, aind-stan-sim-beh",e21527a7-b538-4e99-aef7-8ccf2e826205,aind-open-data,OPEN
+701707_2024-01-06_16-29-23_nwb_2025-09-05_16-22-47,"aind-beh-physiology-publication, aind-stan-sim-beh",cb10e328-0867-48c1-a1b5-889f7f67204d,aind-open-data,OPEN
+701707_2024-01-12_14-53-55_nwb_2025-09-05_16-22-47,"aind-beh-physiology-publication, aind-stan-sim-beh",8cdf2215-41ca-4f3f-baf1-673cd1ece87e,aind-open-data,OPEN
+701707_2024-01-13_18-07-21_nwb_2025-09-05_16-22-47,"aind-beh-physiology-publication, aind-stan-sim-beh",191baddd-6d6e-4c92-9540-56b3f8757cf1,aind-open-data,OPEN
+701707_2024-01-14_18-00-04_nwb_2025-09-05_16-22-47,"aind-beh-physiology-publication, aind-stan-sim-beh",576810c5-cbca-421b-9445-14048c970b03,aind-open-data,OPEN
+701707_2024-01-17_15-22-21_nwb_2025-09-05_16-22-48,"aind-beh-physiology-publication, aind-stan-sim-beh",fb7ea6cb-387a-40f3-84d7-78b7aa4428f8,aind-open-data,OPEN
+701707_stan_model,aind-beh-physiology-publication,507e5a80-b6e9-4f05-8178-378059bd1e28,aind-scratch-data,AIND PRIVATE
+716325_stan_results,aind-beh-physiology-publication,d647e1b6-7bc9-478f-ab0c-24d349d087af,unresolved (no DocDB record),CO PRIVATE
+717121_stan_results,aind-beh-physiology-publication,02de20a5-f81b-4fcc-92b0-9ec386807ac9,unresolved (no DocDB record),CO PRIVATE
+749472_2024-12-28_18-37-02_nwb_2025-09-05_16-22-48,"aind-beh-physiology-publication, aind-stan-sim-beh",62fb2f93-aeae-4e03-8807-bc7b1633cca3,aind-open-data,OPEN
+749472_2024-12-30_14-44-06_nwb_2025-09-05_16-22-48,"aind-beh-physiology-publication, aind-stan-sim-beh",3e0bf4ea-fa51-4c6b-bebc-3d0aee4d5647,aind-open-data,OPEN
+749472_2024-12-31_18-19-20_nwb_2025-09-05_16-22-48,"aind-beh-physiology-publication, aind-stan-sim-beh",4e20b6ca-cbac-4fdb-bbf5-cf3e06642059,aind-open-data,OPEN
+749472_2025-01-01_16-22-33_nwb_2025-09-05_16-22-48,"aind-beh-physiology-publication, aind-stan-sim-beh",b03954d4-2a73-41e0-a37b-f68b926f8729,aind-open-data,OPEN
+749472_2025-01-03_15-11-09_nwb_2025-09-05_16-22-48,"aind-beh-physiology-publication, aind-stan-sim-beh",75ec0136-e331-400c-a514-8244e2439ecd,aind-open-data,OPEN
+749472_2025-01-04_14-13-30_nwb_2025-09-05_16-22-49,"aind-beh-physiology-publication, aind-stan-sim-beh",85823ea1-2c4e-4f9e-8951-b690209c537a,aind-open-data,OPEN
+749472_2025-01-06_13-14-52_nwb_2025-09-05_16-22-49,"aind-beh-physiology-publication, aind-stan-sim-beh",2f2b7103-c63e-4123-9d79-5add15c5e6aa,aind-open-data,OPEN
+749472_2025-01-08_13-43-07_nwb_2025-09-05_16-22-49,"aind-beh-physiology-publication, aind-stan-sim-beh",14308b31-227b-442a-8cb6-0d7babf9a2e6,aind-open-data,OPEN
+749472_2025-01-09_13-56-02_nwb_2025-09-05_16-22-49,"aind-beh-physiology-publication, aind-stan-sim-beh",1c87a499-3442-41a3-bda4-854c177340be,aind-open-data,OPEN
+749472_stan_model,aind-beh-physiology-publication,12ecf704-7cb7-4311-85bd-3d2a2623c8f9,aind-scratch-data,AIND PRIVATE
+749624_2025-01-02_13-30-36_nwb_2025-09-05_16-22-48,"aind-beh-physiology-publication, aind-stan-sim-beh",3ae00200-9ab2-483f-89d6-11a6423f468f,aind-open-data,OPEN
+749624_2025-01-03_13-20-28_nwb_2025-09-05_16-22-48,"aind-beh-physiology-publication, aind-stan-sim-beh",18a3f904-1203-4bc0-b3d4-b71c3ae08b70,aind-open-data,OPEN
+749624_2025-01-04_12-44-49_nwb_2025-09-05_16-22-48,"aind-beh-physiology-publication, aind-stan-sim-beh",ea68cf2e-8f04-4e19-a52d-9e0155772aae,aind-open-data,OPEN
+749624_2025-01-07_11-08-11_nwb_2025-09-05_16-22-48,"aind-beh-physiology-publication, aind-stan-sim-beh",1167257d-e3a4-4c7b-b81e-5e0f645350c5,aind-open-data,OPEN
+749624_2025-01-09_12-39-56_nwb_2025-09-05_16-22-48,"aind-beh-physiology-publication, aind-stan-sim-beh",4a4af9f5-577b-4a6e-8d46-d6c9c504ac0c,aind-open-data,OPEN
+749624_stan_model,aind-beh-physiology-publication,003d68cd-861c-473b-9f0b-a3b2e914bdb3,aind-scratch-data,AIND PRIVATE
+751004_stan_results,aind-beh-physiology-publication,dee86390-9e3d-47d8-8b3c-dfc6c1172596,unresolved (no DocDB record),CO PRIVATE
+751181_stan_model,aind-beh-physiology-publication,dfdaf212-c8e4-46c7-b11d-1109ea60a9d4,unresolved (no DocDB record),CO PRIVATE
+751766_stan_model,aind-beh-physiology-publication,859b3594-1518-4067-92be-5de9665cb318,unresolved (no DocDB record),CO PRIVATE
+751769_stan_model,aind-beh-physiology-publication,d0cf7f76-a4df-4c57-81cb-f7f0db0fee44,unresolved (no DocDB record),CO PRIVATE
+752014_stan_model,aind-beh-physiology-publication,0451326b-c2f5-44d6-acfd-549ebf8ba85b,unresolved (no DocDB record),CO PRIVATE
+754895_2024-12-31_19-19-16_nwb_2025-09-05_16-22-51,"aind-beh-physiology-publication, aind-stan-sim-beh",20020fea-3a13-436d-84f4-e687c918b024,aind-open-data,OPEN
+754895_2025-01-02_15-15-18_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",fe5642ed-0902-4e76-b194-6951bf4885a2,aind-open-data,OPEN
+754895_2025-01-03_16-09-32_nwb_2025-09-05_16-22-51,"aind-beh-physiology-publication, aind-stan-sim-beh",6f4aff7f-654e-4ca9-bbbc-87552ea892cb,aind-open-data,OPEN
+754895_2025-01-04_15-19-09_nwb_2025-09-05_16-22-51,"aind-beh-physiology-publication, aind-stan-sim-beh",0d0a9f5a-9186-421a-a606-7686931d72b4,aind-open-data,OPEN
+754895_2025-01-06_14-47-04_nwb_2025-09-05_16-22-51,"aind-beh-physiology-publication, aind-stan-sim-beh",830cef0b-22e4-40db-9259-ea263410bd2e,aind-open-data,OPEN
+754895_2025-01-07_13-05-29_nwb_2025-09-05_16-22-51,"aind-beh-physiology-publication, aind-stan-sim-beh",84d12620-df17-41d9-a5ae-e5e5de8b9250,aind-open-data,OPEN
+754895_2025-01-08_14-38-56_nwb_2025-09-05_16-22-51,"aind-beh-physiology-publication, aind-stan-sim-beh",ff3daf85-ee1d-48e1-8d96-94cea2222e57,aind-open-data,OPEN
+754895_2025-01-09_15-08-04_nwb_2025-09-05_16-22-51,"aind-beh-physiology-publication, aind-stan-sim-beh",de1faaf2-393b-48db-88c9-8d7295f7a5d4,aind-open-data,OPEN
+754895_stan_model,aind-beh-physiology-publication,376cfbac-fea8-4a17-b5d3-95cee992f87b,aind-scratch-data,AIND PRIVATE
+754896_2025-01-02_00-00-00_nwb_2025-09-05_16-22-49,"aind-beh-physiology-publication, aind-stan-sim-beh",3f433836-2dfd-4ddd-8ced-de25853904f6,aind-open-data,OPEN
+754896_2025-01-03_17-20-19_nwb_2025-09-05_16-22-49,"aind-beh-physiology-publication, aind-stan-sim-beh",e9fc7df6-8e0e-436f-a71e-1b8e651f016d,aind-open-data,OPEN
+754896_2025-01-04_17-25-58_nwb_2025-09-05_16-22-49,"aind-beh-physiology-publication, aind-stan-sim-beh",e0d0434d-fe50-49f5-8dd8-78a6d262f854,aind-open-data,OPEN
+754896_2025-01-06_16-37-09_nwb_2025-09-05_16-22-49,"aind-beh-physiology-publication, aind-stan-sim-beh",9903ad2c-d0f8-4863-918d-0ce920120f95,aind-open-data,OPEN
+754896_2025-01-07_14-08-54_nwb_2025-09-05_16-22-49,"aind-beh-physiology-publication, aind-stan-sim-beh",4aebec03-5eee-40d1-b55c-a507d271395c,aind-open-data,OPEN
+754896_2025-01-08_16-03-27_nwb_2025-09-05_16-22-49,"aind-beh-physiology-publication, aind-stan-sim-beh",1d308954-031d-4668-8484-031259e72e8c,aind-open-data,OPEN
+754896_2025-01-09_16-22-47_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",cd0a7714-c475-4d87-b1ed-f0798284a2b9,aind-open-data,OPEN
+754896_stan_model,aind-beh-physiology-publication,1f32e153-cf6f-4a20-97d0-3823722a99b1,aind-scratch-data,AIND PRIVATE
+754897_annotation_2025-09-16_09-03-00,aind-beh-physiology-publication,4cb78036-9629-4ddd-b51f-5df9cbd982cd,unresolved (no DocDB record),CO PRIVATE
+754897_stan_model,aind-beh-physiology-publication,0a5316fd-b550-41e4-b9e9-aa6ec9f3e4f6,unresolved (no DocDB record),CO PRIVATE
+754898_2024-12-26_16-22-54_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",74735be1-9ce3-4887-9b3a-f54682f84231,aind-open-data,OPEN
+754898_2024-12-28_19-23-45_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",b15c5d7d-f12a-4df4-aba7-01107dab8287,aind-open-data,OPEN
+754898_2024-12-30_17-40-08_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",7645676c-a4fd-4a0e-8b01-d578f5cd9e0f,aind-open-data,OPEN
+754898_2025-01-01_20-40-03_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",6cb38bad-4959-422d-87aa-cef3584fbb90,aind-open-data,OPEN
+754898_2025-01-02_17-54-29_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",801986b2-1ead-4ddb-af7a-94ea9c0ed483,aind-open-data,OPEN
+754898_2025-01-04_18-49-39_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",4fd0e6b6-b8a0-4b76-b94f-107575d96d91,aind-open-data,OPEN
+754898_2025-01-06_17-49-54_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",58d530b3-125a-43a6-94f1-41e078e7f8d3,aind-open-data,OPEN
+754898_2025-01-07_17-35-38_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",7ce93b92-d8a6-481d-b5ee-2c0915ee9c93,aind-open-data,OPEN
+754898_2025-01-08_17-48-59_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",00f60af2-787c-429f-895e-205010983e1e,aind-open-data,OPEN
+754898_2025-01-09_17-44-04_nwb_2025-09-05_16-22-50,"aind-beh-physiology-publication, aind-stan-sim-beh",0bf21dcf-93c0-436e-bc06-aed5dc936c7b,aind-open-data,OPEN
+754898_stan_model,aind-beh-physiology-publication,dfe14db7-e483-4db3-8cb9-6eef85dd0591,aind-scratch-data,AIND PRIVATE
+758017_stan_model,aind-beh-physiology-publication,31745c8b-8315-4ead-bc29-7ef7cbf06255,unresolved (no DocDB record),CO PRIVATE
+758018_stan_model,aind-beh-physiology-publication,6c17ad84-08da-43d0-be14-37424b744ce4,unresolved (no DocDB record),CO PRIVATE
+761038_stan_model,aind-beh-physiology-publication,1ed9b960-fb72-4b0a-8d08-12e0a287fe2c,unresolved (no DocDB record),CO PRIVATE
+763590_stan_model,aind-beh-physiology-publication,8643b964-ea0b-490d-95e7-dd73650985a3,unresolved (no DocDB record),CO PRIVATE
+780345_2025-02-20_00-00-00,"LC-NE_BARseq_MAPseq_analyses, LC-NE_BARseq_MAT-RDS_conversion",95dbe512-bcf8-4f68-9947-0fb99320f3b4,aind-private-data-prod-o5171v,AIND PRIVATE
+780346_2025-06-11_00-00-00,"LC-NE_BARseq_MAPseq_analyses, LC-NE_BARseq_MAT-RDS_conversion",d182e926-84f8-42b7-ac7c-ba712f1dd971,aind-private-data-prod-o5171v,AIND PRIVATE
+781166_stan_model,aind-beh-physiology-publication,d2ca8efe-b796-4a42-9c89-1e5660d0cae8,unresolved (no DocDB record),CO PRIVATE
+782394_stan_model,aind-beh-physiology-publication,e9dcfaa7-94e3-4991-9791-b68b49968f45,unresolved (no DocDB record),CO PRIVATE
+784803_stan,aind-beh-physiology-publication,6c0c37af-2073-4837-9912-17193e2c6052,unresolved (no DocDB record),CO PRIVATE
+784806_stan,aind-beh-physiology-publication,72888a8a-820a-4b35-b6cd-fd0e7a1ed349,unresolved (no DocDB record),CO PRIVATE
+785956_stan_model,aind-beh-physiology-publication,35ac77ae-aaef-4ce6-a4e0-0b9dea6f7cdb,unresolved (no DocDB record),CO PRIVATE
+791691_stan,aind-beh-physiology-publication,b7a5900f-a47f-46ee-9141-0eb81e2180e8,unresolved (no DocDB record),CO PRIVATE
+Allen Mouse Common Coordinate Framework,"aind-LC-morphologies, aind-LC-morphologies_supplemental_figure",57a42c66-b6ca-4b56-b8ad-929be00ebff9,aind-msma-morphology-data,AIND PRIVATE
+BARseq_669594_UMAPclustering,LC-NE_BARseq_MAPseq_analyses,9e7eda3c-c668-4c28-abcc-886080217215,unresolved (no DocDB record),CO PRIVATE
+BARseq_780345-780346_combined_UMAPclustering,LC-NE_BARseq_MAPseq_analyses,546c49f5-56c0-45fa-9787-6582332482a5,unresolved (no DocDB record),CO PRIVATE
+BARseq_780345_UMAPclustering,LC-NE_BARseq_MAPseq_analyses,a78668f6-3451-42d4-9a83-d88f6884e83d,unresolved (no DocDB record),CO PRIVATE
+BARseq_780346_UMAPclustering,LC-NE_BARseq_MAPseq_analyses,0e3f1b4f-2f63-4692-acfe-1411d3f44e25,unresolved (no DocDB record),CO PRIVATE
+BARseq_MATtoRDSfiles_brain1,LC-NE_BARseq_MAPseq_analyses,8b374817-d010-4c72-92f7-de9737905f3b,unresolved (no DocDB record),CO PRIVATE
+BARseq_MATtoRDSfiles_brain3_brain4,LC-NE_BARseq_MAPseq_analyses,72096ec2-0e65-4373-9bd4-0bf163dfe4bd,unresolved (no DocDB record),CO PRIVATE
+BARseq_soma_barcodes,LC-NE_BARseq_MAPseq_analyses,80538a79-932f-4ee1-88a9-20a4c0f54662,unresolved (no DocDB record),CO PRIVATE
+BottomViewPylon1-MIB-2025-02-17,LC-ephys-tonguemovements,2c00fd74-e87a-463b-8a07-47d568851d24,unresolved (no DocDB record),CO PRIVATE
+CCF Structure Meshes,LC_H2B_points_to_mesh,673fe731-3a2b-42eb-b8f7-bde82d79e371,unresolved (no DocDB record),CO PRIVATE
+CCF Structure OBJs,"LC-NE_retrograde_viral_labelling_analyses, aind-LC-morphologies, aind-LC-morphologies_supplemental_figure",0fadf46e-9cae-4618-9f8a-6e086af808fb,unresolved (no DocDB record),CO PRIVATE
+Dbh-CreAi65_retrograde_soma_manual_proofread_10-14-25,LC-NE_retrograde_viral_labelling_analyses,a5982495-cb11-4829-aee2-f990c928c2b6,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+FOS_model_210815.hdf5,trailmap_with_point_calls,4aaa1388-7f90-4efb-8a00-90c055a44555,unresolved (no DocDB record),CO PRIVATE
+Helvetica font,LCNE-patchseq-analysis,c5d5e922-1863-4869-99ff-fdce3e10edc7,unresolved (no DocDB record),CO PRIVATE
+LC reconstruction soma location and top projection,LC-NE_retrograde_viral_labelling_analyses,1a3f0210-7f17-4c86-9ae4-e3aaea7fd5b5,unresolved (no DocDB record),CO PRIVATE
+LC-NE_scrach_test,aind-beh-physiology-publication,42507b86-4484-4505-87cd-ce70fb031da5,aind-scratch-data,AIND PRIVATE
+LC-NE_scratch_data_10-26-2025,LC-ephys-tonguemovements,32ec462e-add1-471b-b254-48adaaef9fab,unresolved (no DocDB record),CO PRIVATE
+LCNE-patchseq-ephys,LCNE-patchseq-analysis,68ef27d7-9d95-40ce-9e40-7de93dccf5f8,aind-scratch-data,AIND PRIVATE
+LCNE_neuropixels_alignment_han_20250916,aind-beh-physiology-publication,dc897c0c-fc14-4628-bd46-3b95a680b3dd,unresolved (no DocDB record),CO PRIVATE
+LC_10xv4_2_2,LCNE_10x_preprocessing_R,7a2359b8-fe43-4d03-9020-87d13f35f79a,unresolved (no DocDB record),CO PRIVATE
+LC_H2B_trailmap_probabilities_and_point_calls,LC_H2B_points_to_mesh,779da73f-9d6d-46b2-94bb-1a7dbfaddd66,aind-scratch-data,AIND PRIVATE
+LC_alignment_tip_2025-10-09,aind-beh-physiology-publication,12a4e108-efb2-4191-af48-9213083facd8,unresolved (no DocDB record),CO PRIVATE
+LC_alignment_zs_2025-09-30,aind-beh-physiology-publication,314af35a-dd72-4265-bbdd-24c86b7c2a00,unresolved (no DocDB record),CO PRIVATE
+LC_points_from_cajal,LC-NE_retrograde_viral_labelling_analyses,3aa9d038-9060-4759-af19-829ed8fe37f0,unresolved (no DocDB record),CO PRIVATE
+LC_retro,aind-beh-physiology-publication,78d5ebdd-9b79-4c49-8f83-144f5f7899db,unresolved (no DocDB record),CO PRIVATE
+LCrecordings_combined_units,LC-ephys-tonguemovements,6b1bf694-3272-437a-8f02-319fd90103b5,unresolved (no DocDB record),CO PRIVATE
+MAPseq_ROI_info,LC-NE_BARseq_MAPseq_analyses,b60463ab-6d8b-4b0f-9074-5a579e22b037,unresolved (no DocDB record),CO PRIVATE
+MERFISH_shuonan2sue,aind-beh-physiology-publication,1a8bede7-bdc1-4b41-8290-bc0bdafdf019,unresolved (no DocDB record),CO PRIVATE
+Mock_LC_Snapshots_2026-04-06_17-45-23,"aind-LC-morphologies, aind-LC-morphologies_supplemental_figure",66c45227-e43b-4b01-abf6-3b8e61d1c94f,unresolved (no DocDB record),CO PRIVATE
+Mock_LC_Snapshots_2026-04-09_17-59-00,"aind-LC-morphologies, aind-LC-morphologies_supplemental_figure",2e0359ab-d64c-44ed-80d6-4c15c7109073,unresolved (no DocDB record),CO PRIVATE
+Nardone_2024_merfish_processing_v2,LCNE_transcriptomics_preprocessing,32139770-1323-4155-a059-a245d6aaf60b,unresolved (no DocDB record),CO PRIVATE
+PK_MAPseqBARseq_LC-NEpaper_files,LC-NE_retrograde_viral_labelling_analyses,dd3204b2-28d2-413d-a2ba-dcd9d1ab613c,unresolved (no DocDB record),CO PRIVATE
+SmartSPIM_725231_2024-07-26_15-59-18_stitched_2024-07-29_08-46-42,LC-NE_Register_Annotations_retrograde_cells,80a6e0a5-a2d6-4e1c-9af4-628d4452a5ae,aind-open-data,OPEN
+SmartSPIM_731907_2024-07-26_12-50-16_stitched_2024-08-09_15-13-07,LC-NE_Register_Annotations_retrograde_cells,bd2502e2-602d-4cba-ac67-3866aa6e0162,aind-open-data,OPEN
+SmartSPIM_744117_2024-09-13_16-13-13_stitched_2024-10-04_08-12-37,LC-NE_Register_Annotations_retrograde_cells,ab2d41b9-fed0-4c16-a2a7-6e814fd490b5,aind-open-data,OPEN
+SmartSPIM_744119_2024-09-13_19-19-38_stitched_2024-10-04_07-01-37,LC-NE_Register_Annotations_retrograde_cells,39250f95-64be-454f-af8f-cb5d4d4f76f9,aind-open-data,OPEN
+SmartSPIM_746041_2024-09-19_13-18-06_stitched_2024-10-04_08-24-44,LC-NE_Register_Annotations_retrograde_cells,65766b04-623a-4ae1-8f34-811a85b72158,aind-open-data,OPEN
+SmartSPIM_746043_2024-09-19_16-27-14_stitched_2024-10-04_21-26-25,LC-NE_Register_Annotations_retrograde_cells,b464f0c1-2eef-4e87-a9ce-95268d314256,aind-open-data,OPEN
+SmartSPIM_746045_2024-09-27_12-31-24_stitched_2024-09-29_11-04-08,LC-NE_Register_Annotations_retrograde_cells,bb4a30be-7b42-4e20-818b-63253a373bb1,aind-open-data,OPEN
+SmartSPIM_746046_2024-09-26_22-22-35_stitched_2024-09-28_22-26-50,LC-NE_Register_Annotations_retrograde_cells,a5d98479-ca05-45e8-a15e-5008c6a02392,aind-open-data,OPEN
+SmartSPIM_751017_2024-11-14_19-17-29_stitched_2025-10-14_12-29-00,LC-NE_Register_Annotations_retrograde_cells,f56ccb74-dab5-4ade-85d5-d99e166a4301,aind-open-data,OPEN
+SmartSPIM_751019_2024-11-07_18-39-55_stitched_2024-11-28_12-46-07,LC-NE_Register_Annotations_retrograde_cells,e2f72d52-96e3-4e39-9779-8d99c43bdd51,aind-open-data,OPEN
+SmartSPIM_751023_2024-10-15_17-03-49_stitched_2024-10-18_09-37-08,LC-NE_Register_Annotations_retrograde_cells,97207cc5-a980-4da1-a5cb-2f9b6e871f5c,aind-open-data,OPEN
+SmartSPIM_751024_2024-10-14_15-03-44_stitched_2024-10-16_18-55-21,LC-NE_Register_Annotations_retrograde_cells,d46d7bd1-42cc-4af0-a437-ab1ba6652cf5,aind-open-data,OPEN
+SmartSPIM_751035_2024-10-14_22-59-51_stitched_2024-10-17_04-08-04,LC-NE_Register_Annotations_retrograde_cells,044cd0e8-0fbc-42aa-b139-4eba48bbcff9,aind-open-data,OPEN
+SmartSPIM_751766_2025-04-08_17-56-45_ibl-converted_2025-09-08_14-17-00,aind-beh-physiology-publication,cfcfd6a2-0385-40c6-985d-937b6928adcb,unresolved (no DocDB record),CO PRIVATE
+SmartSPIM_755069_2024-11-13_18-14-30_stitched_2024-11-16_01-54-40,LC-NE_Register_Annotations_retrograde_cells,1a1d1d36-bb09-48cc-9d9b-3272b668d6d2,aind-open-data,OPEN
+SmartSPIM_755072_2024-11-13_21-29-44_stitched_2024-11-16_03-19-42,LC-NE_Register_Annotations_retrograde_cells,de8bc955-35df-4001-a374-d9017abe012a,aind-open-data,OPEN
+SmartSPIM_755073_2024-11-15_03-16-39_stitched_2024-12-03_11-15-46,LC-NE_Register_Annotations_retrograde_cells,c4000623-deb8-4a7d-9b2e-9acc62278ad9,aind-open-data,OPEN
+SmartSPIM_762196_2024-11-26_02-58-49_stitched_2025-10-14_12-31-07,LC-NE_Register_Annotations_retrograde_cells,9dd66d43-53d1-4bf7-a7fd-bdc3024c4128,aind-open-data,OPEN
+SmartSPIM_762199_2024-12-18_15-41-02_stitched_2025-10-14_12-12-57,LC-NE_Register_Annotations_retrograde_cells,d49b299c-d802-4ea1-8e8f-369c3f452753,aind-open-data,OPEN
+SmartSPIM_774450_2025-04-24_19-38-06_stitched_2025-04-25_20-48-53,LC-NE_Register_Annotations_retrograde_cells,deaa15ff-1b26-4719-b369-28a0b9200b2a,aind-open-data,OPEN
+SmartSPIM_784354_2025-04-16_21-39-58_stitched_2025-04-18_02-05-42,LC-NE_Register_Annotations_retrograde_cells,03db2b24-6089-4e44-9d2c-6bd29983c7dc,aind-open-data,OPEN
+SmartSPIM_784361_2025-04-24_16-17-12_stitched_2025-04-25_20-18-16,LC-NE_Register_Annotations_retrograde_cells,085f39d8-15f3-464b-a703-1d2ab8334ed3,aind-open-data,OPEN
+SmartSPIM_785349_2025-04-23_11-29-33_stitched_2025-04-25_06-41-52,LC-NE_Register_Annotations_retrograde_cells,e52721ad-acb2-4699-bf74-a0faa30283b9,aind-open-data,OPEN
+SmartSPIM_791270_2025-05-09_16-37-53_stitched_2025-05-11_00-08-05,LC-NE_Register_Annotations_retrograde_cells,8ce1850a-026a-4e9f-b239-de656766aa14,aind-open-data,OPEN
+SmartSPIM_791272_2025-05-09_19-52-41_stitched_2025-05-11_00-56-07,LC-NE_Register_Annotations_retrograde_cells,3121e967-bf92-4b8a-89a3-69e0072f9ba1,aind-open-data,OPEN
+SmartSPIM_791275_2025-05-09_23-01-27_stitched_2025-05-22_23-15-08,LC-NE_Register_Annotations_retrograde_cells,7bb6c1cc-b415-450a-acd3-37be17351389,aind-open-data,OPEN
+SmartSPIM_791276_2025-06-18_19-35-36_stitched_2025-07-01_16-06-53,LC-NE_Register_Annotations_retrograde_cells,3d883012-58dd-4154-b15e-a1b429a06f5b,aind-open-data,OPEN
+SmartSPIM_793594_2025-07-25_13-32-34_stitched_2025-08-31_21-11-16,LC-NE_Register_Annotations_retrograde_cells,e2803af1-e863-4f98-8e3c-52f3237f9865,aind-open-data,OPEN
+SmartSPIM_793600_2025-07-10_16-39-47_stitched_2025-07-21_07-26-07,LC-NE_Register_Annotations_retrograde_cells,3f3b8181-fa4d-4565-8725-8863aaf4214d,aind-open-data,OPEN
+SmartSPIM_793602_2025-07-10_20-45-19_stitched_2025-07-21_07-39-17,LC-NE_Register_Annotations_retrograde_cells,5f0b2ffd-87e8-4fea-b98f-847f32b745a6,aind-open-data,OPEN
+SmartSPIM_793603_2025-06-30_23-24-29_stitched_2025-07-08_06-31-59,LC-NE_Register_Annotations_retrograde_cells,84b30167-2344-4fa1-99c0-59b0b0582eb0,aind-open-data,OPEN
+SmartSPIM_793606_2025-08-08_18-40-18_stitched_2025-08-22_00-37-34,LC-NE_Register_Annotations_retrograde_cells,b3b4bd53-c18b-4bc3-a7be-d7f2c5dd2662,aind-open-data,OPEN
+SmartSPIM_796809_2025-08-07_15-59-16_stitched_2025-08-08_20-45-35,LC-NE_Register_Annotations_retrograde_cells,a126df0e-848a-4ae4-b44c-247be8994f76,aind-open-data,OPEN
+SmartSPIM_796810_2025-08-07_18-53-27_stitched_2025-08-08_22-04-42,LC-NE_Register_Annotations_retrograde_cells,3850de62-d92b-427a-bb9b-f4522e07e6ac,aind-open-data,OPEN
+SmartSPIM_798571_2025-06-30_11-55-40_stitched_2025-10-23_17-30-14,LC_H2B_points_to_mesh,04f36817-5e97-4019-810b-892a3c7920fa,aind-open-data,OPEN
+SmartSPIM_798573_2025-06-30_15-07-30_stitched_2025-07-22_11-44-32,LC_H2B_points_to_mesh,c9a36369-9b38-4080-ba7b-7923b81e96d2,aind-open-data,OPEN
+SmartSPIM_798576_2025-07-07_16-21-30_stitched_2025-07-22_17-26-01,LC_H2B_points_to_mesh,437257b8-8df9-4bb8-ada8-8525959ab697,aind-open-data,OPEN
+SmartSPIM_801624_2025-08-19_19-51-26_stitched_2025-08-21_09-47-24,LC-NE_Register_Annotations_retrograde_cells,ef87c58c-e3bd-4eb2-859c-a9403212538a,aind-open-data,OPEN
+SmartSPIM_804461_2025-09-03_21-56-28_stitched_2025-09-05_04-14-14,LC-NE_Register_Annotations_retrograde_cells,cc17c3e1-61f6-43c0-adb5-2bbf4a2d2e56,aind-open-data,OPEN
+SmartSPIM_804462_2025-09-03_15-40-54_stitched_2025-09-05_00-18-58,LC-NE_Register_Annotations_retrograde_cells,49181b57-d207-44c5-863e-e86f4cc1e768,aind-open-data,OPEN
+SmartSPIM_804464_2025-09-03_12-51-27_stitched_2025-09-04_15-10-11,LC-NE_Register_Annotations_retrograde_cells,934d273d-7edf-4876-a799-41778507fe7f,aind-open-data,OPEN
+SmartSPIM_807322_2025-08-26_10-41-04_stitched_2025-10-23_06-51-05,LC_H2B_points_to_mesh,2f0c6a5d-d7c2-468d-8e22-6fc99913fb11,aind-open-data,OPEN
+SmartSPIM_807324_2025-08-25_11-34-40_stitched_2025-10-23_17-35-23,LC_H2B_points_to_mesh,5e4c25dc-1c48-482f-8d86-052ac6dbafc5,aind-open-data,OPEN
+SmartSPIM_807325_2025-08-25_14-33-31_stitched_2025-10-23_17-34-05,LC_H2B_points_to_mesh,7a5c8539-9030-4909-a772-975a0e2b40a8,aind-open-data,OPEN
+SmartSPIM_807326_2025-08-26_13-40-47_stitched_2025-10-23_17-44-05,LC_H2B_points_to_mesh,129f4b49-be0e-4007-9a3f-7949fc5d7da0,aind-open-data,OPEN
+SmartSPIM_807327_2025-08-25_17-26-02_stitched_2025-10-23_17-33-43,LC_H2B_points_to_mesh,a44aa562-a655-4a7f-864f-87c2426372a7,aind-open-data,OPEN
+ZS059_2021-03-24_14-22-04_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",478c9648-c97c-4618-9c75-15293beba358,aind-open-data,OPEN
+ZS059_2021-03-25_14-40-45_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",a527b2e5-f42f-4942-af21-a7443b42c1ae,aind-open-data,OPEN
+ZS059_2021-03-26_13-52-11_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",5b7e4a84-e4af-4b0a-9953-7867e5efa68d,aind-open-data,OPEN
+ZS059_2021-03-27_16-03-00_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",f737f7a2-b040-4fb0-a662-e481108053f7,aind-open-data,OPEN
+ZS059_2021-03-28_14-18-58_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",92928a74-17a5-41ab-a4b1-1dafe90eaba9,aind-open-data,OPEN
+ZS059_2021-03-29_14-41-57_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",8ce934fa-6bc5-4c5e-9360-641c7e38880a,aind-open-data,OPEN
+ZS059_2021-03-30_14-57-13_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",10151302-3786-4e86-8197-b4bee25e97ca,aind-open-data,OPEN
+ZS059_2021-03-31_14-32-51_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",26d44b97-bf08-4afa-a7d5-80f01da4526b,aind-open-data,OPEN
+ZS059_2021-04-01_14-17-46_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",ec12b9b4-10ec-4fdc-9c34-ba8bc8fcd5a1,aind-open-data,OPEN
+ZS059_2021-04-02_15-05-16_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",28e02adf-451a-41f0-ac72-e4c3eb5cd2d9,aind-open-data,OPEN
+ZS059_2021-04-03_16-30-45_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",4f66d7d9-9dcb-423b-8078-52e571a53c33,aind-open-data,OPEN
+ZS059_2021-04-04_15-23-14_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",bd60d584-e19d-42cd-98f0-0d3487f56cc3,aind-open-data,OPEN
+ZS059_2021-04-05_14-33-48_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",c70d1891-6bdd-4352-a8a1-a7150d456a82,aind-open-data,OPEN
+ZS059_2021-04-06_14-30-26_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",910d7af6-2894-403b-aa6b-5e1ca817d73f,aind-open-data,OPEN
+ZS059_2021-04-07_13-58-21_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",39ec9e1b-0c5e-4b42-a319-8322bd0a9058,aind-open-data,OPEN
+ZS059_2021-04-08_15-53-36_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",471c2c72-1a5f-45d2-b097-a18c098c00ef,aind-open-data,OPEN
+ZS059_2021-04-09_15-53-45_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",06f9e31c-988c-40a7-8372-1c86f356bde7,aind-open-data,OPEN
+ZS059_2021-04-10_15-55-11_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",e92b86d9-1780-4a1f-8b61-cd2ca2de0fce,aind-open-data,OPEN
+ZS059_2021-04-11_15-41-45_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",ddac46bc-b4af-44c0-854e-44412ded727b,aind-open-data,OPEN
+ZS059_2021-04-12_14-57-43_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",566ada61-532a-40c3-8848-59b9b685dc11,aind-open-data,OPEN
+ZS059_2021-04-13_15-43-53_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",5884d64b-9340-42ed-b7f4-d0eed0d8979a,aind-open-data,OPEN
+ZS059_2021-04-14_14-51-04_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",97aa0ae1-ec1a-4353-9c3e-6a72fcb8d2cd,aind-open-data,OPEN
+ZS059_2021-04-15_15-29-28_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",5b1d15eb-cecf-4f44-b2e0-7f5f7cc2e1c5,aind-open-data,OPEN
+ZS059_2021-04-16_14-50-15_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",c81a5e69-f19a-4d10-aea7-5eeb8174c6f4,aind-open-data,OPEN
+ZS059_2021-04-17_15-44-53_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",cfa9e82b-8134-419a-b766-30d73524db17,aind-open-data,OPEN
+ZS059_2021-04-18_17-26-19_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",9b4c8cc8-b19e-4def-9f0b-923659e61298,aind-open-data,OPEN
+ZS059_2021-04-19_14-42-16_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",a43a0f1d-1f63-4471-9b15-a31c1e9ffa42,aind-open-data,OPEN
+ZS059_2021-04-20_14-50-03_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",6c986a09-9975-4f36-881e-605864c91b38,aind-open-data,OPEN
+ZS059_2021-04-21_15-58-55_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",93fe3c24-bd4c-48cc-9e1a-50ba59f35310,aind-open-data,OPEN
+ZS059_2021-04-22_15-11-25_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",b7483ca4-5d91-47c0-b4f2-63176cdf9a59,aind-open-data,OPEN
+ZS059_2021-04-23_14-57-50_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",5afff9ff-12e0-4297-9539-d2e4e93de50a,aind-open-data,OPEN
+ZS059_2021-04-24_15-38-10_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",77693355-db7b-42f9-b927-87e3827a66ad,aind-open-data,OPEN
+ZS059_2021-04-25_16-22-31_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",74b05cc9-d29d-48f3-b309-57d5b7c57bab,aind-open-data,OPEN
+ZS059_2021-04-26_14-44-03_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",35077244-584d-4101-ab1c-a49a677e6e4b,aind-open-data,OPEN
+ZS059_2021-04-27_15-12-43_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",488e6b43-601c-42f8-9de4-2abbf088f4eb,aind-open-data,OPEN
+ZS059_2021-04-28_14-00-12_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",65587dca-4008-4b43-afd4-0c9968cf07c1,aind-open-data,OPEN
+ZS059_2021-04-29_14-02-45_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",f3e12a7b-ae78-4fed-8a4a-6bc065016f85,aind-open-data,OPEN
+ZS059_stan_model,aind-beh-physiology-publication,7ca665b7-372a-499e-9ad8-579198fd9bbe,unresolved (no DocDB record),CO PRIVATE
+ZS060_2021-03-20_16-20-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",d6c963e0-0002-4b12-a048-cbad082ef8b5,aind-open-data,OPEN
+ZS060_2021-03-21_16-15-00_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",09f595bb-8fbe-41d9-89ab-edcbc83585c8,aind-open-data,OPEN
+ZS060_2021-03-22_16-25-00_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",9c900d83-1072-4009-8290-43fd11f2fcb1,aind-open-data,OPEN
+ZS060_2021-03-23_15-15-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",b22d2813-adba-45a1-84cb-18c4405278c2,aind-open-data,OPEN
+ZS060_2021-03-24_12-00-00_nwb_2025-08-14_10-55-51,aind-stan-sim-beh,7b25270b-2ee2-4666-8597-b266a53f0bbd,aind-open-data,OPEN
+ZS060_2021-03-24_15-40-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",1a3dc614-6daa-42a8-8dc5-1e81802d31ee,aind-open-data,OPEN
+ZS060_2021-03-25_16-00-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",0cf0c966-a228-4681-9d03-313b4f7bb38f,aind-open-data,OPEN
+ZS060_2021-03-26_14-50-00_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",783cc41a-c2b3-4327-a17b-1905b7129fa6,aind-open-data,OPEN
+ZS060_2021-03-27_17-11-43_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",14af55fe-e350-42b8-b8cb-2061c95f061e,aind-open-data,OPEN
+ZS060_2021-03-28_15-27-56_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",08c59e3a-318d-4ed6-a213-afbd58cab2d8,aind-open-data,OPEN
+ZS060_2021-03-29_16-21-37_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",5ff8ac39-61ba-4679-96eb-d28fffbef07d,aind-open-data,OPEN
+ZS060_2021-03-30_16-13-03_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",5a88bc36-e0e0-4f97-b419-d4fb75ea390e,aind-open-data,OPEN
+ZS060_2021-03-31_15-45-00_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",2ed4ad10-3e60-4bef-8496-09fdabe0cb14,aind-open-data,OPEN
+ZS060_2021-04-01_15-30-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",aad27cc0-de61-4fd4-b4db-6cff995bcc88,aind-open-data,OPEN
+ZS060_2021-04-02_16-30-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",7521c383-850d-4e83-9c31-e83e3c4e5096,aind-open-data,OPEN
+ZS060_2021-04-03_17-45-00_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",226102ac-760d-403b-baf8-d715f0f76b30,aind-open-data,OPEN
+ZS060_2021-04-04_16-30-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",ab0e1a86-24ba-4339-87b7-94850ac1569a,aind-open-data,OPEN
+ZS060_2021-04-07_15-21-40_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",bf662e03-2a95-46ff-8933-b4dc86f30424,aind-open-data,OPEN
+ZS060_2021-04-08_16-55-35_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",ee07aeb0-4de5-45de-b98e-1e35fda85c9f,aind-open-data,OPEN
+ZS060_2021-04-09_17-07-51_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",07a49cd1-d22b-4fc3-bb22-6cc196bc40f2,aind-open-data,OPEN
+ZS060_2021-04-10_16-58-41_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",17faac0e-f7cb-4eea-b995-95445112a5a7,aind-open-data,OPEN
+ZS060_2021-04-11_16-41-30_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",61a640ca-5e83-4471-9a96-a48cb70a00ab,aind-open-data,OPEN
+ZS060_2021-04-12_15-57-59_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",0b3ee4f5-b4ce-4c67-b024-aa75c691a373,aind-open-data,OPEN
+ZS060_2021-04-14_18-15-27_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",ab423243-e16a-42cf-a87f-3b59ee85bc05,aind-open-data,OPEN
+ZS060_2021-04-15_19-06-02_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",9ba22d94-0a63-464f-aee8-cb8a82b26986,aind-open-data,OPEN
+ZS060_2021-04-16_16-09-11_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",4ae40447-4db5-46ca-96dd-d22ef7d26834,aind-open-data,OPEN
+ZS060_2021-04-21_19-23-52_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",ec4a821e-fa51-41e4-93c5-4127f1cb0bb3,aind-open-data,OPEN
+ZS060_2021-04-22_18-30-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",9f85d313-d6cb-4b01-9794-7a77133020f0,aind-open-data,OPEN
+ZS060_2021-04-23_18-34-53_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",280e0d0a-9302-4661-a4e4-8321bfd0ee64,aind-open-data,OPEN
+ZS060_2021-04-24_18-50-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",2a202b08-cea8-46d8-bf0f-bfa918370d36,aind-open-data,OPEN
+ZS060_2021-04-25_19-51-06_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",c3641e96-9dd2-44d4-8ea2-75715aeda654,aind-open-data,OPEN
+ZS060_2021-04-26_19-24-52_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",4cadb72e-43b0-4234-b108-675eb4fde5a6,aind-open-data,OPEN
+ZS060_2021-04-27_16-21-43_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",cd2c5c47-1975-4814-87ee-c04c78f61d52,aind-open-data,OPEN
+ZS060_2021-04-28_15-16-45_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",4a2e9230-00d9-4781-858a-1b2d4a2e67b0,aind-open-data,OPEN
+ZS060_2021-04-29_15-15-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",d6e3cc10-a32c-4deb-933b-56de547738f6,aind-open-data,OPEN
+ZS060_stan_model,aind-beh-physiology-publication,f7a73a14-6ece-415c-b291-fe69074e0914,unresolved (no DocDB record),CO PRIVATE
+ZS061_2021-03-16_15-30-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",f08f3ec8-223c-4f2e-9e5b-59e2e2efb3f2,aind-open-data,OPEN
+ZS061_2021-03-17_16-00-53_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",f0544376-6543-4d5c-a0ab-0279379023be,aind-open-data,OPEN
+ZS061_2021-03-18_17-39-19_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",f4599aa0-dfa6-46ca-b87e-fd1d5133572b,aind-open-data,OPEN
+ZS061_2021-03-19_17-52-45_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",856e33c5-9d3a-460a-ab26-d9f4b59b5798,aind-open-data,OPEN
+ZS061_2021-03-20_18-03-26_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",1d385e14-4b79-4113-9ae9-2ea259f62045,aind-open-data,OPEN
+ZS061_2021-03-21_17-37-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",8b9a0267-e865-4dcc-92f0-f1e5d48f0ac6,aind-open-data,OPEN
+ZS061_2021-03-22_17-35-53_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",daf6a1cf-87e5-4dc9-a975-4a98e47572d9,aind-open-data,OPEN
+ZS061_2021-03-23_16-08-12_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",4a76ef51-178a-4e68-b479-fd9a7f672380,aind-open-data,OPEN
+ZS061_2021-03-24_17-24-09_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",f23f7bcb-f3f3-49c7-82db-8cd00c54cb22,aind-open-data,OPEN
+ZS061_2021-03-25_17-12-27_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",fa96e14f-f54a-4847-aec6-cf427255d74f,aind-open-data,OPEN
+ZS061_2021-03-26_17-28-33_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",532e33f2-0118-4a28-8854-1a376d8862b0,aind-open-data,OPEN
+ZS061_2021-03-27_18-20-45_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",ca6f16b2-8f7b-4f00-a5f3-ac25a18eb904,aind-open-data,OPEN
+ZS061_2021-03-28_16-35-51_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",dc36ff5f-a617-4de1-b168-a97d9a1f11db,aind-open-data,OPEN
+ZS061_2021-03-29_17-48-18_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",cb809aed-7e90-4022-8dad-62f06cc2051c,aind-open-data,OPEN
+ZS061_2021-03-30_16-57-26_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",e8b3e27d-229f-4d73-a1b7-0f5d36c3906a,aind-open-data,OPEN
+ZS061_2021-03-31_17-15-48_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",381aef45-ead5-4df7-9f0e-7178090e66d3,aind-open-data,OPEN
+ZS061_2021-04-01_16-38-03_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",0750c396-4a35-4d01-944c-531a1b66cd93,aind-open-data,OPEN
+ZS061_2021-04-02_17-53-41_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",9aade5b3-d4e5-48e7-91b1-de89ebe928ff,aind-open-data,OPEN
+ZS061_2021-04-03_18-50-29_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",902891f6-f5d9-485f-a4cd-af6c9083e3f6,aind-open-data,OPEN
+ZS061_2021-04-04_17-43-18_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",758f4aee-062f-46dd-a9b8-3752819937ff,aind-open-data,OPEN
+ZS061_2021-04-05_18-01-32_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",0f01cfa8-4598-4bb3-8043-850b67a63358,aind-open-data,OPEN
+ZS061_2021-04-06_16-13-38_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",474f01f7-a5e2-41ed-8b10-3d86441a9ae5,aind-open-data,OPEN
+ZS061_2021-04-07_16-47-22_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",a3cc4192-2fe9-4393-b4a8-f2c65a4a295f,aind-open-data,OPEN
+ZS061_2021-04-08_18-01-30_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",6a4a5a2e-2e43-48c9-ad9f-285b2854d70a,aind-open-data,OPEN
+ZS061_2021-04-09_18-19-29_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",ab75a485-9db0-45a8-88c0-afa01eaa8395,aind-open-data,OPEN
+ZS061_2021-04-10_18-01-14_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",971bf14f-4968-4d1f-bb8f-403dfcc8f783,aind-open-data,OPEN
+ZS061_2021-04-11_17-44-56_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",83b5d0ac-2702-49d2-a014-5ce56a5055b0,aind-open-data,OPEN
+ZS061_2021-04-12_17-26-54_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",162fa7a8-7471-4dea-b5f0-1c4fd8c58c2c,aind-open-data,OPEN
+ZS061_2021-04-13_18-14-05_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",98443ff4-e024-4533-8cec-fe3a23a0b607,aind-open-data,OPEN
+ZS061_2021-04-14_16-04-22_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",4b45e774-69a9-41ed-87f5-959375bd3875,aind-open-data,OPEN
+ZS061_2021-04-15_16-45-44_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",a1e4f8ab-ecbf-479c-abdc-05649f441f42,aind-open-data,OPEN
+ZS061_2021-04-16_17-08-59_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",6225b231-23e4-49ff-8d0c-94a79c2e043f,aind-open-data,OPEN
+ZS061_2021-04-17_16-50-25_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",4e0fbf95-0129-42b1-b977-4273468a89c5,aind-open-data,OPEN
+ZS061_2021-04-18_18-32-58_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",9960848b-a798-4543-9492-2379360aecbb,aind-open-data,OPEN
+ZS061_2021-04-19_18-31-40_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",f0d2aadf-454e-4dcd-9cbf-bacb5ff25e62,aind-open-data,OPEN
+ZS061_2021-04-20_15-49-57_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",76290f71-2d05-43fd-9359-7b5e27d9b976,aind-open-data,OPEN
+ZS061_2021-04-21_17-03-09_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",bd6279aa-38a0-4773-8404-0e0ced06375b,aind-open-data,OPEN
+ZS061_2021-04-22_12-00-00_nwb_2025-08-14_10-55-50,aind-stan-sim-beh,8b5b6ea0-443c-4ced-a69c-72f622192a9c,aind-open-data,OPEN
+ZS061_2021-04-22_16-25-00_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",cb9d126f-57f3-43b5-b7fc-2156b4877e8f,aind-open-data,OPEN
+ZS061_2021-04-23_16-13-13_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",0a82d72f-595e-4225-ab12-da7d144c646f,aind-open-data,OPEN
+ZS061_2021-04-24_16-48-52_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",479c062c-4e24-45c5-baac-a98221440580,aind-open-data,OPEN
+ZS061_2021-04-25_17-45-36_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",314f1301-57d3-4f4c-8b44-5ecc516ff9bc,aind-open-data,OPEN
+ZS061_2021-04-26_18-08-01_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",3fde318b-be51-451f-b866-2f2bfb558b71,aind-open-data,OPEN
+ZS061_2021-04-27_18-19-52_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",d379100b-eb0e-4021-adb8-b981f14f43c0,aind-open-data,OPEN
+ZS061_2021-04-28_16-35-50_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",5dbd27e6-e2f9-44a4-8d9d-45f5ee1ec2a8,aind-open-data,OPEN
+ZS061_2021-04-29_16-18-51_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",a5694d23-8e9f-42f3-aa4c-e0b831c0f836,aind-open-data,OPEN
+ZS061_2021-04-30_17-06-18_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",2f6d1bb1-4af3-4934-8e33-b6d295810f78,aind-open-data,OPEN
+ZS061_2021-05-01_18-28-14_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",5d4bb99f-f63c-441b-9bbd-e35fe9002909,aind-open-data,OPEN
+ZS061_stan_model,aind-beh-physiology-publication,5352c86d-3d06-4741-a082-125d8a46161b,unresolved (no DocDB record),CO PRIVATE
+ZS062_2021-03-24_18-52-34_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",92e8ad21-1b93-490f-8d58-215af72f9893,aind-open-data,OPEN
+ZS062_2021-03-25_18-44-20_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",a2933605-ba7e-44b1-b9c9-8fe82a89cf58,aind-open-data,OPEN
+ZS062_2021-03-26_18-45-54_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",3eb635de-dfa7-43c0-bddd-2fcbfe3cd96f,aind-open-data,OPEN
+ZS062_2021-03-27_19-15-29_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",8b6c5583-5a2e-48f2-ba48-168045589ece,aind-open-data,OPEN
+ZS062_2021-03-28_17-40-42_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",8cfe89a2-6c39-4760-ac3f-b03df68b2cc7,aind-open-data,OPEN
+ZS062_2021-03-29_18-50-00_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",2c79f560-10b9-4b5d-966f-e964124145be,aind-open-data,OPEN
+ZS062_2021-03-30_18-30-24_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",cb6b4df0-a9c9-40ac-99cc-5ea4c012d694,aind-open-data,OPEN
+ZS062_2021-03-31_18-40-52_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",24ab2312-4f19-4a82-8d27-5b947b4d0b9e,aind-open-data,OPEN
+ZS062_2021-04-01_17-49-36_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",04fcee09-645c-452b-8bfe-ad6ad7df5fd6,aind-open-data,OPEN
+ZS062_2021-04-02_19-08-52_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",5ad6a2fe-c1f0-4fc2-af43-e3d8a7cc0826,aind-open-data,OPEN
+ZS062_2021-04-03_20-26-34_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",f0f0961a-0102-46dc-98d8-9f8f119a4f32,aind-open-data,OPEN
+ZS062_2021-04-04_18-59-47_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",de4beb37-4182-43c9-9b67-ad0e3bc87e72,aind-open-data,OPEN
+ZS062_2021-04-05_19-25-39_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",fc5217e6-7590-4173-9f9a-071b4657d01f,aind-open-data,OPEN
+ZS062_2021-04-06_18-46-42_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",782d7a43-f76d-494c-a8dd-3398223cda6c,aind-open-data,OPEN
+ZS062_2021-04-07_17-58-07_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",92374083-4922-46ae-bde3-74f0c09316e4,aind-open-data,OPEN
+ZS062_2021-04-08_19-07-10_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",da580983-30d0-4b39-9c35-2164d9666d5e,aind-open-data,OPEN
+ZS062_2021-04-09_19-27-26_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",1c9ee556-c97a-4e37-b663-125f3cc38e59,aind-open-data,OPEN
+ZS062_2021-04-10_19-16-30_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",1cfabf5f-2479-4f8d-90f3-2fbcc95f007a,aind-open-data,OPEN
+ZS062_2021-04-11_18-58-53_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",0ae3c89f-1392-4ae7-aff9-1201e976e532,aind-open-data,OPEN
+ZS062_2021-04-12_18-46-29_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",a19639ac-6de1-4270-aa14-ac2604066bca,aind-open-data,OPEN
+ZS062_2021-04-13_19-35-13_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",19b93b1d-7e71-49b0-861e-2c96b348f395,aind-open-data,OPEN
+ZS062_2021-04-14_17-07-51_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",597b45c2-9cc7-477a-811f-f9c20597c54c,aind-open-data,OPEN
+ZS062_2021-04-15_17-52-49_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",0f971db1-d724-4b9e-9933-34b5a153fffd,aind-open-data,OPEN
+ZS062_2021-04-16_18-17-09_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",4816bb02-9147-473a-a543-b26d56a1cc49,aind-open-data,OPEN
+ZS062_2021-04-17_18-06-40_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",04e70cc5-0d51-4d77-bb53-63033c5f3478,aind-open-data,OPEN
+ZS062_2021-04-18_19-52-39_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",4f63729f-479b-4713-a75d-d9fcf4b3855a,aind-open-data,OPEN
+ZS062_2021-04-19_19-36-48_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",138cbc28-1907-42b3-9a71-2f20a09018b9,aind-open-data,OPEN
+ZS062_2021-04-20_18-23-52_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",48e04ff2-1fe1-4bb5-be40-e9570b3b3d15,aind-open-data,OPEN
+ZS062_2021-04-21_18-15-30_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",664a1d8f-0090-4223-a1a7-d27724d610a9,aind-open-data,OPEN
+ZS062_2021-04-22_17-18-06_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",84095ea6-bd98-41d0-9584-ee4af63ec3ff,aind-open-data,OPEN
+ZS062_2021-04-23_17-27-03_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",89484025-1474-40c3-b0bb-3e28724fb9f8,aind-open-data,OPEN
+ZS062_2021-04-24_17-54-39_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",68527ba1-5085-4748-8322-9f1f8bbb3c31,aind-open-data,OPEN
+ZS062_2021-04-25_18-53-35_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",66face85-3b71-4a49-8380-70be5ba50690,aind-open-data,OPEN
+ZS062_2021-04-26_20-26-29_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",c8b8639e-9ed2-48ce-8d27-f9832be4dcdc,aind-open-data,OPEN
+ZS062_2021-04-27_19-23-36_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",afcb6aae-88ac-46b6-8721-29f879fe6f6e,aind-open-data,OPEN
+ZS062_2021-04-28_17-53-01_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",2f155bd2-0e5d-4e70-a35c-a1d696167f34,aind-open-data,OPEN
+ZS062_2021-04-29_17-36-37_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",b6bb0ffd-3510-4a61-a99b-00ddf9ec2bde,aind-open-data,OPEN
+ZS062_2021-04-30_18-11-39_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",24726d7b-3e8e-49db-a154-f8a1321b6ac4,aind-open-data,OPEN
+ZS062_2021-05-01_19-48-01_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",8d3b3140-510d-4be5-a87b-8a6e8ce86695,aind-open-data,OPEN
+ZS062_2021-05-02_19-20-50_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",c4992798-201d-4ed3-b4ae-56479a0cbd02,aind-open-data,OPEN
+ZS062_2021-05-03_13-58-20_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",5c31dfe9-3dcc-43b3-8578-f47dcfdbb538,aind-open-data,OPEN
+ZS062_2021-05-04_14-29-20_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",3b394b5c-e8aa-4c23-815e-fcabf2df09b6,aind-open-data,OPEN
+ZS062_2021-05-05_16-34-46_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",ad088c27-0c9d-4aae-ab99-125ba41edd47,aind-open-data,OPEN
+ZS062_2021-05-06_15-46-14_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",c1af123f-8c59-4fb6-b0bd-ab4209878a94,aind-open-data,OPEN
+ZS062_2021-05-07_17-38-21_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",e87dfe98-0abe-41d0-bdf3-d6ce59d25638,aind-open-data,OPEN
+ZS062_2021-05-08_18-43-47_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",38d1a26d-7517-4b88-b34a-cdf36495e88f,aind-open-data,OPEN
+ZS062_2021-05-09_17-15-10_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",d4551236-28b1-496a-80bd-38a22385bb6b,aind-open-data,OPEN
+ZS062_2021-05-10_19-15-51_nwb_2025-08-14_10-55-50,"aind-beh-physiology-publication, aind-stan-sim-beh",e60c72d5-878f-4240-95dd-66e2d102e96a,aind-open-data,OPEN
+ZS062_2021-05-11_20-10-59_nwb_2025-08-14_10-55-51,"aind-beh-physiology-publication, aind-stan-sim-beh",0bfaebe6-12fa-4832-8dd5-404863c53fd1,aind-open-data,OPEN
+ZS062_stan_model,aind-beh-physiology-publication,f4789d2c-f5fa-481c-ac39-9e17eeea8888,unresolved (no DocDB record),CO PRIVATE
+alignment_zs_fix_2025-12-17,aind-beh-physiology-publication,c1a35fd0-c3aa-47a8-ba40-288b1e39a86a,unresolved (no DocDB record),CO PRIVATE
+alignment_zs_test_2025-11-09_11-29-00,aind-beh-physiology-publication,a0d213c7-4027-4f16-abdf-ce8e04231e1a,unresolved (no DocDB record),CO PRIVATE
+all_tongue_movements_16092025,aind-beh-physiology-publication,adf4f98c-5015-4d23-81e3-359a9a5b6ec1,unresolved (no DocDB record),CO PRIVATE
+behavior_714116_2024-08-27_11-29-26,"aind-beh-physiology-publication, aind-stan-sim-beh",f927eca0-ea24-4b6b-95f2-36ab2df5af65,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_714116_2024-08-27_11-29-26_sorted-opto-bandpass_2024-08-29_01-45-00,aind-beh-physiology-publication,468ad3c7-4524-43ca-a4fe-ba056d8c8aa9,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_714116_2024-08-28_12-11-55,"aind-beh-physiology-publication, aind-stan-sim-beh",8c6f6dc0-ab81-45cc-bf5d-83bc7b80c815,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_714116_2024-08-28_12-11-55_sorted-opto_2024-11-06_00-31-12,aind-beh-physiology-publication,e6fc5a41-34ca-418b-acf9-2d215db973de,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_714116_2024-08-29_11-46-43,"aind-beh-physiology-publication, aind-stan-sim-beh",968b9a8e-b85c-46d0-aabc-4c7a5eff4a03,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_714116_2024-08-29_11-46-43_sorted-opto-bandpass_2024-08-30_19-45-29,aind-beh-physiology-publication,17acbbc8-35e6-499d-b27f-1a21812f4070,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_716325_2024-05-29_10-33-32,"aind-beh-physiology-publication, aind-stan-sim-beh",8eda219a-7e5e-499c-b3d6-d6b1c4012beb,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_716325_2024-05-29_10-33-32_sorted-opto_2024-09-11_22-32-12,aind-beh-physiology-publication,c3d9b46b-fbdb-4e54-8414-6bbc6d912b1f,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_716325_2024-05-30_11-33-46,"aind-beh-physiology-publication, aind-stan-sim-beh",6df5d1fa-16bf-407d-961d-3515046271a0,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_716325_2024-05-30_11-33-46_sorted-opto_2024-06-04_17-00-28,aind-beh-physiology-publication,bc671ca5-3665-46fb-92ca-ff946a6dffc8,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_716325_2024-05-31_10-31-14,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",2d28ccd9-48ab-429e-92ef-7723135ee306,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_716325_2024-05-31_10-31-14_sorted-opto-ZS_2024-06-05_03-54-32,aind-beh-physiology-publication,908c91c4-294d-48fc-893f-6b2a7bb3e34d,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_716325_2024-05-31_10-31-14_sorted_curated_2024-07-16_06-10-19,aind-beh-physiology-publication,2d2014c0-d616-4381-8ca3-be516b028960,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_716325_2024-05-31_10-31-14_videoprocessed_2025-10-24_21-43-19,LC-ephys-tonguemovements,"0d5ccff0-8b48-4d39-a011-aa52155cefc3, 103d087b-9020-4fa7-b43c-efae85d63296, 40199777-3d38-4279-87bd-03cff99fc1c2",codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_716325_2024-05-31_10-31-14_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,cc8b6665-439e-42f2-85be-343da938e0f5,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_716325_2024-06-01_09-25-37,"aind-beh-physiology-publication, aind-stan-sim-beh",77289b98-7be2-4603-9d96-57b0bffaad72,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_716325_2024-06-01_09-25-37_sorted-opto-bandpass_2024-09-10_13-10-02,aind-beh-physiology-publication,e1ec4626-d2b2-4bab-8997-4af2fd14236c,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717121_2024-06-11_10-23-31,"aind-beh-physiology-publication, aind-stan-sim-beh",bc66b8bc-3ed0-44b2-89a0-9ee97cc2e461,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_717121_2024-06-11_10-23-31_sorted-opto-bandpass_2024-09-10_04-59-38,aind-beh-physiology-publication,ca3d59d6-ca49-4751-ad53-078371a7f7dc,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717121_2024-06-13_12-16-06,"aind-beh-physiology-publication, aind-stan-sim-beh",b39e7acd-a307-400e-a69e-ef8bf5bcf678,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_717121_2024-06-13_12-16-06_sorted-opto-bandpass_2024-09-10_10-14-32,aind-beh-physiology-publication,a9bbf452-2147-4655-80eb-4ca4d139a226,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717121_2024-06-14_10-19-32,"aind-beh-physiology-publication, aind-stan-sim-beh",c1caaa8d-88dc-4913-9ccf-aa27058dad1e,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_717121_2024-06-14_10-19-32_sorted-opto-bandpass_2024-09-10_06-39-22,aind-beh-physiology-publication,2ad859c4-0130-4417-8a1f-e36eb984b007,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717121_2024-06-15_10-00-58,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",f7ceca5c-5010-4436-8a91-b0c780b04fd8,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_717121_2024-06-15_10-00-58_curation_opto_zhixiaosu,aind-stan-sim-beh,79525c3a-e175-4299-92bb-e4d4245c6078,unresolved (no DocDB record),CO PRIVATE
+behavior_717121_2024-06-15_10-00-58_sorted-curated_2024-07-25_06-45-59,aind-beh-physiology-publication,ef655576-ed2a-4101-a6bb-8bedf7ec8138,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717121_2024-06-15_10-00-58_sorted-opto-KJ_2024-06-28_21-53-20,aind-beh-physiology-publication,bb483e32-6421-47fc-8ee9-4262e75f143c,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717121_2024-06-15_10-00-58_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,35323872-63f3-4684-8b77-11ab404023d8,unresolved (no DocDB record),CO PRIVATE
+behavior_717121_2024-06-16_11-39-34,"aind-beh-physiology-publication, aind-stan-sim-beh",1d35ce28-933f-40ae-9595-6bf01edc3e99,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_717121_2024-06-16_11-39-34_sorted-opto_2024-08-14_16-17-53,aind-beh-physiology-publication,f4b9891c-5dae-428e-88ec-984d8e316dfc,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717259_2024-06-25_10-08-39,"aind-beh-physiology-publication, aind-stan-sim-beh",dac33b44-8c5d-42b9-bc1f-aa9850f7823e,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_717259_2024-06-25_10-08-39_sorted-opto-bandpass_2024-09-10_17-45-12,aind-beh-physiology-publication,421e6c10-3e6c-4739-a9bd-3aac850f3c11,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717259_2024-06-26_10-16-59,"aind-beh-physiology-publication, aind-stan-sim-beh",b9dc5ad8-5a67-4230-8203-6ed1a6e3ddb7,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_717259_2024-06-26_10-16-59_sorted-opto-bandpass_2024-09-10_15-52-05,aind-beh-physiology-publication,302cc929-7eed-4077-81e6-830a387c4faf,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717259_2024-06-28_11-17-19,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",db4920d5-d51c-4fa4-b4c7-564478119b28,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_717259_2024-06-28_11-17-19_sorted-opto_2024-07-20_04-24-06,aind-beh-physiology-publication,286ebf43-b05d-48fe-b751-b49f51612ead,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717259_2024-06-28_11-17-19_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,00a091d2-4b25-4954-b01c-d3fd0d7778dd,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717263_2024-07-23_11-42-01,"aind-beh-physiology-publication, aind-stan-sim-beh",6a418380-5297-4960-827f-6c8ed34ba0e0,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_717263_2024-07-23_11-42-01_sorted-opto_2025-01-04_04-02-39,aind-beh-physiology-publication,81304b47-5519-4181-bd48-4ac011bad867,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717263_2024-07-24_10-40-05,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",4463cb73-dc7d-4f58-9736-17448d7ea4b6,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_717263_2024-07-24_10-40-05_sorted-opto_2024-08-14_14-14-38,aind-beh-physiology-publication,b9b0909f-938d-4ca9-a02d-e723d9ed4b6f,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717263_2024-07-24_10-40-05_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,9cf22c4e-b425-41d2-8647-2575405b9b0b,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_717263_2024-07-25_09-57-52,"aind-beh-physiology-publication, aind-stan-sim-beh",301d22a1-e9ba-467a-9dda-6d1cb5c0e26d,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_717263_2024-07-25_09-57-52_sorted-opto-bandpass_2024-09-08_18-02-47,aind-beh-physiology-publication,284c0873-ca42-4ba8-844a-65282bc7bb6d,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_722832_2024-09-13_11-55-58,"aind-beh-physiology-publication, aind-stan-sim-beh",8ed55fb2-3843-4140-82c0-d6307bc69139,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_722832_2024-09-13_11-55-58_sorted_opto_2024-11-06_01-38-07,aind-beh-physiology-publication,88af23e7-ebd4-45a9-bac7-35ce7d23baec,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_724172_2024-10-01_11-20-11,"aind-beh-physiology-publication, aind-stan-sim-beh",3f340001-2d45-47ed-be8f-f7194ec829b0,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_724172_2024-10-01_11-20-11_sorted-opto_2024-11-06_03-55-43,aind-beh-physiology-publication,0be05e63-c599-44df-8616-55517cc0b112,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_724172_2024-10-03_11-02-53,"aind-beh-physiology-publication, aind-stan-sim-beh",d361568a-9315-460e-9a48-59fa0f5cbf9b,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_724172_2024-10-03_11-02-53_sorted-opto_2024-11-06_04-10-53,aind-beh-physiology-publication,8c98cfb6-e73a-4f35-bbdc-441af39639cc,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_739970_2024-10-15_10-04-12,"aind-beh-physiology-publication, aind-stan-sim-beh",b6798f3a-c01b-4b60-9ae0-fbcbf04d0aca,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_739970_2024-10-15_10-04-12_sorted-opto_2025-01-04_05-22-59,aind-beh-physiology-publication,490303d7-a5d3-47ee-af11-51d1e548790b,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_739970_2024-10-16_12-15-24,"aind-beh-physiology-publication, aind-stan-sim-beh",9017cd0f-bfa0-4489-b4a1-85e27fc99a3f,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_739970_2024-10-16_12-15-24_sorted-opto_2024-11-06_04-46-01,aind-beh-physiology-publication,800a28ac-58ac-4e48-bb9b-432a1b520c95,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_739977_2024-10-24_12-58-26,"aind-beh-physiology-publication, aind-stan-sim-beh",18dbd90f-b08c-4e47-bef5-1d2c67198958,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_739977_2024-10-24_12-58-26_sorted-opto_2024-11-10_11-31-43,aind-beh-physiology-publication,d9eaeba6-b30e-4f1a-893a-a44ab436a631,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_744779_2024-11-14_13-13-37,"aind-beh-physiology-publication, aind-stan-sim-beh",f2029505-5cc9-4889-9bd6-5d80d4d6079a,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_744779_2024-11-14_13-13-37_sorted_opto_2024-11-22_09-03-02,aind-beh-physiology-publication,0c897d50-b569-45f7-b002-8c6e5711774d,unresolved (no DocDB record),CO PRIVATE
+behavior_751004_2024-12-18_09-04-25,aind-stan-sim-beh,479bd44a-02a2-4c97-906e-1cb0cee105e6,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751004_2024-12-18_09-04-25_processed_2024-12-19_06-38-52,aind-stan-sim-beh,73b11765-0199-46ac-b70f-4aebb791aa67,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-19_11-50-31,"aind-beh-physiology-publication, aind-stan-sim-beh",6a79f315-8bea-4100-a20d-f049537619af,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751004_2024-12-19_11-50-31_sorted-opto_2025-01-03_04-15-25,aind-stan-sim-beh,658c7bc7-2722-4aa6-bdc3-494faf4b3713,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-19_11-50-31_sorted-opto_2025-01-22_02-45-52,aind-beh-physiology-publication,f2879d04-4e08-4379-8d5b-bd79779a589c,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-19_11-50-37_sorted-curated_2025-01-28_17-10-46,aind-beh-physiology-publication,cb1c4efd-f6bc-416f-b38b-2eef13acce70,aind-scratch-data,AIND PRIVATE
+behavior_751004_2024-12-20_13-26-07,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",04f9127c-c844-4d22-b1af-3864dc6dc8b4,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751004_2024-12-20_13-26-07_sorted-opto_2025-01-03_04-19-35,aind-stan-sim-beh,b2c58fd1-b4bb-431e-ae0c-d18cecc544b2,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-20_13-26-07_sorted-opto_2025-01-22_07-48-05,aind-beh-physiology-publication,74894e74-9057-45bb-a318-1dfaa28f38a8,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-20_13-26-07_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,9b09856a-535f-475f-9e5d-2f7df617dc65,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-20_13-26-11_sorted-curated_2025-01-28_19-06-10,aind-beh-physiology-publication,0e3b90ea-061a-414d-ad46-d4a49e014037,aind-scratch-data,AIND PRIVATE
+behavior_751004_2024-12-21_13-28-24,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",019cab81-ad4e-45e7-ba9b-8dac12480323,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751004_2024-12-21_13-28-24_sorted-opto_2025-01-03_04-35-48,aind-stan-sim-beh,dd9224a7-3472-4602-b91e-7174cc205d86,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-21_13-28-24_sorted-opto_2025-01-22_07-53-12,aind-beh-physiology-publication,ba67f1a1-44a7-4f99-8a4d-13a64cd9f0e8,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-21_13-28-24_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,3d235734-5325-4f77-a03d-aed8f12be2aa,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-21_13-28-28_sorted_curated_2025-11-06_00-28-28,aind-beh-physiology-publication,aab5c03f-d236-49b3-9f4c-e718dde16494,aind-scratch-data,AIND PRIVATE
+behavior_751004_2024-12-22_13-09-11,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",1d0ed8bd-6b36-4c19-a8a4-dcb757abba8b,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751004_2024-12-22_13-09-11_sorted-opto_2025-01-03_05-06-02,aind-stan-sim-beh,0f109992-40d6-478c-b43e-dd9cd534c336,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-22_13-09-11_sorted-opto_2025-01-22_07-53-24,aind-beh-physiology-publication,bc6b4df0-83db-4ba5-aa53-9596fa5a318e,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-22_13-09-11_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,77cb4ae6-51d5-4b89-b7b8-1843d0d3293b,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-22_13-09-17_sorted-curated_2025-01-28_19-06-07,aind-beh-physiology-publication,773d43dc-7f5a-4830-b490-aae48b305cb8,aind-scratch-data,AIND PRIVATE
+behavior_751004_2024-12-23_14-19-57,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",414a1912-d365-465a-83e0-f613c95c0c70,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751004_2024-12-23_14-19-57_processed_2025-07-10_06-34-56,LC-ephys-tonguemovements,73843399-14a0-49cf-9a38-bcef441b1d9c,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-23_14-19-57_sorted-opto_2025-01-03_04-51-23,aind-stan-sim-beh,4f8a4c93-d2d3-4b79-b485-566037e12158,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-23_14-19-57_sorted-opto_2025-01-22_09-08-33,aind-beh-physiology-publication,244fcaa9-14dd-4a0b-bd29-32cf6ef6faf2,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-23_14-19-57_videoprocessed_2025-10-24_21-43-19,LC-ephys-tonguemovements,"41235f40-e714-48f1-8bb9-dd4298d68271, cf0243b5-8da2-4390-be66-c861bc65d6a6, f815fc68-6f70-4333-9cb4-cef60a922542",codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-23_14-19-57_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,35bb96ee-4ffd-4f27-ba06-0ce1e61039d2,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751004_2024-12-23_14-20-03_sorted-curated_2025-01-28_19-26-38,aind-beh-physiology-publication,8ae61d7d-0e8b-4ba7-9aa2-dddceff8a829,aind-scratch-data,AIND PRIVATE
+behavior_751181_2025-02-25_12-12-30,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",15ea1711-625b-4e3f-887e-589e03fc7ebc,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751181_2025-02-25_12-12-30_sorted-opto_bp_2025-03-12_05-05-46,aind-beh-physiology-publication,6488efdd-ba29-4dca-b040-389e8566e917,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751181_2025-02-25_12-12-30_videoprocessed_2025-09-09_18-59-42,LC-ephys-tonguemovements,e613e630-66e3-4456-a98b-e2edfe280ac3,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751181_2025-02-25_12-12-30_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,e5258d95-c786-4f12-9807-204557c11b40,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751181_2025-02-25_12-12-35_sorted_curated_2025-03-20_21-27-08,aind-beh-physiology-publication,d4a291cd-4476-403e-8b0c-98db33114ff4,aind-scratch-data,AIND PRIVATE
+behavior_751181_2025-02-26_11-51-15,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",1ce38424-f3cd-434c-b0af-18d3d0179cf1,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751181_2025-02-26_11-51-15_sorted-opto_bp_2025-03-12_04-26-09,aind-beh-physiology-publication,bde95604-9cb4-4e1d-ae90-fc76dcc69ce4,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751181_2025-02-26_11-51-15_videoprocessed_2025-09-09_18-59-42,LC-ephys-tonguemovements,5a0c46b5-d908-4c95-a21e-6c5b2aa93a8d,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751181_2025-02-26_11-51-15_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,4ca73dde-e0ae-4775-97e6-571c76eb69b9,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751181_2025-02-26_11-51-19_sorted_curated_2025-03-20_21-15-56,aind-beh-physiology-publication,763a150e-434f-4039-a1b5-e0dcfe2ea982,aind-scratch-data,AIND PRIVATE
+behavior_751181_2025-02-27_11-24-44,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",c3a218ea-bea0-4ba5-9a95-4b8353340cad,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751181_2025-02-27_11-24-44_sorted-opto-bp_2025-03-21_01-06-52,aind-beh-physiology-publication,ad291c3a-bf5e-4d03-af52-e59d0b183538,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751181_2025-02-27_11-24-44_videoprocessed_2025-09-09_18-59-42,LC-ephys-tonguemovements,ad853a27-d3fe-41fe-9d0b-ec26a418b329,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751181_2025-02-27_11-24-44_videoprocessed_2025-10-24_21-43-19,LC-ephys-tonguemovements,"2e3d9361-3347-48a4-9fac-e0180450db4b, 4f5c31bc-25fa-43ea-97d2-7ed63dad3b00, ae5f98b1-f883-4615-825b-cfeb6a2ed43b",codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751181_2025-02-27_11-24-44_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,9b285728-1647-49d7-83d7-309892cf1160,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751181_2025-02-27_11-24-47_sorted_curated_2025-03-25_22-37-19,aind-beh-physiology-publication,d330c095-44b6-43bf-bf8e-eaf435bea9e9,aind-scratch-data,AIND PRIVATE
+behavior_751766_2025-02-11_11-53-32,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",1c088c3b-9448-4154-8fa2-11951c98cd35,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751766_2025-02-11_11-53-32_sorted_opto_bandpass_2025-02-18_07-02-02,aind-beh-physiology-publication,8b40b587-af04-48fa-b515-01384778619a,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751766_2025-02-11_11-53-32_videoprocessed_2025-07-17,LC-ephys-tonguemovements,5e3be3e5-abeb-4e17-8dd9-eab9b3bb6f59,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751766_2025-02-11_11-53-32_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,eba26ab1-e01e-4503-819e-31c95f7f181b,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751766_2025-02-11_11-53-38_sorted_curated_2025-02-28_03-49-34,aind-beh-physiology-publication,1cc50ea6-a47a-4385-a1f6-0c7a435d5f78,aind-scratch-data,AIND PRIVATE
+behavior_751766_2025-02-13_11-31-21,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",e9b33712-d39e-41d1-af69-5913f9d17250,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751766_2025-02-13_11-31-21_sorted_curated_2025-02-28_04-20-35,aind-beh-physiology-publication,3253d0d2-7b36-4587-8926-8a97a32b8579,aind-scratch-data,AIND PRIVATE
+behavior_751766_2025-02-13_11-31-21_sorted_opto_bandpass_2025-02-18_07-08-42,aind-beh-physiology-publication,7ff07579-6598-4331-96f0-5edde32bb904,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751766_2025-02-13_11-31-21_videoprocessed_2025-09-09_18-59-42,LC-ephys-tonguemovements,fa953f9f-466a-42a3-93ab-c40df8f1298e,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751766_2025-02-13_11-31-21_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,bc74bd4b-03fa-445b-a6aa-db0685949184,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751766_2025-02-14_11-37-11,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",15579857-ae7f-4621-ab7d-17eb65144e10,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751766_2025-02-14_11-37-11_sorted_curated_2025-02-28_04-06-38,aind-beh-physiology-publication,aa75deb4-3218-4575-bdda-4ecc79791998,aind-scratch-data,AIND PRIVATE
+behavior_751766_2025-02-14_11-37-11_sorted_opto_bandpass_2025-02-18_07-14-15,aind-beh-physiology-publication,33df9c9a-382b-4692-ae49-28b87d5863f4,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751766_2025-02-14_11-37-11_videoprocessed_2025-09-09_18-59-42,LC-ephys-tonguemovements,d1728a80-d6fe-4411-9899-d823a1355715,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751766_2025-02-14_11-37-11_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,78b13356-8bd0-4b34-8020-e59ac93f210e,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751766_2025-02-15_12-08-11,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",c235d536-a2c0-443c-bb79-a7f613b210be,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751766_2025-02-15_12-08-11_sorted-opto-bp_2025-10-22_03-36-09,aind-beh-physiology-publication,c3002882-27fe-4b43-9c95-b5376816c7ce,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751766_2025-02-15_12-08-11_videoprocessed_2025-09-09_18-59-42,LC-ephys-tonguemovements,de8112d5-9e15-48aa-83f2-6949ee528e32,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751766_2025-02-15_12-08-11_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,8c0a4406-72fc-457a-8331-d7fc90557bac,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751769_2025-01-16_11-31-52,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",e08f98e9-7319-4aa1-993e-e28e69604f5b,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751769_2025-01-16_11-31-52_sorted-opto-bp_2025-02-18_07-24-30,aind-beh-physiology-publication,a19ec68a-a660-44f2-a181-15c91794cbd2,unresolved (no DocDB record),CO PRIVATE
+behavior_751769_2025-01-16_11-31-52_videoprocessed_2025-10-15_04-40-52,LC-ephys-tonguemovements,dba6b5ae-652c-484c-9af7-dd06abaf7e2f,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751769_2025-01-16_11-31-52_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,74b04c38-0585-497e-84c1-fba2d4a4ffc7,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751769_2025-01-16_11-32-05_sorted_curated_2025-02-28_20-33-46,aind-beh-physiology-publication,3c454c46-7892-431d-a22e-a6a3785fb0c8,aind-scratch-data,AIND PRIVATE
+behavior_751769_2025-01-17_11-37-35,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",a4dae472-9a9b-4bd7-a920-9691a69869dc,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751769_2025-01-17_11-37-35_sorted-opto-bp_2025-02-18_06-24-43,aind-beh-physiology-publication,2386f052-aeea-4834-8f82-ac87015b5e40,unresolved (no DocDB record),CO PRIVATE
+behavior_751769_2025-01-17_11-37-35_videoprocessed_2025-10-16_00-14-19,LC-ephys-tonguemovements,7b3f6e25-1a03-4f57-8939-4f20d02c3070,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751769_2025-01-17_11-37-35_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,79da570a-b9a8-461b-9965-74abeee934ec,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751769_2025-01-17_11-37-39_sorted_curated_2025-02-28_12-38-04,aind-beh-physiology-publication,5f7d9916-2ab0-492b-bb45-302e0390d704,aind-scratch-data,AIND PRIVATE
+behavior_751769_2025-01-18_10-15-21,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",5a341fc5-eb96-4f7d-9de5-99a99a41a83b,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_751769_2025-01-18_10-15-21_sorted-opto-bp_2025-02-18_06-49-52,aind-beh-physiology-publication,f314f755-6e4a-419e-b0c5-ea65b9d026af,unresolved (no DocDB record),CO PRIVATE
+behavior_751769_2025-01-18_10-15-21_videoprocessed_2025-10-16_00-14-19,LC-ephys-tonguemovements,d93f5192-6d51-47f2-828f-91c492eab426,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751769_2025-01-18_10-15-21_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,b8df5a7f-1fb8-4cf5-9bf2-f4d040a3a1e5,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_751769_2025-01-18_10-15-25_sorted_curated_2025-02-28_20-25-12,aind-beh-physiology-publication,b0b09852-73fd-4cf5-a85e-c8f0fcd596b3,aind-scratch-data,AIND PRIVATE
+behavior_752014_2025-03-25_12-09-16,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",a51c6d11-c613-4d43-a392-0ece255e5c5a,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_752014_2025-03-25_12-09-16_sorted-opto-bp_2025-04-23_02-15-44,aind-beh-physiology-publication,600cd517-3fd4-45fa-86c6-f6a31c885559,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-25_12-09-16_videoprocessed_2025-10-16_00-14-20,LC-ephys-tonguemovements,3e456a66-c8f4-4bba-9342-9f0ec4a22884,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-25_12-09-16_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,4c47ebad-7117-437b-bf59-5a50b86e25d1,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-25_12-09-20_sorted_curated_2025-05-28_20-02-09,aind-beh-physiology-publication,ecf1cecd-49d1-4170-9aaf-1aaac99c53ad,aind-scratch-data,AIND PRIVATE
+behavior_752014_2025-03-26_11-18-52,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",adaef4d0-b0d8-494e-a42e-ccdb5dad4312,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_752014_2025-03-26_11-18-52_sorted-opto-bp_2025-04-23_03-00-52,aind-beh-physiology-publication,634e80f4-4cbd-4174-932b-e820d20bec5b,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-26_11-18-52_videoprocessed_2025-08-07_21-49-21,LC-ephys-tonguemovements,4b81e042-97f9-4a98-9a9b-8e2f9f4a5a9d,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-26_11-18-52_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,955d1068-20d4-415f-acf5-3010b8df7703,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-26_11-18-57_sorted_curated_2025-05-30_16-33-11,aind-beh-physiology-publication,63aa59f2-0944-4f1f-aa84-7cad8904fc8f,aind-scratch-data,AIND PRIVATE
+behavior_752014_2025-03-27_12-03-19,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",c8d71ede-4701-4600-8e67-ac4b97bc7fff,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_752014_2025-03-27_12-03-19_sorted-opto-bp_2025-04-23_02-56-01,aind-beh-physiology-publication,95795eaf-6834-4e5f-bd56-3471f6979a20,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-27_12-03-19_videoprocessed_2025-08-07_21-49-21,LC-ephys-tonguemovements,4b1ee0d4-a52e-4a14-825e-4edcd80b80cb,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-27_12-03-19_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,52671bdc-ccd7-4f09-9b9e-87e4207c27d8,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-27_12-03-59_sorted_curated_2025-05-28_20-08-20,aind-beh-physiology-publication,aa088596-dd34-40fc-846d-48d10b3da29f,aind-scratch-data,AIND PRIVATE
+behavior_752014_2025-03-28_11-04-56,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",8bcb9868-218e-44e8-8e74-76b640e84427,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_752014_2025-03-28_11-04-56_sorted-opto-bp_2025-04-23_03-51-09,aind-beh-physiology-publication,21257274-e4a2-411f-89a1-9ab7dd2620f5,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-28_11-04-56_videoprocessed_2025-08-07_21-49-21,LC-ephys-tonguemovements,44b9abe0-fea7-478b-b97a-fcd4bb0a1411,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-28_11-04-56_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,59335cdb-04e8-4fe5-9c0b-f2da3187c2ca,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_752014_2025-03-28_11-04-59_sorted_curated_2025-05-28_10-32-49,aind-beh-physiology-publication,14df166c-26ea-456f-8cf9-511197168121,aind-scratch-data,AIND PRIVATE
+behavior_754897_2025-03-11_12-07-35,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",f360b4fd-88d5-4676-9770-5a3e94becc1d,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_754897_2025-03-11_12-07-35_sorted-opto-bp_2025-03-21_02-49-18,aind-beh-physiology-publication,fc77e40e-8fa8-4bd5-8eb3-c73fbad43713,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-11_12-07-35_sorted_curated_2025-03-26_21-52-01,aind-beh-physiology-publication,1da236da-42f7-4afe-ab91-0721fbb77520,aind-scratch-data,AIND PRIVATE
+behavior_754897_2025-03-11_12-07-35_videoprocessed_2025-07-08,LC-ephys-tonguemovements,30b818b1-8ebd-4a7a-bb6c-354cf2860a2c,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-11_12-07-35_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,71be6aac-7c1f-45cc-8f17-30d42b53f161,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-12_12-23-09,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",2a63da4e-76c0-4c80-96c7-1b4c5ded8a9a,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_754897_2025-03-12_12-23-09_sorted-opto-bp_2025-03-21_02-19-25,aind-beh-physiology-publication,1d12617d-ff74-4ae3-a4b6-2bc9f0ddf3b5,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-12_12-23-09_sorted_curated_2025-03-25_22-33-24,aind-beh-physiology-publication,a13b3a48-8875-4499-b936-fce9a9e87342,aind-scratch-data,AIND PRIVATE
+behavior_754897_2025-03-12_12-23-09_videoprocessed_2025-09-09_18-59-42,LC-ephys-tonguemovements,f433e3f4-9cbe-4884-a23d-bf45a768b86c,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-12_12-23-09_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,a60b6930-197d-4120-a7c8-2c41fa07081f,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-13_11-20-39,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",1e17e013-6f32-4edd-abcf-76eef426b892,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_754897_2025-03-13_11-20-39_sorted-opto-bp_2025-03-21_05-39-41,aind-beh-physiology-publication,ea416d7f-402d-4002-8fb7-b1dd9b35f4b4,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-13_11-20-39_sorted_curated_2025-03-25_22-58-55,aind-beh-physiology-publication,e60c936f-b0fb-4927-802c-7623603bdcf3,aind-scratch-data,AIND PRIVATE
+behavior_754897_2025-03-13_11-20-39_videoprocessed_2025-07-17,LC-ephys-tonguemovements,d53dcb1f-e967-4289-b4b7-93b939335ed5,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-13_11-20-39_videoprocessed_2025-10-24_21-43-19,LC-ephys-tonguemovements,"a93392f6-734c-4541-8a17-3bf9db5c3eb0, e8d10833-721e-49e5-838a-0a59aecf0784",codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-13_11-20-39_videoprocessed_2025-10-24_21-43-20,LC-ephys-tonguemovements,dc4f5f55-b9c7-42a5-8df6-1e7d32bfff8d,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-13_11-20-39_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,10abc773-1ac2-42cb-a926-acd6606188b7,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-14_11-28-48,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",b7f13908-a11c-4199-a005-4d862e3543e4,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_754897_2025-03-14_11-28-48_sorted-opto-bp_2025-03-21_04-04-42,aind-beh-physiology-publication,0a99592d-8ea2-471d-afbe-f603aefa2d14,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-14_11-28-48_sorted_curated_2025-03-25_20-34-20,aind-beh-physiology-publication,d7f12dd6-f690-400e-995d-a9b01da3fd5e,aind-scratch-data,AIND PRIVATE
+behavior_754897_2025-03-14_11-28-48_videoprocessed_2025-08-07_21-49-21,LC-ephys-tonguemovements,9c0115fa-1515-40db-8c38-ebee42eb2cce,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-14_11-28-48_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,a9777279-80d3-4c3e-8b8b-9a376b25d62b,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-15_11-32-14,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",acaf180c-2f72-4408-955f-edb2e21f087d,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_754897_2025-03-15_11-32-14_sorted-opto-bp_2025-03-21_01-19-46,aind-beh-physiology-publication,847b19ba-f8a8-4339-88ba-2b8306acf3a2,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-15_11-32-14_sorted_curated_2025-03-25_20-24-50,aind-beh-physiology-publication,f54397ec-f68f-446f-9eb6-7775273945eb,aind-scratch-data,AIND PRIVATE
+behavior_754897_2025-03-15_11-32-14_videoprocessed_2025-08-07_21-49-21,LC-ephys-tonguemovements,f90ca0f9-e42e-465f-b078-9031aca94224,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_754897_2025-03-15_11-32-14_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,b133650a-afa3-4bc7-8547-a75cd358e85e,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-04_11-57-33,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",75f7920a-17c9-4e0c-8259-aee69e0544b2,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_758017_2025-02-04_11-57-33_sorted_curated_2025-02-25_12-16-48,aind-beh-physiology-publication,c22f4d4e-12aa-4ad1-82ed-1301c279c270,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-04_11-57-33_sorted_opto_bandpass_2025-02-18_05-10-02,aind-beh-physiology-publication,6a851057-6523-446c-8108-e57924bdca92,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-04_11-57-33_videoprocessed_2025-07-17,LC-ephys-tonguemovements,e740d882-8503-4a30-a764-7340aa250b73,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-04_11-57-33_videoprocessed_2025-10-24_21-43-19,LC-ephys-tonguemovements,"5675b15a-66d6-4434-a67a-7cdb909e8489, 81b5ec4d-4772-4d6b-8a70-f13651d1c4d2, ee715277-4a5c-4163-94ef-88783b1eebe0",codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-04_11-57-33_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,0f39d9a4-fe81-4d47-9e2e-e9e69fd66bc1,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-05_11-42-30,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",b4263e0d-c566-440e-9f82-f617b46adcd4,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_758017_2025-02-05_11-42-30_sorted_curated_2025-02-25_13-57-36,aind-beh-physiology-publication,25c90e73-2455-490b-a58b-9a354c37244e,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-05_11-42-30_sorted_opto_bandpass_2025-02-18_06-02-59,aind-beh-physiology-publication,866eb30b-9f08-49f2-89ab-9c9c452532e9,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-05_11-42-30_videoprocessed_2025-09-09_18-59-42,LC-ephys-tonguemovements,c76f712f-d276-4a26-bc3e-bfd6a9cf035d,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-05_11-42-30_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,b7441fbd-1861-4ae5-be7f-c22173c801ca,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-06_11-26-09,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",a87270c0-16f7-4f7d-b086-1c9feacb00fc,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_758017_2025-02-06_11-26-09_sorted_curated_2025-02-25_16-04-02,aind-beh-physiology-publication,1c147ab8-4465-4684-bc58-448f9ba6a7aa,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-06_11-26-09_sorted_opto_bandpass_2025-02-18_06-39-03,aind-beh-physiology-publication,732b9a07-96b3-47ab-bb27-9cbc9a2303e2,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-06_11-26-09_videoprocessed_2025-09-09_18-59-42,LC-ephys-tonguemovements,c6bed16a-7fda-4468-a530-f15122e8d31d,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-06_11-26-09_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,9608d2d5-9ae5-45bd-8078-db7c92cb40e9,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-07_14-11-05,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",80bed534-acda-40c9-b5a7-afba77b3e8d0,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_758017_2025-02-07_14-11-05_sorted_curated_2025-02-25_13-38-58,aind-beh-physiology-publication,1a1d2f68-72a5-4b62-acab-41dfd94f9b7f,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-07_14-11-05_sorted_opto_bandpass_2025-02-18_06-39-14,aind-beh-physiology-publication,e00a7170-942e-45b0-888d-895c45fe538f,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-07_14-11-05_videoprocessed_2025-09-09_18-59-42,LC-ephys-tonguemovements,4b7d2e07-2d59-4450-a9d6-97f541720541,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758017_2025-02-07_14-11-05_videoprocessed_2025-10-28_23-21-23,LC-ephys-tonguemovements,912a5b0d-7ab3-4282-b575-bf7cf5ea85e2,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758018_2025-03-19_11-16-41,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",324242e3-dab2-458e-b863-f828782e21c1,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_758018_2025-03-19_11-16-41_sorted-opto-bp_2025-04-23_04-35-25,aind-beh-physiology-publication,5ec21b20-6a4d-43a3-ab97-fa513e04135f,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758018_2025-03-19_11-16-41_videoprocessed_2025-10-16_00-14-20,LC-ephys-tonguemovements,a6120b7d-c2ee-4f7e-9da8-bc7525e0fdae,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758018_2025-03-19_11-16-41_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,cad4c711-699f-425a-8baf-f5e71e8e7f3c,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758018_2025-03-19_11-16-44_sorted_curated_2025-05-27_22-01-01,aind-beh-physiology-publication,cb6f25c5-675b-4f4a-a8f3-b6eeb5be6ac3,aind-scratch-data,AIND PRIVATE
+behavior_758018_2025-03-20_11-53-02,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",e359bdb0-95e5-4bcc-a251-4166d9a794ef,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_758018_2025-03-20_11-53-02_sorted-opto-bp_2025-04-23_03-50-28,aind-beh-physiology-publication,f83a6f65-43d5-411d-a5d5-bd619be9a471,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758018_2025-03-20_11-53-02_videoprocessed_2025-10-16_00-14-20,LC-ephys-tonguemovements,f71bbb92-bd5b-4a9a-b4c3-db5d67a7a079,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758018_2025-03-20_11-53-02_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,00452d23-a76a-4fae-80a2-59b15da406d7,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758018_2025-03-20_11-53-05_sorted_curated_2025-05-28_20-36-18,aind-beh-physiology-publication,bbaf2923-5406-48f7-8ca5-edc1805a8c37,aind-scratch-data,AIND PRIVATE
+behavior_758018_2025-03-21_11-00-31,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",81a65bd6-2fb5-4e92-b5f2-5f107f64b66e,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_758018_2025-03-21_11-00-31_sorted-opto-bp_2025-04-23_03-35-36,aind-beh-physiology-publication,2df57944-a8f7-497f-9856-69ee0a86000f,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758018_2025-03-21_11-00-31_videoprocessed_2025-10-16_00-14-20,LC-ephys-tonguemovements,6f888e8d-a45e-4738-af4f-937ae6478644,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758018_2025-03-21_11-00-31_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,890265ea-726b-4e43-ac9c-d422a3e2b851,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_758018_2025-03-21_11-00-34_sorted_curated_2025-05-28_10-48-15,aind-beh-physiology-publication,f7daeae3-a1bc-46a7-a2bf-cafda9d16584,aind-scratch-data,AIND PRIVATE
+behavior_761038_2025-04-15_10-24-57,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",9f16e692-291d-4d05-a1d2-fea4b0cc46de,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_761038_2025-04-15_10-24-57_sorted-opto-bp_2025-04-23_02-41-15,aind-beh-physiology-publication,6ddb6682-f280-45c1-8605-ace67855222b,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-15_10-24-57_videoprocessed_2025-07-17,LC-ephys-tonguemovements,818b6377-0649-430d-8c72-ce273bf3736f,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-15_10-24-57_videoprocessed_2025-10-24_21-43-19,LC-ephys-tonguemovements,"0ef342f6-d5cf-438d-8f7b-cb2d0f7f3e77, 7d7f1202-c493-487d-b10a-a7db0d857e58",codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-15_10-24-57_videoprocessed_2025-10-24_21-43-20,LC-ephys-tonguemovements,0bf2dd99-4a98-4d64-98ce-b300826a2dc8,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-15_10-24-57_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,a672b476-4199-48d3-ba68-35b0474fc596,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-15_10-25-11_sorted_curated_2025-05-28_20-55-32,aind-beh-physiology-publication,17f5047e-a8ed-4013-a04b-ef0c49c8ef2d,aind-scratch-data,AIND PRIVATE
+behavior_761038_2025-04-16_10-39-06,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",9a53dcfe-4285-40e6-a43d-26de6dc8b852,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_761038_2025-04-16_10-39-06_sorted-opto-bp_2025-04-23_04-16-27,aind-beh-physiology-publication,c5863543-1539-43be-8a45-4ee9013082ff,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-16_10-39-06_videoprocessed_2025-07-31_22-11-11,LC-ephys-tonguemovements,e330d168-38df-496f-9a4c-e5ac74d7a6bc,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-16_10-39-06_videoprocessed_2025-10-29_21-59-07,LC-ephys-tonguemovements,5e412d8e-cee2-4506-a06b-034acf64b084,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-16_10-39-10_sorted_curated_2025-05-30_17-10-12,aind-beh-physiology-publication,ed93897a-7836-4a45-ab53-e14dd9d7a6f8,aind-scratch-data,AIND PRIVATE
+behavior_761038_2025-04-17_11-03-12,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",cddf0f43-0113-45c0-a075-3627b1f4888f,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_761038_2025-04-17_11-03-12_sorted-opto-bp_2025-04-23_04-01-37,aind-beh-physiology-publication,bbf4f801-73ff-4635-9154-94e76f732c1e,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-17_11-03-12_videoprocessed_2025-08-01_05-08-29,LC-ephys-tonguemovements,98fe5d4e-5e5a-4936-8697-a3e436157d36,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-17_11-03-12_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,eea8cea5-b5e2-4845-861f-8997d28e577d,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-17_11-03-16_sorted_curated_2025-05-28_11-25-16,aind-beh-physiology-publication,8fa440d7-9c93-47c2-b4fc-d58d95767d09,aind-scratch-data,AIND PRIVATE
+behavior_761038_2025-04-18_12-37-37,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",0aedc7e0-83df-46e0-8d2a-197454d263df,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_761038_2025-04-18_12-37-37_sorted-opto-bp_2025-04-23_03-56-45,aind-beh-physiology-publication,b98dfeed-1b98-487c-b269-7a005e9c80fa,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-18_12-37-37_videoprocessed_2025-08-01_05-08-29,LC-ephys-tonguemovements,07e8bfa0-8bba-4e7a-8f03-0abb42991a6f,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-18_12-37-37_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,5fc6a772-28e1-46a7-8f5e-710512a7ac6c,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_761038_2025-04-18_12-37-39_sorted_curated_2025-05-28_11-30-56,aind-beh-physiology-publication,54b84adb-5c02-4769-bc1c-53ec33809cde,aind-scratch-data,AIND PRIVATE
+behavior_763590_2025-05-01_10-59-16,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",7da1cc31-8dd2-4634-8613-3ee3a2f69ca6,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_763590_2025-05-01_10-59-16_sorted-opto-bp_2025-06-18_10-08-46,aind-beh-physiology-publication,e45c0cf4-b7a0-4dec-9e47-7a994ae6c157,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_763590_2025-05-01_10-59-16_videoprocessed_2025-08-05_20-23-33,LC-ephys-tonguemovements,9fda5b9f-86e7-4093-92a4-77faf332f463,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_763590_2025-05-01_10-59-16_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,8c9beb54-1387-4518-9a31-e80eb18680fa,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_763590_2025-05-01_10-59-18_sorted_curated_2025-07-07_14-00-06,aind-beh-physiology-publication,e5883ec4-db96-4719-8471-3694900283d5,aind-scratch-data,AIND PRIVATE
+behavior_763590_2025-05-02_11-07-07,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",b80fbbbe-adca-43af-b382-1ee4b5a5404f,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_763590_2025-05-02_11-07-07_sorted-opto-bp_2025-06-24_01-18-48,aind-beh-physiology-publication,49fc978f-1637-4b24-a182-a4a8cff170aa,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_763590_2025-05-02_11-07-07_videoprocessed_2025-08-05_20-23-33,LC-ephys-tonguemovements,e4e4a017-f31a-49c3-a575-e88cfd09a5d1,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_763590_2025-05-02_11-07-07_videoprocessed_2025-10-29_21-59-07,LC-ephys-tonguemovements,3f45ae97-a740-4f34-ac1b-dbd9609fb292,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_763590_2025-05-02_11-07-09_sorted_curated_2025-07-08_05-19-34,aind-beh-physiology-publication,88f28923-3a26-48a3-8286-3bcf8cfa76bd,aind-scratch-data,AIND PRIVATE
+behavior_781166_2025-05-13_14-04-22,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",ce657082-bdc7-494b-830e-8c49c620fe91,aind-open-data,OPEN
+behavior_781166_2025-05-13_14-04-22_sorted-opto-bp_2025-06-18_11-54-10,aind-beh-physiology-publication,6e05ed36-0f2c-477c-beb8-b88e40028328,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_781166_2025-05-13_14-04-22_videoprocessed_2025-10-29_21-59-07,LC-ephys-tonguemovements,ed39a681-4544-46fc-9baf-c703d9b10713,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_781166_2025-05-13_14-04-27_sorted_curated_2025-07-07_14-20-51,aind-beh-physiology-publication,baa90c26-7155-46fe-86b4-1b794273046d,aind-scratch-data,AIND PRIVATE
+behavior_781166_2025-05-14_14-18-24,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",a94d3d93-96b3-4d5f-9fc1-2cc85a94982f,aind-open-data,OPEN
+behavior_781166_2025-05-14_14-18-24_sorted-opto-bp_2025-06-25_01-55-57,aind-beh-physiology-publication,f9a2af75-5b9e-4b1e-9f5e-1ca05bc68930,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_781166_2025-05-14_14-18-24_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,e057760c-675d-465e-9966-a319f8e897e0,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_781166_2025-05-14_14-18-28_sorted_curated_2025-07-07_18-20-08,aind-beh-physiology-publication,26122212-99bf-4b25-b32a-127b8ee1e62c,aind-scratch-data,AIND PRIVATE
+behavior_781166_2025-05-15_14-20-48,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",84d1c8ff-d5f8-48bd-bb16-dc98fc8c9786,aind-open-data,OPEN
+behavior_781166_2025-05-15_14-20-48_sorted-opto-bp_2025-06-18_11-49-24,aind-beh-physiology-publication,cdd974b2-7934-42cb-aedb-e6d65791678d,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_781166_2025-05-15_14-20-48_videoprocessed_2025-08-05_20-23-33,LC-ephys-tonguemovements,46163c31-a8bd-4e80-bca7-192fc0011572,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_781166_2025-05-15_14-20-48_videoprocessed_2025-10-29_21-59-07,LC-ephys-tonguemovements,80e20286-7672-492a-ac62-548b5e8bc781,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_781166_2025-05-15_14-20-51_sorted_curated_2025-07-07_14-17-08,aind-beh-physiology-publication,4b3ac54c-42f0-435a-93bb-b479178eb08d,aind-scratch-data,AIND PRIVATE
+behavior_781166_2025-05-16_14-16-29,"aind-beh-physiology-publication, aind-stan-sim-beh",cf507273-9d66-40d2-b3b4-1222c2138975,aind-open-data,OPEN
+behavior_781166_2025-05-16_14-16-29_sorted-opto-bp_2025-06-18_11-54-37,aind-beh-physiology-publication,5363fef5-75d8-40d2-9e92-0015bbce033d,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_781166_2025-05-16_14-16-34_sorted_curated_2025-07-07_18-29-33,aind-beh-physiology-publication,8b519ef4-3996-43e3-8c59-cb4c45c086ec,aind-scratch-data,AIND PRIVATE
+behavior_782394_2025-04-22_10-53-22,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",6fdbbcb0-71e2-4afa-aa19-394b9bd0a3e1,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_782394_2025-04-22_10-53-22_sorted-opto-bp_2025-04-23_02-42-05,aind-beh-physiology-publication,62cf6313-1c28-42e0-b3c3-b6adab53b487,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-22_10-53-22_videoprocessed_2025-10-16_00-14-19,LC-ephys-tonguemovements,3b858a0f-322c-4fca-bdd3-6720ec201081,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-22_10-53-22_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,6b29c360-688b-4d8a-ad9d-f4f9b09e9696,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-22_10-53-28_sorted_curated_2025-07-08_05-17-37,aind-beh-physiology-publication,1ee49688-0442-4059-8a5e-e323cb19554a,aind-scratch-data,AIND PRIVATE
+behavior_782394_2025-04-23_10-51-14,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",fd0c45ba-bb86-498c-a9bc-59f6e92d616d,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_782394_2025-04-23_10-51-14_sorted-opto-bp_2025-06-17_22-40-52,aind-beh-physiology-publication,34377757-2150-423a-b2b1-bb6d97553a13,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-23_10-51-14_videoprocessed_2025-08-01_05-08-29,LC-ephys-tonguemovements,b8a2b0aa-70e3-4c54-93a0-d0a3fcd30886,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-23_10-51-14_videoprocessed_2025-10-24_21-43-19,LC-ephys-tonguemovements,"2f85bc06-1538-443f-9462-1a6ca60a76af, 92bad8b7-32c5-4ff4-8c0d-72c9c3555ec0",codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-23_10-51-14_videoprocessed_2025-10-24_21-43-20,LC-ephys-tonguemovements,0c6cab84-192f-4736-bf08-1f8981196dca,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-23_10-51-14_videoprocessed_2025-10-29_21-59-06,LC-ephys-tonguemovements,2a748929-c7c0-4cd1-875b-77df7a394acf,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-23_10-51-17_sorted_curated_2025-07-08_05-13-15,aind-beh-physiology-publication,6a39d6ea-39c1-427d-87e4-6e70cd7555da,aind-scratch-data,AIND PRIVATE
+behavior_782394_2025-04-24_12-07-31,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",0599881b-39f9-4312-9f16-9fac997a0178,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_782394_2025-04-24_12-07-31_sorted-opto-bp_2025-06-24_02-41-27,aind-beh-physiology-publication,7aba816c-c586-40eb-8ac0-002f17dd80f4,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-24_12-07-31_videoprocessed_2025-07-17,LC-ephys-tonguemovements,d8b07744-eff1-42d9-9167-43e467005b89,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-24_12-07-31_videoprocessed_2025-10-29_21-59-07,LC-ephys-tonguemovements,89fe665e-46ba-4e1a-a97a-be4c255743b3,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-24_12-07-34_sorted_curated_2025-07-07_21-55-27,aind-beh-physiology-publication,0c896ba2-542a-46f7-bd62-5ee0892518f2,aind-scratch-data,AIND PRIVATE
+behavior_782394_2025-04-25_11-13-18,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",2c26eac1-17ff-40eb-badc-25eda92b0de3,aind-private-data-prod-o5171v,AIND PRIVATE
+behavior_782394_2025-04-25_11-13-18_sorted-opto-bp_2025-06-17_16-31-00,aind-beh-physiology-publication,847f98da-b0c8-4a17-bf17-fcd39027f992,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-25_11-13-18_videoprocessed_2025-08-05_20-23-33,LC-ephys-tonguemovements,c240de92-841d-4e3a-a585-6dc40495eeed,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-25_11-13-18_videoprocessed_2025-10-29_21-59-07,LC-ephys-tonguemovements,7119b37e-264a-42fd-a6f2-e4e87c3b4601,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_782394_2025-04-25_11-13-21_sorted_curated_2025-07-07_14-09-26,aind-beh-physiology-publication,e47a88fd-6d68-4747-b2ad-cf758650b850,aind-scratch-data,AIND PRIVATE
+behavior_784803_2025-07-01_13-58-23,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",011b03cd-0adb-403d-a0b9-1cfd0ab2b630,aind-open-data,OPEN
+behavior_784803_2025-07-01_13-58-23_sorted-opto-bp_2025-07-14_11-11-15,aind-beh-physiology-publication,4b6243f9-ea88-4f8b-a2c5-df664969ed64,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_784803_2025-07-01_13-58-23_videoprocessed_2025-11-07_21-12-28,LC-ephys-tonguemovements,ffb1cf69-977b-4646-9585-fc3feb01e883,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_784803_2025-07-01_13-58-26_sorted_curated_2025-09-19_07-56-19,aind-beh-physiology-publication,dbdddb61-86a4-4470-b6c0-ae2d8b415716,aind-scratch-data,AIND PRIVATE
+behavior_784803_2025-07-02_13-41-41,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",6d95a3b7-0e7c-488d-b249-cb2f83fb0307,aind-open-data,OPEN
+behavior_784803_2025-07-02_13-41-41_sorted-opto-bp_2025-07-14_11-11-19,aind-beh-physiology-publication,cb338e1a-756d-4d6d-9875-d21fe043c9d1,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_784803_2025-07-02_13-41-41_sorted_curated_2025-09-19_08-02-24,aind-beh-physiology-publication,83f3d78e-3eb6-4bfa-b5c7-0c3aba5b2bc8,aind-scratch-data,AIND PRIVATE
+behavior_784803_2025-07-02_13-41-41_videoprocessed_2025-11-07_21-12-28,LC-ephys-tonguemovements,709213bb-8443-4ad3-aa26-20ea5f88cc6a,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_784803_2025-07-03_13-55-13,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",12fb8b25-7f2a-4f43-9936-a23df87c5c5c,aind-open-data,OPEN
+behavior_784803_2025-07-03_13-55-13_sorted-opto_2025-09-30_12-27-38,aind-beh-physiology-publication,536804fb-7ac7-4f8c-a526-7b69cd5e383b,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_784803_2025-07-03_13-55-13_sorted_curated_2025-10-20_16-32-38,aind-beh-physiology-publication,ece7339e-7597-4e6c-86f8-ef6803065b6f,aind-scratch-data,AIND PRIVATE
+behavior_784803_2025-07-03_13-55-13_videoprocessed_2025-11-07_21-12-28,LC-ephys-tonguemovements,94372620-98ae-4624-8c69-676783cc9f07,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_784806_2025-06-17_14-59-23,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",d8eb6cfe-d8af-4bf9-a384-909ce651a8b5,aind-open-data,OPEN
+behavior_784806_2025-06-17_14-59-23_sorted-opto-bp_2025-07-14_11-10-42,"aind-beh-physiology-publication, aind-stan-sim-beh",1add4509-a053-40da-874a-f05d7e182820,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_784806_2025-06-17_14-59-23_sorted_curated_2025-09-19_22-52-25,aind-beh-physiology-publication,258e57d3-c47b-4cc8-919c-430b0374e6fb,aind-scratch-data,AIND PRIVATE
+behavior_784806_2025-06-17_14-59-23_videoprocessed_2025-11-07_21-12-28,LC-ephys-tonguemovements,3b2a01fb-b768-402d-9c63-7116f10ab73e,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_784806_2025-06-18_13-39-50,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",1e03ed2b-c579-4192-8779-f0b02ec04210,aind-open-data,OPEN
+behavior_784806_2025-06-18_13-39-50_sorted-opto-bp_2025-08-05_02-47-20,"aind-beh-physiology-publication, aind-stan-sim-beh",f2aeab28-29b0-4e34-a21e-ebc1d002f550,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_784806_2025-06-18_13-39-50_sorted_curated_2025-09-19_07-50-12,aind-beh-physiology-publication,a6ae48e9-d1a4-4ffb-a474-cdcb655e680a,aind-scratch-data,AIND PRIVATE
+behavior_784806_2025-06-18_13-39-50_videoprocessed_2025-11-07_21-12-28,LC-ephys-tonguemovements,35a91933-8973-42ca-a9cd-99f95d77d84e,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_784806_2025-06-20_13-39-16,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",dc47c678-1be2-4701-889a-d392cfe906dc,aind-open-data,OPEN
+behavior_784806_2025-06-20_13-39-16_sorted-opto-bp_2025-08-05_03-27-42,"aind-beh-physiology-publication, aind-stan-sim-beh",c5c7ba39-2d60-4ce1-b939-21313b6e7960,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_784806_2025-06-20_13-39-16_sorted_curated_2025-09-19_08-10-10,aind-beh-physiology-publication,7f70d422-f917-422b-8a4d-b2ef9479824c,aind-scratch-data,AIND PRIVATE
+behavior_784806_2025-06-20_13-39-16_videoprocessed_2025-11-07_21-12-28,LC-ephys-tonguemovements,2a91bd58-7a12-44aa-bb16-cce3bd9aa208,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_785956_2025-05-20_14-15-13,"aind-beh-physiology-publication, aind-stan-sim-beh",4b1aa86e-032c-4fe2-bda5-622a06b5613a,aind-open-data,OPEN
+behavior_785956_2025-05-20_14-15-13_sorted-opto-bp_2025-06-18_09-29-37,aind-beh-physiology-publication,2ecfbc7e-cf6e-4dc5-8886-bf4e97560459,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_785956_2025-05-20_14-15-19_sorted_curated_2025-07-08_15-54-26,aind-beh-physiology-publication,93fbbafc-5963-41ff-a0c5-83c54aae5257,aind-scratch-data,AIND PRIVATE
+behavior_785956_2025-05-21_13-41-59,"aind-beh-physiology-publication, aind-stan-sim-beh",0fb711a1-4ea7-41bf-aaa9-69861f3b3206,aind-open-data,OPEN
+behavior_785956_2025-05-21_13-41-59_sorted-opto-bp_2025-06-18_05-44-40,aind-beh-physiology-publication,dcd35c15-f28d-457c-9e0b-bebc951435f3,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_785956_2025-05-21_13-42-02_sorted_curated_2025-07-08_16-00-08,aind-beh-physiology-publication,39900a0e-726a-4087-9072-4c4a45e15e13,aind-scratch-data,AIND PRIVATE
+behavior_785956_2025-05-23_13-45-17,"aind-beh-physiology-publication, aind-stan-sim-beh",47ab0aeb-013b-4c9f-89e5-965c1005a5a4,aind-open-data,OPEN
+behavior_785956_2025-05-23_13-45-17_sorted-opto-bp_2025-06-18_11-24-56,aind-beh-physiology-publication,5a56bd2b-4ad6-41a0-ac13-72b59426c21c,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_785956_2025-05-23_13-45-21_sorted_curated_2025-07-08_16-40-47,aind-beh-physiology-publication,19d0a2b8-0dd6-450d-bf7a-ef5b54769e25,aind-scratch-data,AIND PRIVATE
+behavior_791691_2025-06-24_13-21-26,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",111342a3-b011-455f-b058-e5de3fd132b3,aind-open-data,OPEN
+behavior_791691_2025-06-24_13-21-26_sorted-opto-bp_2025-07-14_11-50-48,"aind-beh-physiology-publication, aind-stan-sim-beh",765ed17e-99e0-46a1-861c-e8bd6ee7c256,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_791691_2025-06-24_13-21-26_videoprocessed_2025-11-07_21-12-28,LC-ephys-tonguemovements,ae8ae382-923e-4313-8fb0-12415c1d43ee,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_791691_2025-06-24_13-21-29_sorted_curated_2025-09-19_08-15-06,aind-beh-physiology-publication,0438b3fa-3ddc-45ba-9c95-9ce2baf71b93,aind-scratch-data,AIND PRIVATE
+behavior_791691_2025-06-25_14-05-48,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",c1d7c7af-7183-4ccd-baa4-2cefd6f877a6,aind-open-data,OPEN
+behavior_791691_2025-06-25_14-05-48_sorted-opto-bp_2025-07-14_11-15-52,"aind-beh-physiology-publication, aind-stan-sim-beh",0173b68a-1438-4e77-b44b-1d133af4247e,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_791691_2025-06-25_14-05-48_videoprocessed_2025-11-07_21-12-28,LC-ephys-tonguemovements,c1027252-a0d3-4a11-9c06-c5acdb2f5371,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_791691_2025-06-25_14-06-10_sorted_curated_2025-09-19_07-58-39,aind-beh-physiology-publication,5afeea2c-b628-4a17-8905-b48d0b903e34,aind-scratch-data,AIND PRIVATE
+behavior_791691_2025-06-26_13-39-22,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",74177a0b-fb0e-449f-b23d-0e7cbb281866,aind-open-data,OPEN
+behavior_791691_2025-06-26_13-39-22_sorted-opto-bp_2025-07-14_11-31-00,"aind-beh-physiology-publication, aind-stan-sim-beh",c2f723d9-c021-4298-a92b-9561b0785653,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_791691_2025-06-26_13-39-22_videoprocessed_2025-11-07_21-12-28,LC-ephys-tonguemovements,efabcbb6-66ea-4390-88f8-8aa31ded9717,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_791691_2025-06-26_13-39-26_sorted_curated_2025-09-19_08-08-27,aind-beh-physiology-publication,c494df70-5ed3-4d82-95d0-1a132c301a7e,aind-scratch-data,AIND PRIVATE
+behavior_791691_2025-06-27_13-54-27,"LC-ephys-tonguemovements, aind-beh-physiology-publication, aind-stan-sim-beh",353fb0f0-d70f-4efd-8ae2-e14ca36cccf1,aind-open-data,OPEN
+behavior_791691_2025-06-27_13-54-27_sorted-opto-bp_2025-08-09_02-24-05,"aind-beh-physiology-publication, aind-stan-sim-beh",43a477bd-1136-4db6-8b96-3195a358a9af,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_791691_2025-06-27_13-54-27_videoprocessed_2025-11-07_21-12-28,LC-ephys-tonguemovements,e22860ce-0424-4a37-ba30-f121e4b9baf6,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+behavior_791691_2025-06-27_13-54-30_sorted_curated_2025-09-19_22-57-02,aind-beh-physiology-publication,49423fdf-b205-48a7-9702-052ee04f1ef2,aind-scratch-data,AIND PRIVATE
+behavior_800881_2025-07-09_11-55-40,aind-beh-physiology-publication,3827fa2e-489f-42cb-9e52-eb583444827a,aind-open-data,OPEN
+behavior_800881_2025-07-09_11-55-40_sorted-opto-bp_2025-09-29_22-18-10,aind-beh-physiology-publication,8d6e9393-460b-4903-a91e-bb8b13d0e9e3,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+dorsal_edge_fix_2026-01-06s,aind-beh-physiology-publication,ac7c7961-9178-4bf9-9d66-0a426cf3cc24,unresolved (no DocDB record),CO PRIVATE
+ecephys_684930_2023-09-27_10-04-04,aind-beh-physiology-publication,e401352f-0e1e-4099-bf3c-951888158088,aind-ephys-data,AIND PRIVATE
+ecephys_684930_2023-09-27_10-04-04_sorted-curated_2024-08-29_12-30-33,aind-beh-physiology-publication,f2761e13-561d-444b-8e77-359116d5d09a,unresolved (no DocDB record),CO PRIVATE
+ecephys_684930_2023-09-27_10-04-04_sorted_opto_updated_2025-04-18_23-18-40,aind-beh-physiology-publication,5db7878a-4db1-4039-b857-07504e38aaeb,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_684930_2023-09-28_11-45-27,aind-beh-physiology-publication,c48aa4c6-b48f-42ed-8558-939e11d688fa,aind-ephys-data,AIND PRIVATE
+ecephys_684930_2023-09-28_11-45-27_sorted-curated_2024-08-29_10-56-46,aind-beh-physiology-publication,7cd79a18-a54a-4087-9c84-639ad19554f9,unresolved (no DocDB record),CO PRIVATE
+ecephys_684930_2023-09-28_11-45-27_sorted_opto_updated_2025-04-18_22-52-20,aind-beh-physiology-publication,d8c28096-b14a-4333-8d70-adb561c088a4,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_684930_2023-09-28_12-44-15,aind-beh-physiology-publication,9a6808d8-8c28-4b99-a376-ecd25125c020,aind-ephys-data,AIND PRIVATE
+ecephys_684930_2023-09-28_12-44-15_sorted-curated_2024-08-29_10-52-08,aind-beh-physiology-publication,dc4c3a93-7f31-40cf-843c-c451e28021c4,unresolved (no DocDB record),CO PRIVATE
+ecephys_684930_2023-09-28_12-44-15_sorted_opto_updated_2025-04-18_23-03-08,aind-beh-physiology-publication,603bf868-2159-4f74-9aee-e0a54d3da46b,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_687697_2023-09-15_11-30-06,aind-beh-physiology-publication,4699a15c-c8a7-47ab-b288-2a5768530d16,aind-ephys-data,AIND PRIVATE
+ecephys_687697_2023-09-15_11-30-06_sorted_opto_updated_2025-04-18_23-11-25,aind-beh-physiology-publication,9d32722c-265d-49c2-90c9-567590ed110a,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_687697_2023-09-15_11-30-0_sorted-curated_2024-08-29_08-54-33,aind-beh-physiology-publication,20cafef6-5c97-442d-a111-23f8a67449be,unresolved (no DocDB record),CO PRIVATE
+ecephys_687697_2023-09-15_12-36-06,aind-beh-physiology-publication,54ba9609-c8c6-4fc5-a484-0864d01aac26,aind-ephys-data,AIND PRIVATE
+ecephys_687697_2023-09-15_12-36-06_sorted_curated,aind-beh-physiology-publication,2fcec39f-a09e-45eb-91c4-986d17a62308,unresolved (no DocDB record),CO PRIVATE
+ecephys_687697_2023-09-15_12-36-06_sorted_opto_updated_2025-04-18_23-16-21,aind-beh-physiology-publication,6ead8519-1ac1-4fff-b0ce-b1a9e14f6959,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_691893_2023-10-05_12-46-57,aind-beh-physiology-publication,9f28122b-1f5c-4541-b45f-5f6b1a85439a,aind-ephys-data,AIND PRIVATE
+ecephys_691893_2023-10-05_12-46-57_sorted-curated_2024-08-29_11-51-07,aind-beh-physiology-publication,249b888b-d680-428a-a407-ce6e6b514878,unresolved (no DocDB record),CO PRIVATE
+ecephys_691893_2023-10-05_12-46-57_sorted_opto_updated_2025-04-18_23-24-11,aind-beh-physiology-publication,8ef617f7-59b3-4a4f-8397-f29399ea8697,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_691893_2023-10-06_13-48-18,aind-beh-physiology-publication,a4ae799c-a9ef-4c3a-a8c4-4a3351ee2998,aind-ephys-data,AIND PRIVATE
+ecephys_691893_2023-10-06_13-48-18_sorted-curated_2024-08-29_10-11-33,aind-beh-physiology-publication,25f241fa-7ed6-4641-b032-72eead5819bd,unresolved (no DocDB record),CO PRIVATE
+ecephys_691893_2023-10-06_13-48-18_sorted_opto_updated_2025-04-18_23-15-04,aind-beh-physiology-publication,1912fa41-afe7-43a9-aff3-8b505bd4fc9b,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_713854_2024-03-05_12-01-40,aind-beh-physiology-publication,225e3d34-59cd-4980-9c29-fe6b14b15f8b,aind-ephys-data,AIND PRIVATE
+ecephys_713854_2024-03-05_12-01-40_processed_2025-04-03_05-24-36,aind-beh-physiology-publication,cf531550-7cee-4e01-a073-ad1d0086985f,aind-scratch-data,AIND PRIVATE
+ecephys_713854_2024-03-05_12-01-40_sorted-opto_updated,aind-beh-physiology-publication,ed93e6c6-a6fb-4794-a3d5-8a0de1d98c2d,unresolved (no DocDB record),CO PRIVATE
+ecephys_713854_2024-03-05_13-01-09,aind-beh-physiology-publication,4aab417c-f682-4bd2-9b70-5fc0879c2781,aind-ephys-data,AIND PRIVATE
+ecephys_713854_2024-03-05_13-01-09_processed_2025-04-03_06-12-55,aind-beh-physiology-publication,c30c8a5b-3dff-4c18-bda9-7b9b61def44e,aind-scratch-data,AIND PRIVATE
+ecephys_713854_2024-03-05_13-01-09_sorted_opto_updated_2025-04-18_20-34-11,aind-beh-physiology-publication,f91c4e44-e88e-47b0-ae50-e8a1100a11ea,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_713854_2024-03-05_13-31-20,aind-beh-physiology-publication,da3489a9-8f1a-4750-9b25-a8a3300ee715,aind-ephys-data,AIND PRIVATE
+ecephys_713854_2024-03-05_13-31-20_processed_2025-04-03_05-59-41,aind-beh-physiology-publication,83cd992b-c9e8-4600-9524-612aad4bff16,aind-scratch-data,AIND PRIVATE
+ecephys_713854_2024-03-05_13-31-20_sorted_opto_updated_2025-04-18_21-45-15,aind-beh-physiology-publication,378152f4-3879-488d-a294-4a4cd289e8a4,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_713854_2024-03-08_14-54-25,aind-beh-physiology-publication,ee0c6b17-8d70-460d-99f3-806fef653fdb,aind-ephys-data,AIND PRIVATE
+ecephys_713854_2024-03-08_14-54-25_processed_2025-04-03_07-23-06,aind-beh-physiology-publication,c32a4c83-b553-42f1-8a10-ee55c5e3e0c4,aind-scratch-data,AIND PRIVATE
+ecephys_713854_2024-03-08_14-54-25_sorted-opto_2024-04-02_11-07-27,aind-beh-physiology-publication,2e4b5d6b-cb06-4fe3-8b55-c3ab67d8682b,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_713854_2024-03-08_15-43-01,aind-beh-physiology-publication,407bef32-d1af-4c1e-843a-eafd3549e761,aind-ephys-data,AIND PRIVATE
+ecephys_713854_2024-03-08_15-43-01_processed_2025-04-03_08-00-01,aind-beh-physiology-publication,c9035fb1-1ed6-4bc4-aa16-7365cbf1a99b,aind-scratch-data,AIND PRIVATE
+ecephys_713854_2024-03-08_15-43-01_sorted_opto_updated_2025-04-18_22-44-10,aind-beh-physiology-publication,3cb3978b-a7d4-49ec-bc7e-8add72513bb6,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_713854_2024-03-08_16-20-33,aind-beh-physiology-publication,b3b7f2af-1f45-4ffa-a974-9f0474b975be,aind-ephys-data,AIND PRIVATE
+ecephys_713854_2024-03-08_16-20-33_processed_2025-04-03_09-02-13,aind-beh-physiology-publication,16477e2a-901e-426a-a01b-ef14c8705dd6,aind-scratch-data,AIND PRIVATE
+ecephys_713854_2024-03-08_16-20-33_sorted_opto_updated_2025-04-18_22-30-18,aind-beh-physiology-publication,c24029b2-fd14-46f1-ae6f-d0c1eb60273c,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_713854_2024-03-08_17-15-58,aind-beh-physiology-publication,ccad74ef-5221-4bd6-81fb-a449128dce84,aind-ephys-data,AIND PRIVATE
+ecephys_713854_2024-03-08_17-15-58_processed_2025-04-03_06-23-02,aind-beh-physiology-publication,4f36eadc-b2f7-4c43-9dfc-237bb385c709,aind-scratch-data,AIND PRIVATE
+ecephys_713854_2024-03-08_17-15-58_sorted-opto_2024-03-30_10-50-30,aind-beh-physiology-publication,550e5060-51e8-4126-933a-ad34db09c9c0,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_717120_2024-03-06_12-23-53,aind-beh-physiology-publication,d1eac2fa-52ee-4510-8861-7f93078e2fd7,aind-ephys-data,AIND PRIVATE
+ecephys_717120_2024-03-06_12-23-53_processed_2025-04-03_07-24-40,aind-beh-physiology-publication,e1d1495d-4307-4f59-b40f-65ea758a494f,aind-scratch-data,AIND PRIVATE
+ecephys_717120_2024-03-06_12-23-53_sorted_opto_updated_2025-04-18_21-38-14,aind-beh-physiology-publication,ac62c59d-3f69-4095-a9f3-70d564f56471,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_717120_2024-03-06_12-54-27,aind-beh-physiology-publication,eef4683c-0606-4761-a8b0-9cfaaaa99f9b,aind-ephys-data,AIND PRIVATE
+ecephys_717120_2024-03-06_12-54-27_processed_2025-04-03_07-30-58,aind-beh-physiology-publication,afee6e8e-fd2a-4929-bd21-943229000c62,aind-scratch-data,AIND PRIVATE
+ecephys_717120_2024-03-06_12-54-27_sorted_opto_updated_2025-04-18_21-43-59,aind-beh-physiology-publication,fab81e6a-a0f2-4771-98a0-b2a2f0639f69,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_717120_2024-03-07_12-12-02,aind-beh-physiology-publication,85335686-ef59-49d6-8316-6245341fde15,aind-ephys-data,AIND PRIVATE
+ecephys_717120_2024-03-07_12-12-02_processed_2025-04-03_07-12-15,aind-beh-physiology-publication,6162793d-6185-456c-b2cb-a38f23f07bce,aind-scratch-data,AIND PRIVATE
+ecephys_717120_2024-03-07_12-12-02_sorted_opto_updated_2025-04-18_21-40-20,aind-beh-physiology-publication,2f9b8826-f653-43a7-a617-13caf69114b2,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_763360_2025-04-15_12-16-20,aind-beh-physiology-publication,4537b183-40ea-4c22-9c0d-45d114814a0c,aind-private-data-prod-o5171v,AIND PRIVATE
+ecephys_763360_2025-04-15_12-16-20_sorted-opto-bp_2025-04-23_01-21-47,aind-beh-physiology-publication,63e3af6e-ae53-452d-8135-1671ccaba9a5,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_763360_2025-04-15_12-16-29_sorted_curated_2025-07-08_18-43-38,aind-beh-physiology-publication,e11acc1e-05d1-43df-9f6a-a3610da8ad2f,aind-scratch-data,AIND PRIVATE
+ecephys_763360_2025-04-16_13-29-51,aind-beh-physiology-publication,60c6fe35-0d7f-49cb-b15f-c60dae8ce298,aind-private-data-prod-o5171v,AIND PRIVATE
+ecephys_763360_2025-04-16_13-29-51_sorted-opto-bp_2025-04-23_00-41-53,aind-beh-physiology-publication,b2afafe7-780e-48e0-ab9c-46a1afb4eb06,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_763360_2025-04-16_13-29-55_sorted_curated_2025-07-08_18-49-21,aind-beh-physiology-publication,a45e8594-23d4-48f0-a4a8-e1987fbfc65c,aind-scratch-data,AIND PRIVATE
+ecephys_785746_2025-07-30_16-29-33,aind-beh-physiology-publication,39c8d83e-9465-4c99-8385-1c58c372a465,aind-open-data,OPEN
+ecephys_785746_2025-07-30_16-29-33_sorted-opto_2025-09-03_04-06-10,aind-beh-physiology-publication,fc0d7f51-db4d-45bc-9dcb-08ab0f4da8c6,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_791004_2025-07-01_12-05-51,aind-beh-physiology-publication,0c14915e-c8f1-4c48-9e31-3a332d03cb58,aind-open-data,OPEN
+ecephys_791004_2025-07-01_12-05-51_sorted-opto-bp_2025-09-27_01-37-48,aind-beh-physiology-publication,43dacf59-8c2c-4421-8f1b-5187a0937d63,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+ecephys_791004_2025-07-02_12-18-03,aind-beh-physiology-publication,5cd47e9c-74ee-485a-891f-81500e8b82a4,aind-open-data,OPEN
+ecephys_791004_2025-07-02_12-18-03_sorted-opto-bp_2025-09-27_01-57-41,aind-beh-physiology-publication,088588f4-aa6e-4e09-b8d9-1c6100b2ef17,codeocean-s3datasetsbucket-1u41qdg42ur9,CO PRIVATE
+exaSPIM_648434_2023-08-29_15-00-36_fusion_2023-09-22,LC somatodendritic morphology analysis,3f9a2d41-0590-486a-ac76-edf5b40b855c,aind-open-data,OPEN
+exaSPIM_648434_2023-08-29_15-00-36_reconstructions_2026-03-27_12-40-32,LC somatodendritic morphology analysis,6bf332c0-345e-495c-b3d9-031e86a82490,aind-open-data,OPEN
+exaSPIM_685221_2024-04-12_11-46-38_fusion_2024-07-22_21-00-15,LC somatodendritic morphology analysis,fbde8ba6-e6ac-464b-bf67-9441d93e0101,aind-open-data,OPEN
+exaSPIM_685221_2024-04-12_11-46-38_reconstructions_2026-03-27_13-25-22,LC somatodendritic morphology analysis,10ef306a-e48d-43f1-bed9-7e2328dffe88,aind-open-data,OPEN
+exaSPIM_685222_2024-05-07_13-51-39_fusion_2024-07-29_17-28-26,LC somatodendritic morphology analysis,1708c61a-c6e8-4e3b-abaa-503b1061374d,aind-open-data,OPEN
+exaSPIM_685222_2024-05-07_13-51-39_reconstructions_2026-03-27_18-32-11,LC somatodendritic morphology analysis,ca95b2d9-641e-46f0-bdd9-6e591e926276,aind-open-data,OPEN
+exaSPIM_721332_2025-04-05_14-48-36_flatfield-correction_2025-04-24_20-06-12_fusion_2025-05-06_17-30-15,LC somatodendritic morphology analysis,f6c7bb10-517e-46d4-97d2-e9b645e643af,aind-open-data,OPEN
+exaSPIM_721332_2025-04-05_14-48-36_reconstructions_2026-03-27_18-52-37,LC somatodendritic morphology analysis,c8aa9489-0d7a-4aad-9e37-633fe91d9dcd,aind-open-data,OPEN
+filt_neurons_20240321_BARseq669594,LC-NE_BARseq_MAT-RDS_conversion,834d8b74-c377-43f9-a7fe-db38569d25a6,unresolved (no DocDB record),CO PRIVATE
+foraging_nwb_bonsai,"LC-ephys-tonguemovements, aind-stan-sim-beh",f908dd4d-d7ed-4d52-97cf-ccd0e167c659,aind-behavior-data,AIND PRIVATE
+gp_classification_results.pkl,LC-NE_retrograde_viral_labelling_analyses,7baf6210-8c65-4d56-aefe-8752d016a38d,unresolved (no DocDB record),CO PRIVATE
+keypoint_tracking_bottomview_LCrecordings_20260126,LC-ephys-tonguemovements,1a903479-ce3f-44b1-b1d9-18145e2653fc,unresolved (no DocDB record),CO PRIVATE
+keypoint_tracking_bottomview_LCrecordings_20260403,LC-ephys-tonguemovements,3f03b848-6839-4bad-b924-f5a63fde3b1f,unresolved (no DocDB record),CO PRIVATE
+keypoint_tracking_bottomview_LCrecordings_ID_20251028,LC-ephys-tonguemovements,e506fc7b-587a-4701-ae3a-e5e2d41b8538,unresolved (no DocDB record),CO PRIVATE
+keypoint_tracking_bottomview_LCrecordings_OOD_20251028,LC-ephys-tonguemovements,1cb11442-459b-485c-b158-3a1d408214a3,unresolved (no DocDB record),CO PRIVATE
+lightsheet_to_template_to_ccf_registration,LC-NE_Register_Annotations_retrograde_cells,9be4e3ac-adfb-4335-824c-bd99364a2c0f,unresolved (no DocDB record),CO PRIVATE
+merfish_result_04062026_1103am,LCNE_transcriptomics,32df97b8-c759-4ae8-bfe1-371111655e32,unresolved (no DocDB record),CO PRIVATE
+mouse_ccf_cortical_coordinates_2017,aind-LC-morphologies,1501426f-b64b-43e4-93c0-aca8091d9110,aind-scratch-data,AIND PRIVATE
+mouselight_public,aind-LC-morphologies,d7b102e7-1b8c-46b4-afa3-cae10acdac5e,unresolved (no DocDB record),CO PRIVATE
+snRNAseq_LCNE,"LCNE_10x_preprocessing_R, LCNE_transcriptomics_preprocessing","784a0ced-f6cc-4904-9619-4e223aec631d, df5e4b72-294b-41cd-b0c5-e6722e7d0b1a",unresolved (no DocDB record),CO PRIVATE
+snRNAseq_LCNE_batchcorrected,LCNE_transcriptomics,211c8ff2-3754-4f55-a758-4d07e8ab2cc7,unresolved (no DocDB record),CO PRIVATE
