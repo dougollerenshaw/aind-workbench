@@ -24,6 +24,9 @@ from aind_data_schema_models.modalities import Modality
 
 from aind_data_schema.core.acquisition import Acquisition, ExternalDataStream
 
+from procedures_780345 import MAPSEQ_SPECIMEN_IDS as IDS_780345
+from procedures_780346 import MAPSEQ_SPECIMEN_IDS as IDS_780346
+
 # No published MAPseq protocol URL available at the time of writing.
 MAPSEQ_PROTOCOL_ID: list[str] = []
 
@@ -45,9 +48,8 @@ SUBJECTS = {
         # Time-of-day not provided; using noon to avoid timezone-edge day shifts.
         "acquisition_start": datetime(2025, 3, 24, 12, 0, 0, tzinfo=ZoneInfo("America/Los_Angeles")),
         "acquisition_end": datetime(2025, 10, 30, 12, 0, 0, tzinfo=ZoneInfo("America/Los_Angeles")),
-        # MAPseq specimen IDs from aind-data-schema PR #1763 (procedures_sectioning.py).
-        # 39 brain sections (first batch 1-27, second batch 28-39) plus spinal cord.
-        "specimen_id": [f"780345_map{i:03d}" for i in range(1, 40)] + ["780345_spinal"],
+        # Imported from procedures_780345.py to keep acquisition and procedures in sync.
+        "specimen_id": IDS_780345,
     },
     "780346": {
         "experimenters": ["Cold Spring Harbor Laboratory (CSHL) MAPseq team"],
@@ -57,9 +59,8 @@ SUBJECTS = {
         # Time-of-day not provided; using noon to avoid timezone-edge day shifts.
         "acquisition_start": datetime(2025, 7, 23, 12, 0, 0, tzinfo=ZoneInfo("America/Los_Angeles")),
         "acquisition_end": datetime(2025, 10, 30, 12, 0, 0, tzinfo=ZoneInfo("America/Los_Angeles")),
-        # MAPseq specimen IDs from aind-data-schema PR #1763 (procedures_sectioning.py).
-        # 39 brain sections (first batch 1-30, second batch 31-39) plus spinal cord.
-        "specimen_id": [f"780346_map{i:03d}" for i in range(1, 40)] + ["780346_spinal"],
+        # Imported from procedures_780346.py to keep acquisition and procedures in sync.
+        "specimen_id": IDS_780346,
     },
 }
 

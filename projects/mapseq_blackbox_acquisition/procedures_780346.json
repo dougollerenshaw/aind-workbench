@@ -1,0 +1,4470 @@
+{
+   "object_type": "Procedures",
+   "describedBy": "https://raw.githubusercontent.com/AllenNeuralDynamics/aind-data-schema/main/src/aind_data_schema/core/procedures.py",
+   "schema_version": "2.1.1",
+   "subject_id": "780346",
+   "subject_procedures": [],
+   "specimen_procedures": [
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": "780346",
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Planar sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map001",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           0.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map002",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           327.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map003",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           653.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map004",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           980.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map005",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           1307.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map006",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           1633.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map007",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           1960.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map008",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           2287.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map009",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           2613.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map010",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           2940.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map011",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           3267.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map012",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           3593.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map013",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           3920.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map014",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           4247.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map015",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           4573.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map016",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           4900.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map017",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           5227.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map018",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           5553.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map019",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           5880.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map020",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           6207.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map021",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           6533.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map022",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           6860.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map023",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           7187.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map024",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           7513.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map025",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           7840.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map026",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           8167.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map027",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           8493.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map028",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           8820.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map029",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           9147.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map030",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           9473.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  }
+               ],
+               "coordinate_system": null,
+               "section_orientation": "Coronal"
+            }
+         ],
+         "notes": "MAPseq sections 1-30 covering plates 0-98 (300um thick, partial slices)"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": "780346",
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Planar sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar001",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           9900.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar002",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           9920.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar003",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           9940.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar004",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           9960.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar005",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           9980.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar006",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10000.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar007",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10020.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar008",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10040.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar009",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10060.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar010",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10080.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar011",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10100.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar012",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10120.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar013",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10140.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar014",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10160.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar015",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10180.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar016",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10200.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar017",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10220.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar018",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10240.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar019",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10260.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar020",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10280.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar021",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10300.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar022",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10320.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar023",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10340.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar024",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10360.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar025",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10380.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar026",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10400.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar027",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10420.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar028",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10440.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar029",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10460.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar030",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10480.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar031",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10500.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar032",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10520.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar033",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10540.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar034",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10560.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar035",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10580.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar036",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10600.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar037",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10620.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar038",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10640.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar039",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10660.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar040",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10680.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar041",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10700.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar042",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10720.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar043",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10740.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar044",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10760.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar045",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10780.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar046",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10800.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar047",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10820.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar048",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10840.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar049",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10860.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar050",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10880.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_bar051",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           10900.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 20.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  }
+               ],
+               "coordinate_system": null,
+               "section_orientation": "Coronal"
+            }
+         ],
+         "notes": "BARseq LC sections 1-51 covering plates 99-112 (20um thick)"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": "780346",
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Planar sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map031",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           11200.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map032",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           11422.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map033",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           11644.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map034",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           11867.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map035",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           12089.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map036",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           12311.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map037",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           12533.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map038",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           12756.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map039",
+                     "targeted_structure": null,
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": "CCF",
+                     "start_coordinate": {
+                        "object_type": "Translation",
+                        "translation": [
+                           12978.0,
+                           0.0,
+                           0.0
+                        ]
+                     },
+                     "end_coordinate": null,
+                     "thickness": 300.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  }
+               ],
+               "coordinate_system": null,
+               "section_orientation": "Coronal"
+            }
+         ],
+         "notes": "MAPseq sections 31-39 covering plates 112-132 (300um thick, partial slices)"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": "780346",
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_spinal",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "corticospinal tract",
+                        "acronym": "cst",
+                        "id": "784"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": 1000.0,
+                     "thickness_unit": "micrometer",
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "MAPseq spinal cord sections, size is approximate (1/3rd length each)"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map001",
+            "780346_map002",
+            "780346_map003"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map001_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Main olfactory bulb",
+                        "acronym": "MOB",
+                        "id": "507"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map002_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Main olfactory bulb",
+                        "acronym": "MOB",
+                        "id": "507"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map003_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Main olfactory bulb",
+                        "acronym": "MOB",
+                        "id": "507"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 1: sections 1-3 chunked into [MOB]"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map004",
+            "780346_map005",
+            "780346_map006"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map004_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Main olfactory bulb",
+                        "acronym": "MOB",
+                        "id": "507"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map005_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Main olfactory bulb",
+                        "acronym": "MOB",
+                        "id": "507"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map006_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Main olfactory bulb",
+                        "acronym": "MOB",
+                        "id": "507"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 2: sections 4-6 chunked into [MOB]"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map007",
+            "780346_map008",
+            "780346_map009"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map007_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Orbital area",
+                        "acronym": "ORB",
+                        "id": "714"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map008_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Orbital area",
+                        "acronym": "ORB",
+                        "id": "714"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map009_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Orbital area",
+                        "acronym": "ORB",
+                        "id": "714"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map007_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Somatomotor areas",
+                        "acronym": "MO",
+                        "id": "500"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map008_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Somatomotor areas",
+                        "acronym": "MO",
+                        "id": "500"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map009_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Somatomotor areas",
+                        "acronym": "MO",
+                        "id": "500"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map007_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Anterior olfactory nucleus",
+                        "acronym": "AON",
+                        "id": "159"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map008_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Anterior olfactory nucleus",
+                        "acronym": "AON",
+                        "id": "159"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map009_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Anterior olfactory nucleus",
+                        "acronym": "AON",
+                        "id": "159"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 3: sections 7-9 chunked into [ORB, MO, AON]"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map010",
+            "780346_map011",
+            "780346_map012"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map010_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Orbital area",
+                        "acronym": "ORB",
+                        "id": "714"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map011_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Orbital area",
+                        "acronym": "ORB",
+                        "id": "714"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map012_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Orbital area",
+                        "acronym": "ORB",
+                        "id": "714"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map010_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Somatomotor areas",
+                        "acronym": "MO",
+                        "id": "500"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map011_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Somatomotor areas",
+                        "acronym": "MO",
+                        "id": "500"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map012_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Somatomotor areas",
+                        "acronym": "MO",
+                        "id": "500"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map010_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Anterior olfactory nucleus",
+                        "acronym": "AON",
+                        "id": "159"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map011_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Anterior olfactory nucleus",
+                        "acronym": "AON",
+                        "id": "159"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map012_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Anterior olfactory nucleus",
+                        "acronym": "AON",
+                        "id": "159"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 4: sections 10-12 chunked into [ORB, MO, AON]"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map013",
+            "780346_map014",
+            "780346_map015"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map013_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Caudoputamen",
+                        "acronym": "CP",
+                        "id": "672"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map014_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Caudoputamen",
+                        "acronym": "CP",
+                        "id": "672"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map015_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Caudoputamen",
+                        "acronym": "CP",
+                        "id": "672"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map013_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Nucleus accumbens",
+                        "acronym": "ACB",
+                        "id": "56"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map014_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Nucleus accumbens",
+                        "acronym": "ACB",
+                        "id": "56"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map015_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Nucleus accumbens",
+                        "acronym": "ACB",
+                        "id": "56"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map013_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Lateral septal complex",
+                        "acronym": "LSX",
+                        "id": "275"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map014_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Lateral septal complex",
+                        "acronym": "LSX",
+                        "id": "275"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map015_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Lateral septal complex",
+                        "acronym": "LSX",
+                        "id": "275"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map013_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map014_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map015_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map013_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map014_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map015_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map013_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map014_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map015_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 5: sections 13-15 chunked into [CP, ACB, LSX, ctx_1, ctx_2, ctx_3]. CTX chunks: Superior/dorsal cortex ribbon (ctx 1 in figure); Lateral cortex ribbon (ctx 2 in figure); Inferior/ventrolateral cortex ribbon (ctx 3 in figure)"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map016",
+            "780346_map017",
+            "780346_map018"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map016_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Caudoputamen",
+                        "acronym": "CP",
+                        "id": "672"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map017_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Caudoputamen",
+                        "acronym": "CP",
+                        "id": "672"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map018_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Caudoputamen",
+                        "acronym": "CP",
+                        "id": "672"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map016_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Nucleus accumbens",
+                        "acronym": "ACB",
+                        "id": "56"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map017_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Nucleus accumbens",
+                        "acronym": "ACB",
+                        "id": "56"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map018_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Nucleus accumbens",
+                        "acronym": "ACB",
+                        "id": "56"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map016_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Lateral septal complex",
+                        "acronym": "LSX",
+                        "id": "275"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map017_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Lateral septal complex",
+                        "acronym": "LSX",
+                        "id": "275"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map018_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Lateral septal complex",
+                        "acronym": "LSX",
+                        "id": "275"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map016_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map017_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map018_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map016_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map017_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map018_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map016_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map017_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map018_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 6: sections 16-18 chunked into [CP, ACB, LSX, ctx_1, ctx_2, ctx_3]. CTX chunks: Superior/dorsal cortex ribbon (ctx 1 in figure); Lateral cortex ribbon (ctx 2 in figure); Inferior/ventrolateral cortex ribbon (ctx 3 in figure)"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map019",
+            "780346_map020",
+            "780346_map021"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map019_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Caudoputamen",
+                        "acronym": "CP",
+                        "id": "672"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map020_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Caudoputamen",
+                        "acronym": "CP",
+                        "id": "672"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map021_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Caudoputamen",
+                        "acronym": "CP",
+                        "id": "672"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map019_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Lateral septal complex",
+                        "acronym": "LSX",
+                        "id": "275"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map020_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Lateral septal complex",
+                        "acronym": "LSX",
+                        "id": "275"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map021_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Lateral septal complex",
+                        "acronym": "LSX",
+                        "id": "275"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map019_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Bed nuclei of the stria terminalis",
+                        "acronym": "BST",
+                        "id": "351"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map020_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Bed nuclei of the stria terminalis",
+                        "acronym": "BST",
+                        "id": "351"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map021_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Bed nuclei of the stria terminalis",
+                        "acronym": "BST",
+                        "id": "351"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map019_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map020_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map021_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map019_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map020_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map021_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map019_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map020_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map021_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 7: sections 19-21 chunked into [CP, LSX, BST, ctx_1, ctx_2, ctx_3]. CTX chunks: Superior/dorsal cortex ribbon (ctx 1 in figure); Lateral cortex ribbon (ctx 2 in figure); Inferior/ventrolateral cortex ribbon (ctx 3 in figure)"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map022",
+            "780346_map023",
+            "780346_map024"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map022_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hippocampal formation",
+                        "acronym": "HPF",
+                        "id": "1089"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map023_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hippocampal formation",
+                        "acronym": "HPF",
+                        "id": "1089"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map024_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hippocampal formation",
+                        "acronym": "HPF",
+                        "id": "1089"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map022_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Thalamus",
+                        "acronym": "TH",
+                        "id": "549"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map023_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Thalamus",
+                        "acronym": "TH",
+                        "id": "549"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map024_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Thalamus",
+                        "acronym": "TH",
+                        "id": "549"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map022_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hypothalamus",
+                        "acronym": "HY",
+                        "id": "1097"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map023_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hypothalamus",
+                        "acronym": "HY",
+                        "id": "1097"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map024_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hypothalamus",
+                        "acronym": "HY",
+                        "id": "1097"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map022_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Basolateral amygdalar nucleus",
+                        "acronym": "BLA",
+                        "id": "295"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map023_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Basolateral amygdalar nucleus",
+                        "acronym": "BLA",
+                        "id": "295"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map024_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Basolateral amygdalar nucleus",
+                        "acronym": "BLA",
+                        "id": "295"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map022_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Globus pallidus, external segment",
+                        "acronym": "GPe",
+                        "id": "1022"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map023_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Globus pallidus, external segment",
+                        "acronym": "GPe",
+                        "id": "1022"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map024_005",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Globus pallidus, external segment",
+                        "acronym": "GPe",
+                        "id": "1022"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map022_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map023_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map024_006",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map022_007",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map023_007",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map024_007",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map022_008",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map023_008",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map024_008",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 8: sections 22-24 chunked into [HPF, TH, HY, amygdala, GPE, ctx_1, ctx_2, ctx_3]. CTX chunks: Superior/dorsal cortex ribbon (ctx 1 in figure); Lateral cortex ribbon (ctx 2 in figure); Inferior/ventrolateral cortex ribbon (ctx 3 in figure)"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map025",
+            "780346_map026",
+            "780346_map027"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map025_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Midbrain",
+                        "acronym": "MB",
+                        "id": "313"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map026_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Midbrain",
+                        "acronym": "MB",
+                        "id": "313"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map027_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Midbrain",
+                        "acronym": "MB",
+                        "id": "313"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map025_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map026_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map027_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map025_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map026_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map027_003",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map025_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map026_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map027_004",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebral cortex",
+                        "acronym": "CTX",
+                        "id": "688"
+                     },
+                     "includes_surrounding_tissue": true,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 9: sections 25-27 chunked into [MB, ctx_1, ctx_2, ctx_3]. CTX chunks: Superior/dorsal cortex ribbon (ctx 1 in figure); Lateral cortex ribbon (ctx 2 in figure); Inferior/ventrolateral cortex ribbon (ctx 3 in figure)"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map028",
+            "780346_map029",
+            "780346_map030"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map028_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Midbrain",
+                        "acronym": "MB",
+                        "id": "313"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map029_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Midbrain",
+                        "acronym": "MB",
+                        "id": "313"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map030_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Midbrain",
+                        "acronym": "MB",
+                        "id": "313"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map028_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hindbrain",
+                        "acronym": "HB",
+                        "id": "1065"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map029_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hindbrain",
+                        "acronym": "HB",
+                        "id": "1065"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map030_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hindbrain",
+                        "acronym": "HB",
+                        "id": "1065"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 10: sections 28-30 chunked into [MB, HB]"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map031",
+            "780346_map032",
+            "780346_map033"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map031_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Midbrain",
+                        "acronym": "MB",
+                        "id": "313"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map032_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Midbrain",
+                        "acronym": "MB",
+                        "id": "313"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map033_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Midbrain",
+                        "acronym": "MB",
+                        "id": "313"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map031_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hindbrain",
+                        "acronym": "HB",
+                        "id": "1065"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map032_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hindbrain",
+                        "acronym": "HB",
+                        "id": "1065"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map033_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Hindbrain",
+                        "acronym": "HB",
+                        "id": "1065"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 11: sections 31-33 chunked into [MB, HB]"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map034",
+            "780346_map035",
+            "780346_map036"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map034_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebellum",
+                        "acronym": "CB",
+                        "id": "512"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map035_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebellum",
+                        "acronym": "CB",
+                        "id": "512"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map036_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Cerebellum",
+                        "acronym": "CB",
+                        "id": "512"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map034_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Medulla",
+                        "acronym": "MY",
+                        "id": "354"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map035_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Medulla",
+                        "acronym": "MY",
+                        "id": "354"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map036_002",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Medulla",
+                        "acronym": "MY",
+                        "id": "354"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 12: sections 34-36 chunked into [CB, MY]"
+      },
+      {
+         "object_type": "Specimen procedure",
+         "procedure_type": "Sectioning",
+         "procedure_name": null,
+         "specimen_id": [
+            "780346_map037",
+            "780346_map038",
+            "780346_map039"
+         ],
+         "start_date": "2024-01-01",
+         "end_date": "2024-01-01",
+         "experimenters": [
+            "Polina Kosillo"
+         ],
+         "protocol_id": null,
+         "protocol_parameters": null,
+         "procedure_details": [
+            {
+               "object_type": "Sectioning",
+               "sections": [
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map037_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Medulla",
+                        "acronym": "MY",
+                        "id": "354"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map038_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Medulla",
+                        "acronym": "MY",
+                        "id": "354"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  },
+                  {
+                     "object_type": "Section",
+                     "output_specimen_id": "780346_map039_001",
+                     "targeted_structure": {
+                        "atlas": "CCFv3",
+                        "name": "Medulla",
+                        "acronym": "MY",
+                        "id": "354"
+                     },
+                     "includes_surrounding_tissue": null,
+                     "coordinate_system_name": null,
+                     "start_coordinate": null,
+                     "end_coordinate": null,
+                     "thickness": null,
+                     "thickness_unit": null,
+                     "partial_slice": null
+                  }
+               ]
+            }
+         ],
+         "notes": "Slide 13: sections 37-39 chunked into [MY]"
+      }
+   ],
+   "coordinate_system": {
+      "object_type": "Coordinate system",
+      "name": "CCF",
+      "origin": "Origin",
+      "axes": [
+         {
+            "object_type": "Axis",
+            "name": "AP",
+            "direction": "Anterior_to_posterior"
+         },
+         {
+            "object_type": "Axis",
+            "name": "SI",
+            "direction": "Superior_to_inferior"
+         },
+         {
+            "object_type": "Axis",
+            "name": "ML",
+            "direction": "Left_to_right"
+         }
+      ],
+      "axis_unit": "micrometer"
+   },
+   "notes": null
+}
