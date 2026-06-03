@@ -12,21 +12,27 @@ from flask import Flask
 
 # Get the projects directory
 PROJECTS_DIR = Path(__file__).parent.parent
+# Repo root, so the shared `aind_workbench` package is importable.
+REPO_ROOT = PROJECTS_DIR.parent
 
 # Add tool directories to path
+sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECTS_DIR / 'query_tool'))
 sys.path.insert(0, str(PROJECTS_DIR / 'fiber-schematic-viewer'))
 sys.path.insert(0, str(PROJECTS_DIR / 'upgrader-tool'))
+sys.path.insert(0, str(PROJECTS_DIR / 'iacuc_lookup_api'))
 
 # Import the Flask apps from each tool
 from query_tool import app as query_app
 from app import app as fiber_app
 from upgrader_app import app as upgrader_app
+from iacuc_app import app as iacuc_app
 
 # Configure apps to know their mount points
 query_app.config['APPLICATION_ROOT'] = '/query_tool'
 fiber_app.config['APPLICATION_ROOT'] = '/fiber_schematic_viewer'
 upgrader_app.config['APPLICATION_ROOT'] = '/upgrader'
+iacuc_app.config['APPLICATION_ROOT'] = '/iacuc_lookup'
 
 # Configure fiber app cache directory (absolute path)
 fiber_app.config['CACHE_DIR'] = str(PROJECTS_DIR / 'fiber-schematic-viewer' / '.cache' / 'procedures')
@@ -43,6 +49,7 @@ def index():
         <li><a href="/query_tool">Query Tool</a> - Query DocDB metadata</li>
         <li><a href="/fiber_schematic_viewer">Fiber Schematic Viewer</a> - Visualize fiber implants</li>
         <li><a href="/upgrader">Metadata Upgrader</a> - Test asset metadata upgrade from v1 to v2</li>
+        <li><a href="/iacuc_lookup?subject_id=762287">IACUC Lookup</a> - REST API: IACUC protocol for a mouse (JSON)</li>
     </ul>
     '''
 
@@ -51,6 +58,7 @@ application = DispatcherMiddleware(root_app, {
     '/query_tool': query_app,
     '/fiber_schematic_viewer': fiber_app,
     '/upgrader': upgrader_app,
+    '/iacuc_lookup': iacuc_app,
 })
 
 
@@ -70,6 +78,7 @@ if __name__ == '__main__':
     print(f"  - Query Tool: http://localhost:{args.port}/query_tool")
     print(f"  - Fiber Schematic Viewer: http://localhost:{args.port}/fiber_schematic_viewer")
     print(f"  - Metadata Upgrader: http://localhost:{args.port}/upgrader")
+    print(f"  - IACUC Lookup (REST): http://localhost:{args.port}/iacuc_lookup?subject_id=762287")
     print(f"Fiber Schematic Viewer cache directory: {fiber_app.config['CACHE_DIR']}")
     
     run_simple(

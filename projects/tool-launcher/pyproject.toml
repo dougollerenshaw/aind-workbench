@@ -17,6 +17,8 @@ dependencies = [
     "numpy>=1.24.0",
     # Dependencies for upgrader-tool
     "aind-metadata-upgrader",
+    # Dependencies for iacuc_lookup_api (uses aind_workbench.get_iacuc_id_for_mouse)
+    "requests>=2.31",
 ]
 
 [dependency-groups]

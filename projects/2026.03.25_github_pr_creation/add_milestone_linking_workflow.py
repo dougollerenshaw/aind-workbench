@@ -46,37 +46,7 @@ jobs:
 # ]
 
 REPOS = [
-    # "aind-behavior-utils",
-    "aind-bonsai-behavior-nwb",
-    "aind-dynamic-foraging-pipeline",
-    "aind-dynamic-foraging-qc",
-    "aind-ephys-ibl-gui-conversion",
-    "aind-ephys-results-collector",
-    "aind-fiber-photometry-pipeline",
-    "aind-fiber-photometry-standalone-pipeline",
-    "aind-file-standards",
-    "aind-fip-dff",
-    "aind-fip-nwb-base-capsule",
-    "aind-fip-qc-raw",
-    "aind-log-utils",
-    "aind-metadata-manager",
-    "aind-metadata-mapper",
-    "aind-nwb-utils",
-    "aind-ophys-camstim-behavior-qc",
-    "aind-ophys-classifier",
-    "aind-ophys-motion-correction",
-    "aind-ophys-movie-qc",
-    "aind-ophys-nwb",
-    "aind-pavlovian-behavior-capsule",
-    "aind-physio-arch",
-    "aind-pophys-converter",
-    "aind-pophys-converter-capsule",
-    "aind-pophys-pipeline",
-    "aind-running-speed-nwb",
-    "aind-scientific-computing",
-    "aind-vr-foraging-pipeline",
-    "aind-vr-foraging-processing-nwb-packaging",
-    "isi_segmentation",
+    "aind-fiber-photometry-pipeline"
 ]
 
 ORG = "AllenNeuralDynamics"

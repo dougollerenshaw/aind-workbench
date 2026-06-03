@@ -9,6 +9,7 @@ Kept here so the workbench can produce procedures.json files for
 in the schema repo. See implementation_summary.md for context.
 """
 
+import re
 from datetime import date
 from typing import Dict, List
 
@@ -220,18 +221,35 @@ def create_planar_sectioning(
     )
 
 
-def collect_unique_specimen_ids(*procedure_results) -> List[str]:
-    """Extract unique output_specimen_ids (in order) from PlanarSectioning/Sectioning results.
+_CHUNK_PATTERN = re.compile(r"_map\d{3}_\d{3}$")
 
-    Used to keep the acquisition's specimen_id list in sync with the
-    procedures-level definitions.
+
+def collect_acquisition_specimen_ids(procedures) -> List[str]:
+    """Collect chunk-level output_specimen_ids that match the MAPseq chunk pattern.
+
+    Per Dan Birman (2026-05-04), the acquisition's specimen_id list should be
+    a flat list of only the chunk outputs — IDs of the form `{subject}_map###_###`
+    (e.g. `780345_map007_001`). These are the brain-region chunks that get
+    mailed to CSHL for sequencing.
+
+    Excluded:
+      * PlanarSectioning outputs (e.g. `780345_map007`, `780345_bar012`) —
+        the upstream slices, not the chunks.
+      * Spinal-cord outputs (e.g. `780345_spinal`) — same Sectioning class
+        but a different naming convention; these don't match the chunk pattern.
     """
     ids: List[str] = []
     seen: set = set()
-    for result in procedure_results:
-        for sec in result.sections:
-            sid = sec.output_specimen_id
-            if sid not in seen:
+    for sp in procedures.specimen_procedures:
+        for detail in sp.procedure_details:
+            if type(detail) is not Sectioning:
+                continue
+            for sec in detail.sections:
+                sid = sec.output_specimen_id
+                if sid in seen:
+                    continue
+                if not _CHUNK_PATTERN.search(sid):
+                    continue
                 seen.add(sid)
                 ids.append(sid)
     return ids

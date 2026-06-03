@@ -25,7 +25,7 @@ from aind_data_schema.components.specimen_procedures import (
 from aind_data_schema.core.procedures import Procedures
 
 from _procedures_helpers import (
-    collect_unique_specimen_ids,
+    collect_acquisition_specimen_ids,
     create_nonuniform_sections,
     create_planar_sectioning,
     create_uniform_sections,
@@ -110,15 +110,6 @@ def generate_mapseq_spinal():
     )
 
 
-# Canonical MAPseq specimen IDs for this subject (sections + spinal cord).
-# Imported by mapseq_acquisition.py to populate the acquisition's specimen_id list.
-MAPSEQ_SPECIMEN_IDS = collect_unique_specimen_ids(
-    generate_mapseq_first_batch(),
-    generate_mapseq_second_batch(),
-    generate_mapseq_spinal(),
-)
-
-
 def generate_procedures() -> Procedures:
     """Build the full Procedures object for subject 780345."""
     return Procedures(
@@ -164,6 +155,13 @@ def generate_procedures() -> Procedures:
             *generate_mapseq_slide_chunks(SUBJECT_ID),
         ],
     )
+
+
+# Canonical MAPseq specimen IDs for this subject — flat list of chunk-level
+# outputs (and the spinal cord) drawn from the Sectioning sub-procedures.
+# Imported by mapseq_acquisition.py to keep acquisition's specimen_id list
+# in sync with procedures.
+MAPSEQ_SPECIMEN_IDS = collect_acquisition_specimen_ids(generate_procedures())
 
 
 if __name__ == "__main__":

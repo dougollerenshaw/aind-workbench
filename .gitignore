@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 .ipynb_checkpoints/
+*.egg-info/
+build/
+dist/
 
 # Environment
 .env
@@ -29,3 +32,6 @@ data/
 # Claude files
 claude.md
 claude.local.md
+
+# Scratch notes
+/temp.md

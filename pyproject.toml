@@ -1,0 +1,20 @@
+[project]
+name = "aind-workbench"
+version = "0.1.0"
+description = "Importable general-purpose utility functions for the AIND workbench."
+requires-python = ">=3.9"
+dependencies = [
+    "requests>=2.31",
+]
+
+[project.scripts]
+get-iacuc-id = "aind_workbench.iacuc:_main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+# Only package the shared utility package; the projects/ tree is not part of the
+# installable distribution.
+[tool.setuptools]
+packages = ["aind_workbench"]
