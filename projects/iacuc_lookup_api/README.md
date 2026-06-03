@@ -9,31 +9,36 @@ It's a thin web wrapper around `aind_workbench.get_iacuc_id_for_mouse` (see the
 ## Endpoint
 
 ```
-GET /iacuc_lookup?subject_id=762287   ->  {"762287": "2414"}
-GET /iacuc_lookup/762287              ->  {"762287": "2414"}
-GET /iacuc_lookup?762287              ->  {"762287": "2414"}   (bare query string)
+GET /iacuc_lookup?subject_id=762287    (or /iacuc_lookup/762287, or ?762287)
+->
+{
+  "subject_id":       "762287",
+  "ethics_review_id": "2414",                      # protocol number (null if none)
+  "source":           "docdb",                      # "docdb" | "metadata_service" | null
+  "date_queried":     "2026-05-07T09:10:57.441Z"
+}
 ```
 
-Response shape is `{subject_id: protocol_id}`. If no protocol is found the value is
-`null`. Missing subject id returns HTTP 400.
+`date_queried` is provenance for spotting **stale** IDs:
+- `source: docdb` → the `_created` date of the DocDB procedures record the value came
+  from (the freshest record asserting that protocol).
+- `source: metadata_service` → the current time, since that path queries LabTracks live.
+
+If no protocol is found, `ethics_review_id`/`source`/`date_queried` are `null`. A request
+with no subject id returns the HTML form (browser) — programmatic callers always pass one.
 
 Optional query params:
 
 | param | effect |
 |---|---|
-| `details=true` | Return the richer blob: `{subject_id, iacuc_protocol, source, history}`. |
+| `details=true` | Adds a `history` array: every distinct `{start_date, ethics_review_id}`. |
 | `fallback=false` | DocDB only; skip the slow (~30 s) metadata-service fallback. |
 
 Example:
 
 ```bash
 curl "http://<vm-ip>/iacuc_lookup?subject_id=762287"
-# {"762287": "2414"}
-
-curl "http://<vm-ip>/iacuc_lookup?subject_id=762287&details=true"
-# {"subject_id":"762287","iacuc_protocol":"2414","source":"docdb",
-#  "history":[{"start_date":"2025-01-24","iacuc_protocol":"2414"},
-#             {"start_date":"2024-10-30","iacuc_protocol":"2109"}]}
+# {"subject_id":"762287","ethics_review_id":"2414","source":"docdb","date_queried":"2026-05-07T09:10:57.441Z"}
 ```
 
 ## Running

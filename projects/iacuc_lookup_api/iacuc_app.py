@@ -2,16 +2,20 @@
 
 Mounted by the tool-launcher at ``/iacuc_lookup``.
 
-- ``/iacuc_lookup?subject_id=762287`` -> **always JSON** ``{subject_id: protocol}``
-  (easy to hit programmatically; same response in a browser or via ``curl``).
+- ``/iacuc_lookup?subject_id=762287`` -> **always JSON** (easy to hit
+  programmatically; same response in a browser or via ``curl``)::
+
+      {"subject_id": "762287", "ethics_review_id": "2414",
+       "source": "docdb", "date_queried": "2026-05-07T09:10:57.441Z"}
+
 - ``/iacuc_lookup`` with no subject id -> an HTML page with a single field and a
   "Get IACUC ID" button that GET-submits to the JSON URL above.
 
 Accepted request forms:
-    /iacuc_lookup?subject_id=762287   -> {"762287": "2414"}
-    /iacuc_lookup/762287              -> {"762287": "2414"}
-    /iacuc_lookup?subject_id=762287&details=true   -> {subject_id, iacuc_protocol, source, history}
-    /iacuc_lookup?subject_id=762287&fallback=false -> DocDB only; skip the slow fallback
+    /iacuc_lookup?subject_id=762287                 -> the blob above
+    /iacuc_lookup/762287                            -> same
+    /iacuc_lookup?subject_id=762287&details=true    -> blob + per-surgery history
+    /iacuc_lookup?subject_id=762287&fallback=false  -> DocDB only; skip the slow fallback
 """
 import sys
 from pathlib import Path
@@ -71,8 +75,10 @@ _FORM_PAGE = f"""<!doctype html>
     </label>
     <button type="submit">Get IACUC ID</button>
   </form>
-  <p class="muted">Returns JSON, e.g. <code>{{"762287": "2414"}}</code>.
-     Add <code>&amp;details=true</code> for source + per-surgery history.</p>
+  <p class="muted">Returns JSON, e.g.
+     <code>{{"subject_id": "762287", "ethics_review_id": "2414", "source": "docdb",
+     "date_queried": "2026-05-07T09:10:57.441Z"}}</code>.
+     Add <code>&amp;details=true</code> for per-surgery history.</p>
 </body></html>"""
 
 
@@ -96,7 +102,8 @@ def _truthy(value, default=False):
 @app.route("/")
 @app.route("/<subject_id>")
 def iacuc_lookup(subject_id=None):
-    """JSON ``{subject_id: protocol}`` when given an id; else the HTML entry form."""
+    """JSON blob (subject_id, ethics_review_id, source, date_queried) when given an
+    id; else the HTML entry form."""
     sid = subject_id or _resolve_subject_id()
 
     # No subject id -> show the form (the entry page). Programmatic callers always
@@ -115,8 +122,11 @@ def iacuc_lookup(subject_id=None):
         return jsonify({"error": str(exc), "subject_id": sid}), 502
 
     if details:
-        return jsonify(info)
-    return jsonify({sid: info.get("iacuc_protocol")})  # {subject_id: protocol}
+        return jsonify(info)  # adds per-surgery history
+    # Default blob: subject_id, ethics_review_id, source, date_queried
+    return jsonify(
+        {k: info[k] for k in ("subject_id", "ethics_review_id", "source", "date_queried")}
+    )
 
 
 if __name__ == "__main__":

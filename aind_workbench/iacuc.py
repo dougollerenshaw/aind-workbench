@@ -1,27 +1,30 @@
-"""IACUC protocol lookup for a mouse.
+"""IACUC / ethics-review protocol lookup for a mouse.
 
-Public function: ``get_iacuc_id_for_mouse(subject_id)`` -> current IACUC protocol
-number (e.g. ``"2414"``), or ``None``.
+Public function: ``get_iacuc_id_for_mouse(subject_id)`` -> current protocol number
+(e.g. ``"2414"``), or ``None``. With ``return_details=True`` it returns a blob::
+
+    {
+      "subject_id":      "762287",
+      "ethics_review_id": "2414",         # the protocol number (None if not found)
+      "source":          "docdb",          # "docdb" | "metadata_service" | None
+      "date_queried":    "2026-05-07T09:10:57.441Z",
+      "history":         [ {start_date, ethics_review_id}, ... ]
+    }
+
+``date_queried`` is provenance for catching stale IDs:
+  - source == "docdb": the ``_created`` timestamp of the DocDB procedures record the
+    value came from (the freshest record asserting that protocol).
+  - source == "metadata_service": the current UTC time, since that path queries live.
 
 Two-stage lookup:
+  1. FAST — AIND DocDB (``metadata_index.data_assets``, v2 API). Public read, no creds.
+  2. FALLBACK — ``aind-metadata-service`` ``GET /api/v2/procedures/{subject_id}`` when
+     DocDB has no protocol for the subject (slow ~30 s; needs the internal host).
 
-  1. FAST — AIND DocDB (``metadata_index.data_assets``). Reads procedures metadata
-     already indexed there via the public read API. No credentials, ~sub-second.
-  2. FALLBACK — ``aind-metadata-service`` ``GET /api/v2/procedures/{subject_id}``.
-     Used only when DocDB has no procedures doc (or no protocol) for the subject.
-     Authoritative (pulls LabTracks live) but slow (~30 s) and needs network access
-     to the internal service.
-
-The value lives on each surgery as a bare number string (e.g. ``"2414"``). The field
-name depends on the aind-data-schema generation: v1 docs use ``iacuc_protocol``; v2
-docs (queried here) renamed it to ``ethics_review_id``. We read both. (That is the
-LabTracks form; Dataverse uses ``"2414-Westlake"``.) Note v2 coverage is uneven — some
-records that had a protocol under v1 are null under v2, so those fall through to the
-metadata-service fallback.
-
-Movers: a mouse that changed protocols has surgeries with different protocols. This
-returns the protocol from the most recent surgery (by ``start_date``) and logs a
-warning listing every distinct protocol seen.
+The protocol lives on each surgery as a bare number string. The field name depends on
+the aind-data-schema generation: v1 used ``iacuc_protocol``; v2 (queried here) renamed
+it to ``ethics_review_id``. Both are read. Sentinels like ``"unknown"`` are ignored.
+(This is the LabTracks form; Dataverse uses ``"2414-Westlake"``.)
 """
 from __future__ import annotations
 
@@ -29,6 +32,7 @@ import argparse
 import json
 import logging
 import sys
+from datetime import datetime, timezone
 from typing import List, Optional, Tuple
 
 import requests
@@ -41,65 +45,54 @@ DOCDB_DB = "metadata_index"
 DOCDB_COLLECTION = "data_assets"
 METADATA_SERVICE_HOST = "https://aind-metadata-service"
 
-# A (start_date, protocol_number) pair pulled from one surgery.
-SurgeryProtocol = Tuple[Optional[str], str]
-
-
-# ── selection + extraction helpers ────────────────────────────────────────────
-def _pick_current(pairs: List[SurgeryProtocol]) -> Optional[str]:
-    """Return the protocol from the most recent surgery (by start_date)."""
-    pairs = [(d, p) for d, p in pairs if p]
-    if not pairs:
-        return None
-    distinct = sorted({p for _, p in pairs})
-    if len(distinct) > 1:
-        logger.warning(
-            "subject has multiple IACUC protocols across surgeries: %s "
-            "(returning the most recent by start_date)",
-            distinct,
-        )
-    # ISO date strings sort lexicographically; a missing date sorts oldest.
-    pairs.sort(key=lambda dp: (dp[0] is not None, dp[0] or ""), reverse=True)
-    return pairs[0][1]
-
-
-# The protocol field on a surgery differs by aind-data-schema generation:
-#   v1 docs  -> "iacuc_protocol"
-#   v2 docs  -> "ethics_review_id" (renamed)
-# We read both so the lookup is version-agnostic. Only scalar string values are
-# taken, which naturally excludes the list-valued ``acquisition.ethics_review_id``
-# and the unrelated ``protocol_id`` (a protocols.io DOI, not the IACUC number).
+# Surgery protocol fields, oldest schema name first. v1 -> iacuc_protocol;
+# v2 -> ethics_review_id (renamed). We read both.
 _PROTOCOL_KEYS = ("iacuc_protocol", "ethics_review_id")
 
 # Sentinel strings that appear in the data but are not real protocol numbers.
-# Treated as "no protocol" so they don't pollute results or block the fallback.
 _NON_PROTOCOL_VALUES = {"", "unknown", "none", "n/a", "na", "null", "tbd"}
 
+# (surgery start_date, protocol number, docdb record _created)  -- _created is None
+# for the metadata-service path.
+SurgeryHit = Tuple[Optional[str], str, Optional[str]]
 
-def _walk_iacuc(obj) -> List[SurgeryProtocol]:
+
+def _now_iso() -> str:
+    """Current UTC time as an ISO-8601 'Z' string, matching DocDB's format."""
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _protocol_value(surgery: dict) -> Optional[str]:
+    """Return a real protocol number from a surgery dict, or None (sentinels skipped)."""
+    for key in _PROTOCOL_KEYS:
+        value = surgery.get(key)
+        if isinstance(value, str) and value.strip().lower() not in _NON_PROTOCOL_VALUES:
+            return value.strip()
+    return None
+
+
+def _walk_surgeries(obj) -> List[Tuple[Optional[str], str]]:
     """Recursively collect (start_date, protocol) from any nested surgery dicts.
 
-    Robust to response-envelope differences between DocDB (raw record) and the
-    metadata service (which may wrap the model in a ``data`` field), and to the
-    v1/v2 field rename (see ``_PROTOCOL_KEYS``).
+    Used for the metadata-service response, whose envelope may wrap the model in a
+    ``data`` field.
     """
-    found: List[SurgeryProtocol] = []
+    found: List[Tuple[Optional[str], str]] = []
     if isinstance(obj, dict):
-        for key in _PROTOCOL_KEYS:
-            value = obj.get(key)
-            if isinstance(value, str) and value.strip().lower() not in _NON_PROTOCOL_VALUES:
-                found.append((obj.get("start_date"), value.strip()))
+        protocol = _protocol_value(obj)
+        if protocol:
+            found.append((obj.get("start_date"), protocol))
         for value in obj.values():
-            found.extend(_walk_iacuc(value))
+            found.extend(_walk_surgeries(value))
     elif isinstance(obj, list):
         for value in obj:
-            found.extend(_walk_iacuc(value))
+            found.extend(_walk_surgeries(value))
     return found
 
 
 # ── stage 1: DocDB (fast) ──────────────────────────────────────────────────────
-def _from_docdb(subject_id, host: str = DOCDB_HOST, timeout: int = 20) -> List[SurgeryProtocol]:
-    """Pull surgery protocols for a subject from the DocDB metadata index."""
+def _from_docdb(subject_id, host: str = DOCDB_HOST, timeout: int = 20) -> List[SurgeryHit]:
+    """Surgery protocols + the record's ``_created`` date, from the DocDB index."""
     url = f"https://{host}/{DOCDB_API_VERSION}/{DOCDB_DB}/{DOCDB_COLLECTION}/find"
     params = {
         "filter": json.dumps(
@@ -107,6 +100,7 @@ def _from_docdb(subject_id, host: str = DOCDB_HOST, timeout: int = 20) -> List[S
         ),
         "projection": json.dumps(
             {
+                "_created": 1,  # docdb record creation date -> date_queried
                 "procedures.subject_procedures.start_date": 1,
                 "procedures.subject_procedures.iacuc_protocol": 1,  # v1 field
                 "procedures.subject_procedures.ethics_review_id": 1,  # v2 field
@@ -116,18 +110,50 @@ def _from_docdb(subject_id, host: str = DOCDB_HOST, timeout: int = 20) -> List[S
     }
     resp = requests.get(url, params=params, timeout=timeout)
     resp.raise_for_status()
-    return _walk_iacuc(resp.json())
+    hits: List[SurgeryHit] = []
+    for record in resp.json():
+        created = (record or {}).get("_created")
+        procedures = (record or {}).get("procedures") or {}
+        for surgery in procedures.get("subject_procedures") or []:
+            protocol = _protocol_value(surgery)
+            if protocol:
+                hits.append((surgery.get("start_date"), protocol, created))
+    return hits
 
 
 # ── stage 2: metadata service (slow fallback) ──────────────────────────────────
 def _from_metadata_service(
     subject_id, host: str = METADATA_SERVICE_HOST, timeout: int = 90
-) -> List[SurgeryProtocol]:
-    """Pull surgery protocols from the metadata-service procedures endpoint."""
+) -> List[SurgeryHit]:
+    """Surgery protocols from the metadata-service procedures endpoint (no record date)."""
     url = f"{host.rstrip('/')}/api/v2/procedures/{subject_id}"
     resp = requests.get(url, timeout=timeout)
     resp.raise_for_status()
-    return _walk_iacuc(resp.json())
+    return [(start, protocol, None) for start, protocol in _walk_surgeries(resp.json())]
+
+
+# ── selection ──────────────────────────────────────────────────────────────────
+def _resolve(hits: List[SurgeryHit], source: Optional[str]) -> Tuple[Optional[str], Optional[str]]:
+    """Pick the most recent surgery's protocol and compute ``date_queried``."""
+    hits = [h for h in hits if h[1]]
+    if not hits:
+        return None, None
+    distinct = sorted({p for _, p, _ in hits})
+    if len(distinct) > 1:
+        logger.warning(
+            "subject has multiple IACUC protocols across surgeries: %s "
+            "(returning the most recent by start_date)",
+            distinct,
+        )
+    # ISO date strings sort lexicographically; a missing date sorts oldest.
+    hits.sort(key=lambda h: (h[0] is not None, h[0] or ""), reverse=True)
+    protocol = hits[0][1]
+
+    if source == "metadata_service":
+        return protocol, _now_iso()
+    # docdb: freshest record _created among records that assert this protocol.
+    createds = [c for _, p, c in hits if p == protocol and c]
+    return protocol, (max(createds) if createds else None)
 
 
 # ── public API ─────────────────────────────────────────────────────────────────
@@ -139,44 +165,45 @@ def get_iacuc_id_for_mouse(
     allow_fallback: bool = True,
     return_details: bool = False,
 ):
-    """Return the current IACUC protocol number for *subject_id*.
+    """Return the current protocol number for *subject_id* (bare string), or None.
 
-    Returns the bare protocol string (e.g. ``"2414"``), or ``None`` if no protocol
-    is found in either source. With ``return_details=True`` returns a dict with the
-    resolved protocol, which source answered, and the full per-surgery history.
+    With ``return_details=True`` returns the provenance blob documented in the module
+    docstring (``subject_id``, ``ethics_review_id``, ``source``, ``date_queried``,
+    ``history``).
     """
     try:
-        pairs = _from_docdb(subject_id, host=docdb_host)
+        hits = _from_docdb(subject_id, host=docdb_host)
     except requests.RequestException as exc:
         logger.warning("DocDB lookup failed for %s: %s", subject_id, exc)
-        pairs = []
-    source = "docdb" if pairs else None
+        hits = []
+    source = "docdb" if hits else None
 
-    if not pairs and allow_fallback:
+    if not hits and allow_fallback:
         logger.info(
             "No protocol in DocDB for %s; falling back to metadata service…",
             subject_id,
         )
         try:
-            pairs = _from_metadata_service(subject_id, host=metadata_service_host)
-            source = "metadata_service" if pairs else None
+            hits = _from_metadata_service(subject_id, host=metadata_service_host)
+            source = "metadata_service" if hits else None
         except requests.RequestException as exc:
             logger.warning("Metadata-service fallback failed for %s: %s", subject_id, exc)
 
-    protocol = _pick_current(pairs)
+    protocol, date_queried = _resolve(hits, source)
 
     if return_details:
         history = sorted(
-            {(d, p) for d, p in pairs},
+            {(d, p) for d, p, _ in hits if p},
             key=lambda dp: dp[0] or "",
             reverse=True,
         )
         return {
             "subject_id": str(subject_id),
-            "iacuc_protocol": protocol,
+            "ethics_review_id": protocol,
             "source": source if protocol else None,
+            "date_queried": date_queried,
             "history": [
-                {"start_date": d, "iacuc_protocol": p} for d, p in history
+                {"start_date": d, "ethics_review_id": p} for d, p in history
             ],
         }
     return protocol
@@ -188,12 +215,12 @@ get_iacuc_protocol = get_iacuc_id_for_mouse
 
 def _main(argv=None) -> int:
     parser = argparse.ArgumentParser(
-        description="Get the current IACUC protocol number for a mouse."
+        description="Get the current IACUC/ethics-review protocol number for a mouse."
     )
     parser.add_argument("subject_id", help="Mouse / subject ID, e.g. 762287")
     parser.add_argument(
         "--details", action="store_true",
-        help="Print full JSON (resolved protocol + source + per-surgery history).",
+        help="Print the full JSON blob (ethics_review_id + source + date_queried + history).",
     )
     parser.add_argument(
         "--no-fallback", action="store_true",
@@ -213,7 +240,7 @@ def _main(argv=None) -> int:
     )
     if args.details:
         print(json.dumps(result, indent=2))
-        found = result.get("iacuc_protocol")
+        found = result.get("ethics_review_id")
     else:
         print(result if result is not None else "")
         found = result
