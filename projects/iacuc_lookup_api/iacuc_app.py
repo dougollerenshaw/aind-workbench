@@ -5,8 +5,7 @@ Mounted by the tool-launcher at ``/iacuc_lookup``.
 - ``/iacuc_lookup?subject_id=762287`` -> **always JSON** (easy to hit
   programmatically; same response in a browser or via ``curl``)::
 
-      {"subject_id": "762287", "ethics_review_id": "2414",
-       "source": "docdb", "date_queried": "2026-05-07T09:10:57.441Z"}
+      {"subject_id": "762287", "ethics_review_id": "2414", "source": "docdb"}
 
 - ``/iacuc_lookup`` with no subject id -> an HTML page with a single field and a
   "Get IACUC ID" button that GET-submits to the JSON URL above.
@@ -30,6 +29,13 @@ from flask import Flask, jsonify, request  # noqa: E402
 from aind_workbench import get_iacuc_id_for_mouse  # noqa: E402
 
 app = Flask(__name__)
+
+# Preserve our key insertion order in JSON responses (Flask sorts alphabetically by
+# default). Keeps the blob as subject_id -> ethics_review_id -> source.
+try:
+    app.json.sort_keys = False
+except AttributeError:  # older Flask
+    app.config["JSON_SORT_KEYS"] = False
 
 # Absolute path the form submits to (matches the tool-launcher mount point).
 _FORM_ACTION = "/iacuc_lookup"
@@ -76,8 +82,7 @@ _FORM_PAGE = f"""<!doctype html>
     <button type="submit">Get IACUC ID</button>
   </form>
   <p class="muted">Returns JSON, e.g.
-     <code>{{"subject_id": "762287", "ethics_review_id": "2414", "source": "docdb",
-     "date_queried": "2026-05-07T09:10:57.441Z"}}</code>.
+     <code>{{"subject_id": "762287", "ethics_review_id": "2414", "source": "docdb"}}</code>.
      Add <code>&amp;details=true</code> for per-surgery history.</p>
 </body></html>"""
 
@@ -102,8 +107,8 @@ def _truthy(value, default=False):
 @app.route("/")
 @app.route("/<subject_id>")
 def iacuc_lookup(subject_id=None):
-    """JSON blob (subject_id, ethics_review_id, source, date_queried) when given an
-    id; else the HTML entry form."""
+    """JSON blob (subject_id, ethics_review_id, source) when given an id; else the
+    HTML entry form."""
     sid = subject_id or _resolve_subject_id()
 
     # No subject id -> show the form (the entry page). Programmatic callers always
@@ -123,9 +128,9 @@ def iacuc_lookup(subject_id=None):
 
     if details:
         return jsonify(info)  # adds per-surgery history
-    # Default blob: subject_id, ethics_review_id, source, date_queried
+    # Default blob, in this order: subject_id, ethics_review_id, source
     return jsonify(
-        {k: info[k] for k in ("subject_id", "ethics_review_id", "source", "date_queried")}
+        {k: info[k] for k in ("subject_id", "ethics_review_id", "source")}
     )
 
 

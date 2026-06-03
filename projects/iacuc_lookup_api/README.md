@@ -13,19 +13,13 @@ GET /iacuc_lookup?subject_id=762287    (or /iacuc_lookup/762287, or ?762287)
 ->
 {
   "subject_id":       "762287",
-  "ethics_review_id": "2414",                      # protocol number (null if none)
-  "source":           "docdb",                      # "docdb" | "metadata_service" | null
-  "date_queried":     "2026-05-07T09:10:57.441Z"
+  "ethics_review_id": "2414",     # protocol number (null if none)
+  "source":           "docdb"     # "docdb" | "metadata_service" | null
 }
 ```
 
-`date_queried` is provenance for spotting **stale** IDs:
-- `source: docdb` → the `_created` date of the DocDB procedures record the value came
-  from (the freshest record asserting that protocol).
-- `source: metadata_service` → the current time, since that path queries LabTracks live.
-
-If no protocol is found, `ethics_review_id`/`source`/`date_queried` are `null`. A request
-with no subject id returns the HTML form (browser) — programmatic callers always pass one.
+If no protocol is found, `ethics_review_id`/`source` are `null`. A request with no
+subject id returns the HTML form (browser) — programmatic callers always pass one.
 
 Optional query params:
 
@@ -38,7 +32,7 @@ Example:
 
 ```bash
 curl "http://<vm-ip>/iacuc_lookup?subject_id=762287"
-# {"subject_id":"762287","ethics_review_id":"2414","source":"docdb","date_queried":"2026-05-07T09:10:57.441Z"}
+# {"subject_id":"762287","ethics_review_id":"2414","source":"docdb"}
 ```
 
 ## Running
