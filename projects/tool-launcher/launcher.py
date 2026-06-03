@@ -49,7 +49,7 @@ def index():
         <li><a href="/query_tool">Query Tool</a> - Query DocDB metadata</li>
         <li><a href="/fiber_schematic_viewer">Fiber Schematic Viewer</a> - Visualize fiber implants</li>
         <li><a href="/upgrader">Metadata Upgrader</a> - Test asset metadata upgrade from v1 to v2</li>
-        <li><a href="/iacuc_lookup?subject_id=762287">IACUC Lookup</a> - REST API: IACUC protocol for a mouse (JSON)</li>
+        <li><a href="/iacuc_lookup">IACUC Lookup</a> - Look up the IACUC protocol for a mouse (form + JSON API)</li>
     </ul>
     '''
 

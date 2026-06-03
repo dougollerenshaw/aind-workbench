@@ -71,6 +71,10 @@ def _pick_current(pairs: List[SurgeryProtocol]) -> Optional[str]:
 # and the unrelated ``protocol_id`` (a protocols.io DOI, not the IACUC number).
 _PROTOCOL_KEYS = ("iacuc_protocol", "ethics_review_id")
 
+# Sentinel strings that appear in the data but are not real protocol numbers.
+# Treated as "no protocol" so they don't pollute results or block the fallback.
+_NON_PROTOCOL_VALUES = {"", "unknown", "none", "n/a", "na", "null", "tbd"}
+
 
 def _walk_iacuc(obj) -> List[SurgeryProtocol]:
     """Recursively collect (start_date, protocol) from any nested surgery dicts.
@@ -83,8 +87,8 @@ def _walk_iacuc(obj) -> List[SurgeryProtocol]:
     if isinstance(obj, dict):
         for key in _PROTOCOL_KEYS:
             value = obj.get(key)
-            if isinstance(value, str) and value:
-                found.append((obj.get("start_date"), value))
+            if isinstance(value, str) and value.strip().lower() not in _NON_PROTOCOL_VALUES:
+                found.append((obj.get("start_date"), value.strip()))
         for value in obj.values():
             found.extend(_walk_iacuc(value))
     elif isinstance(obj, list):
