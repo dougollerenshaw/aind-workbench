@@ -1,0 +1,335 @@
+{
+  "behavior_714116_2024-08-28_12-11-55": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_714116_2024-08-29_11-46-43": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_716325_2024-05-29_10-33-32": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      },
+      {
+        "field": "procedures",
+        "error_first_line": "1 validation error for Procedures",
+        "error_full": "1 validation error for Procedures\nsubject_id\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_716325_2024-05-29_10-33-32_sorted-opto_2024-09-11_22-32-12": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "procedures",
+        "error_first_line": "1 validation error for Procedures",
+        "error_full": "1 validation error for Procedures\nsubject_id\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_716325_2024-05-30_11-33-46": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      },
+      {
+        "field": "procedures",
+        "error_first_line": "1 validation error for Procedures",
+        "error_full": "1 validation error for Procedures\nsubject_id\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_716325_2024-05-30_11-33-46_sorted-opto_2024-06-04_17-00-28": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "procedures",
+        "error_first_line": "1 validation error for Procedures",
+        "error_full": "1 validation error for Procedures\nsubject_id\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_716325_2024-05-31_10-31-14": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      },
+      {
+        "field": "procedures",
+        "error_first_line": "1 validation error for Procedures",
+        "error_full": "1 validation error for Procedures\nsubject_id\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_716325_2024-05-31_10-31-14_sorted_curated_2024-07-16_06-10-19": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "procedures",
+        "error_first_line": "1 validation error for Procedures",
+        "error_full": "1 validation error for Procedures\nsubject_id\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_716325_2024-05-31_10-31-14_sorted-opto-ZS_2024-06-05_03-54-32": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "procedures",
+        "error_first_line": "1 validation error for Procedures",
+        "error_full": "1 validation error for Procedures\nsubject_id\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_716325_2024-06-01_09-25-37": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      },
+      {
+        "field": "procedures",
+        "error_first_line": "1 validation error for Procedures",
+        "error_full": "1 validation error for Procedures\nsubject_id\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_716325_2024-06-01_09-25-37_sorted-opto-bandpass_2024-09-10_13-10-02": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "procedures",
+        "error_first_line": "1 validation error for Procedures",
+        "error_full": "1 validation error for Procedures\nsubject_id\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_717121_2024-06-11_10-23-31": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_717121_2024-06-15_10-00-58": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_717259_2024-06-28_11-17-19": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_717263_2024-07-24_10-40-05": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_722832_2024-09-13_11-55-58": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "data_description",
+        "error_first_line": "Unsupported funder type: NINMH",
+        "error_full": "Unsupported funder type: NINMH"
+      },
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_724172_2024-10-01_11-20-11": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "data_description",
+        "error_first_line": "Unsupported funder type: NINMH",
+        "error_full": "Unsupported funder type: NINMH"
+      },
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_724172_2024-10-03_11-02-53": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "data_description",
+        "error_first_line": "Unsupported funder type: NINMH",
+        "error_full": "Unsupported funder type: NINMH"
+      },
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_739970_2024-10-15_10-04-12": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_739970_2024-10-16_12-15-24": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "data_description",
+        "error_first_line": "Unsupported funder type: NINMH",
+        "error_full": "Unsupported funder type: NINMH"
+      },
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_739977_2024-10-24_12-58-26": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "data_description",
+        "error_first_line": "Unsupported funder type: NINMH",
+        "error_full": "Unsupported funder type: NINMH"
+      },
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_751766_2025-02-13_11-31-21": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_751766_2025-02-14_11-37-11": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  },
+  "behavior_751766_2025-02-15_12-08-11": {
+    "found": true,
+    "upgrades_fine": false,
+    "blockers": [
+      {
+        "field": "processing",
+        "error_first_line": "1 validation error for DataProcess",
+        "error_full": "1 validation error for DataProcess\nstart_date_time.dt\n  Input should be a valid datetime [type=datetime_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/datetime_type"
+      }
+    ],
+    "stuck": null
+  }
+}

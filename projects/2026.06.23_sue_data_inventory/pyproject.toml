@@ -1,0 +1,11 @@
+[project]
+name = "sue-data-inventory"
+version = "0.1.0"
+description = "Classify Sue's session assets for open-data migration via DocDB lookup"
+requires-python = ">=3.10"
+dependencies = [
+    "aind-data-access-api[docdb]",
+    "aind-metadata-upgrader",
+    "pandas",
+    "openpyxl",
+]
