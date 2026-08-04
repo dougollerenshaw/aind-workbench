@@ -156,8 +156,12 @@ def validate_scheduled_procedure(
                 f"{', '.join(compatible_type_names(db, instrument_id))}.",
             )
 
-    # Rule 3: always computed here, never taken from the caller.
-    return compute_acquisition_type(names[pid] for pid in active_procedure_type_ids)
+    # Rule 3: always computed here, never taken from the caller. Dedupe the
+    # ids exactly like the join-row inserts do, so a repeated id in the
+    # request can never make acquisition_type disagree with the join table.
+    return compute_acquisition_type(
+        names[pid] for pid in dict.fromkeys(active_procedure_type_ids)
+    )
 
 
 def _encode_planned_config(value: Any) -> str | None:

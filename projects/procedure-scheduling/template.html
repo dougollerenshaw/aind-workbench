@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIND Procedure Schedule</title>
+<!-- FullCalendar Scheduler (resource-timeline) from CDN. This repo is open
+     source, so the premium plugins run under FullCalendar's GPLv3 license
+     key (schedulerLicenseKey below). No build toolchain — vanilla JS. -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js"></script>
+<style>
+  :root {
+    --border: #d6d9de;
+    --muted: #5c6470;
+    --accent: #1d4e89;
+    --bg: #f7f8fa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1c2128;
+    background: var(--bg);
+  }
+  header {
+    padding: 0.8rem 1.2rem 0.6rem;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { margin: 0 0 0.15rem; font-size: 1.25rem; }
+  header .subtitle { margin: 0 0 0.6rem; color: var(--muted); font-size: 0.85rem; }
+  header .subtitle a { color: var(--accent); }
+
+  .filters {
+    display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: end;
+    margin-bottom: 0.5rem;
+  }
+  .filters label { display: flex; flex-direction: column; font-size: 0.75rem; color: var(--muted); gap: 2px; }
+  .filters select, .filters input {
+    font-size: 0.85rem; padding: 0.25rem 0.35rem;
+    border: 1px solid var(--border); border-radius: 4px; background: #fff;
+  }
+  button {
+    font-size: 0.85rem; padding: 0.35rem 0.8rem; border-radius: 4px;
+    border: 1px solid var(--border); background: #fff; cursor: pointer;
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button:hover { filter: brightness(0.96); }
+
+  #legend { display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem; font-size: 0.75rem; color: var(--muted); }
+  #legend .chip { display: inline-flex; align-items: center; gap: 0.3rem; }
+  #legend .swatch { width: 0.7rem; height: 0.7rem; border-radius: 3px; display: inline-block; }
+
+  #layout { display: flex; gap: 0; }
+  #calendar { flex: 1; padding: 0.8rem 1.2rem; background: #fff; margin: 0.8rem; border: 1px solid var(--border); border-radius: 6px; min-width: 0; }
+  .fc .fc-event { cursor: pointer; font-size: 0.75rem; }
+
+  /* Detail side panel */
+  #detail-panel {
+    width: 21rem; flex: none; margin: 0.8rem 0.8rem 0.8rem 0; padding: 0.9rem 1rem;
+    background: #fff; border: 1px solid var(--border); border-radius: 6px;
+    font-size: 0.85rem; align-self: flex-start; max-height: 85vh; overflow-y: auto;
+  }
+  #detail-panel h2 { margin: 0 0 0.2rem; font-size: 1rem; }
+  #detail-panel .close { float: right; border: none; background: none; font-size: 1rem; }
+  #detail-panel dl { margin: 0.5rem 0; }
+  #detail-panel dt { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; margin-top: 0.55rem; }
+  #detail-panel dd { margin: 0.1rem 0 0; word-break: break-word; }
+  #detail-panel code, #detail-panel pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.78rem; background: var(--bg); border-radius: 4px;
+  }
+  #detail-panel code { padding: 0.05rem 0.3rem; }
+  #detail-panel pre { padding: 0.5rem; overflow-x: auto; margin: 0.2rem 0 0; }
+  .status-badge { display: inline-block; padding: 0.05rem 0.5rem; border-radius: 999px; font-size: 0.75rem; border: 1px solid var(--border); text-transform: capitalize; }
+
+  /* Modal form */
+  #modal-backdrop {
+    position: fixed; inset: 0; background: rgba(20, 24, 30, 0.45);
+    display: flex; align-items: flex-start; justify-content: center; padding: 3vh 1rem; z-index: 50;
+  }
+  #procedure-form {
+    background: #fff; border-radius: 8px; padding: 1.1rem 1.3rem; width: 34rem; max-width: 100%;
+    max-height: 92vh; overflow-y: auto; font-size: 0.87rem;
+  }
+  #procedure-form h2 { margin: 0 0 0.8rem; font-size: 1.05rem; }
+  #procedure-form .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem 1rem; }
+  #procedure-form label { display: flex; flex-direction: column; gap: 2px; font-size: 0.75rem; color: var(--muted); }
+  #procedure-form label.wide { grid-column: 1 / -1; }
+  #procedure-form select, #procedure-form input, #procedure-form textarea {
+    font-size: 0.85rem; padding: 0.3rem 0.4rem; border: 1px solid var(--border); border-radius: 4px;
+    font-family: inherit;
+  }
+  #procedure-form textarea { min-height: 3.2rem; }
+  #active-types { display: flex; flex-direction: column; gap: 0.25rem; padding: 0.4rem 0.5rem;
+    border: 1px solid var(--border); border-radius: 4px; }
+  #active-types .type-option { display: flex; flex-direction: row; align-items: center; gap: 0.4rem;
+    font-size: 0.85rem; color: #1c2128; }
+  #active-types .hint { color: var(--muted); font-size: 0.78rem; }
+  #form-error {
+    display: none; margin: 0.7rem 0 0; padding: 0.5rem 0.7rem; border-radius: 4px;
+    background: #fdeaea; border: 1px solid #e6a3a3; color: #8c2f2f; white-space: pre-wrap;
+  }
+  #form-error.visible { display: block; }
+  .form-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 0.9rem; }
+  .muted { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>AIND Procedure Schedule</h1>
+  <p class="subtitle">
+    Prototype scheduling system — every event carries a persistent acquisition token (UUIDv7).
+    Read-only API + docs: <a href="/docs">/docs</a>
+  </p>
+
+  <div class="filters">
+    <label>Platform
+      <select id="filter-type"><option value="">All platforms</option></select>
+    </label>
+    <label>Instrument
+      <select id="filter-instrument"><option value="">All instruments</option></select>
+    </label>
+    <label>From
+      <input type="date" id="filter-start">
+    </label>
+    <label>To
+      <input type="date" id="filter-end">
+    </label>
+    <label>Subject contains
+      <input type="text" id="filter-subject" placeholder="e.g. testmouse1" size="12">
+    </label>
+    <button id="clear-filters" type="button">Clear filters</button>
+    <button id="add-btn" type="button" class="primary">Add procedure</button>
+  </div>
+
+  <div id="legend"></div>
+</header>
+
+<div id="layout">
+  <div id="calendar"></div>
+
+  <aside id="detail-panel" hidden>
+    <button class="close" type="button" title="Close" onclick="closeDetail()">&#10005;</button>
+    <h2 id="detail-title"></h2>
+    <span class="status-badge" id="detail-status"></span>
+    <dl id="detail-fields"></dl>
+    <button id="edit-btn" type="button">Edit</button>
+  </aside>
+</div>
+
+<div id="modal-backdrop" hidden>
+  <form id="procedure-form">
+    <h2 id="form-title">Add procedure</h2>
+    <div class="grid">
+      <label>Mouse
+        <select id="f-mouse" required></select>
+      </label>
+      <label>Instrument
+        <select id="f-instrument" required></select>
+      </label>
+      <label>Project
+        <select id="f-project" required></select>
+      </label>
+      <label>Scientific contact
+        <select id="f-contact" required></select>
+      </label>
+      <label class="wide">Experimenter(s) <span class="muted">(ctrl/cmd-click for multiple)</span>
+        <select id="f-experimenters" multiple size="3"></select>
+      </label>
+      <label>Scheduled start <span class="muted">(local time)</span>
+        <input type="datetime-local" id="f-start" required>
+      </label>
+      <label>Scheduled end <span class="muted">(local time)</span>
+        <input type="datetime-local" id="f-end" required>
+      </label>
+      <label class="wide">Active procedure types
+        <span class="muted">(only types compatible with the selected instrument)</span>
+        <div id="active-types"><span class="hint">Select an instrument first.</span></div>
+      </label>
+      <label>Status
+        <select id="f-status">
+          <option value="scheduled" selected>scheduled</option>
+          <option value="completed">completed</option>
+          <option value="cancelled">cancelled</option>
+          <option value="rescheduled">rescheduled</option>
+        </select>
+      </label>
+      <label class="wide">Protocols
+        <input type="text" id="f-protocols" placeholder="e.g. Modular probe insertion, 4 shanks; FIP dual-fiber">
+      </label>
+      <label class="wide">Notes
+        <textarea id="f-notes"></textarea>
+      </label>
+      <label class="wide">Planned config <span class="muted">(optional JSON)</span>
+        <textarea id="f-planned-config" placeholder='{"probe_count": 4}'></textarea>
+      </label>
+    </div>
+    <div id="form-error"></div>
+    <div class="form-actions">
+      <button type="button" onclick="closeModal()">Cancel</button>
+      <button type="submit" class="primary" id="form-submit">Create</button>
+    </div>
+  </form>
+</div>
+
+<script>
+'use strict';
+
+const API = '/session_schedule/api';
+
+// Stable color per procedure type, indexed by procedure_types.sort_order.
+const PALETTE = [
+  '#4c78a8', // 1 Acute extracellular electrophysiology
+  '#9d755d', // 2 Whole-brain 3D histology
+  '#54a24b', // 3 Cellular imaging
+  '#e45756', // 4 Fiber photometry (FIP)
+  '#b2457a', // 5 Fiber photometry (HSFP)
+  '#f58518', // 6 Patch foraging behavior
+  '#3c9d9b', // 7 Dynamic foraging behavior
+  '#7b6bb2', // 8 Whole-brain axonal imaging
+];
+
+// Lookup caches, filled by init().
+let procedureTypes = [];        // [{id, name, sort_order, ...}]
+let typeInfoByName = {};        // name -> {sort_order, color}
+let instruments = [];           // [{id, name, compatible_procedure_types, ...}]
+let mice = [], projects = [], users = [];
+
+let calendar = null;
+let eventSource = null;
+let currentDetail = null;       // record shown in the side panel
+let editingId = null;           // scheduled_procedure id when the modal edits
+
+async function fetchJSON(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`${url} -> HTTP ${response.status}`);
+  return response.json();
+}
+
+// ---------------------------------------------------------------------------
+// Bootstrapping
+// ---------------------------------------------------------------------------
+
+async function init() {
+  [procedureTypes, instruments, mice, projects, users] = await Promise.all([
+    fetchJSON(`${API}/procedure-types`),
+    fetchJSON(`${API}/instruments`),
+    fetchJSON(`${API}/mice`),
+    fetchJSON(`${API}/projects`),
+    fetchJSON(`${API}/users`),
+  ]);
+  for (const t of procedureTypes) {
+    typeInfoByName[t.name] = {
+      sort_order: t.sort_order,
+      color: PALETTE[(t.sort_order - 1) % PALETTE.length],
+    };
+  }
+  buildLegend();
+  populateFilters();
+  populateFormSelects();
+  initCalendar();
+  await loadEvents();
+}
+
+function buildLegend() {
+  const legend = document.getElementById('legend');
+  legend.innerHTML = '';
+  for (const t of procedureTypes) {
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    const swatch = document.createElement('span');
+    swatch.className = 'swatch';
+    swatch.style.background = typeInfoByName[t.name].color;
+    chip.append(swatch, document.createTextNode(t.name));
+    legend.appendChild(chip);
+  }
+}
+
+function fillSelect(select, rows, valueKey, labelKey, placeholder) {
+  if (placeholder !== undefined) {
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = placeholder;
+    select.appendChild(opt);
+  }
+  for (const row of rows) {
+    const opt = document.createElement('option');
+    opt.value = row[valueKey];
+    opt.textContent = row[labelKey];
+    select.appendChild(opt);
+  }
+}
+
+function populateFilters() {
+  fillSelect(document.getElementById('filter-type'), procedureTypes, 'id', 'name');
+  fillSelect(document.getElementById('filter-instrument'), instruments, 'id', 'name');
+}
+
+function populateFormSelects() {
+  fillSelect(document.getElementById('f-mouse'), mice, 'id', 'subject_id', 'Select…');
+  fillSelect(document.getElementById('f-instrument'), instruments, 'id', 'name', 'Select…');
+  fillSelect(document.getElementById('f-project'), projects, 'id', 'name', 'Select…');
+  fillSelect(document.getElementById('f-contact'), users, 'id', 'name', 'Select…');
+  fillSelect(document.getElementById('f-experimenters'), users, 'id', 'name');
+}
+
+// ---------------------------------------------------------------------------
+// Calendar (resource timeline: instruments as rows)
+// ---------------------------------------------------------------------------
+
+function initCalendar() {
+  calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+    schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
+    initialView: 'resourceTimelineWeek',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth',
+    },
+    resourceAreaHeaderContent: 'Instrument',
+    resourceAreaWidth: '13rem',
+    resources: instruments.map((i) => ({ id: i.id, title: i.name })),
+    resourceOrder: 'title',
+    height: 'auto',
+    nowIndicator: true,
+    scrollTime: '06:00:00',
+    eventClick: (info) => showDetail(info.event.id),
+  });
+  calendar.render();
+}
+
+function primaryTypeColor(activeTypeNames) {
+  // "Primary" = the active type with the lowest sort_order (stable mapping).
+  let best = null;
+  for (const name of activeTypeNames) {
+    const info = typeInfoByName[name];
+    if (info && (best === null || info.sort_order < best.sort_order)) best = info;
+  }
+  return best ? best.color : '#8892a0';
+}
+
+async function loadEvents() {
+  const params = new URLSearchParams();
+  const typeId = document.getElementById('filter-type').value;
+  const instrumentId = document.getElementById('filter-instrument').value;
+  const from = document.getElementById('filter-start').value;
+  const to = document.getElementById('filter-end').value;
+  if (typeId) params.set('procedure_type_id', typeId);
+  if (instrumentId) params.set('instrument_id', instrumentId);
+  if (from) params.set('start_after', `${from}T00:00:00Z`);
+  if (to) params.set('start_before', `${to}T23:59:59Z`);
+
+  let records = await fetchJSON(`${API}/scheduled-procedures?${params}`);
+
+  // Subject filter: client-side substring match on subject_id.
+  const subjectQuery = document.getElementById('filter-subject').value.trim().toLowerCase();
+  if (subjectQuery) {
+    records = records.filter((r) => r.mouse.subject_id.toLowerCase().includes(subjectQuery));
+  }
+
+  const events = records.map((r) => ({
+    id: r.id,
+    resourceId: r.instrument.id,
+    title: `${r.mouse.subject_id} · ${r.acquisition_type}`,
+    start: r.scheduled_start,
+    end: r.scheduled_end,
+    backgroundColor: primaryTypeColor(r.active_procedure_types),
+    borderColor: primaryTypeColor(r.active_procedure_types),
+  }));
+
+  if (eventSource) eventSource.remove();
+  eventSource = calendar.addEventSource(events);
+}
+
+// ---------------------------------------------------------------------------
+// Detail side panel
+// ---------------------------------------------------------------------------
+
+function fmtLocal(iso) {
+  return new Date(iso).toLocaleString([], {
+    dateStyle: 'medium', timeStyle: 'short',
+  });
+}
+
+async function showDetail(id) {
+  const record = await fetchJSON(`${API}/scheduled-procedures/${id}`);
+  currentDetail = record;
+
+  document.getElementById('detail-title').textContent =
+    `${record.mouse.subject_id} on ${record.instrument.name}`;
+  document.getElementById('detail-status').textContent = record.status;
+
+  const rows = [
+    ['Acquisition token (id)', `<code>${record.id}</code>`],
+    ['Subject', record.mouse.subject_id],
+    ['Instrument', `${record.instrument.name}${record.instrument.sipe_rig_name ? ` (${record.instrument.sipe_rig_name})` : ''}`],
+    ['Project', record.project.name],
+    ['Scientific contact', record.contact.name],
+    ['Experimenters', record.experimenters.map((e) => e.name).join(', ') || '—'],
+    ['Active platforms', record.active_procedure_types.join(', ')],
+    ['Acquisition type', record.acquisition_type],
+    ['Acquisition name', record.acquisition_name ?? '— (filled at acquisition time)'],
+    ['Scheduled', `${fmtLocal(record.scheduled_start)} → ${fmtLocal(record.scheduled_end)}`],
+    ['Ethics review (IACUC)', record.ethics_review_id ?? '—'],
+    ['Protocols', record.protocols ?? '—'],
+    ['Notes', record.notes ?? '—'],
+    ['Planned config', record.planned_config
+      ? `<pre>${JSON.stringify(record.planned_config, null, 2)}</pre>` : '—'],
+  ];
+  const dl = document.getElementById('detail-fields');
+  dl.innerHTML = '';
+  for (const [label, value] of rows) {
+    const dt = document.createElement('dt');
+    dt.textContent = label;
+    const dd = document.createElement('dd');
+    if (typeof value === 'string' && value.startsWith('<')) dd.innerHTML = value;
+    else dd.textContent = value;
+    dl.append(dt, dd);
+  }
+  document.getElementById('detail-panel').hidden = false;
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').hidden = true;
+  currentDetail = null;
+}
+
+// ---------------------------------------------------------------------------
+// Add / edit modal
+// ---------------------------------------------------------------------------
+
+function renderTypeCheckboxes(instrumentId, selectedNames = []) {
+  const box = document.getElementById('active-types');
+  box.innerHTML = '';
+  const instrument = instruments.find((i) => i.id === instrumentId);
+  if (!instrument) {
+    box.innerHTML = '<span class="hint">Select an instrument first.</span>';
+    return;
+  }
+  if (!instrument.compatible_procedure_types.length) {
+    box.innerHTML = '<span class="hint">This instrument has no compatible procedure types.</span>';
+    return;
+  }
+  for (const t of instrument.compatible_procedure_types) {
+    const label = document.createElement('label');
+    label.className = 'type-option';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = t.id;
+    cb.checked = selectedNames.includes(t.name);
+    const swatch = document.createElement('span');
+    swatch.className = 'swatch';
+    swatch.style.cssText =
+      `width:.65rem;height:.65rem;border-radius:3px;background:${typeInfoByName[t.name]?.color ?? '#8892a0'}`;
+    label.append(cb, swatch, document.createTextNode(t.name));
+    box.appendChild(label);
+  }
+}
+
+function toLocalInputValue(iso) {
+  const d = new Date(iso);
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` +
+         `T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function openModal(record = null) {
+  editingId = record ? record.id : null;
+  document.getElementById('form-title').textContent =
+    record ? `Edit procedure ${record.id.slice(0, 8)}…` : 'Add procedure';
+  document.getElementById('form-submit').textContent = record ? 'Save' : 'Create';
+  hideFormError();
+
+  document.getElementById('f-mouse').value = record ? record.mouse.id : '';
+  document.getElementById('f-instrument').value = record ? record.instrument.id : '';
+  document.getElementById('f-project').value = record ? record.project.id : '';
+  document.getElementById('f-contact').value = record ? record.contact.id : '';
+  const experimenterIds = record ? record.experimenters.map((e) => e.id) : [];
+  for (const opt of document.getElementById('f-experimenters').options) {
+    opt.selected = experimenterIds.includes(opt.value);
+  }
+  document.getElementById('f-start').value = record ? toLocalInputValue(record.scheduled_start) : '';
+  document.getElementById('f-end').value = record ? toLocalInputValue(record.scheduled_end) : '';
+  document.getElementById('f-status').value = record ? record.status : 'scheduled';
+  document.getElementById('f-protocols').value = record?.protocols ?? '';
+  document.getElementById('f-notes').value = record?.notes ?? '';
+  document.getElementById('f-planned-config').value =
+    record?.planned_config ? JSON.stringify(record.planned_config, null, 2) : '';
+  renderTypeCheckboxes(record ? record.instrument.id : '', record ? record.active_procedure_types : []);
+
+  document.getElementById('modal-backdrop').hidden = false;
+}
+
+function closeModal() {
+  document.getElementById('modal-backdrop').hidden = true;
+  editingId = null;
+}
+
+function showFormError(message) {
+  const box = document.getElementById('form-error');
+  box.textContent = message;
+  box.classList.add('visible');
+}
+
+function hideFormError() {
+  document.getElementById('form-error').classList.remove('visible');
+}
+
+async function submitForm(event) {
+  event.preventDefault();
+  hideFormError();
+
+  const activeTypeIds = [...document.querySelectorAll('#active-types input:checked')]
+    .map((cb) => cb.value);
+  if (!activeTypeIds.length) {
+    showFormError('Select at least one active procedure type.');
+    return;
+  }
+
+  let plannedConfig = null;
+  const rawConfig = document.getElementById('f-planned-config').value.trim();
+  if (rawConfig) {
+    try {
+      plannedConfig = JSON.parse(rawConfig);
+    } catch (err) {
+      showFormError(`Planned config is not valid JSON: ${err.message}`);
+      return;
+    }
+  }
+
+  // NOTE: the write body is constructed explicitly — never echo a read
+  // payload back, because server-computed fields (id, acquisition_type,
+  // created_at, updated_at) are rejected by the admin API.
+  const body = {
+    mouse_id: document.getElementById('f-mouse').value,
+    instrument_id: document.getElementById('f-instrument').value,
+    project_id: document.getElementById('f-project').value,
+    contact_user_id: document.getElementById('f-contact').value,
+    experimenter_user_ids: [...document.getElementById('f-experimenters').selectedOptions]
+      .map((o) => o.value),
+    // datetime-local is local time; toISOString() converts to UTC "Z".
+    scheduled_start: new Date(document.getElementById('f-start').value).toISOString(),
+    scheduled_end: new Date(document.getElementById('f-end').value).toISOString(),
+    active_procedure_type_ids: activeTypeIds,
+    status: document.getElementById('f-status').value,
+    protocols: document.getElementById('f-protocols').value.trim() || null,
+    notes: document.getElementById('f-notes').value.trim() || null,
+    planned_config: plannedConfig,
+    // Preserved across edits; not editable in the form.
+    acquisition_name: editingId ? currentDetail?.acquisition_name ?? null : null,
+    ethics_review_id: editingId ? currentDetail?.ethics_review_id ?? null : null,
+  };
+
+  const url = editingId
+    ? `${API}/admin/scheduled-procedures/${editingId}`
+    : `${API}/admin/scheduled-procedures`;
+  const response = await fetch(url, {
+    method: editingId ? 'PUT' : 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    let message = `HTTP ${response.status}`;
+    try {
+      const err = await response.json();
+      if (typeof err.detail === 'string') {
+        // The store's documented shape: {"error": code, "detail": message}
+        message = err.error ? `${err.error}: ${err.detail}` : err.detail;
+      } else if (Array.isArray(err.detail)) {
+        // FastAPI request-validation errors.
+        message = err.detail
+          .map((e) => `${(e.loc || []).join('.')}: ${e.msg}`)
+          .join('\n');
+      }
+    } catch { /* keep the HTTP status message */ }
+    showFormError(message);
+    return;
+  }
+
+  const record = await response.json();
+  closeModal();
+  await loadEvents();
+  showDetail(record.id);
+}
+
+// ---------------------------------------------------------------------------
+// Wiring
+// ---------------------------------------------------------------------------
+
+document.getElementById('filter-type').addEventListener('change', loadEvents);
+document.getElementById('filter-instrument').addEventListener('change', loadEvents);
+document.getElementById('filter-start').addEventListener('change', loadEvents);
+document.getElementById('filter-end').addEventListener('change', loadEvents);
+
+let subjectDebounce = null;
+document.getElementById('filter-subject').addEventListener('input', () => {
+  clearTimeout(subjectDebounce);
+  subjectDebounce = setTimeout(loadEvents, 250);
+});
+
+document.getElementById('clear-filters').addEventListener('click', () => {
+  for (const id of ['filter-type', 'filter-instrument', 'filter-start', 'filter-end', 'filter-subject']) {
+    document.getElementById(id).value = '';
+  }
+  loadEvents();
+});
+
+document.getElementById('add-btn').addEventListener('click', () => openModal());
+document.getElementById('edit-btn').addEventListener('click', () => {
+  if (currentDetail) openModal(currentDetail);
+});
+document.getElementById('f-instrument').addEventListener('change', (e) => {
+  renderTypeCheckboxes(e.target.value);
+});
+document.getElementById('procedure-form').addEventListener('submit', submitForm);
+document.getElementById('modal-backdrop').addEventListener('click', (e) => {
+  if (e.target.id === 'modal-backdrop') closeModal();
+});
+
+init().catch((err) => {
+  document.getElementById('calendar').innerHTML =
+    `<p style="color:#8c2f2f">Failed to load the schedule: ${err.message}</p>`;
+});
+</script>
+</body>
+</html>

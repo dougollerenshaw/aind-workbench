@@ -16,7 +16,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 
 # Make `scripts/` importable when running under uvicorn from the project dir.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -25,6 +25,10 @@ from app.admin_api import router as admin_router  # noqa: E402
 from app.db import DEFAULT_DB_PATH, Database  # noqa: E402
 from app.read_api import router as read_router  # noqa: E402
 from app.store import ValidationError  # noqa: E402
+
+# The calendar SPA: a single vanilla-JS page (FullCalendar from CDN, no
+# build toolchain), kept in template.html per house style.
+TEMPLATE_PATH = Path(__file__).resolve().parent.parent / "template.html"
 
 DESCRIPTION = """
 Prototype procedure-scheduling system for AIND acquisitions
@@ -69,6 +73,15 @@ def create_app(
     application.state.db = database
     application.include_router(read_router)
     application.include_router(admin_router)
+
+    @application.get("/session_schedule/", include_in_schema=False)
+    def calendar_page() -> HTMLResponse:
+        """The calendar SPA (Phase 2 of DESIGN.md)."""
+        return HTMLResponse(TEMPLATE_PATH.read_text(encoding="utf-8"))
+
+    @application.get("/", include_in_schema=False)
+    def root() -> RedirectResponse:
+        return RedirectResponse("/session_schedule/")
 
     @application.exception_handler(ValidationError)
     async def rejected_write(_: Request, exc: ValidationError) -> JSONResponse:

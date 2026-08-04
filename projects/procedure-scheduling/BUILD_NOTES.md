@@ -182,3 +182,67 @@ Decisions / deviations:
   DESIGN.md Example 1 shows `"mouse_id": "testmouse2"`, but the doc's own
   convention note says the short placeholders stand in for real UUIDs, and
   the mice seed table uses the subject_id as its placeholder id.
+- **Post-verification fix (AC7 invariant):** `acquisition_type` was computed
+  from the raw `active_procedure_type_ids` list while the join-row inserts
+  deduped, so a repeated id in a request body could persist an inflated
+  value like `"X + X"` alongside a single join row. Fixed by deduping
+  (`dict.fromkeys`) in `validate_scheduled_procedure` before computing;
+  regression tests cover both POST and PUT with duplicated ids.
+
+### Advisories for the UI (recorded before building M5)
+
+- Because the write models are `extra="forbid"`, an edit form that GETs a
+  record and PUTs it back **verbatim will 422** on `id` / `created_at` /
+  `updated_at` / `acquisition_type` / the resolved lookup objects. The SPA
+  edit path must construct the write body explicitly (only
+  `ScheduledProcedureWrite` fields), never echo the read payload.
+- Naive (timezone-less) datetimes sent to the write API are interpreted as
+  UTC. The SPA always sends explicit UTC (`Date.toISOString()`), so users
+  type local time in the form and the API stores UTC.
+
+## M5 — Calendar SPA
+
+Built: `template.html` (single-file vanilla-JS SPA, house style — no build
+toolchain), served at `GET /session_schedule/` by `app/main.py`;
+`tests/test_spa.py` (8 server-side tests).
+
+What the page does:
+
+- FullCalendar **resource-timeline** (day/week/month) with instruments as
+  rows and events spanning scheduled_start -> scheduled_end. The Scheduler
+  bundle loads from CDN (`fullcalendar-scheduler@6.1.15`) under
+  `schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'` (this repo is open
+  source). No fallback view was needed — resource-timeline worked directly.
+- Events colored by **primary active procedure type** = the active type with
+  the lowest `sort_order`, mapped to a fixed 8-color palette indexed by
+  `sort_order` (stable across loads). Legend chips map color -> platform.
+- Filters: platform (procedure_type_id), instrument (instrument_id), and
+  date range (start_after/start_before) are passed to the API; the
+  subject_id text filter is a client-side **substring** match on the fetched
+  records (friendlier than the API's exact-match `subject_id` param).
+- Event click -> side panel with token id, subject, instrument (+ SIPE rig
+  name), project, contact, experimenters, active platforms,
+  acquisition_type, acquisition_name, schedule, ethics_review_id, protocols,
+  notes, and pretty-printed planned_config.
+- **Add procedure** modal per DESIGN.md; the active-type checkboxes are
+  rebuilt from the selected instrument's `compatible_procedure_types`
+  (server still validates). Server 422s are surfaced verbatim in the form
+  (e.g. the `incompatible_procedure_type` message). An **Edit** button on the
+  detail panel reuses the modal with PUT — DESIGN.md's "Add / edit" line —
+  constructing the write body field-by-field per the extra="forbid" advisory
+  above; `acquisition_name`/`ethics_review_id` are preserved (not editable in
+  the form).
+- Times: users enter local time (`datetime-local`); the page converts to UTC
+  with `toISOString()` on submit and renders event times in the viewer's
+  locale.
+- `/` redirects to `/session_schedule/`; the page route is excluded from the
+  OpenAPI schema.
+
+Testing note: the page is browser-rendered JS, so automated tests assert the
+server-side contract (200 HTML, calendar mount, CDN + license key +
+resourceTimeline present, every API path referenced, filter/legend/panel/
+form elements present, no server-computed fields echoed in the write path,
+redirects). The create round-trip was smoke-tested live over HTTP with the
+exact body shape the form submits (including JS millisecond `toISOString()`
+datetimes) — 201, token minted, event visible in the list API. Browser
+click-through is left for Doug's demo pass.

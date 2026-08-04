@@ -193,6 +193,49 @@ def test_other_server_side_fields_rejected_in_body(client, field):
     assert response.status_code == 422
 
 
+def test_post_with_duplicate_type_ids_dedupes_acquisition_type(client):
+    """Regression (M4 verifier): a repeated active_procedure_type_id must not
+    inflate acquisition_type — it is computed from the DEDUPED names, in
+    lockstep with the deduped join-row inserts."""
+    ephys = _id(client, "procedure_types", "name",
+                "Acute extracellular electrophysiology (modular insertion)")
+    fip = _id(client, "procedure_types", "name", "Fiber photometry (FIP)")
+
+    response = client.post(
+        f"{ADMIN}/scheduled-procedures",
+        json=_example_1_body(client, active_procedure_type_ids=[ephys, ephys, fip, ephys]),
+    )
+    assert response.status_code == 201
+    record = response.json()
+    assert record["acquisition_type"] == (
+        "Acute extracellular electrophysiology (modular insertion) "
+        "+ Fiber photometry (FIP)"
+    )
+    assert record["active_procedure_types"] == [
+        "Acute extracellular electrophysiology (modular insertion)",
+        "Fiber photometry (FIP)",
+    ]
+    assert _join_counts(client, record["id"])[0] == 2  # one row per distinct type
+
+
+def test_put_with_duplicate_type_ids_dedupes_acquisition_type(client):
+    """Same regression through the PUT path, with a single repeated type."""
+    created = client.post(
+        f"{ADMIN}/scheduled-procedures", json=_example_1_body(client)
+    ).json()
+    fip = _id(client, "procedure_types", "name", "Fiber photometry (FIP)")
+
+    response = client.put(
+        f"{ADMIN}/scheduled-procedures/{created['id']}",
+        json=_example_1_body(client, active_procedure_type_ids=[fip, fip, fip]),
+    )
+    assert response.status_code == 200
+    record = response.json()
+    assert record["acquisition_type"] == "Fiber photometry (FIP)"
+    assert record["active_procedure_types"] == ["Fiber photometry (FIP)"]
+    assert _join_counts(client, record["id"])[0] == 1
+
+
 def test_acquisition_type_recomputed_on_put(client):
     created = client.post(
         f"{ADMIN}/scheduled-procedures", json=_example_1_body(client)
