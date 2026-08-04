@@ -439,3 +439,34 @@ to this folder for M8):
 Operational note (also in the README): the launcher holds the scheduler's
 DuckDB open once it has served a scheduler request — stop it before running
 `scripts/seed.py` / `scripts/export_parquet.py` on the default DB.
+
+## M9 — First-browser-pass fixes (modal CSS bug + duration input)
+
+**Bug (blocking): the add/edit modal was permanently open.** Root cause:
+the stylesheet declared `#modal-backdrop { display: flex; ... }`. Any
+author `display` rule beats the UA stylesheet's `[hidden] { display: none }`,
+so the `hidden` attribute (set in the markup and toggled by
+`openModal`/`closeModal`) had no effect — the modal was visible from page
+load and Cancel/Create appeared to do nothing. Fix: the rule is now
+`#modal-backdrop:not([hidden]) { ... }`, so the flex layout only applies
+when the element is shown. A stylesheet audit confirmed the backdrop was
+the only element toggled via `.hidden` that also had an author `display`
+rule (`#detail-panel` has none). A static regression test now parses the
+CSS and asserts every `.hidden`-toggled id either has no author `display`
+rule or guards it with `[hidden]`, and that the specific
+`:not([hidden])` fix is present.
+
+**Lesson learned:** this is exactly the class of bug server-side tests
+structurally cannot catch — every DOM/wiring assertion passed while the
+rendered page was unusable. It took Doug's first real browser pass to see
+it. Anything beyond static page-contract checks needs an actual browser
+(even one manual pass, or Playwright if this outlives the prototype).
+
+**Feature (Doug's request): duration instead of explicit end time.** The
+form now takes Scheduled start (datetime-local, as before) + Duration in
+hours (numeric, step 0.25, min 0.25, default 2). The client computes
+`scheduled_end = start + duration` before POST/PUT — the API contract is
+unchanged (the server still receives and validates `scheduled_start` +
+`scheduled_end`; no server changes). Edit mode derives the duration field
+from the record's `end - start`. A live hint under the fields shows the
+computed end time in local time.

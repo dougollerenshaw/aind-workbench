@@ -74,8 +74,12 @@
   #detail-panel pre { padding: 0.5rem; overflow-x: auto; margin: 0.2rem 0 0; }
   .status-badge { display: inline-block; padding: 0.05rem 0.5rem; border-radius: 999px; font-size: 0.75rem; border: 1px solid var(--border); text-transform: capitalize; }
 
-  /* Modal form */
-  #modal-backdrop {
+  /* Modal form. The :not([hidden]) guard is load-bearing: a bare
+     `#modal-backdrop { display: flex }` author rule would override the UA
+     stylesheet's `[hidden] { display: none }`, leaving the modal permanently
+     visible even with the hidden attribute set (real bug, found in the first
+     browser pass). Only apply the flex layout when the element is shown. */
+  #modal-backdrop:not([hidden]) {
     position: fixed; inset: 0; background: rgba(20, 24, 30, 0.45);
     display: flex; align-items: flex-start; justify-content: center; padding: 3vh 1rem; z-index: 50;
   }
@@ -172,9 +176,10 @@
       <label>Scheduled start <span class="muted">(local time)</span>
         <input type="datetime-local" id="f-start" required>
       </label>
-      <label>Scheduled end <span class="muted">(local time)</span>
-        <input type="datetime-local" id="f-end" required>
+      <label>Duration <span class="muted">(hours)</span>
+        <input type="number" id="f-duration" min="0.25" step="0.25" value="2" required>
       </label>
+      <div id="end-hint" class="muted" style="grid-column: 1 / -1; font-size: 0.78rem;"></div>
       <label class="wide">Active procedure types
         <span class="muted">(only types compatible with the selected instrument)</span>
         <div id="active-types"><span class="hint">Select an instrument first.</span></div>
@@ -484,6 +489,23 @@ function toLocalInputValue(iso) {
          `T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
+// The form takes start + duration; scheduled_end is computed client-side as
+// start + duration hours. The API contract is unchanged (it still receives
+// scheduled_start and scheduled_end).
+function computedEndDate() {
+  const startValue = document.getElementById('f-start').value;
+  const hours = parseFloat(document.getElementById('f-duration').value);
+  if (!startValue || !(hours > 0)) return null;
+  return new Date(new Date(startValue).getTime() + hours * 3600 * 1000);
+}
+
+function updateEndHint() {
+  const end = computedEndDate();
+  document.getElementById('end-hint').textContent = end
+    ? `Ends ${end.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })} (local time)`
+    : '';
+}
+
 function openModal(record = null) {
   editingId = record ? record.id : null;
   document.getElementById('form-title').textContent =
@@ -500,7 +522,11 @@ function openModal(record = null) {
     opt.selected = experimenterIds.includes(opt.value);
   }
   document.getElementById('f-start').value = record ? toLocalInputValue(record.scheduled_start) : '';
-  document.getElementById('f-end').value = record ? toLocalInputValue(record.scheduled_end) : '';
+  // Duration is derived from the record's end - start when editing.
+  document.getElementById('f-duration').value = record
+    ? String((new Date(record.scheduled_end) - new Date(record.scheduled_start)) / 3600000)
+    : '2';
+  updateEndHint();
   document.getElementById('f-status').value = record ? record.status : 'scheduled';
   document.getElementById('f-protocols').value = record?.protocols ?? '';
   document.getElementById('f-notes').value = record?.notes ?? '';
@@ -537,6 +563,12 @@ async function submitForm(event) {
     return;
   }
 
+  const endDate = computedEndDate();
+  if (!endDate) {
+    showFormError('Enter a start time and a positive duration.');
+    return;
+  }
+
   let plannedConfig = null;
   const rawConfig = document.getElementById('f-planned-config').value.trim();
   if (rawConfig) {
@@ -559,8 +591,9 @@ async function submitForm(event) {
     experimenter_user_ids: [...document.getElementById('f-experimenters').selectedOptions]
       .map((o) => o.value),
     // datetime-local is local time; toISOString() converts to UTC "Z".
+    // scheduled_end is computed client-side from start + duration.
     scheduled_start: new Date(document.getElementById('f-start').value).toISOString(),
-    scheduled_end: new Date(document.getElementById('f-end').value).toISOString(),
+    scheduled_end: endDate.toISOString(),
     active_procedure_type_ids: activeTypeIds,
     status: document.getElementById('f-status').value,
     protocols: document.getElementById('f-protocols').value.trim() || null,
@@ -633,6 +666,8 @@ document.getElementById('edit-btn').addEventListener('click', () => {
 document.getElementById('f-instrument').addEventListener('change', (e) => {
   renderTypeCheckboxes(e.target.value);
 });
+document.getElementById('f-start').addEventListener('input', updateEndHint);
+document.getElementById('f-duration').addEventListener('input', updateEndHint);
 document.getElementById('procedure-form').addEventListener('submit', submitForm);
 document.getElementById('modal-backdrop').addEventListener('click', (e) => {
   if (e.target.id === 'modal-backdrop') closeModal();

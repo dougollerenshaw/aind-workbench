@@ -107,6 +107,50 @@ def test_detail_panel_renders_user_content_as_text(html):
     assert "textContent" in renderer
 
 
+def test_hidden_toggled_elements_have_no_unguarded_display_rules(html):
+    """Regression for the permanently-open modal (found in the first real
+    browser pass): an author `display:` rule on an element toggled via the
+    `hidden` attribute overrides the UA's `[hidden] { display: none }`, so
+    the element can never be hidden. Every id the JS toggles via `.hidden`
+    must either have no author display rule or guard it with [hidden] /
+    :not([hidden])."""
+    toggled = set(re.findall(r"getElementById\('([\w-]+)'\)\.hidden\s*=", html))
+    assert {"modal-backdrop", "detail-panel"} <= toggled
+
+    style = html[html.index("<style>") : html.index("</style>")]
+    rules = re.findall(r"([^{}]+)\{([^{}]*)\}", style)
+    for element_id in toggled:
+        for selector, body in rules:
+            for sel in selector.split(","):
+                sel = sel.strip()
+                # Rules that style the element ITSELF (not descendants — no
+                # combinator), e.g. "#modal-backdrop", "#modal-backdrop:hover".
+                if re.match(rf"#{element_id}(?![\w-])", sel) and " " not in sel:
+                    if "display" in body:
+                        assert "[hidden]" in sel, (
+                            f"`{sel}` sets display without a [hidden] guard; "
+                            f"the hidden attribute would stop working"
+                        )
+    # And the specific fix is present, so this exact regression can't return.
+    assert "#modal-backdrop:not([hidden])" in style
+
+
+def test_form_uses_start_plus_duration(html):
+    """The form takes start + duration (hours); scheduled_end is computed
+    client-side, keeping the API contract (start + end) unchanged."""
+    assert 'id="f-duration"' in html
+    assert 'type="number"' in html
+    assert 'id="f-end"' not in html, "explicit end input was replaced by duration"
+    # The submit body still sends a computed scheduled_end.
+    match = re.search(r"const body = \{(.*?)\};", html, re.S)
+    assert match and "scheduled_end: endDate.toISOString()" in match.group(1)
+    # Edit mode derives duration from the record's end - start.
+    assert "record.scheduled_end) - new Date(record.scheduled_start)" in html
+    # Live hint shows the computed end time.
+    assert 'id="end-hint"' in html
+    assert "updateEndHint" in html
+
+
 def test_trailing_slash_and_root_redirects(client):
     bare = client.get("/session_schedule", follow_redirects=False)
     assert bare.status_code in (301, 307)
