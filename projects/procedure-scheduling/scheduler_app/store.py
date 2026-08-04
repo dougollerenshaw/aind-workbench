@@ -19,7 +19,7 @@ import json
 from datetime import datetime
 from typing import Any, Iterable, Sequence
 
-from app.db import Database, new_uuid, new_uuid7, utcnow
+from scheduler_app.db import Database, new_uuid, new_uuid7, utcnow
 
 ACQUISITION_TYPE_SEPARATOR = " + "
 

@@ -35,8 +35,8 @@ from pathlib import Path
 # Allow `uv run python scripts/seed.py` from the project root.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.db import DEFAULT_DB_PATH, TABLES, Database  # noqa: E402
-from app.store import (  # noqa: E402
+from scheduler_app.db import DEFAULT_DB_PATH, TABLES, Database  # noqa: E402
+from scheduler_app.store import (  # noqa: E402
     create_scheduled_procedure,
     ensure_instrument_compatibility,
     find_scheduled_procedure,

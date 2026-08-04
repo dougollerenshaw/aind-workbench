@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 import duckdb
 import pytest
 
-from app.db import (
+from scheduler_app.db import (
     TABLES,
     Database,
     create_schema,

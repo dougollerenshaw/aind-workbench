@@ -9,8 +9,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.db import Database
-from app.store import compute_acquisition_type
+from scheduler_app.db import Database
+from scheduler_app.store import compute_acquisition_type
 from scripts.seed import (
     CANONICAL_PROCEDURES,
     EXTRA_PROCEDURES,

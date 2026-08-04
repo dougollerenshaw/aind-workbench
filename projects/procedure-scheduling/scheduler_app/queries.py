@@ -14,7 +14,7 @@ from __future__ import annotations
 import json
 from datetime import datetime, timezone
 
-from app.db import Database
+from scheduler_app.db import Database
 
 # ---------------------------------------------------------------------------
 # Helpers

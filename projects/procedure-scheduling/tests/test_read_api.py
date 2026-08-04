@@ -15,7 +15,7 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.main import create_app
+from scheduler_app.main import create_app
 from scripts.seed import seed_database
 
 NOW = datetime.now(timezone.utc)
@@ -423,8 +423,10 @@ def test_next_acquisition_unknown_animal_is_404(client):
 
 
 def test_docs_and_openapi_reachable(client):
-    assert client.get("/docs").status_code == 200
-    openapi = client.get("/openapi.json")
+    # Docs live under the /session_schedule prefix so they work both
+    # standalone and behind the tool launcher.
+    assert client.get("/session_schedule/docs").status_code == 200
+    openapi = client.get("/session_schedule/openapi.json")
     assert openapi.status_code == 200
     paths = openapi.json()["paths"]
     assert f"{API}/scheduled-procedures" in paths

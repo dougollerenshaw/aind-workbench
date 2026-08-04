@@ -19,9 +19,9 @@ from datetime import datetime
 
 from fastapi import APIRouter, HTTPException, Query, Request
 
-from app import queries
-from app.db import Database, utcnow
-from app.schemas import (
+from scheduler_app import queries
+from scheduler_app.db import Database, utcnow
+from scheduler_app.schemas import (
     InstrumentOut,
     MouseOut,
     NextAcquisitionOut,

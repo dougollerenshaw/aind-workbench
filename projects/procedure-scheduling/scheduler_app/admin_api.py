@@ -17,10 +17,10 @@ from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException, Request, Response
 
-from app import queries, store
-from app.db import Database
-from app.queries import ensure_utc
-from app.schemas import (
+from scheduler_app import queries, store
+from scheduler_app.db import Database
+from scheduler_app.queries import ensure_utc
+from scheduler_app.schemas import (
     CompatibilityCreate,
     InstrumentCreate,
     InstrumentOut,

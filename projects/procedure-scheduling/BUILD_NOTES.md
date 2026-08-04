@@ -28,23 +28,39 @@ independent verification pass. Nothing is blocked.
 - README with setup, CLI options, VM remote-access, and the Dataverse
   mapping; OpenAPI docs at `/docs` with tagged sections.
 
-**Run it on the VM:**
+**Run it (deployed, primary):** the scheduler is mounted in the AIND tool
+launcher (`projects/tool-launcher/`, M8) — on the VM it lives at
+`http://10.128.142.221:8080/session_schedule/` (docs at
+`.../session_schedule/docs`) alongside the other tools.
+
+**Run it standalone (dev):**
 
 ```bash
 cd projects/procedure-scheduling
 uv sync
 uv run python app.py            # binds 0.0.0.0:8000, auto-seeds if empty
 # UI:   http://<vm_ip>:8000/session_schedule/   (hostname -I for the IP)
-# Docs: http://<vm_ip>:8000/docs
+# Docs: http://<vm_ip>:8000/session_schedule/docs
 uv run pytest                   # full test suite
 uv run python scripts/seed.py --reset          # fresh demo data (optional)
 uv run python scripts/export_parquet.py        # Parquet -> data/parquet/
 ```
 
+**DuckDB is single-writer:** stop the app (and the tool launcher, if it has
+the scheduler's DB open) before running `scripts/seed.py` or
+`scripts/export_parquet.py` against the same file, or DuckDB fails with
+`IOException: Could not set lock`.
+
 **Deferred (per DESIGN.md, intentionally not built):** auto Acquisition-log
 generation, cancellation/reschedule-reason capture, PowerPlatform
 notifications, SmartSPIM sub-workflows, auth. No Dataverse/network
-integration of any kind — local DuckDB + synthetic data only.
+integration of any kind — local DuckDB + synthetic data only. Also
+deferred: the `run.sh` convenience script and optional systemd unit
+mentioned in DESIGN.md's Deployment section — the M1 notes said the entry
+point question would settle it, but the scripts themselves were never
+built; the tool launcher (M8) is now the actual deployment vehicle, run
+under tmux per its README, so they're redundant unless someone wants the
+scheduler to survive reboots independently of the launcher.
 
 **Notable deviations from DESIGN.md** (each detailed in its milestone
 section below): no native DuckDB FK constraints (app-enforced; DuckDB's
@@ -366,3 +382,60 @@ Small follow-ups from the M6 review folded in: the Parquet
 writer-vs-reader decision is now under a labeled deviation bullet in the M6
 section, and the SPA's bootstrap error handler renders via `textContent`
 (the last interpolating `innerHTML`).
+
+## M8 — Tool-launcher integration
+
+The scheduler is now mounted in the AIND tool launcher
+(`projects/tool-launcher/launcher.py`, a werkzeug `DispatcherMiddleware`
+serving every internal tool on port 8080), reachable at
+`http://10.128.142.221:8080/session_schedule/`. Changes on both sides:
+
+Scheduler side (this project):
+
+- **Package renamed `app/` -> `scheduler_app/`.** The launcher imports
+  fiber-schematic-viewer's Flask app as `from app import app`; with this
+  project on the same sys.path, a package named `app` (or our top-level
+  `app.py`) colliding with that module would be a landmine. `scheduler_app`
+  is unambiguous. The user-facing entry points are unchanged
+  (`uv run python app.py`; uvicorn form is now
+  `uv run uvicorn scheduler_app.main:app`). Historical references to
+  `app/...` paths in the milestone notes below should be read as
+  `scheduler_app/...`.
+- **OpenAPI docs moved under the prefix:** `/session_schedule/docs`,
+  `/session_schedule/redoc`, `/session_schedule/openapi.json` (previously
+  `/docs` etc.). The launcher forwards only `/session_schedule/*` to this
+  app, so everything the app serves must live under that prefix; standalone
+  behavior is identical. The root `/` redirect remains for standalone
+  convenience. README, template link, and tests updated.
+
+Launcher side (`projects/tool-launcher/` — write scope explicitly widened
+to this folder for M8):
+
+- Added runtime deps to its pyproject: `a2wsgi` (ASGI->WSGI bridge),
+  `fastapi`, `pydantic`, `duckdb`, `uuid-utils`, `pytz` (what
+  `scheduler_app` imports at runtime; deliberately NOT `pyarrow`/`uvicorn`,
+  which only the export script / standalone CLI use). `uv.lock` updated.
+- `launcher.py`: the procedure-scheduling dir is **appended** (not
+  inserted at the front) to sys.path, with a comment — its top-level
+  `app.py` must never shadow the fiber viewer's `app` module. The FastAPI
+  app is built with an absolute DB path
+  (`projects/procedure-scheduling/data/procedure_scheduling.duckdb`) so the
+  launcher's cwd doesn't matter, wrapped in `a2wsgi.ASGIMiddleware`, and
+  mounted at `/session_schedule`.
+- **Prefix shim:** `DispatcherMiddleware` strips the mount prefix into
+  `SCRIPT_NAME`, but the scheduler's routes are defined WITH the
+  `/session_schedule` prefix (it also runs standalone). A tiny WSGI shim
+  re-prepends the prefix to `PATH_INFO` (and empties `SCRIPT_NAME`) before
+  calling the wrapped app.
+- **Lazy creation:** the werkzeug reloader (`use_reloader=True`) imports
+  `launcher.py` in BOTH the watcher process and the serving child; opening
+  DuckDB at import time in both would fail (single-writer file lock). The
+  scheduler app is therefore created on the first request, which only ever
+  happens in the serving child. Schema creation stays idempotent and
+  auto-seed only fires on an empty DB, so reloads are safe.
+- Landing page `<li>` and the startup print list gained the scheduler
+  entry.
+
+Operational note (also in the README): the launcher holds the scheduler's
+DuckDB open once it has served a scheduler request — stop it before running
+`scripts/seed.py` / `scripts/export_parquet.py` on the default DB.

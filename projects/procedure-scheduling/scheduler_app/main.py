@@ -1,12 +1,14 @@
 """FastAPI application factory for the procedure-scheduling prototype.
 
-Run it either way:
+Run it standalone either way:
 
     uv run python app.py [--host 0.0.0.0] [--port 8000] [--db-path ...]
-    uv run uvicorn app.main:app [--host 0.0.0.0] [--port 8000]
+    uv run uvicorn scheduler_app.main:app [--host 0.0.0.0] [--port 8000]
 
-Everything lives under ``/session_schedule``; the interactive OpenAPI page
-is at ``/docs``.
+Everything — the SPA, the API, and the interactive OpenAPI page
+(``/session_schedule/docs``) — lives under the ``/session_schedule`` prefix,
+so the app behaves identically standalone and mounted behind the AIND tool
+launcher (projects/tool-launcher), which dispatches that prefix to this app.
 """
 
 from __future__ import annotations
@@ -21,10 +23,10 @@ from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 # Make `scripts/` importable when running under uvicorn from the project dir.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.admin_api import router as admin_router  # noqa: E402
-from app.db import DEFAULT_DB_PATH, Database  # noqa: E402
-from app.read_api import router as read_router  # noqa: E402
-from app.store import ValidationError  # noqa: E402
+from scheduler_app.admin_api import router as admin_router  # noqa: E402
+from scheduler_app.db import DEFAULT_DB_PATH, Database  # noqa: E402
+from scheduler_app.read_api import router as read_router  # noqa: E402
+from scheduler_app.store import ValidationError  # noqa: E402
 
 # The calendar SPA: a single vanilla-JS page (FullCalendar from CDN, no
 # build toolchain), kept in template.html per house style.
@@ -69,6 +71,12 @@ def create_app(
         description=DESCRIPTION,
         version="0.1.0",
         lifespan=lifespan,
+        # Docs live under the /session_schedule prefix too, so they are
+        # reachable both standalone and through the tool launcher (which
+        # forwards only /session_schedule/* to this app).
+        docs_url="/session_schedule/docs",
+        redoc_url="/session_schedule/redoc",
+        openapi_url="/session_schedule/openapi.json",
         openapi_tags=[
             {
                 "name": "Public read API",
@@ -116,9 +124,9 @@ def create_app(
     return application
 
 
-# Lazy module attribute so `uvicorn app.main:app` works without importing
-# this module causing side effects (creating/seeding the default database)
-# for everyone else who imports create_app — e.g. the tests.
+# Lazy module attribute so `uvicorn scheduler_app.main:app` works without
+# importing this module causing side effects (creating/seeding the default
+# database) for everyone else who imports create_app — e.g. the tests.
 _app: FastAPI | None = None
 
 

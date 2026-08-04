@@ -23,7 +23,23 @@ system**.
 See `DESIGN.md` for the full design and `BUILD_NOTES.md` for build decisions
 and deviations.
 
-## Setup (uv)
+## Deployed access (primary)
+
+The scheduler is mounted in the **AIND tool launcher**
+(`projects/tool-launcher/`), which serves all the internal tools on one
+port. On the VM it is reachable at:
+
+- UI: **http://10.128.142.221:8080/session_schedule/**
+- API: `http://10.128.142.221:8080/session_schedule/api/...`
+- Interactive API docs: `http://10.128.142.221:8080/session_schedule/docs`
+
+The launcher's landing page (`http://10.128.142.221:8080/`) links to it
+alongside the other tools. See `projects/tool-launcher/README.md` for how the
+launcher itself is run (tmux on the VM). The app's code is identical in both
+modes — every route already lives under the `/session_schedule` prefix, so
+the launcher just forwards that prefix here.
+
+## Standalone mode (development)
 
 1. Install dependencies from `pyproject.toml` (creates `.venv`):
 ```bash
@@ -38,11 +54,17 @@ uv run python app.py
 
 3. Open your browser to: `http://localhost:8000/session_schedule/`
 
-The interactive API docs (OpenAPI) are at `http://localhost:8000/docs`.
+The interactive API docs (OpenAPI) are at
+`http://localhost:8000/session_schedule/docs`.
 
 On first run the database is created at `data/procedure_scheduling.duckdb`
 and auto-seeded with the synthetic demo dataset, so the calendar is
 populated immediately.
+
+> **DuckDB is single-writer.** Only one process can have the database file
+> open. Stop the standalone app *and* the tool launcher before running
+> `scripts/seed.py` or `scripts/export_parquet.py` against the same file,
+> otherwise DuckDB fails with `IOException: Could not set lock`.
 
 ### Command-line options
 ```bash
@@ -55,13 +77,18 @@ uv run python app.py --host 0.0.0.0 --port 8000 --db-path data/procedure_schedul
 
 Equivalent alternative (same defaults via uvicorn directly):
 ```bash
-uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
+uv run uvicorn scheduler_app.main:app --host 0.0.0.0 --port 8000
 ```
+
+(The application package is `scheduler_app` rather than `app` so it can
+never collide with other tools' `app` modules when mounted in the shared
+tool launcher.)
 
 ## Seeding
 
 The app auto-seeds an empty database on startup, so no separate step is
-needed. To seed explicitly (e.g. after experimenting, or into another file):
+needed. To seed explicitly (e.g. after experimenting, or into another file)
+— with the app/launcher stopped, per the single-writer note above:
 
 ```bash
 uv run python scripts/seed.py            # top up the default DB (idempotent)
@@ -80,7 +107,7 @@ duplicates rows.
 ## Parquet export
 
 Export every table to Parquet (one file per table) for portability and the
-eventual Dataverse backfill:
+eventual Dataverse backfill (again with the app/launcher stopped):
 
 ```bash
 uv run python scripts/export_parquet.py                      # -> data/parquet/
@@ -91,7 +118,10 @@ The files are plain Parquet readable with pyarrow/pandas. `TIMESTAMPTZ`
 columns export as UTC-zoned timestamps; the `planned_config` JSON column
 exports as a JSON string.
 
-## Remote access from your Mac (VM running the app)
+## Remote access from your Mac (standalone mode on a VM)
+
+For the deployed launcher, just use the URLs under "Deployed access" above.
+To reach a *standalone* dev instance running on a VM:
 
 1. On the VM, run the app bound to all interfaces (default):
 ```bash
@@ -107,7 +137,7 @@ hostname -I
 Pick the VPN-reachable address (often `10.x.x.x`).
 
 3. From your Mac, open: `http://<VM_IP>:8000/session_schedule/`
-   (API docs at `http://<VM_IP>:8000/docs`.)
+   (API docs at `http://<VM_IP>:8000/session_schedule/docs`.)
 
 4. If the page does not load, check:
 - VM firewall allows inbound TCP 8000.
@@ -116,9 +146,9 @@ Pick the VPN-reachable address (often `10.x.x.x`).
 
 ### Custom host/port (optional)
 ```bash
-uv run python app.py --port 8080
+uv run python app.py --port 8081
 ```
-Then browse to `http://<VM_IP>:8080/session_schedule/`.
+Then browse to `http://<VM_IP>:8081/session_schedule/`.
 
 ### Serving on bare port 80 (optional)
 

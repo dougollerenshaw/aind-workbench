@@ -17,7 +17,7 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.main import create_app
+from scheduler_app.main import create_app
 from scripts.seed import seed_database
 
 NOW = datetime.now(timezone.utc)

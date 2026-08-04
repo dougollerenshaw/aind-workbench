@@ -3,10 +3,12 @@
 
     uv run python app.py [--host 0.0.0.0] [--port 8000] [--db-path PATH]
 
-Note: this file coexists with the ``app/`` package (packages win import
-precedence, so ``from app.main import ...`` below resolves to the package).
-It exists so the house-style ``uv run python app.py`` works; the equivalent
-is ``uv run uvicorn app.main:app``.
+The application package is ``scheduler_app`` — named so it can never collide
+with other tools' ``app`` modules when this project shares sys.path with
+them (fiber-schematic-viewer's ``app.py`` under projects/tool-launcher, and
+this very file). This script exists so the house-style
+``uv run python app.py`` works; the equivalent is
+``uv run uvicorn scheduler_app.main:app``.
 """
 
 from __future__ import annotations
@@ -15,14 +17,14 @@ import argparse
 
 import uvicorn
 
-from app.db import DEFAULT_DB_PATH
-from app.main import create_app
+from scheduler_app.db import DEFAULT_DB_PATH
+from scheduler_app.main import create_app
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Serve the procedure-scheduling prototype "
-        "(API + calendar under /session_schedule, OpenAPI at /docs)."
+        description="Serve the procedure-scheduling prototype (API + calendar "
+        "under /session_schedule, OpenAPI at /session_schedule/docs)."
     )
     parser.add_argument("--host", default="0.0.0.0",
                         help="bind address (default: 0.0.0.0)")

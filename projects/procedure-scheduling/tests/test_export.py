@@ -17,7 +17,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.db import TABLES, Database
+from scheduler_app.db import TABLES, Database
 from scripts.export_parquet import export_parquet
 from scripts.seed import seed_database
 

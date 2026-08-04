@@ -27,7 +27,7 @@ from pathlib import Path
 # Allow `uv run python scripts/export_parquet.py` from the project root.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.db import DEFAULT_DB_PATH, TABLES, Database  # noqa: E402
+from scheduler_app.db import DEFAULT_DB_PATH, TABLES, Database  # noqa: E402
 
 DEFAULT_OUT_DIR = Path(__file__).resolve().parent.parent / "data" / "parquet"
 

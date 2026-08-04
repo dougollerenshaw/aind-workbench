@@ -17,7 +17,7 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.main import create_app
+from scheduler_app.main import create_app
 from scripts.seed import seed_database
 
 
@@ -118,5 +118,5 @@ def test_trailing_slash_and_root_redirects(client):
 
 
 def test_page_not_in_openapi_schema(client):
-    paths = client.get("/openapi.json").json()["paths"]
+    paths = client.get("/session_schedule/openapi.json").json()["paths"]
     assert "/session_schedule/" not in paths

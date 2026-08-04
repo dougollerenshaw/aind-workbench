@@ -13,8 +13,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.db import Database
-from app.store import (
+from scheduler_app.db import Database
+from scheduler_app.store import (
     ValidationError,
     compute_acquisition_type,
     create_scheduled_procedure,
