@@ -12,8 +12,12 @@ ALL DATA HERE IS SYNTHETIC. Nothing is read from Dataverse, LIMS, or any
 other live system, and the mouse ids are deliberately non-numeric
 ("testmouse1") so they can never be confused with real AIND subject ids.
 
-Dates are relative to the day the script runs ("today" = run date, times UTC),
-so a freshly seeded database always has a schedule in the near future.
+Dates are relative to the day the script runs ("today" = run date), so a
+freshly seeded database always has a schedule in the near future. Storage is
+always UTC; the canonical SP-1..SP-4 keep DESIGN.md's documented UTC clock
+times, while the filler rows are placed inside LOCAL working hours (see
+LOCAL_TZ / WORKING_DAY_* below) so the rendered calendar looks like a real
+working week rather than showing 2 a.m. sessions.
 
 Re-runnable: lookups are matched on their natural keys (name / subject_id /
 email) and scheduled procedures on (mouse, instrument, scheduled_start), so
@@ -149,6 +153,26 @@ USR_DOUG = "doug.ollerenshaw@alleninstitute.org"
 USR_BRUNO = "bruno.cruz@alleninstitute.org"
 USR_JANE = "jane.kim@alleninstitute.org"
 
+# The machine's local timezone. Filler procedure times below are written as
+# local wall-clock working hours and converted to UTC on the way into the
+# database (which is always UTC). Doug's browser renders local time, so this
+# is what keeps the seeded calendar looking like a real working week.
+LOCAL_TZ = datetime.now().astimezone().tzinfo
+
+# Working-hours window the filler procedures must fit inside (local time).
+# Keep in step with WORKING_HOURS in template.html.
+WORKING_DAY_START = time(7, 0)
+WORKING_DAY_END = time(18, 0)
+
+# DESIGN.md documents SP-1..SP-4's times as UTC and by default we honor that
+# exactly. Note the consequence: 09:00 UTC renders as 02:00 in Pacific time,
+# so those four rows land outside local working hours — SP-1 is precisely the
+# 2 a.m. event from the first browser pass. Set this to False to read their
+# documented clock times (09:00/13:00/10:00/09:00) as LOCAL instead, which
+# puts all seeded rows inside working hours at the cost of diverging from
+# DESIGN.md's "times UTC" note. See BUILD_NOTES.md "M11".
+CANONICAL_TIMES_ARE_UTC = True
+
 # Synthetic IACUC / ethics protocol numbers.
 ETHICS_BEHAVIOR = "IACUC-2109"
 ETHICS_IMAGING = "IACUC-2115"
@@ -162,9 +186,11 @@ ETHICS_IMAGING = "IACUC-2115"
 # fill the next ~3 weeks so the calendar is populated, mixing single- and
 # multi-platform sessions across all four instruments.
 #
-# Fields: day offset from today, start time (UTC), duration in hours,
-# mouse subject_id, instrument name, project, contact, experimenters,
-# active procedure types, and optional extras.
+# Fields: day offset from today, start time, duration in hours, mouse
+# subject_id, instrument name, project, contact, experimenters, active
+# procedure types, and optional extras. NOTE the timezone split: canonical
+# rows' `start` is UTC (as DESIGN.md documents); filler rows' `start` is LOCAL
+# wall-clock and is converted to UTC when seeded.
 # ---------------------------------------------------------------------------
 
 CANONICAL_PROCEDURES = [
@@ -213,7 +239,8 @@ CANONICAL_PROCEDURES = [
 ]
 
 # Additional procedures (14) bringing the total to 18 across ~3 weeks.
-# Weekday-nudged (see _weekday_start) so the calendar reads naturally.
+# Times are LOCAL working hours (see _weekday_local_start) and weekday-
+# nudged, so the calendar reads naturally for whoever opens it.
 EXTRA_PROCEDURES = [
     {"day_offset": 1, "start": time(13, 30), "hours": 2,
      "mouse": "testmouse2", "instrument": "Ephys-Rig-2", "project": PROJECT_PF,
@@ -234,7 +261,7 @@ EXTRA_PROCEDURES = [
      "ethics_review_id": ETHICS_BEHAVIOR,
      "protocols": "Patch foraging task; FIP single-fiber"},
 
-    {"day_offset": 3, "start": time(14, 0), "hours": 5,
+    {"day_offset": 3, "start": time(12, 0), "hours": 5,
      "mouse": "testmouse3", "instrument": "SmartSPIM-1", "project": PROJECT_BC,
      "contact": USR_JANE, "experimenters": [USR_JANE], "types": [PT_AXONAL],
      "ethics_review_id": ETHICS_IMAGING,
@@ -320,17 +347,36 @@ def _start_datetime(today: datetime, day_offset: int, start: time) -> datetime:
     return day.replace(hour=start.hour, minute=start.minute)
 
 
-def _weekday_start(today: datetime, day_offset: int, start: time) -> datetime:
-    """Like :func:`_start_datetime`, but nudged forward off Sat/Sun.
+def _canonical_start(today: datetime, day_offset: int, start: time) -> datetime:
+    """Start time for SP-1..SP-4: their exact documented clock time, read as
+    UTC or as local depending on ``CANONICAL_TIMES_ARE_UTC``. No weekday
+    nudging — the canonical rows keep DESIGN.md's exact day offsets."""
+    if CANONICAL_TIMES_ARE_UTC:
+        return _start_datetime(today, day_offset, start)
+    day = today + timedelta(days=day_offset)
+    local_naive = datetime(day.year, day.month, day.day, start.hour, start.minute)
+    return local_naive.replace(tzinfo=LOCAL_TZ).astimezone(timezone.utc)
 
-    Applied to the filler procedures only (SP-1..SP-4 keep their exact
-    offsets from DESIGN.md) so the calendar doesn't look odd when the seed
-    script happens to run late in the week.
+
+def _weekday_local_start(today: datetime, day_offset: int, start: time) -> datetime:
+    """Filler start time: `start` read as LOCAL wall-clock, returned as UTC.
+
+    Filler procedures are deliberately placed inside working hours *in the
+    rig's local timezone* (the machine's), because that's what a human reading
+    the calendar sees — a 09:00 UTC session renders at 02:00 in Pacific time,
+    which is what made the first browser pass look wrong. Storage stays UTC.
+
+    Also nudged forward off Sat/Sun, as before, so the calendar doesn't look
+    odd when the seed script happens to run late in the week. (SP-1..SP-4 keep
+    their exact UTC offsets from DESIGN.md — see :func:`_start_datetime`.)
     """
-    dt = _start_datetime(today, day_offset, start)
-    while dt.weekday() >= 5:  # 5 = Saturday, 6 = Sunday
-        dt += timedelta(days=1)
-    return dt
+    day = today + timedelta(days=day_offset)
+    while day.weekday() >= 5:  # 5 = Saturday, 6 = Sunday
+        day += timedelta(days=1)
+    local_naive = datetime(
+        day.year, day.month, day.day, start.hour, start.minute
+    )
+    return local_naive.replace(tzinfo=LOCAL_TZ).astimezone(timezone.utc)
 
 
 def wipe(db: Database) -> None:
@@ -446,9 +492,9 @@ def seed_database(db: Database, reference: datetime | None = None) -> dict[str, 
         occupied[(inst_id, start_dt)] = existing_mouse_id
 
     for spec in CANONICAL_PROCEDURES:
-        add(spec, _start_datetime(today, spec["day_offset"], spec["start"]))
+        add(spec, _canonical_start(today, spec["day_offset"], spec["start"]))
     for spec in EXTRA_PROCEDURES:
-        add(spec, _weekday_start(today, spec["day_offset"], spec["start"]))
+        add(spec, _weekday_local_start(today, spec["day_offset"], spec["start"]))
 
     return row_counts(db)
 

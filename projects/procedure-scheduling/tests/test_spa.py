@@ -47,6 +47,68 @@ def test_calendar_mount_and_fullcalendar_cdn(html):
     assert "resources: instruments.map" in html
 
 
+def test_default_view_is_a_single_day_opening_on_today(html):
+    """The week view rendered 168 hourly columns, so "now" was far off-screen.
+    The default is now one day at hour resolution, opened on today."""
+    assert "initialView: 'resourceTimelineDay'" in html
+    assert "initialDate: new Date()" in html
+    # Live current-time line, and the initial scroll follows it.
+    assert "nowIndicator: true" in html
+    assert "scrollTime: nowScrollTime()" in html
+    assert "function nowScrollTime" in html
+    # The three view buttons are unchanged (no new agenda/list view).
+    assert "resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth" in html
+    assert "listWeek" not in html and "listMonth" not in html
+
+
+def test_working_hours_window_is_a_named_adjustable_constant(html):
+    match = re.search(
+        r"const WORKING_HOURS = \{ start: '([\d:]+)', end: '([\d:]+)' \};", html
+    )
+    assert match, "WORKING_HOURS must be a single named constant"
+    start, end = match.groups()
+    assert start < end
+    # Applied to the day view only, so week/month never hide events.
+    day_config = html[html.index("function dayViewConfig") : html.index("function calendarViews")]
+    assert "config.slotMinTime = WORKING_HOURS.start" in day_config
+    assert "config.slotMaxTime = WORKING_HOURS.end" in day_config
+    views = html[html.index("function calendarViews") : html.index("function nowScrollTime")]
+    # No slot-range *assignment* in the week/month configs (comments are fine),
+    # so those views can never clip an event out of existence.
+    assert not re.search(r"slot(Min|Max)Time\s*:", views), "week/month must not clip events"
+
+
+def test_out_of_window_procedures_are_reported_not_silently_hidden(html):
+    """FullCalendar won't draw events outside slotMinTime..slotMaxTime, so the
+    page must both warn about them and offer a way to see them."""
+    assert 'id="window-notice"' in html
+    assert "function updateWindowNotice" in html
+    assert "are not drawn here" in html
+    # The 24-hour escape hatch.
+    assert 'id="full-day-toggle"' in html
+    assert "function toggleFullDay" in html
+    assert "calendar.setOption('views', calendarViews())" in html
+    # Recomputed when the view or date range changes.
+    assert "datesSet: () => updateWindowNotice(lastRecords)" in html
+
+
+def test_week_and_month_use_day_resolution_columns(html):
+    """A week is 7 day-columns, not 168 hour-columns; a month is ~30."""
+    views = html[html.index("function calendarViews") : html.index("function nowScrollTime")]
+    week = views[views.index("resourceTimelineWeek") : views.index("resourceTimelineMonth")]
+    assert "slotDuration: { days: 1 }" in week
+    month = views[views.index("resourceTimelineMonth") :]
+    assert "slotDuration: { days: 1 }" in month
+    # Day view keeps hour resolution.
+    day_config = html[html.index("function dayViewConfig") : html.index("function calendarViews")]
+    assert "slotDuration: '01:00:00'" in day_config
+    # Time-of-day moves into the event label for the day-column views.
+    assert "eventContent: (arg) => ({ text: eventLabel(arg.event) })" in html
+    assert "function eventLabel" in html
+    # Today's column is highlighted.
+    assert ".fc-day-today" in html
+
+
 def test_page_wires_the_real_api_paths(html):
     # All fetch URLs are built from this constant...
     assert "const API = '/session_schedule/api'" in html

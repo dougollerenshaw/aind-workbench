@@ -54,6 +54,12 @@
   #layout { display: flex; gap: 0; }
   #calendar { flex: 1; padding: 0.8rem 1.2rem; background: #fff; margin: 0.8rem; border: 1px solid var(--border); border-radius: 6px; min-width: 0; }
   .fc .fc-event { cursor: pointer; font-size: 0.75rem; }
+  /* Highlight today's column in the day-resolution week/month views. */
+  .fc .fc-day-today { background: rgba(29, 78, 137, 0.07); }
+  .fc .fc-timeline-slot.fc-day-today { background: rgba(29, 78, 137, 0.07); }
+
+  .filters .inline-check { flex-direction: row; align-items: center; gap: 0.3rem; }
+  .notice { margin: 0.35rem 0 0; font-size: 0.75rem; color: #8c5a2f; min-height: 0.9rem; }
 
   /* Detail side panel */
   #detail-panel {
@@ -137,9 +143,13 @@
     </label>
     <button id="clear-filters" type="button">Clear filters</button>
     <button id="add-btn" type="button" class="primary">Add procedure</button>
+    <label class="inline-check" title="Day view normally shows working hours only">
+      <input type="checkbox" id="full-day-toggle"> Show full 24 h
+    </label>
   </div>
 
   <div id="legend"></div>
+  <p id="window-notice" class="notice"></p>
 </header>
 
 <div id="layout">
@@ -319,25 +329,91 @@ function populateFormSelects() {
 // Calendar (resource timeline: instruments as rows)
 // ---------------------------------------------------------------------------
 
+// Day view shows one working day across the page at hour resolution, so the
+// whole day fits with no horizontal scrolling. Adjust the window here.
+const WORKING_HOURS = { start: '06:00:00', end: '20:00:00' };
+
+// When true the day view shows all 24 hours (the "Show full 24 h" checkbox),
+// so procedures outside working hours are never unreachable.
+let showFullDay = false;
+
+function dayViewConfig() {
+  const config = {
+    slotDuration: '01:00:00',
+    slotLabelFormat: { hour: 'numeric', meridiem: 'short' },
+  };
+  if (!showFullDay) {
+    // FullCalendar does NOT render events lying entirely outside
+    // slotMinTime..slotMaxTime, so the notice under the calendar reports any
+    // that fall outside the window and the checkbox reveals them.
+    config.slotMinTime = WORKING_HOURS.start;
+    config.slotMaxTime = WORKING_HOURS.end;
+  }
+  return config;
+}
+
+function calendarViews() {
+  return {
+    resourceTimelineDay: dayViewConfig(),
+    // Week and month use DAY-resolution columns (7 / ~30 columns that fit on
+    // screen) instead of one column per hour, which made a week 168 columns
+    // wide. Time-of-day is carried in the event label instead. No
+    // slotMinTime/slotMaxTime here, so these views always show every event.
+    resourceTimelineWeek: {
+      slotDuration: { days: 1 },
+      slotLabelFormat: [{ weekday: 'short', month: 'numeric', day: 'numeric' }],
+    },
+    resourceTimelineMonth: {
+      slotDuration: { days: 1 },
+      slotLabelFormat: [{ day: 'numeric' }],
+    },
+  };
+}
+
+// Start the day view scrolled so "now" is in view (a no-op while the whole
+// window fits, but correct if the window is ever widened past the viewport).
+function nowScrollTime() {
+  const now = new Date();
+  const startHour = parseInt(WORKING_HOURS.start, 10);
+  const hour = Math.max(startHour, now.getHours() - 1);
+  return `${String(hour).padStart(2, '0')}:00:00`;
+}
+
 function initCalendar() {
   calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-    initialView: 'resourceTimelineWeek',
+    // One day at hour resolution, opening on today — finding "now" in a
+    // 168-column week was the usability complaint this replaces.
+    initialView: 'resourceTimelineDay',
+    initialDate: new Date(),
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
       right: 'resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth',
     },
+    buttonText: { today: 'Today', day: 'Day', week: 'Week', month: 'Month' },
+    views: calendarViews(),
     resourceAreaHeaderContent: 'Instrument',
     resourceAreaWidth: '13rem',
     resources: instruments.map((i) => ({ id: i.id, title: i.name })),
     resourceOrder: 'title',
     height: 'auto',
-    nowIndicator: true,
-    scrollTime: '06:00:00',
+    nowIndicator: true,          // live current-time line
+    scrollTime: nowScrollTime(),
+    // Local time-of-day in the label, so the week/month day-columns still
+    // tell you when a procedure runs.
+    eventContent: (arg) => ({ text: eventLabel(arg.event) }),
+    datesSet: () => updateWindowNotice(lastRecords),
     eventClick: (info) => showDetail(info.event.id).catch(showFetchError),
   });
   calendar.render();
+}
+
+function eventLabel(event) {
+  const time = event.start.toLocaleTimeString([], {
+    hour: 'numeric', minute: '2-digit',
+  });
+  return `${time} ${event.title}`;
 }
 
 function showFetchError(err) {
@@ -390,6 +466,54 @@ async function loadEvents() {
 
   if (eventSource) eventSource.remove();
   eventSource = calendar.addEventSource(events);
+
+  lastRecords = records;
+  updateWindowNotice(records);
+}
+
+// Records currently loaded, kept so the notice can be recomputed when the
+// view or date range changes without refetching.
+let lastRecords = [];
+
+function minutesIntoDay(date) {
+  return date.getHours() * 60 + date.getMinutes();
+}
+
+function windowMinutes() {
+  const [startHour, startMin] = WORKING_HOURS.start.split(':').map(Number);
+  const [endHour, endMin] = WORKING_HOURS.end.split(':').map(Number);
+  return [startHour * 60 + startMin, endHour * 60 + endMin];
+}
+
+// The day view can only draw what's inside the working-hours window, so say
+// so out loud rather than silently dropping procedures.
+function updateWindowNotice(records) {
+  const notice = document.getElementById('window-notice');
+  if (!notice || !calendar) return;
+  if (calendar.view.type !== 'resourceTimelineDay' || showFullDay) {
+    notice.textContent = '';
+    return;
+  }
+  const [windowStart, windowEnd] = windowMinutes();
+  const viewStart = calendar.view.activeStart;
+  const viewEnd = calendar.view.activeEnd;
+  const outside = records.filter((r) => {
+    const start = new Date(r.scheduled_start);
+    const end = new Date(r.scheduled_end);
+    if (end <= viewStart || start >= viewEnd) return false;  // not this day
+    return minutesIntoDay(end) <= windowStart || minutesIntoDay(start) >= windowEnd;
+  });
+  notice.textContent = outside.length
+    ? `${outside.length} procedure(s) on this day fall outside the ` +
+      `${WORKING_HOURS.start.slice(0, 5)}–${WORKING_HOURS.end.slice(0, 5)} window ` +
+      `and are not drawn here — tick "Show full 24 h", or use the Week view.`
+    : '';
+}
+
+function toggleFullDay(checked) {
+  showFullDay = checked;
+  calendar.setOption('views', calendarViews());
+  updateWindowNotice(lastRecords);
 }
 
 // ---------------------------------------------------------------------------
@@ -684,6 +808,10 @@ document.getElementById('clear-filters').addEventListener('click', () => {
     document.getElementById(id).value = '';
   }
   refresh();
+});
+
+document.getElementById('full-day-toggle').addEventListener('change', (e) => {
+  toggleFullDay(e.target.checked);
 });
 
 document.getElementById('add-btn').addEventListener('click', () => openModal());

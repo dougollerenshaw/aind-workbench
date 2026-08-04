@@ -14,6 +14,9 @@ from scheduler_app.store import compute_acquisition_type
 from scripts.seed import (
     CANONICAL_PROCEDURES,
     EXTRA_PROCEDURES,
+    LOCAL_TZ,
+    WORKING_DAY_END,
+    WORKING_DAY_START,
     row_counts,
     seed_database,
 )
@@ -384,6 +387,62 @@ def test_no_seeded_procedure_has_two_behavior_types(seeded):
         """
     ).fetchall()
     assert offenders == []
+
+
+def test_filler_procedures_fall_in_local_working_hours_on_weekdays(seeded):
+    """Generated procedures must look like real sessions: inside the local
+    working-hours window, on weekdays. No more 2 a.m. sessions.
+
+    The four canonical rows are exempt — they keep DESIGN.md's documented UTC
+    clock times, which land outside local working hours in this timezone (see
+    the dedicated assertion below and BUILD_NOTES).
+    """
+    canonical_starts = {
+        TODAY + timedelta(days=1, hours=9),    # SP-1
+        TODAY + timedelta(days=2, hours=13),   # SP-2
+        TODAY + timedelta(days=4, hours=10),   # SP-3
+        TODAY + timedelta(days=8, hours=9),    # SP-4
+    }
+    rows = seeded.conn.execute(
+        "SELECT id, scheduled_start, scheduled_end FROM scheduled_procedures"
+    ).fetchall()
+
+    window_start = WORKING_DAY_START.hour * 60 + WORKING_DAY_START.minute
+    window_end = WORKING_DAY_END.hour * 60 + WORKING_DAY_END.minute
+    checked = 0
+    for _, start_utc, end_utc in rows:
+        if start_utc in canonical_starts:
+            continue
+        checked += 1
+        start = start_utc.astimezone(LOCAL_TZ)
+        end = end_utc.astimezone(LOCAL_TZ)
+        assert start.weekday() < 5, f"{start} is a weekend"
+        assert end.weekday() < 5, f"{end} is a weekend"
+        start_minutes = start.hour * 60 + start.minute
+        end_minutes = end.hour * 60 + end.minute
+        assert window_start <= start_minutes <= window_end, f"{start} starts outside hours"
+        assert window_start <= end_minutes <= window_end, f"{end} ends outside hours"
+        assert start.date() == end.date(), f"{start} spans midnight"
+    assert checked == len(EXTRA_PROCEDURES)
+
+
+def test_canonical_rows_keep_their_documented_utc_times(seeded):
+    """SP-1..SP-4 keep DESIGN.md's exact documented UTC clock times, whatever
+    the local working-hours window is."""
+    expected = [
+        (TODAY + timedelta(days=1, hours=9), 2.0),     # SP-1 09:00 UTC, 2 h
+        (TODAY + timedelta(days=2, hours=13), 1.5),    # SP-2 13:00 UTC, 1.5 h
+        (TODAY + timedelta(days=4, hours=10), 6.0),    # SP-3 10:00 UTC, 6 h
+        (TODAY + timedelta(days=8, hours=9), 3.0),     # SP-4 09:00 UTC, 3 h
+    ]
+    for start, hours in expected:
+        row = seeded.conn.execute(
+            "SELECT scheduled_end FROM scheduled_procedures WHERE scheduled_start = ?",
+            [start],
+        ).fetchone()
+        assert row is not None, f"no canonical procedure starting {start.isoformat()}"
+        assert row[0] == start + timedelta(hours=hours)
+        assert start.astimezone(timezone.utc).hour == start.hour  # stored as UTC
 
 
 def test_all_seeded_procedures_respect_instrument_compatibility(seeded):

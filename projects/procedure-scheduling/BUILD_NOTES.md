@@ -528,13 +528,70 @@ Seeded dataset after the correction: 4 instruments / 10 compatibility rows /
 18 procedures — Dynamic-Foraging-Box-1 5, SmartSPIM-1 5, VR-Foraging-Rig-A 4,
 Ephys-Rig-2 4; zero rows with two behavior tasks.
 
+## M11 — Calendar usability (default day view, realistic seeded times)
+
+Doug's browser pass: the default `resourceTimelineWeek` rendered a week at
+hour resolution — 168 columns — so "now" sat far off-screen to the right,
+with no current-time line and a seeded event at 2 a.m.
+
+- **Default view is now `resourceTimelineDay`**, opening on today
+  (`initialDate: new Date()`): instruments as rows, one day across the page
+  at hour resolution, limited to a working-hours window so it fits with no
+  horizontal scrolling. `nowIndicator` draws the live current-time line and
+  `scrollTime` starts an hour before now.
+- **`WORKING_HOURS = { start: '06:00:00', end: '20:00:00' }`** — a single
+  named constant at the top of the calendar section of `template.html`,
+  trivially adjustable.
+- **Out-of-window events are reported, never silently hidden.** Verified
+  behavior: FullCalendar does **not** render events lying entirely outside
+  `slotMinTime..slotMaxTime`. Rather than widen the window to swallow every
+  edge case, the page (a) applies the window to the **day view only**, so
+  Week and Month always show every event, (b) counts events on the displayed
+  day that fall outside the window and says so in a notice under the
+  calendar, and (c) offers a **"Show full 24 h"** checkbox that drops the
+  window entirely. Nothing is unreachable.
+- **Week and month now use day-resolution columns** (`slotDuration:
+  { days: 1 }`) — 7 and ~30 columns that fit on screen, instead of 168 hour
+  columns. Local time-of-day moved into the event label (`eventContent`) so
+  the day-columns still say when a procedure runs, and today's column is
+  highlighted via `.fc-day-today`. The three existing view buttons are
+  unchanged; no list/agenda view was added.
+- **Seeded times are now working-hours-constrained.** The 14 filler rows are
+  written as **local** wall-clock times inside `WORKING_DAY_START..
+  WORKING_DAY_END` (07:00–18:00) on weekdays, then converted to UTC for
+  storage (the DB is always UTC). This is the real fix for the 2 a.m.
+  session: the browser renders local time, so a filler row written at 09:00
+  *UTC* appeared at 02:00 Pacific. One row (SmartSPIM, 5 h) moved from 14:00
+  to 12:00 so it ends inside the window. The existing weekday nudge is kept.
+
+**Open question for Doug — the canonical rows are still the 2 a.m. events.**
+SP-1..SP-4 keep DESIGN.md's documented times *as UTC* (09:00/13:00/10:00/
+09:00) per instruction, which in Pacific renders as **02:00, 06:00, 03:00,
+02:00 local** — so SP-1, the flagship multi-modality example, is exactly the
+2 a.m. event from the screenshot, and it is one of the rows the day view
+can't draw (it appears in the notice, the 24 h toggle, and Week/Month).
+DESIGN.md says those times are UTC; it almost certainly *means* 9 a.m. at the
+rig. `scripts/seed.py` therefore has a one-line switch:
+
+```python
+CANONICAL_TIMES_ARE_UTC = True   # default: honor DESIGN.md literally
+```
+
+Set it to `False` to read the same documented clock times as local; verified
+that this puts **all 18 seeded rows inside local working hours** with the
+canonical clock values preserved. Doug's call — it's a genuine
+spec-fidelity-vs-demo-realism tradeoff, and worth folding into the DESIGN.md
+amendments for Bruno either way.
+
 ### Re-seeding the live database (Doug runs this when ready)
 
 Seeding is idempotent, so the **running :8080 database will NOT pick up the
-new compatibility sets or the new instrument** until it is re-seeded with
-`--reset`. That needs the launcher stopped, because DuckDB is single-writer.
-**`--reset` wipes every table, discarding any procedures created through the
-UI.**
+M10 compatibility sets / new instrument or the M11 working-hours times** until
+it is re-seeded with `--reset`. That needs the launcher stopped, because
+DuckDB is single-writer. **`--reset` wipes every table, discarding any
+procedures created through the UI.** (The M11 calendar changes are in
+`template.html`, which is read per request — those are live on refresh with
+no restart and no re-seed.)
 
 ```bash
 # 1. stop the launcher (in its tmux session: Ctrl-C, or)
