@@ -5,6 +5,7 @@ Mounts multiple Flask apps at different URL paths on a single port.
 
 import sys
 import os
+import threading
 from pathlib import Path
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.serving import run_simple
@@ -47,8 +48,13 @@ iacuc_app.config['APPLICATION_ROOT'] = '/iacuc_lookup'
 # Configure fiber app cache directory (absolute path)
 fiber_app.config['CACHE_DIR'] = str(PROJECTS_DIR / 'fiber-schematic-viewer' / '.cache' / 'procedures')
 
-# Absolute DB path so the launcher's cwd doesn't matter.
-SCHEDULER_DB = PROJECTS_DIR / 'procedure-scheduling' / 'data' / 'procedure_scheduling.duckdb'
+# Absolute DB path so the launcher's cwd doesn't matter. Overridable via the
+# SCHEDULER_DB env var so tests (or a staging run) can point the scheduler at
+# a throwaway database instead of the real one.
+SCHEDULER_DB = Path(os.environ.get(
+    'SCHEDULER_DB',
+    str(PROJECTS_DIR / 'procedure-scheduling' / 'data' / 'procedure_scheduling.duckdb'),
+))
 
 
 class LazySchedulerApp:
@@ -72,10 +78,16 @@ class LazySchedulerApp:
 
     def __init__(self):
         self._app = None
+        # run_simple below uses its default threaded=False, so requests are
+        # sequential today — the lock is cheap insurance so first-request
+        # creation stays single-shot if anyone ever flips threaded=True.
+        self._lock = threading.Lock()
 
     def __call__(self, environ, start_response):
         if self._app is None:
-            self._app = ASGIMiddleware(create_scheduler_app(db_path=SCHEDULER_DB))
+            with self._lock:
+                if self._app is None:
+                    self._app = ASGIMiddleware(create_scheduler_app(db_path=SCHEDULER_DB))
         environ['PATH_INFO'] = self.PREFIX + environ.get('PATH_INFO', '')
         environ['SCRIPT_NAME'] = ''
         return self._app(environ, start_response)
