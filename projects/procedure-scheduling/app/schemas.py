@@ -7,9 +7,10 @@ field-for-field. Datetimes are serialized as ISO-8601 UTC strings with a
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 Status = Literal["scheduled", "completed", "cancelled", "rescheduled"]
 
@@ -158,3 +159,76 @@ class NextAcquisitionOut(BaseModel):
     instrument: str = Field(description="Instrument display name.")
     acquisition_type: str
     scheduled_start: str
+
+
+# ---------------------------------------------------------------------------
+# Admin write requests (DESIGN.md Example 1)
+#
+# extra="forbid" so server-computed fields (`id`, `acquisition_type`,
+# `created_at`, `updated_at`) are REJECTED if a client sends them, rather
+# than silently ignored — validation rule 3 made visible.
+# ---------------------------------------------------------------------------
+
+
+class ScheduledProcedureWrite(BaseModel):
+    """Request body for POST and PUT of a scheduled procedure."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    mouse_id: str
+    instrument_id: str
+    project_id: str
+    contact_user_id: str
+    scheduled_start: datetime
+    scheduled_end: datetime
+    active_procedure_type_ids: list[str]
+    experimenter_user_ids: list[str] = []
+    status: Status = "scheduled"
+    acquisition_name: str | None = Field(
+        default=None,
+        description="The dated AIND session name, filled once acquisition "
+        "begins; leave null when scheduling.",
+    )
+    ethics_review_id: str | None = None
+    notes: str | None = None
+    planned_config: Any = None
+    protocols: str | None = None
+
+
+class InstrumentCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    name: str
+    instrument_id: str | None = None
+    sipe_rig_name: str | None = None
+    location: str | None = None
+    active: bool = True
+    compatible_procedure_type_ids: list[str] = []
+
+
+class MouseCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    subject_id: str
+    genotype: str | None = None
+
+
+class ProjectCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    name: str
+
+
+class UserCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    name: str
+    email: str
+    orcid: str | None = None
+
+
+class CompatibilityCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    instrument_id: str
+    procedure_type_id: str

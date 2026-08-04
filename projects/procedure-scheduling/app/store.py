@@ -160,6 +160,22 @@ def validate_scheduled_procedure(
     return compute_acquisition_type(names[pid] for pid in active_procedure_type_ids)
 
 
+def _encode_planned_config(value: Any) -> str | None:
+    """Encode planned_config for the JSON column; reject invalid JSON strings."""
+    if value is None:
+        return None
+    if isinstance(value, str):
+        try:
+            json.loads(value)
+        except json.JSONDecodeError as exc:
+            raise ValidationError(
+                "invalid_planned_config",
+                f"planned_config is not valid JSON: {exc}.",
+            )
+        return value
+    return json.dumps(value)
+
+
 # ---------------------------------------------------------------------------
 # Insert
 # ---------------------------------------------------------------------------
@@ -202,11 +218,7 @@ def create_scheduled_procedure(
 
     sp_id = new_uuid7()
     now = utcnow()
-    config_json = (
-        planned_config
-        if planned_config is None or isinstance(planned_config, str)
-        else json.dumps(planned_config)
-    )
+    config_json = _encode_planned_config(planned_config)
 
     with db.write() as conn:
         conn.execute(
@@ -238,6 +250,211 @@ def create_scheduled_procedure(
                 [sp_id, user_id],
             )
     return sp_id
+
+
+# ---------------------------------------------------------------------------
+# Update / delete (admin API)
+# ---------------------------------------------------------------------------
+
+
+def update_scheduled_procedure(
+    db: Database,
+    sp_id: str,
+    *,
+    mouse_id: str,
+    instrument_id: str,
+    project_id: str,
+    contact_user_id: str,
+    scheduled_start: datetime,
+    scheduled_end: datetime,
+    active_procedure_type_ids: Sequence[str],
+    experimenter_user_ids: Sequence[str] = (),
+    status: str = "scheduled",
+    acquisition_name: str | None = None,
+    ethics_review_id: str | None = None,
+    notes: str | None = None,
+    planned_config: Any = None,
+    protocols: str | None = None,
+) -> bool:
+    """Full-replace update of a scheduled procedure.
+
+    The ``id`` (the acquisition token) and ``created_at`` are immutable;
+    ``acquisition_type`` and ``updated_at`` are recomputed server-side. The
+    row update and the replacement of both join tables happen in one
+    transaction, so a failed write leaves the record untouched.
+
+    Returns False if no such procedure exists.
+    """
+    exists = db.conn.execute(
+        "SELECT 1 FROM scheduled_procedures WHERE id = ?", [sp_id]
+    ).fetchone()
+    if exists is None:
+        return False
+
+    acquisition_type = validate_scheduled_procedure(
+        db,
+        mouse_id=mouse_id,
+        instrument_id=instrument_id,
+        project_id=project_id,
+        contact_user_id=contact_user_id,
+        scheduled_start=scheduled_start,
+        scheduled_end=scheduled_end,
+        active_procedure_type_ids=active_procedure_type_ids,
+        experimenter_user_ids=experimenter_user_ids,
+    )
+    config_json = _encode_planned_config(planned_config)
+    now = utcnow()
+
+    with db.write() as conn:
+        conn.execute(
+            """
+            UPDATE scheduled_procedures SET
+                mouse_id = ?, instrument_id = ?, project_id = ?,
+                contact_user_id = ?, scheduled_start = ?, scheduled_end = ?,
+                acquisition_type = ?, acquisition_name = ?, status = ?,
+                ethics_review_id = ?, notes = ?, planned_config = ?,
+                protocols = ?, updated_at = ?
+            WHERE id = ?
+            """,
+            [
+                mouse_id, instrument_id, project_id, contact_user_id,
+                scheduled_start, scheduled_end, acquisition_type,
+                acquisition_name, status, ethics_review_id, notes,
+                config_json, protocols, now, sp_id,
+            ],
+        )
+        conn.execute(
+            "DELETE FROM scheduled_procedure_active_types WHERE scheduled_procedure_id = ?",
+            [sp_id],
+        )
+        for pid in dict.fromkeys(active_procedure_type_ids):
+            conn.execute(
+                "INSERT INTO scheduled_procedure_active_types "
+                "(scheduled_procedure_id, procedure_type_id) VALUES (?, ?)",
+                [sp_id, pid],
+            )
+        conn.execute(
+            "DELETE FROM scheduled_procedure_experimenters WHERE scheduled_procedure_id = ?",
+            [sp_id],
+        )
+        for user_id in dict.fromkeys(experimenter_user_ids):
+            conn.execute(
+                "INSERT INTO scheduled_procedure_experimenters "
+                "(scheduled_procedure_id, user_id) VALUES (?, ?)",
+                [sp_id, user_id],
+            )
+    return True
+
+
+def delete_scheduled_procedure(db: Database, sp_id: str) -> bool:
+    """Delete a scheduled procedure and its join rows (one transaction).
+
+    Returns False if no such procedure exists.
+    """
+    exists = db.conn.execute(
+        "SELECT 1 FROM scheduled_procedures WHERE id = ?", [sp_id]
+    ).fetchone()
+    if exists is None:
+        return False
+    with db.write() as conn:
+        conn.execute(
+            "DELETE FROM scheduled_procedure_active_types WHERE scheduled_procedure_id = ?",
+            [sp_id],
+        )
+        conn.execute(
+            "DELETE FROM scheduled_procedure_experimenters WHERE scheduled_procedure_id = ?",
+            [sp_id],
+        )
+        conn.execute("DELETE FROM scheduled_procedures WHERE id = ?", [sp_id])
+    return True
+
+
+# ---------------------------------------------------------------------------
+# Admin lookup creation (minimal, so the demo can be populated via the UI)
+# ---------------------------------------------------------------------------
+
+
+def _reject_duplicate(db: Database, table: str, column: str, value: str) -> None:
+    if db.conn.execute(
+        f"SELECT 1 FROM {table} WHERE {column} = ?", [value]
+    ).fetchone():
+        raise ValidationError(
+            "already_exists", f"A {table} row with {column} '{value}' already exists."
+        )
+
+
+def create_instrument(
+    db: Database,
+    *,
+    name: str,
+    instrument_id: str | None = None,
+    sipe_rig_name: str | None = None,
+    location: str | None = None,
+    active: bool = True,
+    compatible_procedure_type_ids: Sequence[str] = (),
+) -> str:
+    _reject_duplicate(db, "instruments", "name", name)
+    names = procedure_type_names(db, compatible_procedure_type_ids)
+    missing = [p for p in compatible_procedure_type_ids if p not in names]
+    if missing:
+        raise ValidationError(
+            "unknown_reference", f"Unknown procedure type id(s): {', '.join(missing)}."
+        )
+    row_id = new_uuid()
+    with db.write() as conn:
+        conn.execute(
+            "INSERT INTO instruments (id, name, instrument_id, sipe_rig_name, location, active) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            [row_id, name, instrument_id, sipe_rig_name, location, active],
+        )
+        for pid in dict.fromkeys(compatible_procedure_type_ids):
+            conn.execute(
+                "INSERT INTO instrument_compatible_types "
+                "(instrument_id, procedure_type_id) VALUES (?, ?)",
+                [row_id, pid],
+            )
+    return row_id
+
+
+def create_mouse(db: Database, *, subject_id: str, genotype: str | None = None) -> str:
+    _reject_duplicate(db, "mice", "subject_id", subject_id)
+    row_id = new_uuid()
+    with db.write() as conn:
+        conn.execute(
+            "INSERT INTO mice (id, subject_id, genotype) VALUES (?, ?, ?)",
+            [row_id, subject_id, genotype],
+        )
+    return row_id
+
+
+def create_project(db: Database, *, name: str) -> str:
+    _reject_duplicate(db, "projects", "name", name)
+    row_id = new_uuid()
+    with db.write() as conn:
+        conn.execute("INSERT INTO projects (id, name) VALUES (?, ?)", [row_id, name])
+    return row_id
+
+
+def create_user(
+    db: Database, *, name: str, email: str, orcid: str | None = None
+) -> str:
+    _reject_duplicate(db, "users", "email", email)
+    row_id = new_uuid()
+    with db.write() as conn:
+        conn.execute(
+            "INSERT INTO users (id, name, email, orcid) VALUES (?, ?, ?, ?)",
+            [row_id, name, email, orcid],
+        )
+    return row_id
+
+
+def add_instrument_compatibility(
+    db: Database, *, instrument_id: str, procedure_type_id: str
+) -> None:
+    """Declare a procedure type compatible with an instrument (idempotent)."""
+    _require_row(db, "instruments", instrument_id, "instrument")
+    _require_row(db, "procedure_types", procedure_type_id, "procedure type")
+    ensure_instrument_compatibility(db, instrument_id, [procedure_type_id])
 
 
 # ---------------------------------------------------------------------------

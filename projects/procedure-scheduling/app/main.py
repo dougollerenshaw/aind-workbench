@@ -15,13 +15,16 @@ import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 # Make `scripts/` importable when running under uvicorn from the project dir.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from app.admin_api import router as admin_router  # noqa: E402
 from app.db import DEFAULT_DB_PATH, Database  # noqa: E402
 from app.read_api import router as read_router  # noqa: E402
+from app.store import ValidationError  # noqa: E402
 
 DESCRIPTION = """
 Prototype procedure-scheduling system for AIND acquisitions
@@ -65,6 +68,15 @@ def create_app(
     )
     application.state.db = database
     application.include_router(read_router)
+    application.include_router(admin_router)
+
+    @application.exception_handler(ValidationError)
+    async def rejected_write(_: Request, exc: ValidationError) -> JSONResponse:
+        """The documented error shape (DESIGN.md Example 1's failure case)."""
+        return JSONResponse(
+            status_code=422, content={"error": exc.code, "detail": exc.detail}
+        )
+
     return application
 
 

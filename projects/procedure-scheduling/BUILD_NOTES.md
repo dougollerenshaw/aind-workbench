@@ -133,3 +133,52 @@ Decisions / deviations:
 - Datetimes serialize as ISO-8601 UTC with a `Z` suffix to match the
   examples byte-for-byte (Pydantic's default would emit `+00:00`), so the
   models declare those fields as strings.
+
+## M4 — Admin write API + validation
+
+Built: `app/admin_api.py` (POST/PUT/DELETE for scheduled procedures plus
+minimal creates for instruments, mice, projects, users, and
+instrument-compatibility, all under `/session_schedule/api/admin`),
+write request models in `app/schemas.py`, update/delete and lookup-create
+functions in `app/store.py`, the `ValidationError -> 422 {"error", "detail"}`
+handler in `app/main.py`, `tests/test_admin_api.py` (23 tests).
+
+Decisions / deviations:
+
+- **PUT is full-replace**, not a partial patch: the body has the same shape
+  as POST; optional fields omitted from the body reset to null. That matches
+  what a form submit sends and keeps semantics standard. `id` (the token) and
+  `created_at` are immutable; `acquisition_type` and `updated_at` are always
+  recomputed server-side.
+- **Server-computed fields are rejected, not ignored:** the write models use
+  Pydantic `extra="forbid"`, so a client-sent `acquisition_type` (or `id`,
+  `created_at`, `updated_at`, or any unknown field) fails with 422 instead of
+  being silently dropped. Rule 3 made visible.
+- **Atomicity:** PUT updates the row and replaces both join tables inside one
+  transaction; DELETE removes join rows and the row in one transaction. A
+  failed PUT (e.g. incompatible type) leaves the record byte-identical —
+  tested.
+- **Error shape:** rejected writes return the documented
+  `{"error": <code>, "detail": <message>}` with HTTP 422 (Example 1's failure
+  case). Codes: `incompatible_procedure_type`, `invalid_time_range`,
+  `unknown_reference`, `no_active_procedure_types`, `already_exists`,
+  `invalid_planned_config`. Body-shape violations (unknown/missing fields)
+  return FastAPI's standard 422 instead — two 422 flavors, both documented
+  in /docs.
+- **Duplicate natural keys** (instrument name, mouse subject_id, project
+  name, user email) are rejected with `already_exists` (422). The
+  `instrument-compatibility` endpoint is idempotent — re-declaring an existing
+  pair is a no-op 201.
+- DELETE returns 204 with an empty body.
+- The M3 read-only OpenAPI guard test was updated to assert the actual
+  contract: non-GET methods exist **only** under `/api/admin/`; the public
+  data API additionally returns 405 for POST/PUT/DELETE (tested).
+- **Status semantics for creates:** the admin API accepts an optional
+  `status` (default `scheduled`) and allows past-dated rows — needed to
+  record completed/cancelled history, and used by the verifier-advisory
+  tests (status filter narrows positively; `next-acquisition` skips past and
+  cancelled rows).
+- Mouse ids in write bodies are the UUID primary keys, not subject_ids —
+  DESIGN.md Example 1 shows `"mouse_id": "testmouse2"`, but the doc's own
+  convention note says the short placeholders stand in for real UUIDs, and
+  the mice seed table uses the subject_id as its placeholder id.

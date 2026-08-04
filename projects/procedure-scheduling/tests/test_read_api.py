@@ -428,6 +428,15 @@ def test_docs_and_openapi_reachable(client):
     assert openapi.status_code == 200
     paths = openapi.json()["paths"]
     assert f"{API}/scheduled-procedures" in paths
-    # Read-only: no write methods anywhere yet (M4 adds the admin router).
+    # The PUBLIC data API is read-only: every write method lives under the
+    # separate /api/admin/ namespace (DESIGN.md's read/write split).
     for path, methods in paths.items():
-        assert set(methods).issubset({"get"}), f"{path} has non-GET methods"
+        if not path.startswith(f"{API}/admin/"):
+            assert set(methods).issubset({"get"}), f"{path} has non-GET methods"
+
+
+def test_public_api_rejects_write_methods(client, full):
+    sp_id = full[0]["id"]
+    assert client.post(f"{API}/scheduled-procedures", json={}).status_code == 405
+    assert client.put(f"{API}/scheduled-procedures/{sp_id}", json={}).status_code == 405
+    assert client.delete(f"{API}/scheduled-procedures/{sp_id}").status_code == 405
