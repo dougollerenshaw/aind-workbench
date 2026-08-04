@@ -213,6 +213,20 @@ def test_form_uses_start_plus_duration(html):
     assert "updateEndHint" in html
 
 
+def test_date_filter_bounds_are_local_calendar_days(html):
+    """The From/To inputs are local calendar dates, so the bounds sent to the
+    API must be local midnight / end-of-day converted to UTC. Sending
+    `${date}T00:00:00Z` shifted the window by the UTC offset and dropped real
+    matches (in Pacific, a "To" date excluded everything after 16:59 local)."""
+    assert "params.set('start_after', localDayStart(from).toISOString())" in html
+    assert "params.set('start_before', localDayEnd(to).toISOString())" in html
+    assert "function localDayStart" in html and "function localDayEnd" in html
+    # No naive-UTC date bound is actually *sent* (the string may still appear
+    # in the explanatory comment).
+    assert not re.search(r"params\.set\([^)]*T00:00:00Z", html)
+    assert not re.search(r"params\.set\([^)]*T23:59:59Z", html)
+
+
 def test_behavior_exclusivity_wiring(html):
     """Once one Behavior-modality type is checked, the others are disabled and
     muted (mirrors the server's `multiple_behavior_types` rule)."""

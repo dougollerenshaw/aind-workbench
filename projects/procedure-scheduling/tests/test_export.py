@@ -20,6 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scheduler_app.db import TABLES, Database
 from scripts.export_parquet import export_parquet
 from scripts.seed import seed_database
+from tests.expected_times import LOCAL_TZ, expected_start
 
 REFERENCE = datetime(2026, 8, 3, 17, 30, tzinfo=timezone.utc)
 
@@ -131,10 +132,12 @@ def test_scheduled_procedures_values_survive(exported):
     assert json.loads(sp1["planned_config"]) == json.loads(duck[4])
     assert json.loads(sp1["planned_config"])["fibers"] == ["DMS-left", "DMS-right"]
 
-    # And the instant is the seeded one: reference date + 1 day at 09:00 UTC.
-    assert sp1["scheduled_start"].astimezone(timezone.utc) == datetime(
-        2026, 8, 4, 9, 0, tzinfo=timezone.utc
+    # And the instant is the seeded one: 09:00 LOCAL on the first weekday from
+    # reference + 1 day (2026-08-04 is a Tuesday, so no weekend nudge here).
+    assert sp1["scheduled_start"].astimezone(timezone.utc) == expected_start(
+        datetime(2026, 8, 3, tzinfo=timezone.utc), 1, 9
     )
+    assert sp1["scheduled_start"].astimezone(LOCAL_TZ).hour == 9
 
 
 def test_join_tables_survive_and_reference_valid_ids(exported):

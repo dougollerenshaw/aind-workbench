@@ -435,6 +435,16 @@ function primaryTypeColor(activeTypeNames) {
   return best ? best.color : '#8892a0';
 }
 
+// "2026-08-05" -> that instant at 00:00:00 LOCAL time. A date string without
+// a timezone suffix is parsed as local time, which is what we want here.
+function localDayStart(dateString) {
+  return new Date(`${dateString}T00:00:00`);
+}
+
+function localDayEnd(dateString) {
+  return new Date(`${dateString}T23:59:59`);
+}
+
 async function loadEvents() {
   const params = new URLSearchParams();
   const typeId = document.getElementById('filter-type').value;
@@ -443,8 +453,12 @@ async function loadEvents() {
   const to = document.getElementById('filter-end').value;
   if (typeId) params.set('procedure_type_id', typeId);
   if (instrumentId) params.set('instrument_id', instrumentId);
-  if (from) params.set('start_after', `${from}T00:00:00Z`);
-  if (to) params.set('start_before', `${to}T23:59:59Z`);
+  // The date inputs mean LOCAL calendar days, so convert local midnight /
+  // end-of-day to UTC instants. Sending `${from}T00:00:00Z` instead would
+  // shift the bounds by the UTC offset and drop genuine matches — in Pacific
+  // a "To" date would have excluded everything after 16:59 local.
+  if (from) params.set('start_after', localDayStart(from).toISOString());
+  if (to) params.set('start_before', localDayEnd(to).toISOString());
 
   let records = await fetchJSON(`${API}/scheduled-procedures?${params}`);
 

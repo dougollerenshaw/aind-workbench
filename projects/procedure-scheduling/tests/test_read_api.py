@@ -17,6 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from scheduler_app.main import create_app
 from scripts.seed import seed_database
+from tests.expected_times import expected_start
 
 NOW = datetime.now(timezone.utc)
 TODAY = NOW.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -78,7 +79,7 @@ def test_list_returns_all_seeded_rows_sorted_by_start(full):
 
 def test_sp1_payload_matches_example_2_shape(client, full):
     """SP-1 resolved exactly as documented (ids are real UUIDs here)."""
-    sp1_start = iso(TODAY + timedelta(days=1, hours=9))
+    sp1_start = iso(expected_start(TODAY, 1, 9))   # 09:00 LOCAL, day+1
     sp1 = next(
         r for r in full
         if r["scheduled_start"] == sp1_start
@@ -114,7 +115,7 @@ def test_sp1_payload_matches_example_2_shape(client, full):
     ]
     assert sp1["acquisition_type"] == "Dynamic foraging behavior + Fiber photometry (FIP)"
     assert sp1["acquisition_name"] is None
-    assert sp1["scheduled_end"] == iso(TODAY + timedelta(days=1, hours=11))
+    assert sp1["scheduled_end"] == iso(expected_start(TODAY, 1, 9) + timedelta(hours=2))
     assert sp1["status"] == "scheduled"
 
 
@@ -239,7 +240,7 @@ def test_filters_are_combinable(client, full):
 
 
 def test_single_record_fully_resolved(client, full):
-    sp1_start = iso(TODAY + timedelta(days=1, hours=9))
+    sp1_start = iso(expected_start(TODAY, 1, 9))   # 09:00 LOCAL, day+1
     sp1 = next(
         r for r in full
         if r["scheduled_start"] == sp1_start
@@ -352,7 +353,7 @@ def test_mice_projects_users_endpoints(client):
 def test_rig_planned_acquisitions(client, full):
     # SP-1 lives on the dynamic-foraging box (BEH-DF-01) since Doug's domain
     # correction, so that's the rig whose window we check.
-    start, end = TODAY, TODAY + timedelta(days=3)
+    start, end = TODAY, TODAY + timedelta(days=7)
     response = client.get(
         f"{API}/rig/BEH-DF-01/planned-acquisitions",
         params={"start": iso(start), "end": iso(end)},
@@ -373,8 +374,8 @@ def test_rig_planned_acquisitions(client, full):
         and start <= parse(r["scheduled_start"]) < end
     ]
     assert got == expected
-    # SP-1 (tomorrow 09:00) is always inside this window.
-    sp1 = next(g for g in got if g["scheduled_start"] == iso(start + timedelta(days=1, hours=9)))
+    # SP-1 (09:00 local on the first weekday from day+1) is inside the window.
+    sp1 = next(g for g in got if g["scheduled_start"] == iso(expected_start(TODAY, 1, 9)))
     assert sp1["subject_id"] == "testmouse1"
     assert sp1["acquisition_type"] == "Dynamic foraging behavior + Fiber photometry (FIP)"
     assert set(sp1.keys()) == {
@@ -426,7 +427,7 @@ def test_next_acquisition_for_animal(client, full):
         "scheduled_start": soonest["scheduled_start"],
     }
     # And that soonest row is SP-1: tomorrow 09:00 on the dynamic-foraging box.
-    assert got["scheduled_start"] == iso(TODAY + timedelta(days=1, hours=9))
+    assert got["scheduled_start"] == iso(expected_start(TODAY, 1, 9))
     assert got["instrument"] == "Dynamic-Foraging-Box-1"
 
 

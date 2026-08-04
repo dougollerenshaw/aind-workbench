@@ -2,9 +2,12 @@
 
 ## Summary (read this first)
 
-**Status: complete.** All seven milestones (M1–M7) built and verified; the
-full pytest suite (105 tests) is green and each milestone passed an
-independent verification pass. Nothing is blocked.
+**Status: complete and deployed.** Milestones M1–M7 (the specified build)
+plus M8–M12 (tool-launcher integration and Doug's review rounds) are built and
+verified; the full pytest suite (126 tests) is green, plus 11 launcher tests,
+and each milestone passed an independent verification pass. Nothing is
+blocked. **If you read one more thing, read "Amendments needed to DESIGN.md"
+immediately below — that's the list for Bruno.**
 
 **What was built** — the prototype specified in `DESIGN.md`:
 
@@ -62,10 +65,35 @@ built; the tool launcher (M8) is now the actual deployment vehicle, run
 under tmux per its README, so they're redundant unless someone wants the
 scheduler to survive reboots independently of the launcher.
 
-**Deliberate divergence from DESIGN.md needing spec amendments:** see
-"M10 — Domain correction: one behavior task per rig" at the bottom — VR rig
-compatibility, a fourth instrument, SP-1's home, and a fourth validation
-rule, all per Doug's 2026-08-04 ruling. That's the list for Bruno.
+## Amendments needed to DESIGN.md (the list for Bruno)
+
+`DESIGN.md` was treated as a frozen input spec and never edited. Three
+findings need to go back into it — the first is a documentation
+inconsistency, the other two are Doug's domain corrections of 2026-08-04.
+The prototype implements the corrected behavior in all three cases.
+
+1. **Procedure-type name inconsistency (documentation).** The vocabulary and
+   modality tables call it `Acute extracellular electrophysiology (modular
+   insertion)`, while the instruments seed table and Example 1 abbreviate it
+   to `Acute extracellular electrophysiology`. The prototype uses the full
+   vocabulary name, so SP-4's computed `acquisition_type` is longer than
+   Example 1 shows. Pick one spelling. (Details: M2 notes.)
+2. **A behavior rig runs exactly ONE behavior task.** The seed table gives
+   `VR-Foraging-Rig-A` both Patch foraging *and* Dynamic foraging, and SP-1
+   schedules dynamic foraging on it. VR foraging **is** the patch-foraging
+   paradigm (`Aind.Behavior.VrForaging`). Corrected: the VR rig offers Patch
+   foraging + FIP; a fourth instrument `Dynamic-Foraging-Box-1`
+   (`DynamicForaging1` / `BEH-DF-01`) carries Dynamic foraging + FIP; SP-1
+   moves there unchanged; and a **fourth validation rule** rejects more than
+   one Behavior-modality type per procedure (`multiple_behavior_types`).
+   DESIGN.md lists three validation rules and three instruments; it needs
+   four of each. (Details: M10 notes.)
+3. **Times in the seed table are rig-local, not UTC.** The table is labelled
+   "times UTC"; read that way, SP-1's documented 09:00 renders at 02:00
+   Pacific — a 2 a.m. session. The documented clock values are rig-local
+   wall-clock (storage stays UTC). The line saying "times UTC" should change.
+   Related: the prototype also nudges seeded rows off weekends, so day
+   offsets are "first weekday at or after the offset". (Details: M12 notes.)
 
 **Notable deviations from DESIGN.md** (each detailed in its milestone
 section below): no native DuckDB FK constraints (app-enforced; DuckDB's
@@ -564,40 +592,105 @@ with no current-time line and a seeded event at 2 a.m.
   *UTC* appeared at 02:00 Pacific. One row (SmartSPIM, 5 h) moved from 14:00
   to 12:00 so it ends inside the window. The existing weekday nudge is kept.
 
-**Open question for Doug — the canonical rows are still the 2 a.m. events.**
-SP-1..SP-4 keep DESIGN.md's documented times *as UTC* (09:00/13:00/10:00/
-09:00) per instruction, which in Pacific renders as **02:00, 06:00, 03:00,
-02:00 local** — so SP-1, the flagship multi-modality example, is exactly the
-2 a.m. event from the screenshot, and it is one of the rows the day view
-can't draw (it appears in the notice, the 24 h toggle, and Week/Month).
-DESIGN.md says those times are UTC; it almost certainly *means* 9 a.m. at the
-rig. `scripts/seed.py` therefore has a one-line switch:
+**RESOLVED (M12) — see the M12 section below.** M11 left the canonical rows'
+times read as UTC pending Doug's call; on 2026-08-04 he ruled that documented
+clock values are **rig-local**, which is now the single behavior. All 18
+seeded rows land inside local working hours.
 
-```python
-CANONICAL_TIMES_ARE_UTC = True   # default: honor DESIGN.md literally
-```
+## M12 — Timezone rule: documented clock times are rig-local
 
-Set it to `False` to read the same documented clock times as local; verified
-that this puts **all 18 seeded rows inside local working hours** with the
-canonical clock values preserved. Doug's call — it's a genuine
-spec-fidelity-vs-demo-realism tradeoff, and worth folding into the DESIGN.md
-amendments for Bruno either way.
+**Doug's decision, 2026-08-04:** the clock values in DESIGN.md's seed table
+are **rig-local wall-clock**, not UTC. SP-1's documented 09:00 means 9 a.m. at
+the rig. Reading them as UTC put the flagship example at 02:00 Pacific — the
+2 a.m. session from the first browser pass.
+
+What changed:
+
+- `scripts/seed.py` has **one** start-time helper (`_weekday_local_start`)
+  used by canonical and filler rows alike: local wall-clock -> UTC for
+  storage. The M11 `CANONICAL_TIMES_ARE_UTC` switch was **removed** rather
+  than flipped — a lingering boolean with two supported timezone meanings is
+  exactly the confusion that produced this bug.
+- **Canonical rows are now weekday-nudged too.** SP-3 (day+4) landed on a
+  Saturday whenever the seed ran on a Tuesday or Wednesday; a Saturday
+  histology session makes the demo look wrong. The cost is that DESIGN.md's
+  exact day offsets become "the first weekday at or after the offset" on some
+  run dates — a better trade than a weekend session, and the documented clock
+  times and durations are preserved exactly.
+- **Slot-collision fix (found by this change):** nudging a canonical row can
+  drop it onto a filler row's slot for the same mouse and rig — SP-3 and a
+  filler both wanted SmartSPIM-1 at 10:00 on the same Monday when seeding from
+  a Tuesday — and the natural-key dedupe silently skipped one, yielding 17
+  rows instead of 18. Seeding now distinguishes "slot already in the database
+  from an earlier run" (skip, keeping re-runs idempotent) from "two specs want
+  one slot in this run" (shift an hour). Verified: exactly 18 rows, all inside
+  weekday working hours, idempotent on re-run, from **all seven** reference
+  weekdays.
+
+**Known cosmetic artifact:** because the shifter moves a colliding row by an
+hour rather than out of the way entirely, weekday nudging can leave two
+sessions *overlapping* on one instrument (e.g. SmartSPIM-1 10:00–16:00 and
+11:00–15:00 on the same Monday). This is deliberate: DESIGN.md defines no
+non-overlap rule, a scheduler should be able to represent a genuine
+double-booking, and FullCalendar stacks the bars legibly within the
+instrument's row. If Doug wants the seed to avoid it, the fix is to push the
+later row to the next weekday rather than the next hour.
+
+### Timezone audit (M12 task 1)
+
+Every place a conversion happens, and whether it agrees with "documented
+clock values are rig-local":
+
+| Place | Behavior | Consistent? |
+|---|---|---|
+| `scripts/seed.py` | local wall-clock -> UTC on write | ✔ the rule |
+| DuckDB storage / API responses | UTC always, ISO-8601 with `Z` | ✔ unambiguous |
+| SPA add/edit form | `datetime-local` (local) -> `toISOString()` (UTC) | ✔ |
+| SPA calendar rendering | renders UTC instants in viewer-local time | ✔ |
+| SPA date-range filter | **was** a bug — see below | ✔ now fixed |
+| Admin write API, naive datetime | treated as **UTC** | ⚠ see below |
+
+- **Fixed here — SPA date-range filter.** The From/To inputs are local
+  calendar dates, but the page sent `${date}T00:00:00Z` / `T23:59:59Z`, i.e.
+  UTC-midnight bounds. In Pacific that shifted the window seven hours: a "To"
+  date silently excluded every procedure after 16:59 local. Now converts local
+  midnight / end-of-day to UTC instants (`localDayStart` / `localDayEnd`),
+  covered by a test.
+- **Remaining ambiguity, deliberately left — naive datetimes on the write
+  API.** `ensure_utc()` treats a datetime with no offset as UTC, so
+  `POST {"scheduled_start": "2026-09-01T09:00:00"}` means 09:00 **UTC**, which
+  in Pacific stores 02:00 local — the opposite of the seed's convention for
+  the same-looking string. It is not a bug for any current caller (the SPA
+  always sends explicit `Z`), and treating naive input as server-local would
+  make the API's meaning depend on the host's timezone, which is worse for an
+  API. **Recommendation for the real system: reject naive datetimes outright**
+  (require an explicit offset) rather than guessing. Flagged rather than
+  silently changed.
 
 ### Re-seeding the live database (Doug runs this when ready)
 
-Seeding is idempotent, so the **running :8080 database will NOT pick up the
-M10 compatibility sets / new instrument or the M11 working-hours times** until
-it is re-seeded with `--reset`. That needs the launcher stopped, because
-DuckDB is single-writer. **`--reset` wipes every table, discarding any
-procedures created through the UI.** (The M11 calendar changes are in
-`template.html`, which is read per request — those are live on refresh with
-no restart and no re-seed.)
+**This supersedes the sequences in the M10/M11 notes — one run covers all of
+M10 + M11 + M12.** Seeding is idempotent, so a plain re-run will NOT pick up
+these changes; `--reset` is required. It needs the launcher stopped, because
+DuckDB is single-writer.
+
+What the re-seed brings in that the live database does not have yet:
+
+- M10: the fourth instrument `Dynamic-Foraging-Box-1`, the corrected
+  compatibility sets (VR rig loses Dynamic foraging), SP-1's relocation.
+- M11/M12: every procedure on a weekday inside local working hours
+  (07:00–18:00), with documented clock times read as rig-local.
+
+**`--reset` wipes every table, discarding any procedures created through the
+UI.** Everything in `template.html` (the M9 modal fix and duration input, the
+M11 day-view calendar, the M12 filter fix) is read per request and is already
+live — no restart and no re-seed needed for those.
 
 ```bash
 # 1. stop the launcher (in its tmux session: Ctrl-C, or)
 pkill -f "launcher.py"
 
-# 2. reset + re-seed the scheduler's database
+# 2. reset + re-seed the scheduler's database  (WIPES existing rows)
 cd ~/code/aind-workbench/projects/procedure-scheduling
 uv run python scripts/seed.py --reset
 
@@ -606,5 +699,7 @@ cd ../tool-launcher
 uv run python launcher.py          # or inside tmux: tmux new -s tools
 ```
 
-Then reload `http://10.128.142.221:8080/session_schedule/` — the calendar
-should show four instrument rows including Dynamic-Foraging-Box-1.
+Then reload `http://10.128.142.221:8080/session_schedule/`. Expect: four
+instrument rows including Dynamic-Foraging-Box-1, one working day across the
+page with the current-time line, and every seeded session between 07:00 and
+18:00 on a weekday — no 2 a.m. or Saturday sessions.

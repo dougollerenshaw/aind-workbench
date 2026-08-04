@@ -14,12 +14,10 @@ from scheduler_app.store import compute_acquisition_type
 from scripts.seed import (
     CANONICAL_PROCEDURES,
     EXTRA_PROCEDURES,
-    LOCAL_TZ,
-    WORKING_DAY_END,
-    WORKING_DAY_START,
     row_counts,
     seed_database,
 )
+from tests.expected_times import LOCAL_TZ, expected_start
 
 # Fixed reference date so seeded datetimes are predictable in tests.
 REFERENCE = datetime(2026, 8, 3, 17, 30, tzinfo=timezone.utc)
@@ -223,14 +221,14 @@ def _resolved(db, subject_id, instrument_name, start):
 
 
 def test_sp1_matches_design_document(seeded):
-    """SP-1: testmouse1, today+1 09:00->11:00, Dynamic foraging + FIP,
+    """SP-1: testmouse1, today+1 09:00->11:00 LOCAL, Dynamic foraging + FIP,
     contact Doug, experimenter Bruno.
 
     Per Doug's 2026-08-04 correction this row lives on
     Dynamic-Foraging-Box-1, not DESIGN.md's VR-Foraging-Rig-A (a VR rig
     doesn't run the dynamic foraging task); everything else is as documented.
     """
-    start = TODAY + timedelta(days=1, hours=9)
+    start = expected_start(TODAY, 1, 9)   # 09:00 LOCAL on day+1
     row, active, experimenters = _resolved(
         seeded, "testmouse1", "Dynamic-Foraging-Box-1", start
     )
@@ -252,7 +250,7 @@ def test_sp1_matches_design_document(seeded):
 
 
 def test_sp2_matches_design_document(seeded):
-    start = TODAY + timedelta(days=2, hours=13)
+    start = expected_start(TODAY, 2, 13)  # 13:00 LOCAL on day+2
     row, active, experimenters = _resolved(seeded, "testmouse2", "VR-Foraging-Rig-A", start)
     assert row[7] == start + timedelta(hours=1, minutes=30)
     assert row[8] == "Patch foraging behavior"
@@ -262,7 +260,7 @@ def test_sp2_matches_design_document(seeded):
 
 
 def test_sp3_matches_design_document(seeded):
-    start = TODAY + timedelta(days=4, hours=10)
+    start = expected_start(TODAY, 4, 10)  # 10:00 LOCAL on day+4
     row, active, experimenters = _resolved(seeded, "testmouse3", "SmartSPIM-1", start)
     assert row[7] == start + timedelta(hours=6)
     assert row[4] == "Brain-wide connectivity"
@@ -273,7 +271,7 @@ def test_sp3_matches_design_document(seeded):
 
 
 def test_sp4_matches_design_document(seeded):
-    start = TODAY + timedelta(days=8, hours=9)
+    start = expected_start(TODAY, 8, 9)   # 09:00 LOCAL on day+8
     row, active, experimenters = _resolved(seeded, "testmouse1", "Ephys-Rig-2", start)
     assert row[7] == start + timedelta(hours=3)
     assert row[5] == "Doug Ollerenshaw"
@@ -389,60 +387,63 @@ def test_no_seeded_procedure_has_two_behavior_types(seeded):
     assert offenders == []
 
 
-def test_filler_procedures_fall_in_local_working_hours_on_weekdays(seeded):
-    """Generated procedures must look like real sessions: inside the local
-    working-hours window, on weekdays. No more 2 a.m. sessions.
+def test_every_seeded_procedure_is_in_local_working_hours_on_a_weekday(seeded):
+    """ALL 18 rows — canonical included — must look like real sessions: inside
+    the local working-hours window, on a weekday, not spanning midnight.
 
-    The four canonical rows are exempt — they keep DESIGN.md's documented UTC
-    clock times, which land outside local working hours in this timezone (see
-    the dedicated assertion below and BUILD_NOTES).
+    No exemptions since Doug's 2026-08-04 ruling that documented clock times
+    are rig-local (previously the four canonical rows landed at 02:00-06:00
+    local because their times were read as UTC).
     """
-    canonical_starts = {
-        TODAY + timedelta(days=1, hours=9),    # SP-1
-        TODAY + timedelta(days=2, hours=13),   # SP-2
-        TODAY + timedelta(days=4, hours=10),   # SP-3
-        TODAY + timedelta(days=8, hours=9),    # SP-4
-    }
     rows = seeded.conn.execute(
         "SELECT id, scheduled_start, scheduled_end FROM scheduled_procedures"
     ).fetchall()
+    assert len(rows) == EXPECTED_PROCEDURES
 
-    window_start = WORKING_DAY_START.hour * 60 + WORKING_DAY_START.minute
-    window_end = WORKING_DAY_END.hour * 60 + WORKING_DAY_END.minute
-    checked = 0
+    # Window bounds hardcoded (07:00-18:00 local), not read from seed.py.
+    window_start, window_end = 7 * 60, 18 * 60
     for _, start_utc, end_utc in rows:
-        if start_utc in canonical_starts:
-            continue
-        checked += 1
         start = start_utc.astimezone(LOCAL_TZ)
         end = end_utc.astimezone(LOCAL_TZ)
         assert start.weekday() < 5, f"{start} is a weekend"
         assert end.weekday() < 5, f"{end} is a weekend"
-        start_minutes = start.hour * 60 + start.minute
-        end_minutes = end.hour * 60 + end.minute
-        assert window_start <= start_minutes <= window_end, f"{start} starts outside hours"
-        assert window_start <= end_minutes <= window_end, f"{end} ends outside hours"
+        assert window_start <= start.hour * 60 + start.minute <= window_end, (
+            f"{start} starts outside working hours"
+        )
+        assert window_start <= end.hour * 60 + end.minute <= window_end, (
+            f"{end} ends outside working hours"
+        )
         assert start.date() == end.date(), f"{start} spans midnight"
-    assert checked == len(EXTRA_PROCEDURES)
 
 
-def test_canonical_rows_keep_their_documented_utc_times(seeded):
-    """SP-1..SP-4 keep DESIGN.md's exact documented UTC clock times, whatever
-    the local working-hours window is."""
+def test_canonical_rows_keep_their_documented_clock_times_as_local(seeded):
+    """SP-1..SP-4 keep DESIGN.md's documented clock values (09:00 / 13:00 /
+    10:00 / 09:00) and durations, read as RIG-LOCAL time per Doug's
+    2026-08-04 decision — so 09:00 means 9 a.m. at the rig, not 02:00 local.
+
+    Expected instants are computed by tests/expected_times.py, an independent
+    implementation of the documented rule.
+    """
     expected = [
-        (TODAY + timedelta(days=1, hours=9), 2.0),     # SP-1 09:00 UTC, 2 h
-        (TODAY + timedelta(days=2, hours=13), 1.5),    # SP-2 13:00 UTC, 1.5 h
-        (TODAY + timedelta(days=4, hours=10), 6.0),    # SP-3 10:00 UTC, 6 h
-        (TODAY + timedelta(days=8, hours=9), 3.0),     # SP-4 09:00 UTC, 3 h
+        ("SP-1", 1, 9, 0, 2.0),     # today+1, 09:00 local, 2 h
+        ("SP-2", 2, 13, 0, 1.5),    # today+2, 13:00 local, 1.5 h
+        ("SP-3", 4, 10, 0, 6.0),    # today+4, 10:00 local, 6 h
+        ("SP-4", 8, 9, 0, 3.0),     # today+8, 09:00 local, 3 h
     ]
-    for start, hours in expected:
+    for label, day_offset, hour, minute, hours in expected:
+        start = expected_start(TODAY, day_offset, hour, minute)
         row = seeded.conn.execute(
             "SELECT scheduled_end FROM scheduled_procedures WHERE scheduled_start = ?",
             [start],
         ).fetchone()
-        assert row is not None, f"no canonical procedure starting {start.isoformat()}"
-        assert row[0] == start + timedelta(hours=hours)
-        assert start.astimezone(timezone.utc).hour == start.hour  # stored as UTC
+        assert row is not None, (
+            f"no {label} starting {start.isoformat()} "
+            f"({hour:02d}:{minute:02d} local on day+{day_offset})"
+        )
+        assert row[0] == start + timedelta(hours=hours), label
+        # The documented clock value is what a calendar reader sees locally.
+        local_start = start.astimezone(LOCAL_TZ)
+        assert (local_start.hour, local_start.minute) == (hour, minute), label
 
 
 def test_all_seeded_procedures_respect_instrument_compatibility(seeded):

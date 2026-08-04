@@ -13,11 +13,14 @@ other live system, and the mouse ids are deliberately non-numeric
 ("testmouse1") so they can never be confused with real AIND subject ids.
 
 Dates are relative to the day the script runs ("today" = run date), so a
-freshly seeded database always has a schedule in the near future. Storage is
-always UTC; the canonical SP-1..SP-4 keep DESIGN.md's documented UTC clock
-times, while the filler rows are placed inside LOCAL working hours (see
-LOCAL_TZ / WORKING_DAY_* below) so the rendered calendar looks like a real
-working week rather than showing 2 a.m. sessions.
+freshly seeded database always has a schedule in the near future.
+
+TIMES ARE RIG-LOCAL. Every clock time below is local wall-clock, converted to
+UTC on the way into the database (storage is always UTC), and every row is
+placed on a weekday inside working hours (see LOCAL_TZ / WORKING_DAY_* below).
+This is Doug's 2026-08-04 decision and supersedes DESIGN.md, whose seed table
+labels those times UTC — reading them as UTC rendered the documented 09:00
+session at 02:00 Pacific.
 
 Re-runnable: lookups are matched on their natural keys (name / subject_id /
 email) and scheduled procedures on (mouse, instrument, scheduled_start), so
@@ -153,25 +156,23 @@ USR_DOUG = "doug.ollerenshaw@alleninstitute.org"
 USR_BRUNO = "bruno.cruz@alleninstitute.org"
 USR_JANE = "jane.kim@alleninstitute.org"
 
-# The machine's local timezone. Filler procedure times below are written as
-# local wall-clock working hours and converted to UTC on the way into the
-# database (which is always UTC). Doug's browser renders local time, so this
-# is what keeps the seeded calendar looking like a real working week.
+# The rig's local timezone (the machine's). All procedure times below are
+# written as local wall-clock and converted to UTC on the way into the
+# database. A calendar reader sees local time, so this is what keeps the
+# seeded schedule looking like a real working week.
 LOCAL_TZ = datetime.now().astimezone().tzinfo
 
-# Working-hours window the filler procedures must fit inside (local time).
+# Working-hours window every seeded procedure must fit inside (local time).
 # Keep in step with WORKING_HOURS in template.html.
 WORKING_DAY_START = time(7, 0)
 WORKING_DAY_END = time(18, 0)
 
-# DESIGN.md documents SP-1..SP-4's times as UTC and by default we honor that
-# exactly. Note the consequence: 09:00 UTC renders as 02:00 in Pacific time,
-# so those four rows land outside local working hours — SP-1 is precisely the
-# 2 a.m. event from the first browser pass. Set this to False to read their
-# documented clock times (09:00/13:00/10:00/09:00) as LOCAL instead, which
-# puts all seeded rows inside working hours at the cost of diverging from
-# DESIGN.md's "times UTC" note. See BUILD_NOTES.md "M11".
-CANONICAL_TIMES_ARE_UTC = True
+# TIMEZONE RULE (Doug's decision, 2026-08-04 — supersedes DESIGN.md, whose
+# seed table says "times UTC"): every clock time in this file is RIG-LOCAL
+# wall-clock. SP-1's documented 09:00 means 9 a.m. at the rig, not 09:00 UTC
+# (which renders as 02:00 in Pacific time — the 2 a.m. session from Doug's
+# first browser pass). Times are converted to UTC on the way into the
+# database, which remains UTC-only. See BUILD_NOTES.md "M12".
 
 # Synthetic IACUC / ethics protocol numbers.
 ETHICS_BEHAVIOR = "IACUC-2109"
@@ -188,9 +189,10 @@ ETHICS_IMAGING = "IACUC-2115"
 #
 # Fields: day offset from today, start time, duration in hours, mouse
 # subject_id, instrument name, project, contact, experimenters, active
-# procedure types, and optional extras. NOTE the timezone split: canonical
-# rows' `start` is UTC (as DESIGN.md documents); filler rows' `start` is LOCAL
-# wall-clock and is converted to UTC when seeded.
+# procedure types, and optional extras. Every `start` is LOCAL wall-clock and
+# every row lands on the first weekday at/after its offset — see
+# _weekday_local_start. Day offsets are therefore approximate on run dates
+# where the offset falls on a weekend.
 # ---------------------------------------------------------------------------
 
 CANONICAL_PROCEDURES = [
@@ -334,41 +336,34 @@ EXTRA_PROCEDURES = [
 
 
 def _today(reference: datetime | None = None) -> datetime:
-    """Midnight UTC on the seeding reference date (default: today)."""
+    """Midnight UTC on the seeding reference date (default: today).
+
+    Used only as the date anchor that day offsets are added to; the actual
+    clock times are applied in the local timezone by
+    :func:`_weekday_local_start`.
+    """
     now = reference or datetime.now(timezone.utc)
     return now.astimezone(timezone.utc).replace(
         hour=0, minute=0, second=0, microsecond=0
     )
 
 
-def _start_datetime(today: datetime, day_offset: int, start: time) -> datetime:
-    """Exact start = today + day_offset at the given UTC time."""
-    day = today + timedelta(days=day_offset)
-    return day.replace(hour=start.hour, minute=start.minute)
-
-
-def _canonical_start(today: datetime, day_offset: int, start: time) -> datetime:
-    """Start time for SP-1..SP-4: their exact documented clock time, read as
-    UTC or as local depending on ``CANONICAL_TIMES_ARE_UTC``. No weekday
-    nudging — the canonical rows keep DESIGN.md's exact day offsets."""
-    if CANONICAL_TIMES_ARE_UTC:
-        return _start_datetime(today, day_offset, start)
-    day = today + timedelta(days=day_offset)
-    local_naive = datetime(day.year, day.month, day.day, start.hour, start.minute)
-    return local_naive.replace(tzinfo=LOCAL_TZ).astimezone(timezone.utc)
-
-
 def _weekday_local_start(today: datetime, day_offset: int, start: time) -> datetime:
-    """Filler start time: `start` read as LOCAL wall-clock, returned as UTC.
+    """Start time for EVERY seeded row: `start` read as rig-LOCAL wall-clock
+    on the first weekday at/after ``today + day_offset``, returned as UTC.
 
-    Filler procedures are deliberately placed inside working hours *in the
-    rig's local timezone* (the machine's), because that's what a human reading
-    the calendar sees — a 09:00 UTC session renders at 02:00 in Pacific time,
-    which is what made the first browser pass look wrong. Storage stays UTC.
+    Two deliberate choices, both applied uniformly to the canonical SP-1..SP-4
+    rows and the filler rows (see BUILD_NOTES.md "M12"):
 
-    Also nudged forward off Sat/Sun, as before, so the calendar doesn't look
-    odd when the seed script happens to run late in the week. (SP-1..SP-4 keep
-    their exact UTC offsets from DESIGN.md — see :func:`_start_datetime`.)
+    - **Local, not UTC.** A human reading the calendar sees local time, so
+      DESIGN.md's documented 09:00 means 9 a.m. at the rig. Reading it as UTC
+      rendered it at 02:00 Pacific — the 2 a.m. session from the first
+      browser pass. The database still stores UTC.
+    - **Weekends nudged forward.** Rig work happens on weekdays; a histology
+      session appearing on a Saturday just because the seed script ran on a
+      Tuesday makes the demo look wrong. This costs DESIGN.md's exact day
+      offsets on some run dates (they become "first weekday at or after the
+      offset"), which is a better trade than a weekend session.
     """
     day = today + timedelta(days=day_offset)
     while day.weekday() >= 5:  # 5 = Saturday, 6 = Sunday
@@ -443,30 +438,40 @@ def seed_database(db: Database, reference: datetime | None = None) -> dict[str, 
     }
 
     # --- scheduled procedures --------------------------------------------
-    # (instrument_id, scheduled_start) -> mouse_id for every slot already taken,
-    # whether by a previous run or earlier in this one.
-    occupied: dict[tuple[str, datetime], str] = {}
+    # Slots already in the database from an EARLIER run. The same mouse in the
+    # same slot means "this spec is already seeded", which is what makes
+    # re-running a no-op.
+    seeded_slots: dict[tuple[str, datetime], str] = {}
+    for inst_id, existing_start, existing_mouse_id in db.conn.execute(
+        "SELECT instrument_id, scheduled_start, mouse_id FROM scheduled_procedures"
+    ).fetchall():
+        seeded_slots[(inst_id, existing_start)] = existing_mouse_id
+
+    # Slots filled during THIS run. A clash here is two different specs wanting
+    # the same rig at the same instant — including the same mouse, which the
+    # weekday nudge can produce when a canonical row's weekend offset lands on
+    # a filler row's day — so the later spec shifts rather than being skipped.
+    placed_slots: set[tuple[str, datetime]] = set()
 
     def add(spec: dict, start_dt: datetime) -> None:
         instrument_id = instrument_ids[spec["instrument"]]
         mouse_id = mouse_ids[spec["mouse"]]
 
-        # Resolve the slot. If it already holds this same mouse, this exact
-        # procedure was seeded on an earlier run — skip it (this is what makes
-        # re-running safe). If it holds a different mouse, the instrument is
-        # double-booked, so shift an hour later and look again. The scan is
-        # deterministic, so every run resolves each spec to the same slot.
+        # Resolve the slot, shifting an hour at a time past anything already
+        # taken. Bailing out as soon as a slot holds this mouse from a previous
+        # run keeps re-runs idempotent; the scan is deterministic, so every run
+        # resolves each spec the same way.
         while True:
-            slot_mouse = occupied.get((instrument_id, start_dt))
-            if slot_mouse is None:
+            key = (instrument_id, start_dt)
+            if seeded_slots.get(key) == mouse_id:
+                return  # already seeded on an earlier run
+            if key not in placed_slots and key not in seeded_slots:
                 break
-            if slot_mouse == mouse_id:
-                return
             start_dt += timedelta(hours=1)
 
         if find_scheduled_procedure(db, mouse_id, instrument_id, start_dt) is not None:
             return  # already seeded — re-run, nothing to do
-        occupied[(instrument_id, start_dt)] = mouse_id
+        placed_slots.add((instrument_id, start_dt))
 
         create_scheduled_procedure(
             db,
@@ -484,15 +489,8 @@ def seed_database(db: Database, reference: datetime | None = None) -> dict[str, 
             protocols=spec.get("protocols"),
         )
 
-    # Record slots already taken in the database so a re-run recognizes its own
-    # previous output instead of writing shifted copies of it.
-    for inst_id, start_dt, existing_mouse_id in db.conn.execute(
-        "SELECT instrument_id, scheduled_start, mouse_id FROM scheduled_procedures"
-    ).fetchall():
-        occupied[(inst_id, start_dt)] = existing_mouse_id
-
     for spec in CANONICAL_PROCEDURES:
-        add(spec, _canonical_start(today, spec["day_offset"], spec["start"]))
+        add(spec, _weekday_local_start(today, spec["day_offset"], spec["start"]))
     for spec in EXTRA_PROCEDURES:
         add(spec, _weekday_local_start(today, spec["day_offset"], spec["start"]))
 
