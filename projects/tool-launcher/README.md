@@ -8,6 +8,7 @@ This launcher allows you to run multiple Flask apps simultaneously on port 8080 
 
 - `http://your-vm-ip:8080/query_tool`
 - `http://your-vm-ip:8080/fiber_schematic_viewer`
+- `http://your-vm-ip:8080/session_schedule/` (Procedure Scheduler — a FastAPI/ASGI app, bridged in via `a2wsgi`)
 - (Future tools can be added easily)
 
 ## Setup

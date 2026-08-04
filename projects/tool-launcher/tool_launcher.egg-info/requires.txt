@@ -9,3 +9,9 @@ matplotlib>=3.8.0
 numpy>=1.24.0
 aind-metadata-upgrader
 requests>=2.31
+a2wsgi
+fastapi
+pydantic>=2
+duckdb>=1.0
+uuid-utils
+pytz

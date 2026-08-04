@@ -19,6 +19,14 @@ dependencies = [
     "aind-metadata-upgrader",
     # Dependencies for iacuc_lookup_api (uses aind_workbench.get_iacuc_id_for_mouse)
     "requests>=2.31",
+    # Dependencies for procedure-scheduling (scheduler_app runtime imports;
+    # pyarrow/uvicorn are only used by its scripts/standalone CLI, not here)
+    "a2wsgi",
+    "fastapi",
+    "pydantic>=2",
+    "duckdb>=1.0",
+    "uuid-utils",
+    "pytz",
 ]
 
 [dependency-groups]
