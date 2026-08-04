@@ -1,7 +1,65 @@
 # Build notes — procedure-scheduling prototype
 
-Running log of decisions and deviations, kept per milestone. Final summary
-(what was built, how to run on the VM) will be completed at M7.
+## Summary (read this first)
+
+**Status: complete.** All seven milestones (M1–M7) built and verified; the
+full pytest suite (105 tests) is green and each milestone passed an
+independent verification pass. Nothing is blocked.
+
+**What was built** — the prototype specified in `DESIGN.md`:
+
+- DuckDB store with all nine tables (string-UUID PKs; the
+  `scheduled_procedures.id` acquisition token is a time-sortable UUIDv7),
+  idempotent schema creation, single app-level connection with serialized
+  writes (`app/db.py`).
+- Canonical synthetic seed dataset, idempotent/re-runnable
+  (`scripts/seed.py`); the app also auto-seeds an empty DB on startup.
+- Read-only public API under `/session_schedule/api/...` with the full
+  combinable filter set and resolved lookups, plus the three rig-facing
+  endpoints (`app/read_api.py`).
+- Admin write API under `/session_schedule/api/admin/...` enforcing both
+  validation rules and recomputing `acquisition_type`/`updated_at`
+  server-side (`app/admin_api.py`, shared rules in `app/store.py`).
+- Calendar SPA at `/session_schedule/` — FullCalendar resource timeline,
+  instruments as rows, color-by-platform legend, filters, detail panel,
+  add/edit modal constrained to instrument compatibility (`template.html`).
+- Parquet export of every table for the Dataverse backfill
+  (`scripts/export_parquet.py`).
+- README with setup, CLI options, VM remote-access, and the Dataverse
+  mapping; OpenAPI docs at `/docs` with tagged sections.
+
+**Run it on the VM:**
+
+```bash
+cd projects/procedure-scheduling
+uv sync
+uv run python app.py            # binds 0.0.0.0:8000, auto-seeds if empty
+# UI:   http://<vm_ip>:8000/session_schedule/   (hostname -I for the IP)
+# Docs: http://<vm_ip>:8000/docs
+uv run pytest                   # full test suite
+uv run python scripts/seed.py --reset          # fresh demo data (optional)
+uv run python scripts/export_parquet.py        # Parquet -> data/parquet/
+```
+
+**Deferred (per DESIGN.md, intentionally not built):** auto Acquisition-log
+generation, cancellation/reschedule-reason capture, PowerPlatform
+notifications, SmartSPIM sub-workflows, auth. No Dataverse/network
+integration of any kind — local DuckDB + synthetic data only.
+
+**Notable deviations from DESIGN.md** (each detailed in its milestone
+section below): no native DuckDB FK constraints (app-enforced; DuckDB's
+DELETE+INSERT updates would break edits); the full vocabulary name is used
+for the ephys procedure type (DESIGN.md is self-inconsistent — flag to
+Bruno); seed dates are offsets from the run date; detail payloads include
+audit fields; `/api/instruments` returns the compatible-type set; write
+models reject (not ignore) server-computed fields; PUT is full-replace;
+Parquet files are written by DuckDB's native writer and verified with
+pyarrow; the SPA's subject filter is a client-side substring match; the
+date-range filter bounds `scheduled_start` only.
+
+---
+
+Running log of decisions and deviations, kept per milestone, follows.
 
 ## M1 — Schema + store
 
@@ -269,11 +327,17 @@ Built: `scripts/export_parquet.py` (one Parquet file per table into
 `data/parquet/`, `--db-path` / `--out-dir` flags), `tests/test_export.py`
 (7 tests).
 
-- Uses DuckDB's native Parquet writer (`COPY <table> TO ... (FORMAT
-  PARQUET)`) — simplest correct path; pyarrow reads the output, which the
-  round-trip tests prove (acceptance criterion 9: counts match for all nine
+Decisions / deviations:
+
+- **Deviation from the letter of DESIGN.md/CLAUDE.md ("pyarrow for Parquet
+  export"): DuckDB writes, pyarrow verifies.** The files are written with
+  DuckDB's native Parquet writer (`COPY <table> TO ... (FORMAT PARQUET)`)
+  instead of a hand-rolled DuckDB->Arrow conversion; pyarrow is the reader
+  that proves the output (acceptance criterion 9: counts match for all nine
   tables, plus column names, values, referential integrity of the exported
-  join tables, and re-export overwriting in place).
+  join tables, and re-export overwriting in place). CLAUDE.md explicitly
+  allows either as long as pyarrow can read the result, which the tests
+  demonstrate.
 - Column names in the files are exactly the DuckDB schema names, i.e. the
   left column of DESIGN.md's Dataverse-mapping table — backfill is a direct
   field mapping.
@@ -286,3 +350,19 @@ Built: `scripts/export_parquet.py` (one Parquet file per table into
   DuckDB->Arrow conversion step.
 - Exports land in `data/parquet/`, which is gitignored along with the DB
   file (synthetic, regenerated on demand).
+
+## M7 — Docs + polish
+
+Built: `README.md` (what/why, uv setup, run + CLI options, seeding, Parquet
+export, "Remote access from your Mac (VM running the app)" mirroring the
+query_tool README style with the actual 0.0.0.0:8000 defaults, the port-80
+options from DESIGN.md, the Dataverse mapping table + practical notes, and
+test instructions). OpenAPI polish: the three router groups are tagged and
+described ("Public read API", "Rig-facing (read-only)", "Admin (write)") so
+`/docs` reads as a guided tour for the Dataverse team. This summary section
+added at the top of BUILD_NOTES.
+
+Small follow-ups from the M6 review folded in: the Parquet
+writer-vs-reader decision is now under a labeled deviation bullet in the M6
+section, and the SPA's bootstrap error handler renders via `textContent`
+(the last interpolating `innerHTML`).

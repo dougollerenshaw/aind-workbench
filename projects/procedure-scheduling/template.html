@@ -639,8 +639,12 @@ document.getElementById('modal-backdrop').addEventListener('click', (e) => {
 });
 
 init().catch((err) => {
-  document.getElementById('calendar').innerHTML =
-    `<p style="color:#8c2f2f">Failed to load the schedule: ${err.message}</p>`;
+  // textContent, not innerHTML: err.message must never be treated as markup
+  // (it could one day include response text).
+  const message = document.createElement('p');
+  message.style.color = '#8c2f2f';
+  message.textContent = `Failed to load the schedule: ${err.message}`;
+  document.getElementById('calendar').replaceChildren(message);
 });
 </script>
 </body>

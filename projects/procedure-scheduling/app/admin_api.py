@@ -34,7 +34,7 @@ from app.schemas import (
     UserOut,
 )
 
-router = APIRouter(prefix="/session_schedule/api/admin", tags=["admin (write)"])
+router = APIRouter(prefix="/session_schedule/api/admin", tags=["Admin (write)"])
 
 
 def _db(request: Request) -> Database:

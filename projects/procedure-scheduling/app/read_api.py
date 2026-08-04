@@ -49,7 +49,7 @@ def _db(request: Request) -> Database:
 @router.get(
     "/scheduled-procedures",
     response_model=list[ScheduledProcedureSummary],
-    tags=["read"],
+    tags=["Public read API"],
     summary="List scheduled procedures (all filters optional and combinable)",
 )
 def list_scheduled_procedures(
@@ -87,7 +87,7 @@ def list_scheduled_procedures(
 @router.get(
     "/scheduled-procedures/{sp_id}",
     response_model=ScheduledProcedureDetail,
-    tags=["read"],
+    tags=["Public read API"],
     summary="One scheduled procedure, fully resolved",
 )
 def get_scheduled_procedure(request: Request, sp_id: str):
@@ -102,7 +102,7 @@ def get_scheduled_procedure(request: Request, sp_id: str):
 # ---------------------------------------------------------------------------
 
 
-@router.get("/instruments", response_model=list[InstrumentOut], tags=["read"])
+@router.get("/instruments", response_model=list[InstrumentOut], tags=["Public read API"])
 def list_instruments(
     request: Request,
     active: bool | None = Query(None),
@@ -115,22 +115,22 @@ def list_instruments(
     )
 
 
-@router.get("/procedure-types", response_model=list[ProcedureTypeOut], tags=["read"])
+@router.get("/procedure-types", response_model=list[ProcedureTypeOut], tags=["Public read API"])
 def list_procedure_types(request: Request):
     return queries.fetch_procedure_types(_db(request))
 
 
-@router.get("/mice", response_model=list[MouseOut], tags=["read"])
+@router.get("/mice", response_model=list[MouseOut], tags=["Public read API"])
 def list_mice(request: Request, subject_id: str | None = Query(None)):
     return queries.fetch_mice(_db(request), subject_id=subject_id)
 
 
-@router.get("/projects", response_model=list[ProjectOut], tags=["read"])
+@router.get("/projects", response_model=list[ProjectOut], tags=["Public read API"])
 def list_projects(request: Request):
     return queries.fetch_projects(_db(request))
 
 
-@router.get("/users", response_model=list[UserOut], tags=["read"])
+@router.get("/users", response_model=list[UserOut], tags=["Public read API"])
 def list_users(request: Request):
     return queries.fetch_users(_db(request))
 
@@ -143,7 +143,7 @@ def list_users(request: Request):
 @router.get(
     "/rig/{rig_id}/planned-acquisitions",
     response_model=list[PlannedAcquisitionOut],
-    tags=["rig-facing"],
+    tags=["Rig-facing (read-only)"],
     summary="Planned acquisitions for one rig (mirrors get_planned_acquisitions)",
 )
 def rig_planned_acquisitions(
@@ -164,7 +164,7 @@ def rig_planned_acquisitions(
 @router.get(
     "/acquisitions/{acquisition_id}",
     response_model=ScheduledProcedureDetail,
-    tags=["rig-facing"],
+    tags=["Rig-facing (read-only)"],
     summary="One acquisition record by token (mirrors get_acquisition_record)",
 )
 def get_acquisition_record(request: Request, acquisition_id: str):
@@ -179,7 +179,7 @@ def get_acquisition_record(request: Request, acquisition_id: str):
 @router.get(
     "/animals/{animal_id}/next-acquisition",
     response_model=NextAcquisitionOut,
-    tags=["rig-facing"],
+    tags=["Rig-facing (read-only)"],
     summary="Soonest upcoming scheduled procedure for an animal "
     "(mirrors get_next_acquisition_for_animal)",
 )

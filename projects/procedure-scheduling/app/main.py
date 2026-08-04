@@ -69,6 +69,29 @@ def create_app(
         description=DESCRIPTION,
         version="0.1.0",
         lifespan=lifespan,
+        openapi_tags=[
+            {
+                "name": "Public read API",
+                "description": "GET-only data API with combinable filters. "
+                "Lookups are resolved (names alongside IDs) so clients need "
+                "no join logic.",
+            },
+            {
+                "name": "Rig-facing (read-only)",
+                "description": "Thin aliases over the read API mirroring the "
+                "Python client shape rigs are expected to use "
+                "(get_planned_acquisitions / get_acquisition_record / "
+                "get_next_acquisition_for_animal). The `id` in every "
+                "response is the persistent acquisition token.",
+            },
+            {
+                "name": "Admin (write)",
+                "description": "Write side for the scheduling form, "
+                "namespaced so the public data API stays read-only. "
+                "Validates compatibility and time ranges; recomputes "
+                "acquisition_type and updated_at on every write.",
+            },
+        ],
     )
     application.state.db = database
     application.include_router(read_router)
