@@ -46,12 +46,12 @@ def seeded(db):
 def test_seed_row_counts(seeded):
     counts = row_counts(seeded)
     assert counts["procedure_types"] == 8
-    assert counts["instruments"] == 3
+    assert counts["instruments"] == 4
     assert counts["mice"] == 3
     assert counts["projects"] == 2
     assert counts["users"] == 3
-    # 3 compatible types per instrument, per DESIGN.md's seed table.
-    assert counts["instrument_compatible_types"] == 9
+    # 2 + 2 + 3 + 3 across the four instruments (see DESIGN_COMPATIBILITY).
+    assert counts["instrument_compatible_types"] == 10
     assert counts["scheduled_procedures"] == EXPECTED_PROCEDURES
     assert 15 <= counts["scheduled_procedures"] <= 25
 
@@ -81,19 +81,26 @@ def test_instruments_match_design_seed_table(seeded):
         "SELECT name, instrument_id, sipe_rig_name, active FROM instruments ORDER BY name"
     ).fetchall()
     assert rows == [
+        ("Dynamic-Foraging-Box-1", "DynamicForaging1", "BEH-DF-01", True),
         ("Ephys-Rig-2", "EPHYS2", "EPHYS-02", True),
         ("SmartSPIM-1", "SmartSPIM1", "IMG-SPIM-01", True),
         ("VR-Foraging-Rig-A", "VRForaging1", "BEH-VR-01", True),
     ]
 
 
-# Literal compatibility sets from DESIGN.md's instruments seed table —
-# deliberately NOT read from scripts.seed, so drift in seed.py fails here.
+# Literal compatibility sets — deliberately NOT read from scripts.seed, so
+# drift in seed.py fails here. These reflect Doug's 2026-08-04 domain
+# correction (one behavior task per rig; VR foraging IS patch foraging;
+# Dynamic foraging lives on its own box), which supersedes DESIGN.md's seed
+# table. See BUILD_NOTES.md "Domain correction".
 DESIGN_COMPATIBILITY = {
     "VR-Foraging-Rig-A": [
-        "Dynamic foraging behavior",
         "Fiber photometry (FIP)",
         "Patch foraging behavior",
+    ],
+    "Dynamic-Foraging-Box-1": [
+        "Dynamic foraging behavior",
+        "Fiber photometry (FIP)",
     ],
     "SmartSPIM-1": [
         "Cellular imaging",
@@ -213,12 +220,19 @@ def _resolved(db, subject_id, instrument_name, start):
 
 
 def test_sp1_matches_design_document(seeded):
-    """SP-1: testmouse1 on VR-Foraging-Rig-A, today+1 09:00->11:00,
-    Dynamic foraging + FIP, contact Doug, experimenter Bruno."""
-    start = TODAY + timedelta(days=1, hours=9)
-    row, active, experimenters = _resolved(seeded, "testmouse1", "VR-Foraging-Rig-A", start)
+    """SP-1: testmouse1, today+1 09:00->11:00, Dynamic foraging + FIP,
+    contact Doug, experimenter Bruno.
 
-    assert row[3] == "BEH-VR-01"
+    Per Doug's 2026-08-04 correction this row lives on
+    Dynamic-Foraging-Box-1, not DESIGN.md's VR-Foraging-Rig-A (a VR rig
+    doesn't run the dynamic foraging task); everything else is as documented.
+    """
+    start = TODAY + timedelta(days=1, hours=9)
+    row, active, experimenters = _resolved(
+        seeded, "testmouse1", "Dynamic-Foraging-Box-1", start
+    )
+
+    assert row[3] == "BEH-DF-01"
     assert row[4] == "Cognitive flexibility in patch foraging"
     assert row[5] == "Doug Ollerenshaw"
     assert row[6] == start
@@ -309,6 +323,69 @@ def test_reseeding_preserves_natural_key_uniqueness(seeded):
 # ---------------------------------------------------------------------------
 
 
+def test_dynamic_foraging_box_exists_and_vr_rig_excludes_dynamic(seeded):
+    """Doug's domain correction: Dynamic foraging moved off the VR rig onto
+    its own box, and the VR rig offers exactly patch foraging + FIP."""
+    def compat(instrument_name):
+        return {
+            r[0]
+            for r in seeded.conn.execute(
+                """
+                SELECT pt.name FROM instruments i
+                JOIN instrument_compatible_types ict ON ict.instrument_id = i.id
+                JOIN procedure_types pt ON pt.id = ict.procedure_type_id
+                WHERE i.name = ?
+                """,
+                [instrument_name],
+            ).fetchall()
+        }
+
+    assert compat("Dynamic-Foraging-Box-1") == {
+        "Dynamic foraging behavior", "Fiber photometry (FIP)",
+    }
+    assert compat("VR-Foraging-Rig-A") == {
+        "Patch foraging behavior", "Fiber photometry (FIP)",
+    }
+    assert "Dynamic foraging behavior" not in compat("VR-Foraging-Rig-A")
+    # And the dynamic box is actually used by seeded procedures.
+    assert seeded.conn.execute(
+        """
+        SELECT count(*) FROM scheduled_procedures sp
+        JOIN instruments i ON i.id = sp.instrument_id
+        WHERE i.name = 'Dynamic-Foraging-Box-1'
+        """
+    ).fetchone()[0] > 0
+
+
+def test_no_instrument_offers_two_behavior_tasks(seeded):
+    """A behavior rig runs one behavior task, so no compatibility set may
+    contain two Behavior-modality types."""
+    offenders = seeded.conn.execute(
+        """
+        SELECT i.name, count(*) FROM instruments i
+        JOIN instrument_compatible_types ict ON ict.instrument_id = i.id
+        JOIN procedure_types pt ON pt.id = ict.procedure_type_id
+        WHERE pt.modality_name = 'Behavior'
+        GROUP BY i.name HAVING count(*) > 1
+        """
+    ).fetchall()
+    assert offenders == []
+
+
+def test_no_seeded_procedure_has_two_behavior_types(seeded):
+    """Validation rule 4 holds across the whole seeded dataset."""
+    offenders = seeded.conn.execute(
+        """
+        SELECT sp.id, count(*) FROM scheduled_procedures sp
+        JOIN scheduled_procedure_active_types sat ON sat.scheduled_procedure_id = sp.id
+        JOIN procedure_types pt ON pt.id = sat.procedure_type_id
+        WHERE pt.modality_name = 'Behavior'
+        GROUP BY sp.id HAVING count(*) > 1
+        """
+    ).fetchall()
+    assert offenders == []
+
+
 def test_all_seeded_procedures_respect_instrument_compatibility(seeded):
     violations = seeded.conn.execute(
         """
@@ -389,11 +466,11 @@ def test_procedures_span_the_next_two_to_three_weeks(seeded):
     assert lo >= TODAY
     span_days = (hi - lo).days
     assert 14 <= span_days <= 25, f"schedule spans {span_days} days"
-    # All three instruments are used, so the calendar has populated rows.
+    # All four instruments are used, so the calendar has populated rows.
     used = seeded.conn.execute(
         "SELECT count(DISTINCT instrument_id) FROM scheduled_procedures"
     ).fetchone()[0]
-    assert used == 3
+    assert used == 4
 
 
 def test_seed_uses_all_three_mice_and_both_projects(seeded):

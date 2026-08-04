@@ -146,6 +146,111 @@ def test_incompatible_type_rejected_and_compatible_succeeds(client):
 
 
 # ---------------------------------------------------------------------------
+# Rule 4 — at most one Behavior-modality active type (Doug's 2026-08-04
+# domain correction): a rig runs one behavior task, never two at once
+# ---------------------------------------------------------------------------
+
+
+def test_two_behavior_types_rejected_through_api(client):
+    """Widen Ephys-Rig-2's compatible set to hold both behavior tasks, so the
+    rejection can only come from the behavior rule."""
+    ephys_rig = _id(client, "instruments", "name", "Ephys-Rig-2")
+    dynamic = _id(client, "procedure_types", "name", "Dynamic foraging behavior")
+    assert client.post(
+        f"{ADMIN}/instrument-compatibility",
+        json={"instrument_id": ephys_rig, "procedure_type_id": dynamic},
+    ).status_code == 201
+
+    response = client.post(
+        f"{ADMIN}/scheduled-procedures",
+        json=_example_1_body(
+            client,
+            active_procedure_type_ids=[
+                _id(client, "procedure_types", "name", "Patch foraging behavior"),
+                dynamic,
+            ],
+        ),
+    )
+    assert response.status_code == 422
+    body = response.json()
+    assert body["error"] == "multiple_behavior_types"
+    assert "Patch foraging behavior" in body["detail"]
+    assert "Dynamic foraging behavior" in body["detail"]
+
+
+def test_two_behavior_types_rejected_on_put(client):
+    created = client.post(
+        f"{ADMIN}/scheduled-procedures", json=_example_1_body(client)
+    ).json()
+    ephys_rig = _id(client, "instruments", "name", "Ephys-Rig-2")
+    dynamic = _id(client, "procedure_types", "name", "Dynamic foraging behavior")
+    client.post(
+        f"{ADMIN}/instrument-compatibility",
+        json={"instrument_id": ephys_rig, "procedure_type_id": dynamic},
+    )
+    response = client.put(
+        f"{ADMIN}/scheduled-procedures/{created['id']}",
+        json=_example_1_body(
+            client,
+            active_procedure_type_ids=[
+                _id(client, "procedure_types", "name", "Patch foraging behavior"),
+                dynamic,
+            ],
+        ),
+    )
+    assert response.status_code == 422
+    assert response.json()["error"] == "multiple_behavior_types"
+    # The record is untouched.
+    assert client.get(f"{API}/scheduled-procedures/{created['id']}").json() == created
+
+
+def test_cross_modality_combinations_still_allowed(client):
+    """behavior + FIP and ephys + FIP must keep working."""
+    # Behavior + FIP on the dynamic-foraging box.
+    box = _id(client, "instruments", "name", "Dynamic-Foraging-Box-1")
+    behavior_fip = client.post(
+        f"{ADMIN}/scheduled-procedures",
+        json=_example_1_body(
+            client,
+            instrument_id=box,
+            active_procedure_type_ids=[
+                _id(client, "procedure_types", "name", "Dynamic foraging behavior"),
+                _id(client, "procedure_types", "name", "Fiber photometry (FIP)"),
+            ],
+        ),
+    )
+    assert behavior_fip.status_code == 201
+    assert behavior_fip.json()["acquisition_type"] == (
+        "Dynamic foraging behavior + Fiber photometry (FIP)"
+    )
+
+    # Ephys + FIP on the ephys rig (the Example 1 body).
+    ephys_fip = client.post(
+        f"{ADMIN}/scheduled-procedures",
+        json=_example_1_body(client, scheduled_start=iso(TODAY + timedelta(days=33, hours=9)),
+                             scheduled_end=iso(TODAY + timedelta(days=33, hours=11))),
+    )
+    assert ephys_fip.status_code == 201
+
+
+def test_dynamic_foraging_not_compatible_with_vr_rig_through_api(client):
+    """The VR rig runs patch foraging, not dynamic foraging."""
+    response = client.post(
+        f"{ADMIN}/scheduled-procedures",
+        json=_example_1_body(
+            client,
+            instrument_id=_id(client, "instruments", "name", "VR-Foraging-Rig-A"),
+            active_procedure_type_ids=[
+                _id(client, "procedure_types", "name", "Dynamic foraging behavior")
+            ],
+        ),
+    )
+    assert response.status_code == 422
+    assert response.json()["error"] == "incompatible_procedure_type"
+    assert "VR-Foraging-Rig-A" in response.json()["detail"]
+
+
+# ---------------------------------------------------------------------------
 # Acceptance criterion 6 — end must be strictly after start
 # ---------------------------------------------------------------------------
 
@@ -270,7 +375,7 @@ def test_put_round_trip_replaces_everything_but_id_and_created_at(client):
 
     new_body = {
         "mouse_id": _id(client, "mice", "subject_id", "testmouse1"),
-        "instrument_id": _id(client, "instruments", "name", "VR-Foraging-Rig-A"),
+        "instrument_id": _id(client, "instruments", "name", "Dynamic-Foraging-Box-1"),
         "project_id": _id(client, "projects", "name", "Brain-wide connectivity"),
         "contact_user_id": _id(client, "users", "email", "jane.kim@alleninstitute.org"),
         "experimenter_user_ids": [
@@ -284,7 +389,7 @@ def test_put_round_trip_replaces_everything_but_id_and_created_at(client):
             _id(client, "procedure_types", "name", "Fiber photometry (FIP)"),
         ],
         "status": "rescheduled",
-        "notes": "Moved to the VR rig.",
+        "notes": "Moved to the dynamic-foraging box.",
     }
     response = client.put(f"{ADMIN}/scheduled-procedures/{created['id']}", json=new_body)
     assert response.status_code == 200
@@ -294,7 +399,7 @@ def test_put_round_trip_replaces_everything_but_id_and_created_at(client):
     assert record["created_at"] == created["created_at"]
     assert record["updated_at"] > created["updated_at"]
     assert record["mouse"]["subject_id"] == "testmouse1"
-    assert record["instrument"]["name"] == "VR-Foraging-Rig-A"
+    assert record["instrument"]["name"] == "Dynamic-Foraging-Box-1"
     assert record["project"]["name"] == "Brain-wide connectivity"
     assert record["contact"]["name"] == "Jane Kim"
     assert [e["name"] for e in record["experimenters"]] == ["Doug Ollerenshaw", "Jane Kim"]
@@ -491,7 +596,7 @@ def mouse_with_history(client):
     mouse_id = client.post(
         f"{ADMIN}/mice", json={"subject_id": "testmouse9"}
     ).json()["id"]
-    vr = _id(client, "instruments", "name", "VR-Foraging-Rig-A")
+    box = _id(client, "instruments", "name", "Dynamic-Foraging-Box-1")
     dynamic = _id(client, "procedure_types", "name", "Dynamic foraging behavior")
 
     def make(start, end, status):
@@ -500,7 +605,7 @@ def mouse_with_history(client):
             json=_example_1_body(
                 client,
                 mouse_id=mouse_id,
-                instrument_id=vr,
+                instrument_id=box,
                 active_procedure_type_ids=[dynamic],
                 scheduled_start=iso(start),
                 scheduled_end=iso(end),

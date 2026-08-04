@@ -3,7 +3,7 @@
 
 The dataset here is the one defined in DESIGN.md "Seed data and worked
 examples": the eight ``procedure_types`` with their aind-data-schema modality
-mappings, three ``instruments`` with their compatibility sets, three ``mice``,
+mappings, four ``instruments`` with their compatibility sets, three ``mice``,
 two ``projects``, three ``users``, the four explicit scheduled procedures
 SP-1..SP-4, and a further set of procedures so the calendar looks populated
 on first open.
@@ -80,15 +80,26 @@ PT_AXONAL = "Whole-brain axonal imaging"
 
 # ---------------------------------------------------------------------------
 # Instruments — DESIGN.md seed table (name, instrument_id, sipe_rig_name,
-# compatible procedure types).
+# compatible procedure types), as amended by Doug's domain correction below.
 # ---------------------------------------------------------------------------
 
+# NOTE (Doug's decision, 2026-08-04 — supersedes DESIGN.md's seed table):
+# a behavior rig runs exactly ONE behavior task. VR foraging *is* the patch
+# foraging paradigm (Bruno's Aind.Behavior.VrForaging), so VR-Foraging-Rig-A
+# offers Patch foraging (+ FIP) only, and Dynamic foraging moves to its own
+# box. See BUILD_NOTES.md "Domain correction".
 INSTRUMENTS = [
     {
         "name": "VR-Foraging-Rig-A",
         "instrument_id": "VRForaging1",
         "sipe_rig_name": "BEH-VR-01",
-        "compatible": [PT_PATCH, PT_DYNAMIC, PT_FIP],
+        "compatible": [PT_PATCH, PT_FIP],
+    },
+    {
+        "name": "Dynamic-Foraging-Box-1",
+        "instrument_id": "DynamicForaging1",
+        "sipe_rig_name": "BEH-DF-01",
+        "compatible": [PT_DYNAMIC, PT_FIP],
     },
     {
         "name": "SmartSPIM-1",
@@ -97,12 +108,19 @@ INSTRUMENTS = [
         "compatible": [PT_HISTOLOGY, PT_CELLULAR, PT_AXONAL],
     },
     {
+        # A behavior task on an ephys rig is fine — that's still one behavior
+        # task (Patch foraging), optionally alongside ephys/FIP.
         "name": "Ephys-Rig-2",
         "instrument_id": "EPHYS2",
         "sipe_rig_name": "EPHYS-02",
         "compatible": [PT_EPHYS, PT_PATCH, PT_FIP],
     },
 ]
+
+INST_VR = "VR-Foraging-Rig-A"
+INST_DF = "Dynamic-Foraging-Box-1"
+INST_SPIM = "SmartSPIM-1"
+INST_EPHYS = "Ephys-Rig-2"
 
 # ---------------------------------------------------------------------------
 # Lookups
@@ -142,7 +160,7 @@ ETHICS_IMAGING = "IACUC-2115"
 # day offsets come from that table read relative to the document's "today"
 # (2026-08-03): 08-04 -> +1, 08-05 -> +2, 08-07 -> +4, 08-11 -> +8. The rest
 # fill the next ~3 weeks so the calendar is populated, mixing single- and
-# multi-platform sessions across all three instruments.
+# multi-platform sessions across all four instruments.
 #
 # Fields: day offset from today, start time (UTC), duration in hours,
 # mouse subject_id, instrument name, project, contact, experimenters,
@@ -150,10 +168,13 @@ ETHICS_IMAGING = "IACUC-2115"
 # ---------------------------------------------------------------------------
 
 CANONICAL_PROCEDURES = [
-    {   # SP-1
+    {   # SP-1 — DESIGN.md puts this on VR-Foraging-Rig-A, which is now
+        # illegal (Dynamic foraging is not a VR-rig task); moved to the
+        # dynamic-foraging box, everything else unchanged, so the canonical
+        # multi-modality example survives. See BUILD_NOTES.md.
         "label": "SP-1",
         "day_offset": 1, "start": time(9, 0), "hours": 2,
-        "mouse": "testmouse1", "instrument": "VR-Foraging-Rig-A",
+        "mouse": "testmouse1", "instrument": INST_DF,
         "project": PROJECT_PF, "contact": USR_DOUG, "experimenters": [USR_BRUNO],
         "types": [PT_DYNAMIC, PT_FIP],
         "ethics_review_id": ETHICS_BEHAVIOR,
@@ -201,7 +222,7 @@ EXTRA_PROCEDURES = [
      "protocols": "Modular probe insertion, 2 shanks"},
 
     {"day_offset": 2, "start": time(9, 0), "hours": 2,
-     "mouse": "testmouse1", "instrument": "VR-Foraging-Rig-A", "project": PROJECT_PF,
+     "mouse": "testmouse1", "instrument": INST_DF, "project": PROJECT_PF,
      "contact": USR_DOUG, "experimenters": [USR_BRUNO, USR_JANE],
      "types": [PT_DYNAMIC, PT_FIP], "ethics_review_id": ETHICS_BEHAVIOR,
      "protocols": "Dynamic foraging task v2; FIP dual-fiber",
@@ -220,7 +241,7 @@ EXTRA_PROCEDURES = [
      "protocols": "Whole-brain axonal imaging, 3 channels"},
 
     {"day_offset": 5, "start": time(9, 0), "hours": 2,
-     "mouse": "testmouse1", "instrument": "VR-Foraging-Rig-A", "project": PROJECT_PF,
+     "mouse": "testmouse1", "instrument": INST_DF, "project": PROJECT_PF,
      "contact": USR_DOUG, "experimenters": [USR_BRUNO], "types": [PT_DYNAMIC],
      "ethics_review_id": ETHICS_BEHAVIOR,
      "protocols": "Dynamic foraging task v2",
@@ -247,7 +268,7 @@ EXTRA_PROCEDURES = [
      "planned_config": {"stage": "stage_3"}},
 
     {"day_offset": 9, "start": time(13, 0), "hours": 2,
-     "mouse": "testmouse1", "instrument": "VR-Foraging-Rig-A", "project": PROJECT_PF,
+     "mouse": "testmouse1", "instrument": INST_DF, "project": PROJECT_PF,
      "contact": USR_DOUG, "experimenters": [USR_BRUNO], "types": [PT_DYNAMIC, PT_FIP],
      "ethics_review_id": ETHICS_BEHAVIOR,
      "protocols": "Dynamic foraging task v2; FIP dual-fiber"},
@@ -259,7 +280,7 @@ EXTRA_PROCEDURES = [
      "protocols": "Whole-brain 3D histology, standard clearing"},
 
     {"day_offset": 12, "start": time(9, 0), "hours": 2,
-     "mouse": "testmouse1", "instrument": "VR-Foraging-Rig-A", "project": PROJECT_PF,
+     "mouse": "testmouse1", "instrument": INST_DF, "project": PROJECT_PF,
      "contact": USR_DOUG, "experimenters": [USR_BRUNO], "types": [PT_DYNAMIC],
      "ethics_review_id": ETHICS_BEHAVIOR,
      "protocols": "Dynamic foraging task v2"},

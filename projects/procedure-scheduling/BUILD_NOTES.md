@@ -62,6 +62,11 @@ built; the tool launcher (M8) is now the actual deployment vehicle, run
 under tmux per its README, so they're redundant unless someone wants the
 scheduler to survive reboots independently of the launcher.
 
+**Deliberate divergence from DESIGN.md needing spec amendments:** see
+"M10 — Domain correction: one behavior task per rig" at the bottom — VR rig
+compatibility, a fourth instrument, SP-1's home, and a fourth validation
+rule, all per Doug's 2026-08-04 ruling. That's the list for Bruno.
+
 **Notable deviations from DESIGN.md** (each detailed in its milestone
 section below): no native DuckDB FK constraints (app-enforced; DuckDB's
 DELETE+INSERT updates would break edits); the full vocabulary name is used
@@ -462,7 +467,8 @@ rendered page was unusable. It took Doug's first real browser pass to see
 it. Anything beyond static page-contract checks needs an actual browser
 (even one manual pass, or Playwright if this outlives the prototype).
 
-**Feature (Doug's request): duration instead of explicit end time.** The
+**Feature (Doug's request): duration instead of explicit end time.** (see
+also M10 below) The
 form now takes Scheduled start (datetime-local, as before) + Duration in
 hours (numeric, step 0.25, min 0.25, default 2). The client computes
 `scheduled_end = start + duration` before POST/PUT — the API contract is
@@ -470,3 +476,78 @@ unchanged (the server still receives and validates `scheduled_start` +
 `scheduled_end`; no server changes). Edit mode derives the duration field
 from the record's `end - start`. A live hint under the fields shows the
 computed end time in local time.
+
+## M10 — Domain correction: one behavior task per rig (DESIGN.md amendments needed)
+
+**Doug — this is the list to take to Bruno.** DESIGN.md's seed table and its
+SP-1 example encode a domain error: they put **both** behavior tasks (Patch
+foraging *and* Dynamic foraging) on `VR-Foraging-Rig-A`. Per Doug's
+2026-08-04 ruling, a behavior rig runs exactly **one** behavior task, VR
+foraging **is** the patch-foraging paradigm (Bruno's
+`Aind.Behavior.VrForaging`), and no procedure ever runs two behavior tasks
+simultaneously. The prototype now **deliberately diverges from DESIGN.md**
+on the following points; DESIGN.md itself was left untouched (it's the
+frozen input spec) and these are the amendments it needs:
+
+1. **`VR-Foraging-Rig-A` compatible set** — was Patch foraging + Dynamic
+   foraging + FIP; **now Patch foraging behavior + Fiber photometry (FIP)**.
+   Dynamic foraging removed.
+2. **New instrument added: `Dynamic-Foraging-Box-1`**
+   (`instrument_id` = `DynamicForaging1`, `sipe_rig_name` = `BEH-DF-01`),
+   compatible with **Dynamic foraging behavior + Fiber photometry (FIP)** —
+   so dynamic foraging still appears in the demo, on a rig that can actually
+   run it. DESIGN.md's seed table lists only three instruments; the
+   prototype now seeds four.
+3. **`SmartSPIM-1` and `Ephys-Rig-2` unchanged.** Ephys-Rig-2 keeps Patch
+   foraging behavior — a behavior task on an ephys rig is fine, that's still
+   *one* behavior task (optionally alongside ephys and/or FIP).
+4. **SP-1 relocated.** DESIGN.md's SP-1 is "Dynamic foraging + FIP on
+   VR-Foraging-Rig-A", which is now illegal. It moved to
+   `Dynamic-Foraging-Box-1`; mouse, project, contact, experimenter, times,
+   active types, and computed `acquisition_type` are all unchanged, so the
+   canonical multi-modality example survives. Consequently the documented
+   rig-facing example for SP-1 is served under `BEH-DF-01`, not `BEH-VR-01`.
+   No other seed row needed moving except four filler dynamic-foraging rows,
+   which moved to the same box; every remaining row was re-checked against
+   the new sets and the new rule.
+5. **New validation rule (an addition beyond DESIGN.md's three):** at most
+   **one** active procedure type whose `modality_name` is `"Behavior"` per
+   scheduled procedure. Rejected with the standard error shape and code
+   `multiple_behavior_types`, naming the conflicting types. It lives in
+   `scheduler_app/store.py`'s shared validate path, so seed and API enforce
+   it identically. Keyed on `procedure_types.modality_name` (not hardcoded
+   task names) so it generalizes to any behavior task added later.
+   Cross-modality combos (behavior + FIP, ephys + FIP) remain allowed.
+
+Supporting changes: `/api/instruments` now includes `modality_name` in each
+`compatible_procedure_types` entry, and the form disables + visually mutes
+the other Behavior-modality checkboxes once one is checked (server remains
+the authority; the UI is guidance).
+
+Seeded dataset after the correction: 4 instruments / 10 compatibility rows /
+18 procedures — Dynamic-Foraging-Box-1 5, SmartSPIM-1 5, VR-Foraging-Rig-A 4,
+Ephys-Rig-2 4; zero rows with two behavior tasks.
+
+### Re-seeding the live database (Doug runs this when ready)
+
+Seeding is idempotent, so the **running :8080 database will NOT pick up the
+new compatibility sets or the new instrument** until it is re-seeded with
+`--reset`. That needs the launcher stopped, because DuckDB is single-writer.
+**`--reset` wipes every table, discarding any procedures created through the
+UI.**
+
+```bash
+# 1. stop the launcher (in its tmux session: Ctrl-C, or)
+pkill -f "launcher.py"
+
+# 2. reset + re-seed the scheduler's database
+cd ~/code/aind-workbench/projects/procedure-scheduling
+uv run python scripts/seed.py --reset
+
+# 3. restart the launcher
+cd ../tool-launcher
+uv run python launcher.py          # or inside tmux: tmux new -s tools
+```
+
+Then reload `http://10.128.142.221:8080/session_schedule/` — the calendar
+should show four instrument rows including Dynamic-Foraging-Box-1.

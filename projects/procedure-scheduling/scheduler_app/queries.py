@@ -320,9 +320,9 @@ def fetch_instruments(
     }
     if records:
         placeholders = ", ".join("?" for _ in records)
-        for inst_id, pt_id, pt_name in db.conn.execute(
+        for inst_id, pt_id, pt_name, pt_modality in db.conn.execute(
             f"""
-            SELECT ict.instrument_id, pt.id, pt.name
+            SELECT ict.instrument_id, pt.id, pt.name, pt.modality_name
             FROM instrument_compatible_types ict
             JOIN procedure_types pt ON pt.id = ict.procedure_type_id
             WHERE ict.instrument_id IN ({placeholders})
@@ -331,7 +331,9 @@ def fetch_instruments(
             list(records),
         ).fetchall():
             records[inst_id]["compatible_procedure_types"].append(
-                {"id": pt_id, "name": pt_name}
+                # modality_name is included so the form can enforce the
+                # one-behavior-task-per-procedure rule client-side.
+                {"id": pt_id, "name": pt_name, "modality_name": pt_modality}
             )
     return list(records.values())
 

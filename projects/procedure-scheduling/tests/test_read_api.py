@@ -82,7 +82,7 @@ def test_sp1_payload_matches_example_2_shape(client, full):
     sp1 = next(
         r for r in full
         if r["scheduled_start"] == sp1_start
-        and r["instrument"]["name"] == "VR-Foraging-Rig-A"
+        and r["instrument"]["name"] == "Dynamic-Foraging-Box-1"
     )
     assert set(sp1.keys()) == SUMMARY_KEYS
 
@@ -91,9 +91,9 @@ def test_sp1_payload_matches_example_2_shape(client, full):
         "subject_id": "testmouse1",
     }
     assert sp1["instrument"] == {
-        "id": _lookup_id(client, "instruments", "name", "VR-Foraging-Rig-A"),
-        "name": "VR-Foraging-Rig-A",
-        "sipe_rig_name": "BEH-VR-01",
+        "id": _lookup_id(client, "instruments", "name", "Dynamic-Foraging-Box-1"),
+        "name": "Dynamic-Foraging-Box-1",
+        "sipe_rig_name": "BEH-DF-01",
     }
     assert sp1["project"] == {
         "id": _lookup_id(client, "projects", "name", "Cognitive flexibility in patch foraging"),
@@ -243,7 +243,7 @@ def test_single_record_fully_resolved(client, full):
     sp1 = next(
         r for r in full
         if r["scheduled_start"] == sp1_start
-        and r["instrument"]["name"] == "VR-Foraging-Rig-A"
+        and r["instrument"]["name"] == "Dynamic-Foraging-Box-1"
     )
     detail = client.get(f"{API}/scheduled-procedures/{sp1['id']}")
     assert detail.status_code == 200
@@ -287,24 +287,39 @@ def test_procedure_types_endpoint(client):
 def test_instruments_endpoint_with_filters(client):
     instruments = client.get(f"{API}/instruments").json()
     assert [i["name"] for i in instruments] == [
-        "Ephys-Rig-2", "SmartSPIM-1", "VR-Foraging-Rig-A",
+        "Dynamic-Foraging-Box-1", "Ephys-Rig-2", "SmartSPIM-1", "VR-Foraging-Rig-A",
     ]
     vr = next(i for i in instruments if i["name"] == "VR-Foraging-Rig-A")
     assert vr["instrument_id"] == "VRForaging1"
     assert vr["sipe_rig_name"] == "BEH-VR-01"
     assert vr["active"] is True
     assert [t["name"] for t in vr["compatible_procedure_types"]] == [
-        "Fiber photometry (FIP)", "Patch foraging behavior", "Dynamic foraging behavior",
-    ]  # sort_order 4, 6, 7
+        "Fiber photometry (FIP)", "Patch foraging behavior",
+    ]  # sort_order 4, 6 — no Dynamic foraging (one behavior task per rig)
 
-    assert len(client.get(f"{API}/instruments", params={"active": "true"}).json()) == 3
+    # The dynamic-foraging box carries that task instead.
+    df = next(i for i in instruments if i["name"] == "Dynamic-Foraging-Box-1")
+    assert df["instrument_id"] == "DynamicForaging1"
+    assert df["sipe_rig_name"] == "BEH-DF-01"
+    assert [t["name"] for t in df["compatible_procedure_types"]] == [
+        "Fiber photometry (FIP)", "Dynamic foraging behavior",
+    ]  # sort_order 4, 7
+
+    # modality_name is exposed so the form can enforce the behavior rule.
+    assert {t["modality_name"] for t in df["compatible_procedure_types"]} == {
+        "Fiber photometry", "Behavior",
+    }
+
+    assert len(client.get(f"{API}/instruments", params={"active": "true"}).json()) == 4
     assert client.get(f"{API}/instruments", params={"active": "false"}).json() == []
 
     fip_id = _lookup_id(client, "procedure_types", "name", "Fiber photometry (FIP)")
     fip_capable = client.get(
         f"{API}/instruments", params={"procedure_type_id": fip_id}
     ).json()
-    assert {i["name"] for i in fip_capable} == {"Ephys-Rig-2", "VR-Foraging-Rig-A"}
+    assert {i["name"] for i in fip_capable} == {
+        "Dynamic-Foraging-Box-1", "Ephys-Rig-2", "VR-Foraging-Rig-A",
+    }
 
 
 def test_mice_projects_users_endpoints(client):
@@ -335,9 +350,11 @@ def test_mice_projects_users_endpoints(client):
 
 
 def test_rig_planned_acquisitions(client, full):
+    # SP-1 lives on the dynamic-foraging box (BEH-DF-01) since Doug's domain
+    # correction, so that's the rig whose window we check.
     start, end = TODAY, TODAY + timedelta(days=3)
     response = client.get(
-        f"{API}/rig/BEH-VR-01/planned-acquisitions",
+        f"{API}/rig/BEH-DF-01/planned-acquisitions",
         params={"start": iso(start), "end": iso(end)},
     )
     assert response.status_code == 200
@@ -352,7 +369,7 @@ def test_rig_planned_acquisitions(client, full):
             "scheduled_end": r["scheduled_end"],
         }
         for r in full
-        if r["instrument"]["sipe_rig_name"] == "BEH-VR-01"
+        if r["instrument"]["sipe_rig_name"] == "BEH-DF-01"
         and start <= parse(r["scheduled_start"]) < end
     ]
     assert got == expected
@@ -408,9 +425,9 @@ def test_next_acquisition_for_animal(client, full):
         "acquisition_type": soonest["acquisition_type"],
         "scheduled_start": soonest["scheduled_start"],
     }
-    # And that soonest row is SP-1: tomorrow 09:00 on the VR rig.
+    # And that soonest row is SP-1: tomorrow 09:00 on the dynamic-foraging box.
     assert got["scheduled_start"] == iso(TODAY + timedelta(days=1, hours=9))
-    assert got["instrument"] == "VR-Foraging-Rig-A"
+    assert got["instrument"] == "Dynamic-Foraging-Box-1"
 
 
 def test_next_acquisition_unknown_animal_is_404(client):

@@ -215,6 +215,10 @@
 
 const API = '/session_schedule/api';
 
+// The aind-data-schema modality that identifies behavior tasks; a procedure
+// may have at most one (mirrors the server's `multiple_behavior_types` rule).
+const BEHAVIOR_MODALITY = 'Behavior';
+
 // Stable color per procedure type, indexed by procedure_types.sort_order.
 const PALETTE = [
   '#4c78a8', // 1 Acute extracellular electrophysiology
@@ -473,12 +477,35 @@ function renderTypeCheckboxes(instrumentId, selectedNames = []) {
     cb.type = 'checkbox';
     cb.value = t.id;
     cb.checked = selectedNames.includes(t.name);
+    // Modality drives the one-behavior-task rule below.
+    cb.dataset.modality = t.modality_name ?? '';
+    cb.addEventListener('change', applyBehaviorExclusivity);
     const swatch = document.createElement('span');
     swatch.className = 'swatch';
     swatch.style.cssText =
       `width:.65rem;height:.65rem;border-radius:3px;background:${typeInfoByName[t.name]?.color ?? '#8892a0'}`;
     label.append(cb, swatch, document.createTextNode(t.name));
     box.appendChild(label);
+  }
+  applyBehaviorExclusivity();
+}
+
+// A rig runs ONE behavior task, never two at once (server rule
+// `multiple_behavior_types`). Once a Behavior-modality type is checked, mute
+// the other Behavior options so the impossible combo can't be built;
+// unchecking re-enables them. The server remains the authority — this is
+// only guidance.
+function applyBehaviorExclusivity() {
+  const boxes = [...document.querySelectorAll('#active-types input[type=checkbox]')];
+  const behavior = boxes.filter((cb) => cb.dataset.modality === BEHAVIOR_MODALITY);
+  const chosen = behavior.find((cb) => cb.checked);
+  for (const cb of behavior) {
+    const muted = Boolean(chosen) && cb !== chosen;
+    cb.disabled = muted;
+    cb.closest('.type-option').style.opacity = muted ? '0.45' : '';
+    cb.closest('.type-option').title = muted
+      ? 'A procedure can only run one behavior task at a time.'
+      : '';
   }
 }
 

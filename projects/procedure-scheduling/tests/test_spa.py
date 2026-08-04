@@ -151,6 +151,24 @@ def test_form_uses_start_plus_duration(html):
     assert "updateEndHint" in html
 
 
+def test_behavior_exclusivity_wiring(html):
+    """Once one Behavior-modality type is checked, the others are disabled and
+    muted (mirrors the server's `multiple_behavior_types` rule)."""
+    assert "const BEHAVIOR_MODALITY = 'Behavior'" in html
+    assert "function applyBehaviorExclusivity" in html
+    renderer = html[
+        html.index("function applyBehaviorExclusivity") : html.index("function toLocalInputValue")
+    ]
+    # Filters the checkbox list by modality, then disables/mutes the rest.
+    assert "dataset.modality === BEHAVIOR_MODALITY" in renderer
+    assert "cb.disabled = muted" in renderer
+    assert "opacity" in renderer
+    # Modality comes from the API payload, not a hardcoded task list.
+    assert "cb.dataset.modality = t.modality_name" in html
+    # Re-applied whenever a checkbox changes and when the list is rebuilt.
+    assert "cb.addEventListener('change', applyBehaviorExclusivity)" in html
+
+
 def test_trailing_slash_and_root_redirects(client):
     bare = client.get("/session_schedule", follow_redirects=False)
     assert bare.status_code in (301, 307)

@@ -11,6 +11,10 @@ Validation rules (DESIGN.md "Validation rules"):
    instrument's compatible set.
 3. ``acquisition_type`` is always recomputed server-side from the active
    type names; it is never client-supplied.
+4. At most one active type whose modality is "Behavior" — a rig runs one
+   behavior task and never two simultaneously. This rule is an addition
+   beyond DESIGN.md's three, per Doug's 2026-08-04 decision; see
+   BUILD_NOTES.md "Domain correction".
 """
 
 from __future__ import annotations
@@ -22,6 +26,11 @@ from typing import Any, Iterable, Sequence
 from scheduler_app.db import Database, new_uuid, new_uuid7, utcnow
 
 ACQUISITION_TYPE_SEPARATOR = " + "
+
+# The aind-data-schema modality_name that identifies behavior tasks. At most
+# one active type with this modality is allowed per scheduled procedure — see
+# validate_scheduled_procedure (Doug's decision, 2026-08-04).
+BEHAVIOR_MODALITY = "Behavior"
 
 
 class ValidationError(Exception):
@@ -58,6 +67,20 @@ def procedure_type_names(db: Database, procedure_type_ids: Sequence[str]) -> dic
     placeholders = ", ".join("?" for _ in procedure_type_ids)
     rows = db.conn.execute(
         f"SELECT id, name FROM procedure_types WHERE id IN ({placeholders})",
+        list(procedure_type_ids),
+    ).fetchall()
+    return {r[0]: r[1] for r in rows}
+
+
+def procedure_type_modalities(
+    db: Database, procedure_type_ids: Sequence[str]
+) -> dict[str, str]:
+    """Map procedure_type id -> aind-data-schema modality_name."""
+    if not procedure_type_ids:
+        return {}
+    placeholders = ", ".join("?" for _ in procedure_type_ids)
+    rows = db.conn.execute(
+        f"SELECT id, modality_name FROM procedure_types WHERE id IN ({placeholders})",
         list(procedure_type_ids),
     ).fetchall()
     return {r[0]: r[1] for r in rows}
@@ -155,6 +178,30 @@ def validate_scheduled_procedure(
                 f"'{instrument_name}'. Compatible types: "
                 f"{', '.join(compatible_type_names(db, instrument_id))}.",
             )
+
+    # Rule 4 (Doug's decision, 2026-08-04 — an addition beyond DESIGN.md's
+    # three rules): at most one BEHAVIOR-modality active type. A rig runs one
+    # behavior task, never two simultaneously. Keyed on the aind-data-schema
+    # modality_name rather than task names, so it generalizes to any behavior
+    # task added to the vocabulary later.
+    modalities = procedure_type_modalities(db, active_procedure_type_ids)
+    behavior_types = sorted(
+        {
+            names[pid]
+            for pid in dict.fromkeys(active_procedure_type_ids)
+            if modalities.get(pid) == BEHAVIOR_MODALITY
+        }
+    )
+    if len(behavior_types) > 1:
+        raise ValidationError(
+            "multiple_behavior_types",
+            f"A scheduled procedure may have at most one "
+            f"{BEHAVIOR_MODALITY.lower()} procedure type, but got "
+            f"{len(behavior_types)}: {', '.join(behavior_types)}. A rig runs a "
+            f"single behavior task and cannot run two simultaneously. "
+            f"Combining a behavior task with other modalities (e.g. fiber "
+            f"photometry or electrophysiology) is allowed.",
+        )
 
     # Rule 3: always computed here, never taken from the caller. Dedupe the
     # ids exactly like the join-row inserts do, so a repeated id in the

@@ -44,6 +44,11 @@ class UserRef(BaseModel):
 class ProcedureTypeRef(BaseModel):
     id: str
     name: str
+    modality_name: str | None = Field(
+        default=None,
+        description="The aind-data-schema modality; lets clients enforce the "
+        "one-behavior-task-per-procedure rule before submitting.",
+    )
 
 
 # ---------------------------------------------------------------------------
