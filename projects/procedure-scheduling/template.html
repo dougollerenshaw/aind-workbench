@@ -326,9 +326,18 @@ function initCalendar() {
     height: 'auto',
     nowIndicator: true,
     scrollTime: '06:00:00',
-    eventClick: (info) => showDetail(info.event.id),
+    eventClick: (info) => showDetail(info.event.id).catch(showFetchError),
   });
   calendar.render();
+}
+
+function showFetchError(err) {
+  // Surface read failures instead of silently doing nothing.
+  alert(`Request failed: ${err.message}`);
+}
+
+function refresh() {
+  loadEvents().catch(showFetchError);
 }
 
 function primaryTypeColor(activeTypeNames) {
@@ -392,8 +401,11 @@ async function showDetail(id) {
     `${record.mouse.subject_id} on ${record.instrument.name}`;
   document.getElementById('detail-status').textContent = record.status;
 
+  // Values are rendered with textContent only (never innerHTML), so
+  // user-typed content (notes, protocols, planned_config) can't inject
+  // markup. {code:...} / {pre:...} wrap the text in the matching element.
   const rows = [
-    ['Acquisition token (id)', `<code>${record.id}</code>`],
+    ['Acquisition token (id)', { code: record.id }],
     ['Subject', record.mouse.subject_id],
     ['Instrument', `${record.instrument.name}${record.instrument.sipe_rig_name ? ` (${record.instrument.sipe_rig_name})` : ''}`],
     ['Project', record.project.name],
@@ -407,7 +419,7 @@ async function showDetail(id) {
     ['Protocols', record.protocols ?? '—'],
     ['Notes', record.notes ?? '—'],
     ['Planned config', record.planned_config
-      ? `<pre>${JSON.stringify(record.planned_config, null, 2)}</pre>` : '—'],
+      ? { pre: JSON.stringify(record.planned_config, null, 2) } : '—'],
   ];
   const dl = document.getElementById('detail-fields');
   dl.innerHTML = '';
@@ -415,8 +427,14 @@ async function showDetail(id) {
     const dt = document.createElement('dt');
     dt.textContent = label;
     const dd = document.createElement('dd');
-    if (typeof value === 'string' && value.startsWith('<')) dd.innerHTML = value;
-    else dd.textContent = value;
+    if (value && typeof value === 'object') {
+      const tag = 'code' in value ? 'code' : 'pre';
+      const el = document.createElement(tag);
+      el.textContent = value[tag];
+      dd.appendChild(el);
+    } else {
+      dd.textContent = value;
+    }
     dl.append(dt, dd);
   }
   document.getElementById('detail-panel').hidden = false;
@@ -583,29 +601,29 @@ async function submitForm(event) {
   const record = await response.json();
   closeModal();
   await loadEvents();
-  showDetail(record.id);
+  showDetail(record.id).catch(showFetchError);
 }
 
 // ---------------------------------------------------------------------------
 // Wiring
 // ---------------------------------------------------------------------------
 
-document.getElementById('filter-type').addEventListener('change', loadEvents);
-document.getElementById('filter-instrument').addEventListener('change', loadEvents);
-document.getElementById('filter-start').addEventListener('change', loadEvents);
-document.getElementById('filter-end').addEventListener('change', loadEvents);
+document.getElementById('filter-type').addEventListener('change', refresh);
+document.getElementById('filter-instrument').addEventListener('change', refresh);
+document.getElementById('filter-start').addEventListener('change', refresh);
+document.getElementById('filter-end').addEventListener('change', refresh);
 
 let subjectDebounce = null;
 document.getElementById('filter-subject').addEventListener('input', () => {
   clearTimeout(subjectDebounce);
-  subjectDebounce = setTimeout(loadEvents, 250);
+  subjectDebounce = setTimeout(refresh, 250);
 });
 
 document.getElementById('clear-filters').addEventListener('click', () => {
   for (const id of ['filter-type', 'filter-instrument', 'filter-start', 'filter-end', 'filter-subject']) {
     document.getElementById(id).value = '';
   }
-  loadEvents();
+  refresh();
 });
 
 document.getElementById('add-btn').addEventListener('click', () => openModal());

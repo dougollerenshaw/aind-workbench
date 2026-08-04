@@ -7,6 +7,7 @@ the real endpoints (the JS builds URLs from a single `API` constant, so we
 assert the constant and each path fragment).
 """
 
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -81,9 +82,29 @@ def test_page_has_filters_legend_detail_panel_and_form(html):
 def test_edit_path_never_echoes_server_computed_fields(html):
     """The write body is constructed field-by-field; the page must not PUT a
     read payload back verbatim (extra='forbid' would 422)."""
-    assert "const body = {" in html
-    for forbidden in ['"acquisition_type"', "body.id =", "created_at:", "updated_at:"]:
-        assert forbidden not in html
+    match = re.search(r"const body = \{(.*?)\};", html, re.S)
+    assert match, "the form submit must build an explicit body object"
+    body_block = match.group(1)
+    # No server-computed fields in the constructed body...
+    for field in ("acquisition_type", "created_at", "updated_at"):
+        assert field not in body_block, f"body must not send {field}"
+    # ...no bare `id:` key (mouse_id/project_id etc. are fine)...
+    assert re.search(r"(?<![_a-zA-Z])id\s*:", body_block) is None
+    # ...and no wholesale echo of a fetched record anywhere in the script.
+    for echo in ("...currentDetail", "...record", "JSON.stringify(currentDetail)"):
+        assert echo not in html
+    # The only stringified request payload is the explicit body.
+    assert "JSON.stringify(body)" in html
+
+
+def test_detail_panel_renders_user_content_as_text(html):
+    """User-typed fields (notes, protocols, planned_config) must be rendered
+    via textContent, never innerHTML, so they can't inject markup."""
+    renderer = html[html.index("async function showDetail") : html.index("function closeDetail")]
+    # The only innerHTML use may be the empty-string clear of the <dl>.
+    assignments = re.findall(r"innerHTML\s*=\s*([^;]+);", renderer)
+    assert assignments and all(a.strip() == "''" for a in assignments)
+    assert "textContent" in renderer
 
 
 def test_trailing_slash_and_root_redirects(client):

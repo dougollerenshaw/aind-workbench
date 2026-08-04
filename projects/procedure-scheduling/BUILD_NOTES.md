@@ -204,7 +204,8 @@ Decisions / deviations:
 
 Built: `template.html` (single-file vanilla-JS SPA, house style — no build
 toolchain), served at `GET /session_schedule/` by `app/main.py`;
-`tests/test_spa.py` (8 server-side tests).
+`tests/test_spa.py` (7 server-side tests; an earlier revision of this note
+said 8 — miscount).
 
 What the page does:
 
@@ -220,6 +221,21 @@ What the page does:
   date range (start_after/start_before) are passed to the API; the
   subject_id text filter is a client-side **substring** match on the fetched
   records (friendlier than the API's exact-match `subject_id` param).
+- **Date-range filter semantics:** the From/To inputs constrain
+  `scheduled_start` only (`start_after`/`start_before`). A multi-day
+  procedure that *starts before* the From bound but overlaps the window will
+  not be listed. This matches DESIGN.md's filter set (which bounds start and
+  end independently, with no "overlaps" filter); with the seed's <= 6-hour
+  sessions it's invisible in practice, but worth knowing for long
+  procedures.
+- **Post-review hardening (M5 verifier notes):** the detail panel renders
+  every value via `textContent` (a tiny `{code}`/`{pre}` wrapper for the
+  token and planned_config) — previously notes/planned_config beginning with
+  `<` could inject markup via `innerHTML`. Read-path fetch failures
+  (event-click detail, filter refetches) now surface an alert instead of
+  failing silently. Tests strengthened: the submit body's actual `const
+  body = {...}` block is parsed and asserted free of server-computed fields
+  and record spreads, and the detail renderer is asserted innerHTML-free.
 - Event click -> side panel with token id, subject, instrument (+ SIPE rig
   name), project, contact, experimenters, active platforms,
   acquisition_type, acquisition_name, schedule, ethics_review_id, protocols,
@@ -246,3 +262,27 @@ redirects). The create round-trip was smoke-tested live over HTTP with the
 exact body shape the form submits (including JS millisecond `toISOString()`
 datetimes) — 201, token minted, event visible in the list API. Browser
 click-through is left for Doug's demo pass.
+
+## M6 — Parquet export
+
+Built: `scripts/export_parquet.py` (one Parquet file per table into
+`data/parquet/`, `--db-path` / `--out-dir` flags), `tests/test_export.py`
+(7 tests).
+
+- Uses DuckDB's native Parquet writer (`COPY <table> TO ... (FORMAT
+  PARQUET)`) — simplest correct path; pyarrow reads the output, which the
+  round-trip tests prove (acceptance criterion 9: counts match for all nine
+  tables, plus column names, values, referential integrity of the exported
+  join tables, and re-export overwriting in place).
+- Column names in the files are exactly the DuckDB schema names, i.e. the
+  left column of DESIGN.md's Dataverse-mapping table — backfill is a direct
+  field mapping.
+- Representation notes for whoever does the backfill: `TIMESTAMPTZ` columns
+  export as UTC-zoned Parquet timestamps (tz preserved); the
+  `planned_config` JSON column exports as a JSON **string** (Parquet has no
+  JSON type) — parse on import if needed.
+- `pyarrow` is a direct dependency and is what the tests use to verify the
+  files; the writer itself is DuckDB's, avoiding a hand-rolled
+  DuckDB->Arrow conversion step.
+- Exports land in `data/parquet/`, which is gitignored along with the DB
+  file (synthetic, regenerated on demand).
