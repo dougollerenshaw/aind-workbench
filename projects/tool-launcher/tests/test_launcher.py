@@ -77,20 +77,20 @@ def test_admin_write_through_dispatcher(client):
     """POST through the dispatcher creates a procedure (against the
     throwaway DB) — the write path works end-to-end behind the launcher."""
     instruments = client.get("/session_schedule/api/instruments").json
-    vr = next(i for i in instruments if i["name"] == "VR-Foraging-Rig-A")
+    # Pick any instrument and one of ITS compatible types, so this test keeps
+    # working when the seed's rig/task assignments change.
+    rig = next(i for i in instruments if i["compatible_procedure_types"])
+    procedure_type = rig["compatible_procedure_types"][0]
     body = {
         "mouse_id": client.get(
             "/session_schedule/api/mice?subject_id=testmouse1").json[0]["id"],
-        "instrument_id": vr["id"],
+        "instrument_id": rig["id"],
         "project_id": client.get("/session_schedule/api/projects").json[0]["id"],
         "contact_user_id": client.get("/session_schedule/api/users").json[0]["id"],
         "experimenter_user_ids": [],
         "scheduled_start": "2026-10-01T16:00:00Z",
         "scheduled_end": "2026-10-01T18:00:00Z",
-        "active_procedure_type_ids": [
-            t["id"] for t in vr["compatible_procedure_types"]
-            if t["name"] == "Dynamic foraging behavior"
-        ],
+        "active_procedure_type_ids": [procedure_type["id"]],
         "notes": "created through the launcher dispatcher (regression test)",
     }
     response = client.post(
@@ -100,7 +100,7 @@ def test_admin_write_through_dispatcher(client):
     )
     assert response.status_code == 201, response.text
     record = response.json
-    assert record["acquisition_type"] == "Dynamic foraging behavior"
+    assert record["acquisition_type"] == procedure_type["name"]
     assert record["id"].split("-")[2][0] == "7"  # UUIDv7 token
 
     # And it is readable back through the dispatcher.
