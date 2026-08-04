@@ -64,9 +64,9 @@ Decisions / deviations:
   even if one lands on a weekend; the 14 filler rows are nudged forward off
   Sat/Sun so the calendar reads naturally.
 - **18 procedures total** (4 canonical + 14 filler) spanning ~15 days across
-  all three instruments, all three mice, and both projects. 6 are
+  all three instruments, all three mice, and both projects. 7 are
   multi-platform (including Dynamic foraging + FIP) to exercise the
-  multiselect.
+  multiselect. (The M2 commit message says 6 — miscount, correct number is 7.)
 - **Idempotency key** for scheduled procedures is
   `(mouse_id, instrument_id, scheduled_start)`. Lookups are matched on their
   natural keys (`name` / `subject_id` / `email`). Re-running the seed changes
@@ -87,3 +87,49 @@ Decisions / deviations:
 - The compatibility-error message lists compatible types in `sort_order`;
   DESIGN.md's example lists them in the order they appear in that doc's seed
   table. Content is the same, order differs.
+
+## M3 — Read API
+
+Built: `app/schemas.py` (Pydantic v2 response models), `app/queries.py`
+(read-side SQL with lookups resolved), `app/read_api.py` (the public GET
+router under `/session_schedule/api`), `app/main.py` (`create_app` factory),
+top-level `app.py` (CLI entry point), `tests/test_read_api.py` (29 tests).
+
+Entry points (resolves the M1 carry-forward): both documented forms work.
+`uv run python app.py [--host 0.0.0.0] [--port 8000] [--db-path ...]` — the
+top-level `app.py` script coexists with the `app/` package because packages
+win import precedence, so `from app.main import create_app` inside it
+resolves to the package (verified by smoke test). `uv run uvicorn
+app.main:app` also works: `app.main` exposes `app` as a lazy module attribute
+(PEP 562 `__getattr__`) so importing the module — e.g. from tests — doesn't
+create/seed the default database as a side effect.
+
+Decisions / deviations:
+
+- **Auto-seed on first run:** `create_app()` seeds the database if
+  `procedure_types` is empty (acceptance criterion 2: populated calendar on
+  first run, no separate seed step needed). Disable with
+  `create_app(seed_if_empty=False)`; `scripts/seed.py` remains the explicit
+  path.
+- **Detail payload** (`/scheduled-procedures/{id}`, `/acquisitions/{id}`)
+  includes `ethics_review_id`, `created_at`, `updated_at` in addition to
+  Example 2's documented `protocols`/`notes`/`planned_config` — DESIGN.md says
+  "fully resolved", and hiding audit fields helps no one. The *list* payload
+  matches Example 2's shape exactly (enforced by `response_model` filtering;
+  both come from the same query so they cannot drift).
+- **`/api/instruments` additionally returns `compatible_procedure_types`**
+  (list of `{id, name}`) — the M5 form needs the instrument -> compatible-set
+  mapping to constrain its checkboxes, and "responses resolve lookups" covers
+  it.
+- **Filter semantics:** `*_after` is inclusive (>=), `*_before` inclusive
+  (<=); the rig `planned-acquisitions` window is start-inclusive,
+  end-exclusive. Naive datetimes in query params are treated as UTC.
+- **`next-acquisition` semantics:** only `status = 'scheduled'` rows with
+  `scheduled_start` strictly in the future qualify; 404 when the animal is
+  unknown *or* has nothing upcoming (distinct messages). `animal_id` matches
+  `mice.subject_id` first, falling back to the mouse UUID.
+- `planned_config` is returned as parsed JSON (an object), not a string,
+  matching Example 1's payload.
+- Datetimes serialize as ISO-8601 UTC with a `Z` suffix to match the
+  examples byte-for-byte (Pydantic's default would emit `+00:00`), so the
+  models declare those fields as strings.

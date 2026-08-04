@@ -14,11 +14,6 @@ from app.store import compute_acquisition_type
 from scripts.seed import (
     CANONICAL_PROCEDURES,
     EXTRA_PROCEDURES,
-    INSTRUMENTS,
-    MICE,
-    PROCEDURE_TYPES,
-    PROJECTS,
-    USERS,
     row_counts,
     seed_database,
 )
@@ -79,8 +74,6 @@ def test_procedure_types_match_design_vocabulary(seeded):
         ("Whole-brain axonal imaging",
          "Selective plane illumination microscopy", "SPIM", 8),
     ]
-    # The seed constant and the DB agree.
-    assert len(PROCEDURE_TYPES) == 8
 
 
 def test_instruments_match_design_seed_table(seeded):
@@ -94,8 +87,29 @@ def test_instruments_match_design_seed_table(seeded):
     ]
 
 
-@pytest.mark.parametrize("instrument", INSTRUMENTS, ids=lambda i: i["name"])
-def test_instrument_compatibility_sets(seeded, instrument):
+# Literal compatibility sets from DESIGN.md's instruments seed table —
+# deliberately NOT read from scripts.seed, so drift in seed.py fails here.
+DESIGN_COMPATIBILITY = {
+    "VR-Foraging-Rig-A": [
+        "Dynamic foraging behavior",
+        "Fiber photometry (FIP)",
+        "Patch foraging behavior",
+    ],
+    "SmartSPIM-1": [
+        "Cellular imaging",
+        "Whole-brain 3D histology",
+        "Whole-brain axonal imaging",
+    ],
+    "Ephys-Rig-2": [
+        "Acute extracellular electrophysiology (modular insertion)",
+        "Fiber photometry (FIP)",
+        "Patch foraging behavior",
+    ],
+}
+
+
+@pytest.mark.parametrize("instrument_name", sorted(DESIGN_COMPATIBILITY))
+def test_instrument_compatibility_sets(seeded, instrument_name):
     names = [
         r[0]
         for r in seeded.conn.execute(
@@ -106,31 +120,48 @@ def test_instrument_compatibility_sets(seeded, instrument):
             JOIN procedure_types pt ON pt.id = ict.procedure_type_id
             WHERE i.name = ?
             """,
-            [instrument["name"]],
+            [instrument_name],
         ).fetchall()
     ]
-    assert sorted(names) == sorted(instrument["compatible"])
+    assert sorted(names) == DESIGN_COMPATIBILITY[instrument_name]
 
 
 def test_mice_projects_users(seeded):
+    # Literal expected values from DESIGN.md's seed dataset — deliberately
+    # NOT read from scripts.seed constants, so drift in seed.py fails here.
     mice = seeded.conn.execute(
         "SELECT subject_id, genotype FROM mice ORDER BY subject_id"
     ).fetchall()
-    assert mice == [(s, g) for s, g in MICE]
+    assert mice == [
+        ("testmouse1", "test-genotype"),
+        ("testmouse2", "test-genotype"),
+        ("testmouse3", "test-genotype"),
+    ]
     # Synthetic-data guardrail: never numeric AIND-looking subject ids.
     assert all(not s.isdigit() for s, _ in mice)
 
     projects = [
         r[0] for r in seeded.conn.execute("SELECT name FROM projects ORDER BY name").fetchall()
     ]
-    assert sorted(projects) == sorted(PROJECTS)
+    assert projects == [
+        "Brain-wide connectivity",
+        "Cognitive flexibility in patch foraging",
+    ]
 
     users = seeded.conn.execute(
-        "SELECT name, email, orcid FROM users ORDER BY name"
+        "SELECT name, email FROM users ORDER BY name"
     ).fetchall()
-    assert users == sorted((n, e, o) for n, e, o in USERS)
-    assert ("Doug Ollerenshaw", "doug.ollerenshaw@alleninstitute.org",
-            "0000-0000-0000-0001") in users
+    assert users == [
+        ("Bruno Cruz", "bruno.cruz@alleninstitute.org"),
+        ("Doug Ollerenshaw", "doug.ollerenshaw@alleninstitute.org"),
+        ("Jane Kim", "jane.kim@alleninstitute.org"),
+    ]
+    # Doug's ORCID placeholder round-trips; Bruno's is NULL (nullable case).
+    orcids = dict(
+        seeded.conn.execute("SELECT name, orcid FROM users").fetchall()
+    )
+    assert orcids["Doug Ollerenshaw"] == "0000-0000-0000-0001"
+    assert orcids["Bruno Cruz"] is None
 
 
 # ---------------------------------------------------------------------------
