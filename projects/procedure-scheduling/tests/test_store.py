@@ -1,4 +1,4 @@
-"""Tests for the shared write logic in app/store.py.
+"""Tests for the shared write logic in scheduler_app/store.py.
 
 These cover the pieces the seed script (M2) and the admin write API (M4)
 both depend on: the computed ``acquisition_type`` and the two validation

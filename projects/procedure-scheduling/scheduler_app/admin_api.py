@@ -4,7 +4,7 @@ Kept separate from the public data API so the "read-only API" contract is
 honored: everything outside ``/api/admin/`` is GET-only. No auth — this is
 an internal-network prototype; the namespace makes the write side obvious.
 
-All writes go through the shared logic in ``app/store.py``, which enforces
+All writes go through the shared logic in ``scheduler_app/store.py``, which enforces
 DESIGN.md's validation rules and recomputes ``acquisition_type`` and
 ``updated_at`` server-side. A rejected write returns the documented error
 shape::
