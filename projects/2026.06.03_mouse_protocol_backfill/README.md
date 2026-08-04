@@ -1,144 +1,65 @@
 # Mouse → IACUC protocol backfill (Dataverse)
 
-Backfills the **`aibs_iacuc_protocol`** lookup on the Dataverse `aibs_dim_mice` table
-from a CSV of `subject_id, iacuc_protocol_id` rows.
+One-time backfill of **`aibs_dim_mice.aibs_iacuc_protocol`** in Dataverse. Each mouse's
+protocol is sourced from the AIND metadata pipeline (DocDB fast path, metadata-service
+fallback) and written to Dataverse as a lookup. After this backfill, **Dataverse is the
+source of truth** going forward, maintained by LAS / behavior / neurosurgery.
 
-As of this writing the lookup is **null for all ~1156 mice** in `aibs_dim_mice`. The
-column exists in the schema (a lookup → `aibs_dim_iacuc_protocols`, whose
-`aibs_protocol_id` holds names like `2301-Westlake`), it just hasn't been populated.
-This script populates it.
+> This folder is **ephemeral** — it's a staging copy. The real home is a PR on
+> [`AllenNeuralDynamics/aind-dataverse-migration-scripts`](https://github.com/AllenNeuralDynamics/aind-dataverse-migration-scripts).
+> That's why the lookup logic is a **self-contained copy** here (`iacuc_lookup.py`) and
+> does **not** import from the repo's `aind_workbench` package.
 
-> **Who runs this:** someone with **write** access to Dataverse. The author of this
-> folder does not have auth — this is meant to land via PR and be run by a credentialed
-> operator after a dry-run review.
-
-## Open questions — resolve before a real run
-
-These are **unresolved** and intentionally deferred. The script is verified working
-(auth + GUID resolution + dry-run plan all run end-to-end against a live org), but the
-following need answers before an `--apply`:
-
-1. **Which environment is the target?** During testing, two distinct Dataverse
-   environments showed up and they do **not** hold the same data:
-
-   | | `aind-metadata-service` proxy | direct Web API org `<sandbox-org>.crm.dynamics.com` |
-   |---|---|---|
-   | Mice | 1156 | 792 |
-   | Mouse ID ranges | 83xxxx… | 61xxxx… (+ some 83xxxx) |
-   | Protocols | 32, all `NNNN-Westlake` | 19, **including `TEST_IACUC_Protocol` / `TEST_IACUC_Archived_Protocol`** |
-
-   The `TEST_IACUC_*` protocols + service account suggest the direct org is a
-   **sandbox/dev** org, while the proxy reads from something prod-like. Confirm which org
-   the backfill should actually write to, and set `DATAVERSE_HOST` to match. **Pull the
-   ground-truth `subject_id → protocol_id` list from that same environment.**
-
-2. **Sandbox protocol-population state is unknown.** The "null for all ~1156 mice"
-   finding was observed via the **proxy** environment only. Whether the mice in
-   the direct org (or whichever target you pick) already have protocols set has **not**
-   been checked — verify with a dry run against the real target first.
-
-3. **Sample CSV is environment-specific.** `sample_mouse_protocol.csv` uses IDs from the
-   proxy environment; against the sandbox only some resolve (mice `839222`, `837468`,
-   `841310`, `836174` and protocols `2403`, `2413`, `2414` exist there; mice `835272`,
-   `830849` and protocols `2301`, `2307`, `2425` do not). Regenerate the fixture from the
-   chosen target environment before relying on it.
-
-4. **`@odata.bind` navigation-property name unverified** — see the "Verify before the
-   first real `--apply`" section below.
+## Files
+- **`iacuc_lookup.py`** — standalone two-stage lookup (DocDB → metadata-service),
+  `get_iacuc_id_for_mouse(subject_id) -> "2414" | None`. No external-repo imports.
+- **`backfill_iacuc_protocol.py`** — fetches mice from Dataverse, looks up each one's
+  protocol, maps it to the Dataverse protocol GUID, and PATCHes the lookup.
 
 ## How it works
+1. Auth to Dataverse (MSAL).
+2. Fetch mice from `aibs_dim_mices` — by default only those whose `aibs_iacuc_protocol`
+   is empty (the backfill target). `--overwrite` to also touch populated ones.
+3. Build `{numeric protocol key → aibs_dim_iacuc_protocolsid GUID}` from
+   `aibs_dim_iacuc_protocolses`. **Format mismatch:** Dataverse stores `"2414-Westlake"`
+   while the lookup yields the bare `"2414"`, so we match on the leading digits.
+4. For each mouse: `get_iacuc_id_for_mouse(subject_id)` → map number → GUID.
+5. `PATCH /aibs_dim_mices(<guid>)` with `aibs_iacuc_protocol@odata.bind`.
 
-1. Read + validate the CSV (one protocol per mouse).
-2. Resolve each `iacuc_protocol_id` → its GUID in `aibs_dim_iacuc_protocolses`.
-3. Resolve each `subject_id` → its GUID in `aibs_dim_mices` (and read the current
-   protocol value, so already-set mice are skipped by default).
-4. `PATCH /aibs_dim_mices(<guid>)` binding the lookup via
-   `"aibs_iacuc_protocol@odata.bind": "/aibs_dim_iacuc_protocolses(<guid>)"`.
+## Safety — writes are off unless you ask twice
+- **Dry-run is the default.** Writing needs the `--apply` flag **and** the env var
+  `IACUC_BACKFILL_CONFIRM_WRITE=1`. With either missing, the write path raises — a bare
+  `--apply` (or any accidental call) cannot write.
+- PATCH uses `If-Match: *` (update-only; never creates a row).
 
-It is **dry-run by default**: it resolves everything and logs the exact plan but writes
-nothing. Add `--apply` to write. Each run also writes a timestamped `iacuc_backfill_*.log`.
-
-## CSV format
-
-```csv
-subject_id,iacuc_protocol_id
-835272,2301-Westlake
-830849,2413-Westlake
-```
-
-`sample_mouse_protocol.csv` ships with this folder. **The pairings are simulated**, but
-both the subject IDs and the protocol IDs are *real existing rows* in Dataverse, so GUID
-resolution succeeds end-to-end during a test/dry run. Replace it with the real
-`subject_id → protocol_id` ground-truth list (point `--csv` at your file, or overwrite
-the sample). Column names are configurable via `--subject-col` / `--protocol-col`.
-
-## Prerequisites
-
-Set these environment variables (a `.env` file in this folder is auto-loaded — see
-`.env.example`). These mirror `aind-dataverse-migration-scripts`:
-
-| Variable | Purpose |
-|---|---|
-| `DATAVERSE_HOST` | e.g. `https://<org>.crm.dynamics.com` |
-| `DATAVERSE_TENANT_ID` | Azure AD tenant id |
-| `DATAVERSE_CLIENT_ID` | App registration (public client) id |
-| `DATAVERSE_USERNAME` | Service/operator account (needs write on `aibs_dim_mice`) |
-| `DATAVERSE_PASSWORD` | …its password |
-
-## Run it (uv)
-
-Dependencies are declared inline (PEP 723), so `uv run` installs them automatically.
-
+## Usage
 ```bash
-# 1) Offline CSV sanity check — no network, no auth:
-uv run backfill_iacuc_protocol.py --validate-only
+# Read-only dry runs (no writes possible):
+uv run backfill_iacuc_protocol.py --subject-ids ids.json --no-fallback   # quick, targeted
+uv run backfill_iacuc_protocol.py --top 50                               # first 50 empty-protocol mice
+uv run backfill_iacuc_protocol.py                                        # full dry run
 
-# 2) Dry run against Dataverse (needs read auth) — REVIEW THE PLAN + any warnings:
-uv run backfill_iacuc_protocol.py --csv sample_mouse_protocol.csv
-
-# 3) Optional: limit to the first few rows while testing the write path:
-uv run backfill_iacuc_protocol.py --csv sample_mouse_protocol.csv --apply --top 3
-
-# 4) Full apply:
-uv run backfill_iacuc_protocol.py --csv your_real_data.csv --apply
+# Real write — ONLY after the migration-repo PR is approved:
+IACUC_BACKFILL_CONFIRM_WRITE=1 uv run backfill_iacuc_protocol.py --apply
 ```
+Flags: `--overwrite`, `--top N`, `--subject-ids <json array>`, `--no-fallback`,
+`--env-file`, `--log-dir`. Env: the five `DATAVERSE_*` vars (auto-loaded from `.env`).
 
-Useful flags: `--overwrite` (also update mice that already have a protocol),
-`--top N` (cap rows), `--log-dir DIR`.
+## Verified (2026-06-03, all read-only — nothing written)
+- `iacuc_lookup.py` against live DocDB (`762287→2414`, `632269→2109`, `853578→2414`).
+- Offline unit tests of `_numeric_key`, the protocol map, and `build_plan`
+  (matched / skipped-existing / no-protocol / unmatched, incl. `--overwrite`).
+- Write-gate: `--apply` without `IACUC_BACKFILL_CONFIRM_WRITE=1` refuses (exit 2).
+- Full live **dry run** against Dataverse: auth + fetch 791 mice + map 17 protocols +
+  per-mouse lookup + plan + dry-run output. `837468`/`841310` → `2414` PATCH plan; 0 writes.
 
-Non-uv fallback: `pip install -r requirements.txt` then `python backfill_iacuc_protocol.py ...`.
-
-## Safety notes
-
-- **Dry-run is the default.** Writing requires the explicit `--apply` flag.
-- **Skip-existing by default.** Mice that already have a protocol are left untouched
-  (and flagged if they differ from the CSV); pass `--overwrite` to replace them.
-- **Update-only writes.** PATCH is sent with `If-Match: *`, so a mistyped GUID errors
-  instead of silently creating an orphan record.
-- **Pre-flight reporting.** Unmatched subject IDs and protocol IDs are listed before any
-  write, so you can fix the CSV first.
-
-## ⚠️ Verify before the first real `--apply`
-
-The `@odata.bind` navigation-property name is set to **`aibs_iacuc_protocol`**
-(`IACUC_PROTOCOL_NAV` in the script). This matches the lookup's value column
-(`_aibs_iacuc_protocol_value`) and is almost certainly correct, but in Dataverse a
-navigation property *can* differ from the attribute logical name. Confirm once against:
-
-```
-{DATAVERSE_HOST}/api/data/v9.2/$metadata
-```
-
-Find `EntityType Name="aibs_dim_mice"` → its `NavigationProperty` pointing at
-`aibs_dim_iacuc_protocols`. A wrong name produces a `400` on PATCH (which the dry run
-cannot detect, since dry run never PATCHes). The simplest live check is
-`--apply --top 1` and confirm one row updates before running the rest.
-
-## Provenance
-
-Auth, querying, and lookup-binding follow the conventions in
-[`AllenNeuralDynamics/aind-dataverse-migration-scripts`](https://github.com/AllenNeuralDynamics/aind-dataverse-migration-scripts).
-That repo's load helpers only **create** rows (POST + skip-existing); they have no update
-path. This backfill targets rows that already exist, so it adds the missing
-**PATCH-by-GUID** step. If useful, this can be folded into that repo as an
-`iacuc-protocol` table loader / an `update` mode on the shared utils.
+## ⚠️ Confirm before the first real `--apply`
+- **Target environment.** Verification ran against the sandbox org `orgc1997c24`, whose
+  old subjects mostly aren't in (prod) DocDB, so match rates there are low and *not*
+  representative. Point `DATAVERSE_HOST` at the **real target org** and pull from the
+  matching DocDB; expect far higher coverage.
+- **`@odata.bind` nav-property name** is assumed `aibs_iacuc_protocol` (matches
+  `_aibs_iacuc_protocol_value`). A dry run can't confirm it — check `…/$metadata`, or do
+  `--apply` on a single subject first. A wrong name → 400 on PATCH.
+- **Fallback needs the internal host.** DocDB works anywhere; the metadata-service
+  fallback needs VPN/DNS for `aind-metadata-service` (use `--no-fallback` otherwise).

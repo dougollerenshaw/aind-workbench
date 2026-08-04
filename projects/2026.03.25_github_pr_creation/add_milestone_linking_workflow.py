@@ -46,7 +46,7 @@ jobs:
 # ]
 
 REPOS = [
-    "aind-fiber-photometry-pipeline"
+    "camstim-behavior-processing"
 ]
 
 ORG = "AllenNeuralDynamics"

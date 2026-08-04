@@ -7,56 +7,58 @@
 # ]
 # ///
 """
-Backfill the ``aibs_iacuc_protocol`` lookup on the Dataverse ``aibs_dim_mice`` table.
+Backfill ``aibs_dim_mice.aibs_iacuc_protocol`` in Dataverse.
 
-Given a CSV of ``subject_id, iacuc_protocol_id`` rows, this script:
+Each mouse's protocol is sourced from the AIND metadata pipeline (DocDB fast path,
+metadata-service fallback) via the sibling ``iacuc_lookup`` module — i.e. the same
+logic the standalone lookup tool uses. This is a ONE-TIME backfill of historical data;
+going forward the source of truth is Dataverse itself (maintained by LAS / behavior /
+neurosurgery).
 
-  1. Reads + validates the CSV (one protocol per mouse).
-  2. Resolves each protocol id (e.g. ``2301-Westlake``) to its row GUID in
-     ``aibs_dim_iacuc_protocolses``.
-  3. Resolves each subject/mouse id to its row GUID in ``aibs_dim_mices`` (and reads
-     the current protocol value so already-populated mice can be skipped).
-  4. PATCHes each mouse record, binding the protocol lookup via ``@odata.bind``.
+Flow:
+  1. Auth to Dataverse (MSAL username/password).
+  2. Fetch mice from ``aibs_dim_mices`` (default: those whose ``aibs_iacuc_protocol``
+     lookup is empty — the actual backfill target).
+  3. Build {numeric protocol key -> ``aibs_dim_iacuc_protocolsid`` GUID} from
+     ``aibs_dim_iacuc_protocolses``. Dataverse stores ``"2414-Westlake"`` while the
+     lookup yields the bare ``"2414"``, so we match on the leading digits.
+  4. For each mouse: look up its protocol number, map it to the Dataverse protocol GUID.
+  5. PATCH ``aibs_dim_mices(<guid>)`` binding ``aibs_iacuc_protocol@odata.bind``.
 
-It is **dry-run by default** — it resolves everything and logs exactly what *would*
-be written, but sends nothing. Pass ``--apply`` to perform the writes.
+SAFETY — writes are off unless you ask twice:
+  * Dry-run is the default. Writing requires the ``--apply`` flag, AND
+  * the env var ``IACUC_BACKFILL_CONFIRM_WRITE=1`` must be set. Without both, the write
+    function raises. A bare ``--apply`` (or any accidental call) cannot write.
 
-The auth / query / lookup-binding conventions here mirror
-``AllenNeuralDynamics/aind-dataverse-migration-scripts`` (the same MSAL flow, the same
-``/api/data/v9.2`` Web API, the same ``"<nav>@odata.bind": "/entityset(guid)"`` idiom).
-The one piece that repo lacks is an *update* path — its loaders only POST/create and
-skip existing rows — so the PATCH-by-GUID helper below is the new bit. The ~1156 mice
-already exist with a null protocol, so they must be updated, not created.
+Usage:
+    # Read-only dry run (no creds needed for the offline bits; reads for the plan):
+    uv run backfill_iacuc_protocol.py --top 10
+    uv run backfill_iacuc_protocol.py                     # full dry run (all empty-protocol mice)
 
-Usage (uv resolves the inline deps automatically):
+    # Real write (only after the migration-repo PR is approved):
+    IACUC_BACKFILL_CONFIRM_WRITE=1 uv run backfill_iacuc_protocol.py --apply
 
-    # Offline CSV check — no network, no auth required:
-    uv run backfill_iacuc_protocol.py --validate-only
-
-    # Dry run against Dataverse (needs read auth) — review the plan:
-    uv run backfill_iacuc_protocol.py
-
-    # Apply the writes (needs write auth):
-    uv run backfill_iacuc_protocol.py --apply
-
-Required environment variables (a .env file in this dir is auto-loaded):
+Required env (a .env in this dir / repo root is auto-loaded):
     DATAVERSE_CLIENT_ID, DATAVERSE_TENANT_ID, DATAVERSE_HOST,
     DATAVERSE_USERNAME, DATAVERSE_PASSWORD
 """
 from __future__ import annotations
 
 import argparse
-import csv
+import json
 import logging
 import os
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Tuple
+from typing import Callable, Dict, List, Optional, Tuple
 
 import requests
 
-try:  # optional; only needed to auto-load a .env file
+from iacuc_lookup import get_iacuc_id_for_mouse  # sibling module (NOT aind_workbench)
+
+try:
     from dotenv import load_dotenv
 except ImportError:  # pragma: no cover
     load_dotenv = None
@@ -64,25 +66,18 @@ except ImportError:  # pragma: no cover
 
 # ── Dataverse schema constants ────────────────────────────────────────────────
 API_VERSION = "v9.2"
-
 MICE_ENTITY_SET = "aibs_dim_mices"
 MICE_ID_FIELD = "aibs_mouse_id"
 MICE_GUID_FIELD = "aibs_dim_miceid"
+IACUC_PROTOCOL_VALUE_FIELD = "_aibs_iacuc_protocol_value"  # the lookup's stored value
 
 IACUC_ENTITY_SET = "aibs_dim_iacuc_protocolses"
 IACUC_ID_FIELD = "aibs_protocol_id"
 IACUC_GUID_FIELD = "aibs_dim_iacuc_protocolsid"
 
-# Single-valued navigation property used in the @odata.bind payload. It corresponds
-# to the lookup column whose stored value field is ``_aibs_iacuc_protocol_value``.
-# This is almost certainly correct, but the navigation-property name can differ from
-# the attribute logical name in Dataverse — VERIFY once against
-#   {DATAVERSE_HOST}/api/data/v9.2/$metadata
-# (search for the EntityType "aibs_dim_mice" -> NavigationProperty) before the first
-# real --apply run. A wrong name yields a 400 on PATCH, which the dry run cannot catch.
+# Navigation property for @odata.bind. Matches the lookup whose value field is
+# _aibs_iacuc_protocol_value. VERIFY once against {host}/api/data/v9.2/$metadata.
 IACUC_PROTOCOL_NAV = "aibs_iacuc_protocol"
-IACUC_PROTOCOL_VALUE_FIELD = "_aibs_iacuc_protocol_value"
-_FORMATTED = "@OData.Community.Display.V1.FormattedValue"
 
 REQUIRED_ENV = [
     "DATAVERSE_CLIENT_ID",
@@ -92,32 +87,30 @@ REQUIRED_ENV = [
     "DATAVERSE_PASSWORD",
 ]
 
-ODATA_FILTER_CHUNK = 20  # ids per $filter expression, to keep request URLs short
+# Second gate (in addition to --apply) that must be set to permit any write.
+WRITE_CONFIRM_ENV = "IACUC_BACKFILL_CONFIRM_WRITE"
 
 logger = logging.getLogger("iacuc_backfill")
 
 
-# ── auth + http ───────────────────────────────────────────────────────────────
+# ── auth + http (reads) ─────────────────────────────────────────────────────────
 def get_access_token() -> str:
-    """Acquire a Dataverse access token via the MSAL username/password flow."""
-    import msal  # imported lazily so --validate-only needs no auth deps
+    """Acquire a Dataverse token via the MSAL username/password flow."""
+    import msal
 
     missing = [v for v in REQUIRED_ENV if not os.getenv(v)]
     if missing:
         raise ValueError(f"Missing required environment variables: {', '.join(missing)}")
-
     host = os.getenv("DATAVERSE_HOST", "").rstrip("/")
-    authority = f"https://login.microsoftonline.com/{os.getenv('DATAVERSE_TENANT_ID')}"
-    scopes = [f"{host}/user_impersonation"]
-
     app = msal.PublicClientApplication(
-        client_id=os.getenv("DATAVERSE_CLIENT_ID"), authority=authority
+        client_id=os.getenv("DATAVERSE_CLIENT_ID"),
+        authority=f"https://login.microsoftonline.com/{os.getenv('DATAVERSE_TENANT_ID')}",
     )
-    logger.info("Acquiring Dataverse access token ...")
+    logger.info("Acquiring Dataverse access token …")
     result = app.acquire_token_by_username_password(
         username=os.getenv("DATAVERSE_USERNAME"),
         password=os.getenv("DATAVERSE_PASSWORD"),
-        scopes=scopes,
+        scopes=[f"{host}/user_impersonation"],
     )
     if "access_token" not in result:
         raise RuntimeError(
@@ -135,29 +128,23 @@ def make_session(token: str) -> requests.Session:
             "OData-Version": "4.0",
             "Accept": "application/json",
             "Content-Type": "application/json",
-            # Return human-readable values for lookups/choices in GET responses.
-            "Prefer": 'odata.include-annotations="OData.Community.Display.V1.FormattedValue"',
         }
     )
     return session
 
 
-def api_base() -> str:
+def _api_base() -> str:
     return f"{os.getenv('DATAVERSE_HOST', '').rstrip('/')}/api/data/{API_VERSION}"
 
 
 def query_dataverse(
-    session: requests.Session,
-    entity_set: str,
-    *,
-    select: str,
-    filter_str: Optional[str] = None,
+    session: requests.Session, entity_set: str, *, select: str, filter_str: Optional[str] = None
 ) -> List[Dict]:
-    """GET rows from an entity set, following ``@odata.nextLink`` paging."""
+    """GET rows from an entity set, following @odata.nextLink paging. Read-only."""
     params: Dict[str, str] = {"$select": select}
     if filter_str:
         params["$filter"] = filter_str
-    url: Optional[str] = f"{api_base()}/{entity_set}"
+    url: Optional[str] = f"{_api_base()}/{entity_set}"
     out: List[Dict] = []
     while url:
         resp = session.get(url, params=params)
@@ -165,156 +152,150 @@ def query_dataverse(
         body = resp.json()
         out.extend(body.get("value", []))
         url = body.get("@odata.nextLink")
-        params = {}  # nextLink already carries the query
+        params = {}
     return out
 
 
+# ── the only write in the file — double-gated ────────────────────────────────────
 def patch_mouse_protocol(
     session: requests.Session, mouse_guid: str, protocol_guid: str
 ) -> requests.Response:
-    """Bind the IACUC protocol lookup on a single mouse record (update-only)."""
-    url = f"{api_base()}/{MICE_ENTITY_SET}({mouse_guid})"
+    """Bind the IACUC protocol lookup on one mouse. Refuses unless explicitly confirmed."""
+    if os.getenv(WRITE_CONFIRM_ENV) != "1":
+        raise RuntimeError(
+            f"Refusing to write: set {WRITE_CONFIRM_ENV}=1 (in addition to --apply) to "
+            "enable Dataverse writes. This guard makes dry runs incapable of writing."
+        )
+    url = f"{_api_base()}/{MICE_ENTITY_SET}({mouse_guid})"
     body = {f"{IACUC_PROTOCOL_NAV}@odata.bind": f"/{IACUC_ENTITY_SET}({protocol_guid})"}
-    # If-Match: * => update an existing row only; never create. Guards against a
-    # mistyped GUID silently upserting a brand-new (orphan) record.
+    # If-Match: * => update an existing row only; never create.
     resp = session.patch(url, json=body, headers={"If-Match": "*"})
     resp.raise_for_status()
     return resp
 
 
-# ── helpers ─────────────────────────────────────────────────────────────────
-def _chunks(items: List[str], n: int) -> Iterable[List[str]]:
-    for i in range(0, len(items), n):
-        yield items[i : i + n]
+# ── data fetching (reads) ─────────────────────────────────────────────────────────
+def fetch_mice(session: requests.Session, *, only_missing: bool = True) -> List[Dict]:
+    """Return [{mouse_id, guid, current_protocol_value}] from aibs_dim_mices."""
+    rows = query_dataverse(
+        session,
+        MICE_ENTITY_SET,
+        select=f"{MICE_ID_FIELD},{MICE_GUID_FIELD},{IACUC_PROTOCOL_VALUE_FIELD}",
+    )
+    mice = []
+    for r in rows:
+        mid, guid = r.get(MICE_ID_FIELD), r.get(MICE_GUID_FIELD)
+        if not (mid and guid):
+            continue
+        current = r.get(IACUC_PROTOCOL_VALUE_FIELD)
+        if only_missing and current:  # already has a protocol -> skip (client-side; ne-null filter 404s)
+            continue
+        mice.append({"mouse_id": str(mid), "guid": str(guid), "current_protocol_value": current})
+    return mice
 
 
-def _odata_str(value: str) -> str:
-    """Escape single quotes for use inside an OData string literal."""
-    return value.replace("'", "''")
+def _numeric_key(value) -> Optional[str]:
+    """Leading digits of a protocol id ('2414-Westlake' -> '2414', '2414' -> '2414')."""
+    m = re.match(r"\s*(\d+)", str(value))
+    return m.group(1) if m else None
 
 
-# ── CSV ───────────────────────────────────────────────────────────────────────
-def read_csv(path: Path, subject_col: str, protocol_col: str) -> List[Tuple[str, str]]:
-    """Parse the input CSV into a list of (subject_id, protocol_id) pairs."""
-    with open(path, newline="", encoding="utf-8-sig") as f:
-        reader = csv.DictReader(f)
-        fields = [h.strip() for h in (reader.fieldnames or [])]
-        if subject_col not in fields or protocol_col not in fields:
-            raise ValueError(
-                f"CSV must contain columns '{subject_col}' and '{protocol_col}'. "
-                f"Found: {reader.fieldnames}"
-            )
-        pairs: List[Tuple[str, str]] = []
-        for lineno, raw in enumerate(reader, start=2):  # line 1 is the header
-            # tolerate stray whitespace in header names
-            row = {(k or "").strip(): v for k, v in raw.items()}
-            subject = (row.get(subject_col) or "").strip()
-            protocol = (row.get(protocol_col) or "").strip()
-            if not subject and not protocol:
-                continue  # blank line
-            if not subject or not protocol:
-                logger.warning(
-                    "Line %d: missing subject or protocol (%r, %r) — skipping",
-                    lineno, subject, protocol,
-                )
-                continue
-            pairs.append((subject, protocol))
-    return pairs
-
-
-def dedupe(pairs: List[Tuple[str, str]]) -> Dict[str, str]:
-    """Collapse to one protocol per mouse (last wins), warning on conflicts."""
+def fetch_protocol_guid_map(session: requests.Session) -> Dict[str, str]:
+    """Build {numeric protocol key -> aibs_dim_iacuc_protocolsid GUID}."""
+    rows = query_dataverse(
+        session, IACUC_ENTITY_SET, select=f"{IACUC_ID_FIELD},{IACUC_GUID_FIELD}"
+    )
     mapping: Dict[str, str] = {}
-    for subject, protocol in pairs:
-        if subject in mapping and mapping[subject] != protocol:
-            logger.warning(
-                "Subject %s appears with conflicting protocols (%s, %s); using %s",
-                subject, mapping[subject], protocol, protocol,
-            )
-        mapping[subject] = protocol
+    for r in rows:
+        pid, guid = r.get(IACUC_ID_FIELD), r.get(IACUC_GUID_FIELD)
+        if not (pid and guid):
+            continue
+        key = _numeric_key(pid)
+        if not key:  # e.g. "TEST_IACUC_Protocol" — no numeric form, skip
+            continue
+        if key in mapping and mapping[key] != str(guid):
+            logger.warning("protocol number %s maps to >1 Dataverse row; keeping first", key)
+            continue
+        mapping[key] = str(guid)
     return mapping
 
 
-# ── resolution ──────────────────────────────────────────────────────────────
-def resolve_protocol_guids(
-    session: requests.Session, protocol_ids: Iterable[str]
-) -> Dict[str, str]:
-    """Map protocol id (e.g. '2301-Westlake') -> aibs_dim_iacuc_protocolsid GUID."""
-    wanted = sorted(set(protocol_ids))
-    out: Dict[str, str] = {}
-    for chunk in _chunks(wanted, ODATA_FILTER_CHUNK):
-        filt = " or ".join(f"{IACUC_ID_FIELD} eq '{_odata_str(p)}'" for p in chunk)
-        for rec in query_dataverse(
-            session, IACUC_ENTITY_SET,
-            select=f"{IACUC_ID_FIELD},{IACUC_GUID_FIELD}", filter_str=filt,
-        ):
-            pid, guid = rec.get(IACUC_ID_FIELD), rec.get(IACUC_GUID_FIELD)
-            if pid and guid:
-                out[str(pid)] = str(guid)
-    return out
+# ── planning (pure; unit-testable, no network) ───────────────────────────────────
+PlanItem = Dict[str, str]  # {mouse_id, mouse_guid, protocol, protocol_guid}
 
 
-def resolve_mouse_records(
-    session: requests.Session, subject_ids: Iterable[str]
-) -> Dict[str, Dict]:
-    """Map subject id -> {guid, current_protocol_value, current_protocol_name}."""
-    wanted = sorted(set(subject_ids))
-    out: Dict[str, Dict] = {}
-    select = f"{MICE_ID_FIELD},{MICE_GUID_FIELD},{IACUC_PROTOCOL_VALUE_FIELD}"
-    for chunk in _chunks(wanted, ODATA_FILTER_CHUNK):
-        filt = " or ".join(f"{MICE_ID_FIELD} eq '{_odata_str(s)}'" for s in chunk)
-        for rec in query_dataverse(session, MICE_ENTITY_SET, select=select, filter_str=filt):
-            sid, guid = rec.get(MICE_ID_FIELD), rec.get(MICE_GUID_FIELD)
-            if sid and guid:
-                out[str(sid)] = {
-                    "guid": str(guid),
-                    "current_protocol_value": rec.get(IACUC_PROTOCOL_VALUE_FIELD),
-                    "current_protocol_name": rec.get(
-                        IACUC_PROTOCOL_VALUE_FIELD + _FORMATTED
-                    ),
-                }
-    return out
+def build_plan(
+    mice: List[Dict],
+    protocol_guid_map: Dict[str, str],
+    lookup_fn: Callable[[str], Optional[str]],
+    *,
+    overwrite: bool = False,
+) -> Tuple[List[PlanItem], int, List[str], List[Tuple[str, str]]]:
+    """Decide what to PATCH.
+
+    Returns (plan, skipped_existing, no_protocol_found, unmatched_protocol) where
+    unmatched_protocol is [(mouse_id, looked_up_protocol)] not present in Dataverse.
+    """
+    plan: List[PlanItem] = []
+    skipped_existing = 0
+    no_protocol: List[str] = []
+    unmatched: List[Tuple[str, str]] = []
+
+    for m in mice:
+        if m.get("current_protocol_value") and not overwrite:
+            skipped_existing += 1
+            continue
+        protocol = lookup_fn(m["mouse_id"])
+        if not protocol:
+            no_protocol.append(m["mouse_id"])
+            continue
+        guid = protocol_guid_map.get(_numeric_key(protocol) or "")
+        if not guid:
+            unmatched.append((m["mouse_id"], protocol))
+            continue
+        plan.append(
+            {
+                "mouse_id": m["mouse_id"],
+                "mouse_guid": m["guid"],
+                "protocol": protocol,
+                "protocol_guid": guid,
+            }
+        )
+    return plan, skipped_existing, no_protocol, unmatched
 
 
-# ── orchestration ─────────────────────────────────────────────────────────────
+# ── orchestration ─────────────────────────────────────────────────────────────────
 def setup_logging(log_dir: Path) -> None:
     log_dir.mkdir(parents=True, exist_ok=True)
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file = log_dir / f"iacuc_backfill_{ts}.log"
     fmt = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
-    logger.setLevel(logging.INFO)
-    logger.handlers.clear()
+    root = logging.getLogger()
+    root.setLevel(logging.INFO)
+    root.handlers.clear()
     console = logging.StreamHandler()
     console.setFormatter(fmt)
-    logger.addHandler(console)
-    fileh = logging.FileHandler(log_file, encoding="utf-8")
+    root.addHandler(console)
+    fileh = logging.FileHandler(log_dir / f"iacuc_backfill_{ts}.log", encoding="utf-8")
     fileh.setFormatter(fmt)
-    logger.addHandler(fileh)
-    logger.info("Logging to %s", log_file)
+    root.addHandler(fileh)
 
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    default_csv = Path(__file__).with_name("sample_mouse_protocol.csv")
-    p.add_argument("--csv", type=Path, default=default_csv,
-                   help="Input CSV (default: bundled sample_mouse_protocol.csv).")
-    p.add_argument("--subject-col", default="subject_id", help="CSV subject-id column name.")
-    p.add_argument("--protocol-col", default="iacuc_protocol_id",
-                   help="CSV protocol-id column name.")
     p.add_argument("--apply", action="store_true",
-                   help="Perform the writes. Omit for a dry run (the default).")
+                   help=f"Perform writes. Requires {WRITE_CONFIRM_ENV}=1 too. Omit for a dry run.")
     p.add_argument("--overwrite", action="store_true",
                    help="Also update mice that already have a protocol set.")
     p.add_argument("--top", type=int, default=None,
-                   help="Process only the first N (deduped) subjects.")
-    p.add_argument("--validate-only", action="store_true",
-                   help="Parse/validate the CSV and exit. No network, no auth.")
-    p.add_argument("--env-file", type=Path, default=None,
-                   help="Path to a .env file to load (default: ./.env if present).")
-    p.add_argument("--log-dir", type=Path, default=Path(__file__).parent,
-                   help="Directory for the timestamped run log.")
+                   help="Process only the first N mice (handy for test dry runs).")
+    p.add_argument("--subject-ids", type=Path, default=None,
+                   help="JSON array of subject IDs to restrict to (default: all mice).")
+    p.add_argument("--no-fallback", action="store_true",
+                   help="DocDB only for the lookup; skip the slow metadata-service fallback.")
+    p.add_argument("--env-file", type=Path, default=None, help="Path to a .env to load.")
+    p.add_argument("--log-dir", type=Path, default=Path(__file__).parent)
     return p
 
 
@@ -322,108 +303,88 @@ def main(argv: Optional[List[str]] = None) -> int:
     args = build_parser().parse_args(argv)
     setup_logging(args.log_dir)
 
+    if args.apply and os.getenv(WRITE_CONFIRM_ENV) != "1":
+        logger.error(
+            "--apply given but %s != 1. Refusing to run a write that can't write. "
+            "Set the env var to confirm, or drop --apply for a dry run.", WRITE_CONFIRM_ENV,
+        )
+        return 2
     mode = "APPLY (writes enabled)" if args.apply else "DRY RUN (no writes)"
-    logger.info("=== IACUC protocol backfill — %s ===", mode)
+    logger.info("=== IACUC protocol backfill (lookup-sourced) — %s ===", mode)
 
-    # 1) CSV ------------------------------------------------------------------
-    pairs = read_csv(args.csv, args.subject_col, args.protocol_col)
-    mapping = dedupe(pairs)
-    if args.top is not None:
-        mapping = dict(list(mapping.items())[: max(0, args.top)])
-    logger.info("CSV %s -> %d unique subject(s)", args.csv, len(mapping))
-    if not mapping:
-        logger.warning("Nothing to do.")
-        return 0
-
-    if args.validate_only:
-        for sid, pid in mapping.items():
-            logger.info("  %s -> %s", sid, pid)
-        logger.info("validate-only: parsed %d row(s); no network calls made.", len(mapping))
-        return 0
-
-    # 2) env + auth -----------------------------------------------------------
+    # env + auth (reads)
     if load_dotenv is not None:
         load_dotenv(args.env_file) if args.env_file else load_dotenv()
-    elif args.env_file:
-        logger.warning("python-dotenv not installed; --env-file ignored.")
     missing = [v for v in REQUIRED_ENV if not os.getenv(v)]
     if missing:
         logger.error("Missing required env vars: %s", ", ".join(missing))
         return 2
-
     session = make_session(get_access_token())
-    logger.info("Authenticated to %s", api_base())
+    logger.info("Dataverse: %s", _api_base())
 
-    # 3) resolve ids to GUIDs -------------------------------------------------
-    protocol_guids = resolve_protocol_guids(session, mapping.values())
-    mouse_records = resolve_mouse_records(session, mapping.keys())
-
-    unknown_protocols = sorted({p for p in mapping.values() if p not in protocol_guids})
-    unknown_mice = sorted({s for s in mapping if s not in mouse_records})
-    if unknown_protocols:
-        logger.warning("%d protocol id(s) not found in %s: %s",
-                       len(unknown_protocols), IACUC_ENTITY_SET, unknown_protocols)
-    if unknown_mice:
-        logger.warning("%d subject id(s) not found in %s: %s",
-                       len(unknown_mice), MICE_ENTITY_SET, unknown_mice)
-
-    # 4) build the plan -------------------------------------------------------
-    plan: List[Tuple[str, str, str, str]] = []  # (subject, protocol, mouse_guid, proto_guid)
-    skipped_existing = skipped_unresolved = 0
-    for sid, pid in mapping.items():
-        rec = mouse_records.get(sid)
-        pguid = protocol_guids.get(pid)
-        if rec is None or pguid is None:
-            skipped_unresolved += 1
-            continue
-        current = rec.get("current_protocol_value")
-        if current and not args.overwrite:
-            if str(current) == str(pguid):
-                logger.info("Skip %s: protocol already set to %s", sid, pid)
-            else:
-                logger.warning(
-                    "Skip %s: already has a different protocol (%s) — use --overwrite to replace.",
-                    sid, rec.get("current_protocol_name") or current,
-                )
-            skipped_existing += 1
-            continue
-        plan.append((sid, pid, rec["guid"], pguid))
-
+    # fetch target mice
+    mice = fetch_mice(session, only_missing=not args.overwrite)
     logger.info(
-        "Plan: %d update(s); skipped %d already-set, %d unresolved.",
-        len(plan), skipped_existing, skipped_unresolved,
+        "mice in %s %s: %d",
+        MICE_ENTITY_SET,
+        "with empty protocol" if not args.overwrite else "(all)",
+        len(mice),
     )
+    if args.subject_ids:
+        wanted = {str(x) for x in json.loads(Path(args.subject_ids).read_text())}
+        before = len(mice)
+        mice = [m for m in mice if m["mouse_id"] in wanted]
+        logger.info("restricted to --subject-ids: %d of %d", len(mice), before)
+    if args.top is not None:
+        mice = mice[: max(0, args.top)]
+        logger.info("limited to --top %d", len(mice))
 
-    # 5) execute (or dry run) -------------------------------------------------
+    # protocol number -> GUID map
+    protocol_map = fetch_protocol_guid_map(session)
+    logger.info("Dataverse protocols mapped by number: %d", len(protocol_map))
+
+    # build the plan (this performs the per-mouse lookups)
+    def lookup_fn(sid: str) -> Optional[str]:
+        return get_iacuc_id_for_mouse(sid, allow_fallback=not args.no_fallback)
+
+    plan, skipped_existing, no_protocol, unmatched = build_plan(
+        mice, protocol_map, lookup_fn, overwrite=args.overwrite
+    )
+    logger.info(
+        "plan: %d update(s) | %d already-set skipped | %d no-protocol-found | %d unmatched-protocol",
+        len(plan), skipped_existing, len(no_protocol), len(unmatched),
+    )
+    if no_protocol:
+        logger.info("  no protocol found (first 10): %s", no_protocol[:10])
+    if unmatched:
+        logger.info("  protocol not in Dataverse (first 10): %s", unmatched[:10])
+
+    # dry run vs apply
     if not args.apply:
-        for sid, pid, mguid, pguid in plan:
+        for item in plan[:25]:
             logger.info(
-                "DRY RUN would PATCH %s(%s): bind %s -> %s (%s)",
-                MICE_ENTITY_SET, mguid, IACUC_PROTOCOL_NAV, pid, pguid,
+                "DRY RUN would PATCH %s(%s): %s -> %s (%s)",
+                MICE_ENTITY_SET, item["mouse_guid"], item["mouse_id"],
+                item["protocol"], item["protocol_guid"],
             )
-        logger.info(
-            "DRY RUN complete — %d update(s) NOT sent. Re-run with --apply to write.",
-            len(plan),
-        )
+        if len(plan) > 25:
+            logger.info("  … and %d more", len(plan) - 25)
+        logger.info("DRY RUN complete — %d update(s) NOT sent.", len(plan))
         return 0
 
     updated = failed = 0
-    for sid, pid, mguid, pguid in plan:
+    for item in plan:
         try:
-            patch_mouse_protocol(session, mguid, pguid)
-            logger.info("Updated %s -> %s", sid, pid)
+            patch_mouse_protocol(session, item["mouse_guid"], item["protocol_guid"])
+            logger.info("Updated %s -> %s", item["mouse_id"], item["protocol"])
             updated += 1
         except requests.RequestException as exc:
             failed += 1
-            logger.error("FAILED %s -> %s: %s", sid, pid, exc)
+            logger.error("FAILED %s -> %s: %s", item["mouse_id"], item["protocol"], exc)
             if getattr(exc, "response", None) is not None:
                 logger.error("Response body: %s", exc.response.text)
-
     logger.info("=" * 60)
-    logger.info(
-        "Backfill complete — updated=%d failed=%d skipped=%d",
-        updated, failed, skipped_existing + skipped_unresolved,
-    )
+    logger.info("Backfill complete — updated=%d failed=%d", updated, failed)
     logger.info("=" * 60)
     return 0 if failed == 0 else 1
 

@@ -1,0 +1,3104 @@
+{
+"000ab956-1359-491b-bcad-5d06b965cb2b": null,
+"01664cb3-2f94-4458-8b67-0ebb5827070d": null,
+"006a6d6a-f119-4e06-b4d2-e0d00e02ff12": null,
+"011cfca9-f75b-449f-bac6-18cda39e86e8": null,
+"001298b7-62c3-4ba6-965b-658e3164454f": null,
+"00305b2c-9033-4e05-9bdb-f3df4e5926a7": null,
+"00aff47b-b4b1-4ad5-8069-4402249ea39e": null,
+"012fb6bf-eb8c-4074-837d-bf7963bebbe0": null,
+"01924d3b-7d65-48fa-8c29-44b41c56da01": null,
+"021bd48f-a431-4b56-9868-0e4ebc3a473f": null,
+"02831b3c-bdeb-4f50-a8b0-fb91851e9960": null,
+"01daf1dd-38a7-45f7-ad5f-07330bbab125": null,
+"01faec8b-2482-4499-accf-8148914c7c01": null,
+"01c5528f-c633-4a5f-ab0b-d4d1fe56f923": null,
+"0191f027-3295-462d-ac68-2c86dc5c6c6e": null,
+"03137f2b-53fd-42c0-9498-9051f1d6634b": null,
+"02eb8b13-f9cd-4975-8c07-f7ccc9b3a137": null,
+"03792762-eea9-4427-a662-6c0fe8bcec6a": null,
+"035c053f-655f-4c78-a08a-0c8da867aedf": null,
+"03029e18-ee35-4dd6-bd57-7a8ba1f5f03f": null,
+"0428fa36-4191-4b7f-b4db-b0b8a8677b7f": null,
+"0409c0f3-4524-4a92-925e-78748b25b6a2": null,
+"049eeb9d-1718-4e64-8e3e-3ffc90645d0e": null,
+"048d2c02-2e86-48bc-bd65-9856ac56f2be": null,
+"04391eaa-f0a2-419d-b817-5667a528582b": null,
+"04d3af64-ea4a-4030-9e41-e7cf8f08e136": null,
+"053cad2d-4e2a-40b6-8004-ab7e198af9bc": null,
+"0510ca8d-5dad-4fc4-bf5a-1743b115da34": null,
+"054d949d-6c88-4502-ab3c-86cdecbc4161": null,
+"056bb4a5-1129-414b-b47b-c18dfb901aee": null,
+"05841863-5392-40c9-9c7c-5ac9bfc4f321": null,
+"05c9cd17-8087-4da8-8550-7ce4e5168a3e": null,
+"06533058-c6aa-46e0-94f5-090269274de9": null,
+"066e994c-e865-4efe-bca1-cff052220739": null,
+"051e61f9-5149-4d71-87ac-a78bf1301d46": {
+"name": "Patched Ophys Pipeline Evaluation Pipeline",
+"tags": []
+},
+"0622576c-2340-4ae1-8cb9-33790eae2df9": {
+"name": "jGCaMP8 downscaled: Pipeline Evaluation for Cellpose + Suite2p",
+"tags": []
+},
+"060a47bf-2ce4-4664-a2c7-922f31afaf3b": {
+"name": "NWB-Zarr-HDF5-Conversion",
+"tags": []
+},
+"0356af55-f802-4740-b1b5-690a454b7299": {
+"name": "generate_xenium_spatialdata",
+"tags": []
+},
+"05eaf483-9ca3-4a9e-8da8-7d23717f6faf": {
+"name": "Preprocess Ecephys",
+"tags": [
+"ecephys"
+]
+},
+"01beaa14-28de-4b39-b55b-94c53a3b38f9": {
+"name": "aind-pophys-pipeline",
+"tags": []
+},
+"02fecc26-126a-45c8-a7d5-5b4ee73269d6": {
+"name": "Bergamo QC",
+"tags": []
+},
+"067b0803-623d-49e5-ae97-c14fb2a63069": {
+"name": "aind-smartspim-pipeline-v3.0",
+"tags": [
+"SmartSPIM"
+]
+},
+"0681ea95-e3af-4d3f-8165-8c436cab83c1": null,
+"06b163f9-f743-4582-a9a8-9ba672f8d669": null,
+"06c02b71-56b1-4b30-97d6-ac360e75c4f5": null,
+"07323b5d-def6-4c4b-8ca4-92745b18b2ae": null,
+"0743e301-01f8-4960-b263-de3cbfa556f6": null,
+"06f2f564-7e13-4974-86f7-1381b52adbe6": {
+"name": "V2 NWB Packaging Ophys",
+"tags": [
+"NWB"
+]
+},
+"068a0863-8576-45c4-827c-e53fd3e926a9": {
+"name": "Preprocess Ecephys (dev)",
+"tags": [
+"ecephys"
+]
+},
+"07209448-db9e-45bd-b1b6-54189e77ea6e": {
+"name": "ome-zarr conversion",
+"tags": [
+"zarr",
+"ome-zarr"
+]
+},
+"07fc988a-5593-4f60-8556-e9e786452add": null,
+"0843e490-b4e4-4e9d-875e-f1b79033f2a5": null,
+"08d55a1d-a333-4694-bbb9-251ffe743fa3": null,
+"07502e32-f401-49a7-b622-4d1f1725150d": null,
+"08622fb0-67ef-4834-9db7-990425bda58c": null,
+"08fd6fdd-51e2-4280-9d0f-b5e0a2cdacfe": null,
+"08b70d4c-9d89-42e7-b79c-eec6fd310d07": null,
+"08588d21-5a40-420f-b1a1-e2e755709e54": {
+"name": "aind-ophys-decrosstalk-split",
+"tags": []
+},
+"094dca59-bf27-4556-9db8-d50d08a1f358": null,
+"09162809-7000-46ad-a9c2-525a2e98ff9f": null,
+"09cb02b4-bc72-494a-b2bf-8506e9c7dd32": null,
+"093a0de6-9e1c-492f-93ad-c54edcefdaa6": null,
+"091336fc-a9c3-4ffa-9a54-db274985d42d": null,
+"0a2fc78c-f26d-4be1-8165-5c1609e0a752": {
+"name": "data-curation-dynamic-foraging-aind-analysis-pipeline",
+"tags": []
+},
+"0a6cfbe0-ebc8-415a-9ffc-6ab9b6c385aa": null,
+"0a174d03-4330-4f76-a76c-c56cca4293f0": {
+"name": "ophys-zstack-segmentation",
+"tags": []
+},
+"0a739039-7ef8-4ae2-8830-6242d59fba8f": null,
+"0b01ca69-d1fb-4946-bcef-6fdf13de833e": null,
+"0a8fe7c8-02c3-45f7-b6f7-b1d5f828029a": null,
+"0b44cdd3-ba86-4b58-9581-28f9292fded5": {
+"name": "Yoni copy via Di of aind-smartspim-ccf-registration - template-based-reg - register all channels",
+"tags": [
+"SmartSPIM"
+]
+},
+"0ae9703f-9012-4d0b-ad8d-b6a00858b80d": {
+"name": "Combined Dynamic Foraging + fiber pipeline",
+"tags": [
+"FIP",
+"NWB"
+]
+},
+"0bf0f775-17b3-4668-9b1f-d9bf342eaa05": null,
+"0b6c7135-6d2e-4976-9b90-dbac374e06a3": null,
+"0be2aae9-3cda-45de-b5f6-870c0b569819": {
+"name": "aind-ophys-nwb",
+"tags": []
+},
+"0bfe61c0-3ea7-4de1-97f5-9636607c46a4": null,
+"0c25f569-2e0d-41cf-8687-1aeaf631e17c": null,
+"0c56a10c-902c-40f1-bb2b-19956ca349c5": null,
+"0ccc4fa3-22c4-49f9-9a55-d1f97d0f7c26": null,
+"0cd9e2e2-b552-41fe-b69e-686f01751eff": null,
+"0cc3e3bb-8069-4e4a-a967-a926bd9fa10e": null,
+"0c695701-5185-4438-bf0f-b32705342c34": {
+"name": "Update Sorted Ecephys",
+"tags": []
+},
+"0d5621ea-3e37-4549-81e0-f5a1412a7256": null,
+"0d91c06e-880a-465f-a826-607285791fe4": null,
+"0d756e11-59eb-4b36-bfb7-156871afa6ad": null,
+"0d91b7fe-6cff-43de-9e8a-847b096e48cd": {
+"name": "ExaSPIM Template  - Initial Template",
+"tags": []
+},
+"0e03ad4b-f9e6-4136-92b0-812dffbefd57": null,
+"0d9853d8-72cc-4ce0-b658-05272223f03e": null,
+"0e00aa9c-c313-4d90-940b-79594eddc1ea": null,
+"0e311e5b-b4eb-41ae-b1e7-e224b7ef9ba9": null,
+"0e7f9e86-7b12-4d74-a8ca-dfb3ca45bf6f": {
+"name": "YB_copy_of_GL_MRI_ANTs_Pipeline",
+"tags": []
+},
+"0ed27de3-0964-45a0-b701-421b25ce57b0": null,
+"0f03e8a7-31f9-4425-b92d-332b29e5104b": null,
+"0f5a4f5e-1f4a-4c97-a3bf-9eda2fb0f6aa": null,
+"0f16359e-84c6-49e6-9032-2fdfc3e85ade": null,
+"0f51d117-39dc-4c27-a62a-965b4216a32e": {
+"name": "Jinho's Copy of ROICaT Cross-session Matching",
+"tags": []
+},
+"0eb26d14-b31a-49f7-a347-d028242bd79a": {
+"name": "aind-Z1-pipeline-production",
+"tags": [
+"proteomics"
+]
+},
+"0fbce4c9-3874-4fa5-b7c1-e8b2e1f4d246": null,
+"0f9a8881-2f88-4425-8e4e-a5b8c78d24a7": null,
+"105a8a32-835f-4e3f-a16b-ecbac3bbf2ea": null,
+"10777e1c-2263-4a9c-83e3-fe4fa96d2889": null,
+"1049f8e8-5a5a-48db-a09c-c00404e331ee": null,
+"1042a5cf-b8ae-4dab-b60c-c562d242ddc4": {
+"name": "aind-Z1-pipeline-production",
+"tags": [
+"proteomics"
+]
+},
+"10af6ad7-979e-431d-881d-71a754afc039": null,
+"10af71b0-6e10-43d9-b69d-4e34de7fe92b": {
+"name": "Mid run restart (stage 3-->4) for Yoni Multi-Channel Copy of Template Builder Pipeline",
+"tags": []
+},
+"10bffe16-ae0d-42bb-b268-04c0307462c4": null,
+"10fb5b85-14d9-42eb-8a35-42e8414b6398": null,
+"110ee402-1787-41f3-aa29-ec9004ff299b": null,
+"10fe34cc-52e6-4d0b-a422-8dcbb202132f": {
+"name": "aind-multiplane-ophys-pipeline without splitting v6 extraction",
+"tags": []
+},
+"111e7ef9-bc20-4faa-9169-d8e9f373e752": {
+"name": "V2 NWB Packaging Ecephys",
+"tags": []
+},
+"1145cee5-d2db-4d73-8ff2-12c3287e29b0": null,
+"114f1731-47a6-40ab-b976-597cb9b56ac2": {
+"name": "Construct ANTs Template Transform w/ Transgenics (v2)",
+"tags": []
+},
+"112ba5a2-16a7-4412-bc16-656cba4cbe8a": {
+"name": "AIBS scVI_methods GPU Base Capsule (public, outdated)",
+"tags": []
+},
+"11a90420-d384-4c6b-8027-697028626ed1": null,
+"1199dda7-7023-4540-bb87-2a556e6d261d": null,
+"11b47b68-0ead-411a-b2d5-1b30a28105ec": {
+"name": "Untitled Capsule",
+"tags": []
+},
+"11be74a7-6246-4695-840f-f751fa5edcf3": null,
+"121c8b4e-67ae-4d72-906e-f07c089dca4c": null,
+"11f1323c-064c-451d-8811-5440dec88566": null,
+"11beb506-c707-4fa9-9798-da86dc3f8247": {
+"name": "Anipose capsule automated 2 - really fixed",
+"tags": []
+},
+"12325f32-7e54-4024-a515-70803cac3ed1": null,
+"126924e6-72d4-4b68-b2e7-bfa99bac4f68": {
+"name": "Anipose capsule automated 2 - fixed",
+"tags": []
+},
+"128c294e-51c7-4d3a-babb-3579abb17c30": null,
+"1295320b-53a0-44a8-a361-cdcba3e373f1": null,
+"129db786-8e21-46c1-947c-8d1805897b6c": null,
+"12ff097c-ca44-40a7-860a-815bc8ee3acc": null,
+"12cec3c8-e8ca-4118-bf9e-15dbd8c91e31": null,
+"133b4e03-8b78-4b10-b374-149f7c83fd95": null,
+"1338cd39-a84e-4ac5-ab13-5aac1afbbe74": {
+"name": "Multiplane Ophys Pipeline: Suite2p, Cellpose, Decrosstalk FOV ICA 2",
+"tags": []
+},
+"13456254-1011-4714-89c3-bbb48794aa33": null,
+"13be1233-e81a-4a84-a770-f0b15187d05a": null,
+"13c857e2-c566-4452-8534-2b313fd1292a": {
+"name": "P3 Ecephys NWB Packaging (w/ CCF)",
+"tags": []
+},
+"143246a5-aa29-49d7-89b8-5e9aea23e38b": null,
+"14169709-fa94-4b9f-a8cd-12746b4a9187": null,
+"144a58b0-7e3d-49e8-b7fa-4c47028e0600": null,
+"1481bde7-10a8-4478-bb70-f0271bb60f0b": {
+"name": "Merge QC Json",
+"tags": []
+},
+"14818fbc-8897-4107-9a2b-56f508827809": {
+"name": "aind-exaspim-ccf-registration - pipeline - dev",
+"tags": []
+},
+"14ebe0d1-17ed-44aa-8cd6-e27392b1f818": null,
+"14c4c2b1-8d12-49ae-b495-ea6e3f677784": {
+"name": "sniff-from-pixels",
+"tags": []
+},
+"152c486a-7914-4620-9b53-8591215287f8": null,
+"15931d9c-9ff2-45e4-ab8c-656c56a7fc8b": null,
+"156bde1c-09b8-446f-b6b5-b6889fe39b9a": null,
+"158cc6d7-c820-421b-b6c7-6914793d607f": null,
+"157739bc-27fd-4edd-ae09-aed1888d843a": null,
+"1594bd0c-53a0-4d10-b1f8-0a5efbe54197": null,
+"157abc16-62bf-466e-b243-a721a470eb52": {
+"name": "aind-multiplane-ophys-pipeline without splitting v6 extraction",
+"tags": []
+},
+"15a306ce-da03-4868-85d5-531623cc9d23": null,
+"15b47916-7f69-4b21-a534-031807420ab0": null,
+"15c93e8f-6fae-415a-99e1-41e7a3894408": null,
+"15cd3d7a-5a0c-4110-8209-bef73269a2e7": null,
+"15eb90ca-789d-403d-a01d-db95feaae3ce": null,
+"15f8946a-04c5-43f9-81aa-36d73ece4304": null,
+"15d01dc4-31fb-4d4c-b458-899973e272b6": {
+"name": "aind-multi-pophys-behavior-video-processing-pipeline",
+"tags": [
+"behavior-videos"
+]
+},
+"160786f4-b0d2-4ad7-82c6-b4f37ae09bd3": null,
+"16cc593c-63a3-4e4a-8e36-106c24dc5222": {
+"name": "Single Plane Ophys",
+"tags": []
+},
+"169401e2-996b-4cdb-aa7a-c0732eec4391": {
+"name": "aind-ephys-pipeline (dartsort-chronic)",
+"tags": [
+"ecephys"
+]
+},
+"1743ad97-2325-44d9-98f8-701ea17027ef": null,
+"171a18c3-5cc2-488d-8464-1ed0a6f2e5f8": null,
+"1735905f-cccc-4e00-a6d2-544fcaa99f1d": null,
+"16e1fe3d-a89a-4d1e-b7fe-dc08227b3646": {
+"name": "Assign cells to spatial domains",
+"tags": [
+"hmba",
+"MERSCOPE"
+]
+},
+"17471f98-76cb-4f40-9fe6-d071ae2e3ebb": null,
+"17f9be11-c9ca-4264-836a-af6ca32d3fef": null,
+"17d8d591-02e7-46fd-8496-c80468f5f383": null,
+"17a103ae-0d24-450e-ac92-7f715f8a7061": null,
+"1820648c-19c7-4b45-8229-6448cbe632b6": null,
+"1807521d-6c74-431a-86a7-add99c034578": null,
+"180b1b04-f51d-490a-b677-271ba9c66528": null,
+"1899a4a7-19c2-487e-8c0a-def84ff14339": null,
+"184bdbcc-8313-426e-a30a-317efab5b5c4": null,
+"18e05eaa-ccf9-4c94-9518-92434a7936dc": null,
+"18969fef-2e28-4773-984d-764bb5f13cdd": null,
+"19027948-6702-47c7-9433-9a62c9b3b1d8": {
+"name": "Anipose mouse test 6",
+"tags": []
+},
+"1937cd12-0cc3-4c59-ada9-6752c92cb94b": null,
+"193b6b84-616c-4d0d-b9d3-a4ac36f9a8d2": null,
+"1904d230-84a3-4d6e-9e10-5d77c51e06b8": {
+"name": "iGluSnFR-simulation",
+"tags": []
+},
+"19ded5b9-1eca-4ff1-8143-69b1747af33f": null,
+"198ba9c0-b93a-4a5e-82d9-160f5df97e54": null,
+"196a4fb8-0a91-4a48-9bdd-f637dff70a39": null,
+"19a8b9f5-d4d2-4ccc-ba60-dce65c097baa": null,
+"1a047df1-5870-4c1f-af0d-453665fb18c8": null,
+"1ad8beaa-1812-40f4-a4dc-d8f4d76d6da2": null,
+"1a1b8bb6-dd93-47db-875d-3c6b27f81896": null,
+"1b6a2840-3b6b-42b5-aab9-fd4327505076": null,
+"1b744f37-2220-4bf6-810a-dfcd16e36927": null,
+"1af8d02b-8d75-4d10-9bdf-e0849062951c": null,
+"1ae2d849-d39d-4dcf-8e7b-67ced067ecc7": null,
+"1b4e3838-af44-4fab-ad5a-a3825a18dfe8": null,
+"1bd16420-6a7d-4047-8bbe-00bf1bb2e3c6": null,
+"1c29fe82-0925-42e8-b47a-930da1a75f49": null,
+"1be998bb-f244-44cc-92ce-a2b3ba63b8df": {
+"name": "Smartspim Multiscale Capsule",
+"tags": []
+},
+"1c30ba94-2113-4d27-9f7d-dd2def99701b": null,
+"1c998ecf-56f1-469e-bc0d-eaf540e6e5eb": null,
+"1c3a8454-5984-49c5-b413-4e818ea62a24": null,
+"1ca25660-bb6c-4bde-824a-6def8477a49f": {
+"name": "trailmap-batched",
+"tags": []
+},
+"1c3425d5-d326-4960-92b6-01fe46c7477b": {
+"name": "YB Copy - run SmartSPIM template - Preprocess and Register -10um",
+"tags": []
+},
+"1cae6e16-7e53-4ab7-8ea5-149d29a93b75": null,
+"1cd9cd36-2c70-46c2-8ef5-f2c595f58867": null,
+"1dba13b8-62c9-4547-9a04-c62d817860a0": null,
+"1d74e0ab-6d11-46ec-9160-d67c00ac8ef2": null,
+"1df47b45-ad1f-406c-bc17-995532c842ee": null,
+"1d273ad4-4499-4353-9786-5d896661f813": {
+"name": "Run SPACEL",
+"tags": [
+"processing"
+]
+},
+"1e0d0b38-d24b-46d1-b967-3b0241363e04": null,
+"1e510cd0-0b0c-4891-ba08-ce12db9680a3": {
+"name": "Loop NWB Packaging Complete",
+"tags": []
+},
+"1e5ea95b-2107-4c85-8090-9c2aba603ca7": null,
+"1f06f689-5190-48ab-96f9-82e934703df8": null,
+"1e91cfe4-5cee-44c5-ba66-4b501ee7ebdb": {
+"name": "Source Extraction for SLAP2 Multi-ROI Raster",
+"tags": []
+},
+"1f5a2c81-19e3-4406-85b6-cd95523091f6": {
+"name": "Apply affine transform to spatial data - macaque",
+"tags": [
+"hmba",
+"MERSCOPE"
+]
+},
+"1f8f159a-7670-47a9-baf1-078905fc9c2e": {
+"name": "aind-ephys-pipeline (kilosort25)",
+"tags": []
+},
+"20e9d356-b02b-46e5-9bc6-1b6f9bb18749": null,
+"20e5df1a-f160-49c4-8f57-359c323c0970": null,
+"20d7462e-80ae-438a-93a0-5b814d8c67cd": null,
+"20fffa9e-6b6d-44fb-a91b-9c7338e7e965": null,
+"2103f231-8eec-45eb-bc54-c776dc33a0a7": {
+"name": "DEPRECATE Bergamo  Single-Plane",
+"tags": []
+},
+"215ee0ad-ca69-43fc-88dd-d9d3912f89ee": null,
+"2130c19f-436a-4190-bd81-e5004da56dd8": null,
+"21a004f2-fcb2-41d9-92c3-1ddddf277672": null,
+"21a05312-a8ae-4136-9e4f-9b15cc430ae8": null,
+"218f4453-d667-4ae9-b599-ee098ae790be": null,
+"21745a65-f526-4056-a745-da9375662673": {
+"name": "Copy of Anipose capsule automated 3",
+"tags": []
+},
+"21c14eca-6bb4-44c6-afb3-5dbc7ffe9dc9": null,
+"21cce192-d722-4f45-9bc0-5ad511f73098": null,
+"21d6150d-0837-410a-a6da-f618617a5ac8": null,
+"21f1cf0a-c2bf-4c02-8424-81c6316c0413": null,
+"229d8355-abc3-4cb3-a317-cc942d77a7b6": null,
+"220b33b1-0456-4059-bc39-72f6428be4a7": null,
+"22e407d9-87ec-4a2b-b6bb-1c9f82ce3422": null,
+"22b224d3-c13d-46d3-907d-cd5445ab47c3": {
+"name": "Behavior Video Inference Pipeline",
+"tags": []
+},
+"2218efbd-63e0-475b-a140-0d70f2367869": {
+"name": "dr-write-nwb-capsule",
+"tags": []
+},
+"237b1199-b51b-4520-bd6f-287978bf1c09": null,
+"23fa8e8d-f4f4-4105-a62b-8ca0d5d794a9": null,
+"2453aa95-77df-417e-b487-52035ac30e9c": null,
+"2393cd28-3bc9-472e-9263-4ddb8ee97b60": null,
+"244ba58d-9930-43fe-a52d-a9f7bfcca677": null,
+"245b82aa-8846-4369-b79a-9706197e6fce": null,
+"24558b0a-284e-4aa4-9a29-8d72d978b462": null,
+"2488d68b-68e2-463a-b775-01f46d287466": null,
+"249a44a5-8bcf-4a0d-92e0-9f1ae183705b": null,
+"24cad997-4633-4ab3-a17d-8b0c01cad787": null,
+"24e5f558-d77f-46ca-bd03-7871dc335c59": null,
+"24dcff4a-db38-433b-90a8-5bcfa5c8813c": null,
+"24edffdf-fcf4-41f7-bb56-6c1f12775ec0": null,
+"250d329d-f4ba-4934-9af4-6bf891f719cb": null,
+"24ff1f3a-c702-4b7a-93e5-6a6886886e3c": null,
+"250cf9b5-f438-4d31-9bbb-ba29dab47d56": {
+"name": "Combined Dynamic Foraging + fiber pipeline",
+"tags": [
+"FIP",
+"NWB"
+]
+},
+"257dd559-2a05-48a2-b91b-13562041f8b0": null,
+"2544b153-2955-47ee-b7d9-351b18e6e58f": null,
+"25723b10-3e21-4915-9e75-49ae49ed2622": null,
+"254d4862-def2-4a9a-b1e5-cb7f14eea383": null,
+"25b6734f-7dd3-47c5-b5f4-3c20eda7cedd": null,
+"2609e61c-1dc2-4528-a062-861149568a72": null,
+"26226952-9a75-4ae3-a08a-01bad1fd16e2": null,
+"26082c24-faeb-4093-b438-48a19eaba72a": {
+"name": "aind-single-plane-ophys-pipeline",
+"tags": []
+},
+"26400f02-2652-443e-a227-5eacaea37ffe": null,
+"26649b81-1dca-410c-9199-ff5d7feb8c2b": null,
+"264cd47f-1b48-4868-acd7-8a1ca2ff1281": null,
+"265f4a36-3de6-4702-b561-be58cf34487c": {
+"name": "Merge Clusters (internal)",
+"tags": []
+},
+"26787116-910a-433a-b541-f04eabfa4663": {
+"name": "aind-mfish-rounds-registration-pipeline - R1 L2 with masking",
+"tags": []
+},
+"26fe40ac-d002-4570-a6da-1c23ef637de2": null,
+"26b43ddf-b44f-4032-abd6-c5bf2616320c": null,
+"2737f84f-b45d-4863-b4ca-88e97a0953e8": null,
+"28278e05-10d0-4e61-92d8-f34fc8134732": null,
+"2788bf16-9942-4c73-9ce7-1a60b2cb0a9d": null,
+"2754b942-f564-4f41-b50c-4a0720af9b6c": null,
+"2876677d-40f8-4528-bf92-8878722ebe0f": null,
+"287db808-74ce-4e44-b14b-fde1471eba45": {
+"name": "aind-ephys-pipeline (kilosort25-v0.1.0)",
+"tags": []
+},
+"28bbb917-266d-4157-a0af-72d0d333d534": null,
+"289f8d5b-f03d-4bfa-bf57-b46e4be4f900": null,
+"28b7501f-6740-4a2c-9d73-8f95a80c0aa6": {
+"name": "AIND Behavior Trigger Pipeline Capsule 1 (collect datasets)",
+"tags": []
+},
+"28ed3334-1229-4b43-8ccd-e05ded2b8ead": null,
+"28d38b52-65c4-4054-9d37-1e6a303b2a02": {
+"name": "Yoni Multi-Channel Copy of Template Builder Pipeline",
+"tags": []
+},
+"28ca2d26-8e34-4d27-8b69-56afac9938d8": {
+"name": "aind-large-scale-cellpose_single_tile_copy",
+"tags": []
+},
+"295ec079-516e-4a53-aad4-1d1a25540923": null,
+"28f997e0-95df-4c36-b72b-a7c26a9fca35": null,
+"2a0e5ba8-05ab-432e-8e14-3f312cd2fb2d": null,
+"2a504c6e-d13f-4402-8494-c532fb75f38e": {
+"name": "Single-plane Ophys Pipeline",
+"tags": []
+},
+"29bc98de-562c-403a-b17a-8429aa44be0f": {
+"name": "DR_data-driven-RNN",
+"tags": []
+},
+"2ab503ba-910a-4b1e-b246-a8ea3f8fa93a": null,
+"2a66df60-f96d-401e-8384-2e4aedeee818": null,
+"2a824ecc-cb6c-433d-ad8a-7481f9206847": {
+"name": "SmartSPIM reverse transform CCF",
+"tags": []
+},
+"2af57380-9bc5-4be9-a6a9-1ea75ca09581": null,
+"2b07f595-13bc-49a2-89a9-ea8fae6b8c66": {
+"name": "aind-ephys-hybrid-benchmark (lossy-compression)",
+"tags": []
+},
+"2b10170f-1c4c-423c-93ea-85f7a62e118a": null,
+"2bb909ae-fab5-4885-a16d-8ba87223ee2e": null,
+"2b3ebf0d-b94c-4922-bb1e-15cffee2af31": null,
+"2b81f4f2-40b5-43f1-a68a-9298a3859110": null,
+"2be58eaa-73e3-4433-ae6c-8f3ecad5b955": null,
+"2b191c8a-4fd3-4cc3-a3b8-5263be7f0710": {
+"name": "anipose mouse pipeline",
+"tags": []
+},
+"2c68eddf-2837-40f1-8e94-1db526eeacef": null,
+"2c9425cf-029e-4309-bbaf-ccc5f85b1628": null,
+"2cb316b3-a75a-4ee0-884d-ea49cc6131a7": {
+"name": "Multiplane Ophys Pipeline",
+"tags": []
+},
+"2d5cd23e-e2fd-4837-9f2b-ccc6fdd93bfa": null,
+"2d7a2aed-052a-4654-a159-94f875595dbe": null,
+"2e1aaabb-a6c6-41a4-804e-4b4c7cbd385b": null,
+"2d6af963-7ae5-4cb8-becc-0ece5c508ddc": null,
+"2d3ec30d-a0ed-48b6-be82-03036a221810": {
+"name": "NEED TO ARCHIVE - aind-multiplane-ophys-pipeline without splitting v6 extraction",
+"tags": []
+},
+"2eb4e51f-dd6d-4ba0-b638-bf0bad47b859": null,
+"2eaa2cd4-929a-4a7a-afd5-1f679a50a51e": null,
+"2ec089f5-df14-4d81-a41c-faef7704799f": {
+"name": "aind-exaspim-ccf-registration - pipeline",
+"tags": []
+},
+"2eec4f7b-3d05-4793-981f-0915cd1f5335": null,
+"2f193f41-95b8-40a8-8340-8669f7c6b750": null,
+"2f4eb579-9ce6-4ef6-b5e9-62ef485f0a11": null,
+"2f222a0a-9970-4edb-a958-76163976430c": {
+"name": "HCR - post-pipeline - pairwise unmixing",
+"tags": []
+},
+"2f84d9df-d6fb-4e20-a4e6-4affdfa112d1": null,
+"2f680876-bb0c-4130-9543-26c0c5d09823": null,
+"2f6c0db0-4657-4874-bb86-0944d7ccbc39": null,
+"2fcf1c0b-df5d-4822-b078-9e1024a092c5": {
+"name": "Collect Results Ecephys",
+"tags": [
+"ecephys"
+]
+},
+"3009969a-f310-43e8-b525-f853ed700f79": null,
+"3049b737-b09f-41c1-82f7-bf607969eeaa": null,
+"30308791-3c2d-4563-87ea-d19552032fb7": null,
+"307949ce-a6bb-4150-80b1-a73f7e70b3be": null,
+"30bcaac9-f3a9-461e-af36-2051bed85c5e": null,
+"30bdaba2-9d3e-47e2-a99f-1cfc3cfcfb60": null,
+"308132a4-1410-4852-8a29-a345ebc3129a": {
+"name": "Han_pipeline_foraging_behavior_bonsai_V2.0",
+"tags": []
+},
+"310f26f3-1d1e-476d-a4ee-93d6ab59fb37": null,
+"31018fcb-f231-4df0-90af-f260c22586af": null,
+"310d41f6-8405-42e7-9a5c-32919add0ae7": null,
+"311071bd-0197-4fd4-b5a2-25301eae2ffd": null,
+"31452008-c6fa-438b-a25e-1f12c93a70ee": null,
+"320d2434-f32d-474e-95db-9932aebad98e": null,
+"3199ce34-b26c-4d23-98b9-40b7725c4dba": {
+"name": "All Post-Registration Steps",
+"tags": []
+},
+"3295d4e3-0cca-42ed-8070-ea26db71a8e5": null,
+"32b008f0-9227-482c-99fc-27c6e4b6b076": null,
+"32aa98a0-871c-40f0-b37f-2d1ff060c6f0": null,
+"32cd4913-2c55-413d-8fb1-96d5a91acbca": null,
+"328cfd9c-1907-4a04-871e-1f759beb31cd": null,
+"333ba6c0-941e-4d24-9866-0e952db6b1ea": null,
+"33692e67-7750-4d44-8e4d-6fb7b2835df7": null,
+"33557e7e-73c3-4e28-a990-29d67e8eabd6": null,
+"343fd351-5884-4737-9b1b-b80f5eb39fbb": null,
+"3459608e-a8b2-41e1-97e5-d87e9db6d69a": null,
+"34047911-8abb-490b-b5b0-88f40a91bdfe": null,
+"338b6176-f66c-45ae-8bc0-74ae3542f6b7": null,
+"337de7b6-10c8-4b79-907c-46629bd53a6d": null,
+"34d2bf59-7b95-44e0-a3a3-ddca3ebb4907": null,
+"3528585a-5d24-4a4a-99f4-cd3d41ceff51": null,
+"3607aae1-79d8-482f-9c22-3a5984884820": null,
+"35397fac-3e05-4c2c-8859-7826e21efca2": null,
+"3521d349-7340-4e9c-876e-1bb164fc513d": {
+"name": "run-inference-with-pose-tracking-model",
+"tags": []
+},
+"357bc378-feaf-4612-a374-fef39f7feeca": null,
+"35a1d7cc-3793-4005-bc8a-1048f5b99cdb": {
+"name": "Galen's Fix Bad IBL App Files",
+"tags": []
+},
+"353fe269-0e43-49bf-968e-0283576d7da7": {
+"name": "aind-stim-templates-nwb",
+"tags": []
+},
+"36173b3e-2e7b-4510-ad51-8b7e90be08bc": {
+"name": "Multiplane Ophys Pipeline",
+"tags": []
+},
+"3620a0d2-a343-4436-a566-f1a48dce19a8": {
+"name": "Preprocess_And_Merge_Iterative_scANVI",
+"tags": []
+},
+"3726a434-cec1-4b2b-8ac0-07ebe1d4bcdd": null,
+"363de0d9-4122-4246-b8fa-8168b1ff9a41": null,
+"36584811-d06d-4110-99d4-6c03a6809573": null,
+"371a54ab-a480-47b2-9e1b-cfac3c78cc07": null,
+"36e5c489-fa65-4eab-8261-89852009a64d": {
+"name": "Update/Curate Processing Ecephys",
+"tags": []
+},
+"3728e1e7-26da-49df-b4a0-301e3bf38d66": {
+"name": "ExASPIM Flatfield Correction",
+"tags": []
+},
+"374e7974-5ff8-4160-be08-536480a203da": null,
+"3757e9a6-c078-448c-9b51-bb80493bfa37": null,
+"378a1d3d-0967-4455-be93-b07f7b35459e": null,
+"389f23ef-b335-4a0b-9e03-ae878c0aa127": null,
+"38292944-a38a-4b2f-82eb-2dc6242fd713": null,
+"38d3a78c-8fea-48fc-be3d-ec728686ebba": null,
+"38aa2a45-6b5f-49e7-b4f7-4f75181eb701": null,
+"37affaa2-fb51-4fb6-8012-415e644c4023": {
+"name": "aind-mfish-rounds-registration-pipeline",
+"tags": []
+},
+"3954f864-5190-4934-a455-63b3e0965f69": {
+"name": "ExaSPIM Template  - Iterate initial template - 25um & 10um",
+"tags": []
+},
+"39581517-37b4-49a4-8967-8e0e7a89d8f3": {
+"name": "SmartSPIM ResNet Classifier Training",
+"tags": [
+"SmartSPIM"
+]
+},
+"39aa595c-cb56-4db4-bb5f-64e789f9fdd7": null,
+"3ad41a36-b7be-4a21-8405-896fc018e5b6": {
+"name": "bh-copy_aind-ephys-pipeline (kilosort4)",
+"tags": [
+"ecephys"
+]
+},
+"3a94df34-ec90-4cae-bfc1-a1fd58eb68f1": {
+"name": "Merge Suite2p NWB with Legacy NWB to create NWB 2.0",
+"tags": []
+},
+"3b046f6a-1f9d-4cae-a2f1-5a3911bec912": null,
+"3ae4f5ec-91d1-49d7-9fee-4476e50eb463": null,
+"3b109029-297d-4a0b-87eb-f533776ca73c": null,
+"3b2ce5ef-2366-4113-9d99-96cf83df1440": null,
+"3b1ba6d1-142a-4f79-9c99-dec186b0b6a1": null,
+"3b3a725e-4797-4972-ae20-01612a683da7": null,
+"3ba4c957-b21b-4740-8c07-26f1573a4f0b": null,
+"3bb4b5fc-89a9-484f-9d4c-8f48cdf094eb": null,
+"3bc4e51a-a7c3-4d3d-a57b-c1922ef3840b": null,
+"3ba99f52-878c-4133-8b98-cb19529cb391": {
+"name": "pavlovian-aind-analysis-pipeline",
+"tags": []
+},
+"3b851d69-5e4f-4718-b0e5-005ca531aaeb": {
+"name": "foraging_behavior_bonsai_pipeline_collect_and_upload_results",
+"tags": []
+},
+"3c0d62c6-ef01-40b1-ae77-76b9910c6214": null,
+"3bf0c9f6-6191-483a-b731-fca3ed46b665": {
+"name": "dff baseline dev - Claude Code",
+"tags": []
+},
+"3c330b92-8718-419b-8e8e-df954cc6d095": null,
+"3cdf55fc-deca-4ebc-b518-84157a3c5bad": null,
+"3c793bdc-0dda-48cb-ab25-5afa2e3ef39f": null,
+"3cb14797-8178-4a31-9a32-0915b935d6ae": null,
+"3cec77d8-d861-44c7-b3e5-d52404c10160": null,
+"3ce91678-1e44-4fe4-b3d3-77f8ce6eaa7c": null,
+"3d304510-1f96-4ad6-bcdf-94ecdc1d6f37": null,
+"3cfb74f6-a5e6-4b16-99a8-717891a8604a": {
+"name": "Data & Outreach Nightly Pipeline",
+"tags": []
+},
+"3d37b62d-9cc4-4232-86ef-efed6bf4912f": null,
+"3d913966-d142-4428-9b00-267a0482f3f1": null,
+"3d812ddd-c959-4930-86e8-402f740d24ac": null,
+"3d566451-8450-4699-9dba-dd50041ff2c4": null,
+"3dc70116-f56b-44f7-bb1f-1364ca9d8c1f": null,
+"3da94590-cdcd-43b7-994e-d769068391f4": null,
+"3da0c499-ebcb-4558-8394-d2ff2f5de8af": null,
+"3df1ee6a-4574-48c1-bcdd-b83f397f4071": null,
+"3e23e425-3bf7-4bea-b403-2a8f57fb70f6": {
+"name": "Source Extraction for SLAP2 Multi-ROI Raster",
+"tags": []
+},
+"3e6675d1-1ac1-4ea4-8649-90b3346f0a80": null,
+"3e2fe671-9e4c-4680-9a19-d7b7f29ec9c4": null,
+"3e2540cf-9f7a-49fa-968b-448cb034ccbd": {
+"name": "Copy of aind-multiplane-ophys-pipeline without splitting v6 extraction",
+"tags": []
+},
+"3ebda45d-c857-4ae8-876a-42f62d6e4ebc": null,
+"3ebacf1e-90c8-44f7-9119-95c272d2a362": null,
+"3ed236c1-0bd6-4300-8459-d1a56ffcafe9": null,
+"3edecd7e-0d9a-40aa-8276-27c67fa18c0f": null,
+"3efaa500-9bf3-4262-86ea-af1084bdc0f6": {
+"name": "Single-plane Ophys Pipeline",
+"tags": []
+},
+"3f56cd92-0f15-495f-acd7-719e44c0f281": null,
+"3f3a1b35-51dc-4e46-a5ad-c69ffd6fdebf": null,
+"3f392ffb-701d-44d0-ac61-ff83f8fe4211": {
+"name": "download dandi nwb file locally",
+"tags": []
+},
+"3f8cc62b-307f-4dd9-abc3-843bb120a563": null,
+"404333cb-7dc9-455e-82ae-122c6cd4d357": null,
+"3f7368d1-a05f-42a8-8fbb-534ee8b14567": null,
+"40e37f56-5d5f-47e9-bf59-7c8ab7518a92": null,
+"401b9899-cc63-4256-904b-94f38316cac9": {
+"name": "Compile AnnData files",
+"tags": [
+"hmba",
+"MERSCOPE"
+]
+},
+"40e54443-c0cd-4403-adb7-d3e4c69b88de": null,
+"40ecc441-b23b-40f0-a7f1-8fec9d278f04": {
+"name": "aind-ephys-pipeline (kilosort4-chronic)",
+"tags": [
+"ecephys"
+]
+},
+"4109c497-7e47-4e92-8dd9-afc70701eb83": {
+"name": "GIAnT-MATLAB using MATLAB_Runtime",
+"tags": [
+"GIAnT Manuscript"
+]
+},
+"41213f01-16bf-4143-8596-32174e6fd41f": null,
+"415e87dd-f550-4555-b42d-3ff307c7b46b": null,
+"416775c9-8a28-41be-a6dc-4ffb71d25aec": null,
+"4142f253-e1ed-444c-a7fa-06145ef1b71f": null,
+"41834557-b4df-4647-a556-e19f43d9d893": {
+"name": "Motion Correction (suite2p)",
+"tags": []
+},
+"41a411c5-f906-4c5a-bbbc-da60ef5fa6e3": null,
+"41abaea3-c712-4097-a30a-aa5389b929ac": null,
+"41e788a7-6656-4df6-af8e-2bace1c80d2f": {
+"name": "Save Processing Results (internal)",
+"tags": []
+},
+"4293f28b-ac99-4781-a271-21b47ae8025e": null,
+"424bb41b-da82-4656-aada-c24ac9886b01": null,
+"4327b2cf-12be-4fdc-bf91-9b50b68d3afc": null,
+"4235350f-060b-4f2c-896f-7265251b3400": null,
+"42cd7a98-7afe-4e18-8020-a7358176ac7e": null,
+"4248465f-9c3e-4b53-bf97-0012f7a05142": {
+"name": "HCR R2R bigstream kickoff",
+"tags": []
+},
+"43612890-fcaf-4a84-b853-6d8c9edcf5ea": null,
+"435fc40e-4b44-4204-b04b-986264ae7770": {
+"name": "Fiber Photometry Schema 1.0 Standalone Pipeline",
+"tags": []
+},
+"43762f23-b5f9-4659-af53-57e2a4ba76a8": null,
+"44d294eb-dba4-49cc-8678-c202e122f906": null,
+"44a24955-5913-498f-a8a9-588841519746": null,
+"439e1260-0cf1-4a1b-b85d-389c08116e99": null,
+"44186dad-936f-44b6-817f-d373e3549805": {
+"name": "jGCaMP8: Pipeline Evaluation for Cellpose + Suite2p0.10.2",
+"tags": []
+},
+"43f661ab-b29b-4a64-bb70-2d59ac58a9af": {
+"name": "dynamic-routing-notebooks-export",
+"tags": []
+},
+"450a622e-1271-4e87-b6a0-caa2935ae985": null,
+"44f85d1c-2bc9-44e7-953b-c3120c73ef87": {
+"name": "Peak Prioritization & Metrics",
+"tags": [
+"WB-AAV"
+]
+},
+"450b9615-7e47-441c-ac68-b0790d6aa568": null,
+"4552c9d4-3aef-460b-921b-870d3ee06cf7": null,
+"456434c1-7191-4885-9347-b622b03e7138": null,
+"453922b7-8691-4e10-83f5-bc326d0c17a4": null,
+"4510d5f4-b8b5-4c23-9881-ab5f0139eaba": null,
+"45254883-38f1-4e83-9170-1bfa10bda882": {
+"name": "Denoising pipeline",
+"tags": []
+},
+"45a10737-7f3b-4740-b29e-18e89641fd9e": null,
+"45991719-1eb8-4db2-bf4c-aabc8a8a6d6b": null,
+"462431e4-7025-490e-89ce-cca483e82761": null,
+"45d2c30e-9dae-427b-87be-a6988453cec6": null,
+"45f64d9e-d364-4807-b314-3b12955df700": null,
+"45e3d3a1-9d02-4211-8d1d-ba5c00cc95fa": null,
+"4644af57-b59b-4e03-88e3-98c6f70f8ce3": null,
+"464a4765-0c9f-4ada-ac82-de6fd41a4df9": null,
+"46879945-a6aa-4a96-9ba1-8090ce1d97af": null,
+"46a8ba06-cba8-4ee2-b648-026f5ff5a5b3": {
+"name": "aind-ophys-dff",
+"tags": []
+},
+"4779e331-0942-409e-96c4-6ed657d1e1f3": null,
+"46f247bb-71c3-46d6-82c0-d81bde7deeee": null,
+"477690a4-d955-40d5-aed3-8691139184b4": null,
+"47645f3c-5f28-4e0b-99b6-2973d8c80e60": null,
+"46d07d91-06f2-4495-a63e-a7c8d4b51544": {
+"name": "HCR crop fields of view",
+"tags": []
+},
+"46bd1017-aab8-476c-a209-2ec72be9a1e9": {
+"name": "aind-analysis-pipeline-template",
+"tags": []
+},
+"47d4790a-7671-49d5-a0b0-7d9daa9e4691": null,
+"4790ae6b-bd51-4f0c-99c8-f836e1a83d6e": null,
+"48a3ea8d-06f4-40a8-966c-edb218f1175f": null,
+"4853e467-e852-46d0-a64c-ab85b2196db3": null,
+"48701c1b-3171-460e-b875-2c0db62c9905": null,
+"48a6a779-4fb5-47c7-a912-da1a59cafdf0": null,
+"49ccfce2-9faf-44bf-84cb-0913775b29a4": null,
+"4972a33b-280c-476e-b57c-168eb7291c13": null,
+"4a456aa5-c8ac-4d89-ad29-8b572036a373": null,
+"49b76676-d1f6-4202-9473-c763b2b83563": {
+"name": "Preprocess Ecephys",
+"tags": [
+"ecephys"
+]
+},
+"4ac81fd2-8591-493e-9f72-36d5f70490b2": null,
+"4a69a8b8-441f-47c4-b492-42a0dc7f4250": null,
+"4a6cddf3-bf9f-45d3-9e79-a9e2f4003af9": null,
+"4adc8a3e-93b4-4a13-9cba-5592c2aa0718": {
+"name": "load_behavior_video",
+"tags": []
+},
+"4b03c2b5-7dd2-4ea1-a778-6337b22cfcfc": null,
+"4b053b0b-9cea-4f61-b1ad-76dfe5249cd6": null,
+"4afd80bc-dddb-44b8-a35d-f8e16ce86d03": {
+"name": "aind-ophys-decrosstalk-split",
+"tags": []
+},
+"4b1d265b-c3b5-4050-8c57-1272c7219f93": null,
+"4bacc619-7dc2-4100-ad24-8126e881c8ea": null,
+"4ba377a4-6e95-4831-9427-40eb55d31bc0": null,
+"4bd7b8a5-e1d8-4851-a0e3-fb05c1557d00": null,
+"4c6ed0f7-5760-412f-b44c-6da487dc1487": null,
+"4bdbcbbb-bb24-4b79-acff-680df44aec60": null,
+"4c55230e-ce45-470b-8584-c8db77ef7183": null,
+"4c71de3e-3c3a-454b-8aa1-ff05715dcecc": {
+"name": "Dynamic Foraging Lifetime Plot App",
+"tags": []
+},
+"4cbb3e55-83df-40ad-83ff-6d65839dc9c0": {
+"name": "Jinho - aind-multiplane-ophys-pipeline",
+"tags": []
+},
+"4d06a029-4774-4477-9d90-d1f146eeb05c": null,
+"4cef28c0-6813-4b18-b010-e90860c64bb2": {
+"name": "DoubleMAD Mapping Filtering (internal)",
+"tags": []
+},
+"4cf0be83-2245-4bb1-a55c-a78201b14bfe": {
+"name": "aind-capsule-eye-tracking",
+"tags": []
+},
+"4d338644-237a-44b1-af0d-2274de88b0bd": null,
+"4d2c9d56-8eb6-4ac9-9fb6-874735e38ba6": null,
+"4d1d3b17-2d11-4636-b31c-97875566da99": {
+"name": "aind-licks-rewards-nwb",
+"tags": [
+"NWB"
+]
+},
+"4d399ed4-e283-46d4-91f7-2185bb90972c": null,
+"4d3c4bd8-2388-49a1-8402-f86f3d3cbe07": null,
+"4de492a8-4009-45c2-aa13-b8339fb7184b": {
+"name": "Ecephys mipmap builder",
+"tags": []
+},
+"4dc7677d-2b28-44fc-ae0c-3dbcd0df1811": null,
+"4d4392bf-7e65-455e-b693-7cf5082dff60": null,
+"4df9c598-aead-42a0-b32a-890fc00e8b02": null,
+"4e076822-c760-4b7c-bd05-b90c4982809f": null,
+"4e62f33b-1aeb-438f-b858-18161bdd3215": {
+"name": "aind-ephys-pipeline (kilosort4-opto)",
+"tags": []
+},
+"4e6cc9fd-b94d-48da-b881-3a9622a2d588": {
+"name": "Apply existing transform to histology",
+"tags": []
+},
+"4e745305-9654-4358-b606-7f645f52c92a": null,
+"4f0546ea-3242-43f5-b676-db628db29d39": null,
+"4f54654e-7724-4a50-b902-7af093706204": null,
+"4e8add3c-7d7b-4a97-9bac-c93347fbf44d": null,
+"4ea22b41-5bc2-47b0-b816-67dc17f77b11": null,
+"4f42861b-06d8-442b-8e8a-6c0694a9ce91": {
+"name": "aind-ephys-hybrid-benchmark (ks25-ks4-sc2)",
+"tags": []
+},
+"4ed163f0-ff77-485f-af3c-bd20f476034c": {
+"name": "aind-ephys-hybrid-benchmark (ks25-ks4)",
+"tags": []
+},
+"4f84c490-5014-4d44-ae43-7db282cfcbc3": {
+"name": "ACE workflow",
+"tags": []
+},
+"4fa7e2a1-bd15-4c47-a4ac-447243bf6d71": null,
+"5013e46a-472a-464d-a668-1920b07e1a70": null,
+"50a81300-e8fe-4255-86f9-7af708395d5b": null,
+"4fac54aa-835e-456e-b1bf-0fe5c6445035": null,
+"507eaa57-07d7-485a-8842-65be82ac2cb5": null,
+"50acd5b3-91d9-4f6b-b875-1355427ba381": null,
+"512ae5b8-8b01-4bce-8749-82436c9e22ae": null,
+"523a64ca-1dc6-4b4c-ac4f-f43715a099c8": null,
+"515e39a0-ff8f-40c4-acef-ceea16cb097a": null,
+"52de8ea5-f88f-4624-aa37-f902bfbaca76": null,
+"527a2537-8a27-4dd0-b77b-1553fcbfc1ea": null,
+"5260af68-c1dc-4f68-b4f0-9d6252cbe647": {
+"name": "aind-mfish-registration-pipeline",
+"tags": []
+},
+"514df4d1-66d7-4d52-b9e7-88909f6198b7": {
+"name": "SmartSPIM fusion - old",
+"tags": []
+},
+"52f74d4a-397d-470c-89f0-054e281cf67d": null,
+"531c690d-13aa-4636-bcce-0bf7b4568dc7": {
+"name": "Curate Google SWCs",
+"tags": []
+},
+"533598cc-fffc-424f-94fe-06fa4400cb6e": null,
+"53a273d5-f6e6-4ea1-b15e-337172a3bd54": {
+"name": "Convert Avi to Mp4",
+"tags": []
+},
+"544c44a6-dace-4c49-8726-9f6d3321d25d": null,
+"5413b56f-5671-4b01-ab4a-fb62b5138c7a": null,
+"541a3842-92e3-4efa-83f2-ff70b887f1d0": null,
+"53ca9bd3-47ec-4638-866b-b430c1e57124": null,
+"543b69f3-cf29-47b7-8fda-c1482557e814": {
+"name": "Multiplane Ophys Pipeline (v3.0) - with retries",
+"tags": []
+},
+"54571ae9-dc3b-4f63-953e-e001ae94c4cf": {
+"name": "Time Alignment Ecephys",
+"tags": []
+},
+"54929267-e7fb-4ef2-855f-7e032ac060a5": null,
+"5462ba9f-ce63-4ae3-bc0e-6b557d00cf81": {
+"name": "Cirro",
+"tags": []
+},
+"5519db02-2861-43dd-b9ef-143db377470b": null,
+"54d31a5a-3d3f-43c1-9c24-8d34eaa71717": null,
+"550d7154-06fd-421d-97e9-9c353c46fc3b": null,
+"54d57585-08de-44a1-b437-50066cc85e2f": null,
+"551a36fd-9269-4f38-8eea-73860a66b33b": null,
+"552c7050-0249-45ab-9214-c7bde8e869e4": {
+"name": "Add Cluster Labels to Cells (internal)",
+"tags": []
+},
+"55c5d0ef-c0c6-4a4a-9933-d02313f2a765": null,
+"55957064-6fb9-4369-9b49-410393b9fdfe": {
+"name": "Psycode Packaging",
+"tags": []
+},
+"5620c65a-a3a7-4706-82a1-0a952a31a4a3": null,
+"55e765f9-de53-4c01-8003-02c79846f02d": null,
+"56331a8f-ac39-4e9f-8d17-e0ecf8256834": {
+"name": "Run STAligner",
+"tags": []
+},
+"55e4cc0c-c81b-4f2a-b507-a9decf5e5462": {
+"name": "Apply affine transform to spatial data - macaque",
+"tags": [
+"hmba",
+"MERSCOPE"
+]
+},
+"561ca66a-9b22-405d-aea1-d6d0f99a8a5e": {
+"name": "macaque_stereoseq_MMC_slabs",
+"tags": []
+},
+"5653da93-30b9-4945-9dcf-0b6817c734d2": null,
+"565b3513-4070-4677-9172-ea110e67505d": null,
+"5664e925-e6ca-4955-8c44-3c342375f424": {
+"name": "aind-ephys-export-nwb",
+"tags": []
+},
+"568520b5-c567-4212-91e2-18bcee7c5004": null,
+"5674cac0-d71a-4e24-9e1c-26fedd0a3174": null,
+"56c77681-4e2b-4481-b94f-f9d4337c6e2f": null,
+"56956b65-72a4-4248-9718-468df22b23ff": {
+"name": "aind-pophys-converter-capsule",
+"tags": []
+},
+"56b1d4f6-2a6a-4536-8b35-7c208d62f3ba": {
+"name": "Combine Sections (internal)",
+"tags": []
+},
+"56bf687b-dbcd-4b93-a650-21b8584036ff": {
+"name": "multiplane pipeline version 5.0",
+"tags": []
+},
+"56e267a2-2b1d-4a93-a11b-b13bc2538c9d": null,
+"56f4cd28-6798-4d01-b1a1-6a9aaee46dfe": {
+"name": "aind-brain-segmentation-with-MedSAM",
+"tags": []
+},
+"574ee705-0ff1-49b1-9db0-65b5383e27bc": null,
+"573648e4-ab26-4a2a-92e8-a66639bdc2fd": null,
+"577dc78b-9465-4eb9-9c8e-4dbe1500718d": null,
+"5758cf3a-b6d4-4eaf-b2c2-e41475819a14": null,
+"580d3627-a103-4e4e-aba3-3a47c9d84f61": null,
+"57af5e4f-9c57-4352-8fe1-347367b2700e": null,
+"57d45fb5-b1ea-4b71-bbc3-dc62a23a7618": null,
+"577568f5-1c49-411c-aa8d-ea0fc0974300": {
+"name": "SmartSPIM Cell Classification Training GPU",
+"tags": []
+},
+"5815dd8f-976a-420c-b859-8125eaea02c6": null,
+"581e8146-cc98-47ce-ba3c-86a704da0e88": null,
+"595f682c-eaf5-412a-8ace-799dbadf45af": null,
+"58472f54-9f72-487c-b359-681455a6b165": null,
+"59e2d40a-13bb-4702-859f-6ca229b4a14e": null,
+"595f6bd2-ef5e-4a58-bfc5-f82d3e6f3ad1": null,
+"59748879-419b-43f8-82de-066a1abc7a19": null,
+"5993ed31-4bde-4873-b6e6-691e7f472151": null,
+"5ac1ae79-6671-41de-a7b2-46d3d96396dc": null,
+"5a8d2475-fa75-4d21-82e6-f182a827de69": null,
+"5bc560a4-58cf-44cd-ba4c-b940b90d6600": null,
+"5b56587b-51e9-40e2-aab0-5ab2b1ce039f": {
+"name": "exaSPIM bigstitcher alignment pipeline",
+"tags": []
+},
+"5c085123-829d-4e28-9e10-d5a4c6cfae12": null,
+"5be3f9d0-8c2f-456a-901f-b6b8d0500c39": null,
+"5c0667e1-beae-4468-9ab4-1f3ba11514d3": null,
+"5c1d2e88-d668-4adc-92cc-c75223ee4515": null,
+"5c1ef5a6-bde4-4b39-a0a4-d782cee030dc": null,
+"5c83785a-073d-4004-800d-b67d3618826f": null,
+"5cb6abbb-a725-4373-8119-c9fc2737c7a0": null,
+"5cbe10b3-df17-46e8-80d8-f3b5d36018f8": null,
+"5cd8e7bc-5c06-4c3b-bdaf-6017b51343bf": null,
+"5d4570b3-89ed-442e-b522-e38247fa6f15": null,
+"5d20f7bd-1b7c-4679-b0f7-6e543b8a81ad": null,
+"5d07c5a4-420d-4960-81fd-a20fcfd5b53d": {
+"name": "LFP Subsampling Dev",
+"tags": []
+},
+"5e11306c-da07-401e-9b14-0545726e50e4": null,
+"5df12fc7-fa53-430f-a2f9-df5e74204ac7": null,
+"5ddbf996-cc15-4252-81e1-731ffeb7b289": null,
+"5d834008-feda-4a48-a94e-834b1919ae09": {
+"name": "Ophys_analysis_GLM_STAGE_1",
+"tags": []
+},
+"5e3ab2c8-1d49-42bd-83b5-8ce94200284c": null,
+"5e18c0e2-1fac-4b6a-b778-5115ece80b74": null,
+"5e470618-4020-499e-82c5-27da98e1b60a": {
+"name": "Anipose mouse test 4",
+"tags": []
+},
+"5efcd03f-86ea-414c-86f6-f65867d5efa8": null,
+"5f4b599e-c769-48f9-b89a-d8607570b5fd": null,
+"5f6c3880-cc07-452b-aaf5-67d90517bea1": null,
+"5e75700f-9d8b-4851-9294-872d4d38d822": null,
+"5f969447-3fc9-41df-a57a-9c9f0410e2a9": null,
+"60822590-0a21-4b06-b847-729a26b235d5": null,
+"607312d1-1113-43e3-b354-b034c9e11e5b": null,
+"601a1397-67e8-40ce-bc7e-fe9a24299f0e": null,
+"601ebebd-8ccb-462c-adeb-58389e6c0d09": null,
+"60540151-4773-4c02-8401-b1e0fbf779f8": null,
+"60569c31-be2d-4ccd-b60b-ab247824ec7c": {
+"name": "IBL Data Converter GitHub",
+"tags": []
+},
+"6020e947-d8ea-4b64-998b-37404eb5ea51": {
+"name": "Postprocess Ecephys",
+"tags": [
+"ecephys"
+]
+},
+"60f7cd03-10e7-48f2-9820-9c7350988005": null,
+"6176df14-12f1-483d-bfe2-5be1386faca3": null,
+"616d2fa4-b670-436f-a39c-eca5a9be1822": null,
+"61a44c83-54d8-493c-8d4f-68ea08694b8f": null,
+"61a642e0-c4d2-4bb3-8e93-db575c312d71": {
+"name": "Run Phy",
+"tags": []
+},
+"61adfc85-416e-4c76-9636-de6bcfd83343": {
+"name": "HMBA STAligner Pipeline (MERSCOPE & Xenium compatible)",
+"tags": [
+"hmba",
+"MERSCOPE"
+]
+},
+"6216b4ef-c6d2-4cdd-a3cd-9f9bb12004e7": null,
+"62241c81-4f3f-453a-96cc-dd819e9800ef": null,
+"621d7b70-8172-4d8f-92b8-23d3759ffce9": {
+"name": "aind_exaspim_ccf_registration + soma reg -- dev-test",
+"tags": []
+},
+"62eaaa60-6244-42a8-b8c0-a2546a2dd6b7": null,
+"6232b54b-dbbc-477f-9b9e-22dcfbc7113c": null,
+"62c6853b-b675-4cb5-b49b-a553892e462d": null,
+"630c987c-3289-43c1-b36a-54d8ee14f773": null,
+"6295ba36-4e94-47ca-b05d-6e3069fff3c2": {
+"name": "aind-smartspim-fuse-0.0.3-bigstitcher-HCR_testbed",
+"tags": [
+"smartspim"
+]
+},
+"62ef551c-0655-4416-af45-7b802d0fbd4b": null,
+"634aff72-9e10-4e33-9d6c-b8257bc306c9": {
+"name": "TRUNCATED aind-multiplane-ophys-pipeline",
+"tags": []
+},
+"6353ba14-c9c7-4de3-b811-649fb96b3d5c": {
+"name": "iGluSnFR-simulation",
+"tags": []
+},
+"635d4ad1-e059-41cb-8c0e-d518c12fa858": null,
+"6391d7ee-ec37-4b44-9642-bc029cd81645": null,
+"6387dbd4-00d2-4796-a00a-c971be72dca2": {
+"name": "Xenium_Pipeline - Cpasule 3",
+"tags": []
+},
+"63df48ed-934c-4950-94e4-71cffd78ec7a": null,
+"63a31b86-09ce-4250-a1f5-d4b6ece7255a": null,
+"63d7e693-113d-43ea-9535-27ba4a672b15": null,
+"63a8ce2e-f232-4590-9098-36b820202911": {
+"name": "aind-ophys-motion-correction",
+"tags": []
+},
+"63e9e7f7-af55-44c2-b81d-dd5cb29d7cf2": null,
+"640f1fbe-f353-4f87-a314-80bd58108e79": null,
+"644bca5b-6ede-4b01-849c-5fa55c769b4d": null,
+"63fc9238-289d-4f9b-aae5-96f4b58b752f": {
+"name": "Assign cells to spatial domains",
+"tags": [
+"hmba",
+"MERSCOPE"
+]
+},
+"654e47d5-08cd-49e9-8cbf-84b13ce9cbf8": null,
+"64ddeced-e7cd-4bc3-b8e9-ba952570dbe8": null,
+"6585bde3-bcd3-4fc0-9782-bf8e75c7d59c": null,
+"646cdb80-3d72-4fd3-a9c1-11d159158a2a": null,
+"659e22bf-9ada-4179-9205-d5c7c6806580": {
+"name": "aind-pophys-pipeline",
+"tags": []
+},
+"65fa099e-fabc-4142-93f8-ad8a010f0274": null,
+"65a959cd-4190-4998-bbfd-9eb812974c1d": {
+"name": "aind-licks-rewards-nwb",
+"tags": []
+},
+"65aa49bd-06ba-44bb-8fb3-afadf67eee96": {
+"name": "ExaSPIM Template Pipeline",
+"tags": [
+"AIND",
+"FideusLabs"
+]
+},
+"661d7f38-3150-4745-8408-70fb59d2924b": null,
+"661b85cb-f02b-47d7-8a3b-007660f73ac5": null,
+"66852d0d-c63a-4a36-b0a7-1904e3dce989": null,
+"6682393c-8df2-4063-ac1e-6c9133eb78f1": {
+"name": "jGCaMP8: Pipeline Evaluation for Cellpose + CNMF -- fetch from DANDI",
+"tags": []
+},
+"66e711a1-50e1-482b-b699-7a5a75195bc7": null,
+"670de0b3-f73d-4d22-afe6-6449c45fada4": null,
+"6750d8d9-3c7d-4b74-93a6-f488c76b9649": null,
+"67473a4a-f435-4df4-8f52-2ef9cd533169": null,
+"67aa6b10-9f3f-4f19-a7a9-f3e47d5e7c31": null,
+"682ca94a-c5ae-408a-9bfe-463c7d070236": null,
+"677eecf9-c1f0-4fa0-967c-c4d334e94c7d": null,
+"68340b64-d8c7-423c-881c-3ddf30e1039d": null,
+"67d20fbf-f023-4952-a603-b2a91ce005ef": null,
+"683906f2-6c8d-4601-a799-d5cc4c658c2b": null,
+"68405bd2-be47-43d1-992a-127119221bda": null,
+"68341e8d-fefc-4223-8f20-644cb868c896": {
+"name": "Copy of aind-mfish-rounds-registration-pipeline - R1 L2 - explicit checkout",
+"tags": []
+},
+"68820e55-d3c6-414e-ab64-c6f25adda928": null,
+"688a2fb0-a3af-4502-afa4-381c1e38a2c7": null,
+"6861217b-a502-4d10-b0f9-854d24bcb2da": null,
+"687dbe84-7fb8-4ff2-be21-b0ab832970f5": null,
+"68cb15ca-71cb-474c-9e74-e3dc4e4610b6": null,
+"68fc0d01-f91e-43c7-8d40-5bab07ba5a2e": null,
+"68d7ba35-810c-4620-9bb3-3e7c4a8391ce": {
+"name": "Mouse Segmentation Pipeline (v2)",
+"tags": []
+},
+"6908ea06-e3fe-4d50-9184-37d258679850": null,
+"69a74494-ee04-4a7c-9514-d1cb78b142f1": null,
+"69a41df1-efce-4ad1-9bca-d030d6bbffe3": null,
+"6986780d-bb6f-4d88-995b-5cf0c883cbf1": null,
+"692f18dd-7dc1-46bd-b11b-4d23ab2fc493": null,
+"6911ca73-2715-414b-ae42-b48c06ff8cef": null,
+"69ca43ce-9f0d-41a6-855c-8b01821afee4": {
+"name": "Single cell z-drift QC (old)",
+"tags": [
+"single-cell-zdrift-qc"
+]
+},
+"69d1e2b9-1d94-4e71-9b66-6f5085f8b85b": null,
+"69da2e1b-33d9-4f10-9e61-0e3f326d9824": null,
+"69e9ee16-82ec-4119-8760-df9ae7f2026c": null,
+"6a9f0c70-8668-494c-b6ea-276ecba2ae36": null,
+"6a331942-743a-46e2-8fd7-7e477990e1cb": null,
+"6aa62075-f042-43cb-b254-16ed7f31c161": null,
+"6aa0aca7-058e-4cd7-bfb6-c9eba71e83f2": null,
+"6aeaa706-2dec-4883-afb4-606b91815a4c": null,
+"6af9dfdb-1a57-4b70-90da-8ef1a8fd4f68": null,
+"6b0527e2-c199-427d-aaaa-1f83bc51cdf4": {
+"name": "Multi-tile testbed aind-hcr-spot-detection-pipeline",
+"tags": []
+},
+"6b0a8b26-f7be-403f-b79d-3c07eebccc31": null,
+"6ba27093-df87-483a-8a73-38dc6d3e2b7f": null,
+"6b328368-5e09-4165-aa23-7c62de9bc4ae": null,
+"6b0aa5c9-bc08-46c6-8d16-712d706eb966": {
+"name": "aind-stimulus-camstim-nwb",
+"tags": []
+},
+"6b9b96d5-81e7-4443-b711-7045abc3adb8": {
+"name": "compress videos for behavior 2",
+"tags": []
+},
+"6bff62f9-c6c7-4dd0-b77b-aad5d28b9d43": null,
+"6bf3db21-07b1-4801-985d-522bdce770c4": null,
+"6be480db-7271-488d-9ee7-e104244fa292": null,
+"6c2f7310-3037-4cfc-9990-94cb77fb9070": null,
+"6c16f6ed-a2f2-4acd-8bb8-8bbfb4cd5860": null,
+"6c37d746-3547-4192-8b23-32dcc64b6daf": {
+"name": "IBL Data Converter GitHub v1 editable",
+"tags": []
+},
+"6c4dad63-7fdf-4dfe-82f1-f9b24e924d31": {
+"name": "Dynamic Routing Spike Depths Peak Channel",
+"tags": []
+},
+"6c525020-0bc6-48d2-af37-cbeac53684ff": {
+"name": "Yoni Multi-channel copy of Template Builder - Preprocess",
+"tags": []
+},
+"6c785b2d-774a-41b5-9a6a-6f52c0370a73": null,
+"6c5be3a1-87b6-44a8-8773-e7709941ed5d": null,
+"6c7f7b55-b5d7-4863-99f0-534b93bb7da9": {
+"name": "aind-ccf-nwb",
+"tags": []
+},
+"6d1fb019-8f74-4814-a85e-9616ddd4e213": null,
+"6e711560-280a-4137-b122-c026b2643072": null,
+"6e3ceb05-394a-4513-b7d6-d9a19276def3": null,
+"6dbe9cff-e0a4-47c0-a67b-bb015bb26c1e": {
+"name": "Spot_Parallax",
+"tags": []
+},
+"6d9c5e21-08d6-4e33-824b-95bf7630c89c": {
+"name": "aind-proteomics-image-translator",
+"tags": []
+},
+"6d4a8ecf-d2a9-490d-8015-34a6e2150748": null,
+"6d4888b8-1a26-4e92-802a-763309b3ce88": null,
+"6e82d16a-a55e-47db-a641-ed9a3c108a69": null,
+"6e868a54-ed8a-4dfd-89b3-9e8b1820d317": null,
+"6e91c105-d748-44c8-a190-7a67b41f8719": null,
+"6eb25af0-99df-4f60-88be-43e879ee384e": null,
+"6eb4bc8a-61b3-4bce-9d91-f23de8610c42": null,
+"6f526f2d-7bbd-4328-b566-0bc67c901b3b": null,
+"6f8a61a9-46d8-482e-9850-339d8904d3d7": {
+"name": "jGCaMP8: Pipeline Evaluation for Cellpose + CNMF-E gSig=11",
+"tags": []
+},
+"6f74dc23-2702-4240-9398-a7c2cbf8b69d": {
+"name": "aind-curate-sorted-asset",
+"tags": []
+},
+"6ec5d752-4721-41ae-80f5-39a8695eb7c8": {
+"name": "aind-ephys-pipeline-spykingcircus2",
+"tags": []
+},
+"6f9a2d00-de69-4877-b06e-7fd8993ab889": {
+"name": "Behavior_Video_QC",
+"tags": []
+},
+"6fc5c791-7f52-4166-886c-7991065fb546": null,
+"6ff9e814-5c8f-477d-9ec0-943f8a2c8348": null,
+"6fec0a64-6d57-491f-8819-039121bd2e2f": {
+"name": "aind-ophys-segmentation-cellpose-bergamo RR",
+"tags": []
+},
+"6fec8bcc-eb73-4760-be64-96d7696e4e0a": {
+"name": "aind-ophys-demixing-bergamo",
+"tags": []
+},
+"70146748-6211-461c-bf85-a3e254ee640d": null,
+"7039446f-c66b-45be-8508-b742700a5fb4": null,
+"707ebdba-17e5-4266-ad57-2603afe67080": null,
+"7080d3a0-578b-4cf5-9a5b-821e16a5aad7": null,
+"716e5417-e49a-4c9f-ac4b-6288c48f7c98": null,
+"716ee3d1-84cc-4a83-8660-881993048169": null,
+"70f25085-a9e7-458f-979a-484d67b9cc36": null,
+"70d07a24-10d8-414d-8b6e-a7eb697f3806": null,
+"71e153ff-c74b-4fc0-a1ae-e43c92b0eabf": null,
+"71cf9732-270f-4cda-aa7a-2d28686da233": null,
+"71c06c89-0c16-4c49-94db-0d4d7fc1dd19": null,
+"71e64f96-3faa-4e42-be32-674bcfd25005": null,
+"71f1234f-6248-4732-823b-eb70ad2084df": null,
+"71efb9f3-9f3b-4af8-bbe5-e6b356dd7afb": {
+"name": "Han_datajoint_export",
+"tags": []
+},
+"729a8112-2cbf-48f3-9cf1-e78beaf8538d": null,
+"7251cf76-9027-40cd-bd11-c8e8db92987e": null,
+"72a61878-2d3c-4476-acdc-21965e6185cc": {
+"name": "ExaSPIM Single Tile MIP Pipeline",
+"tags": []
+},
+"72ba67af-d545-42c8-a589-b028f981b1bd": {
+"name": "aind-vr-foraging-pipeline",
+"tags": []
+},
+"72a83fe8-b302-4a50-b755-05e5c1183742": {
+"name": "aind-ophys-oasis-event-detection",
+"tags": []
+},
+"72dfc677-40d2-4120-a8ee-37296963b3bc": null,
+"72f84e80-1e5f-4f1d-be61-831b9adad381": {
+"name": "aind-mfish-rounds-registration-capsule",
+"tags": [
+"HCR"
+]
+},
+"7322b920-242b-4b21-a54f-7f37d4d84dbf": {
+"name": "Lightsheet Denoising Tests",
+"tags": []
+},
+"73e8cd34-94a0-48d2-a7f5-3048d80d9b36": null,
+"7392b77d-4ba5-4480-8f23-93bfe87a6642": null,
+"7401d65b-db06-486c-bf29-bf57dc9137c1": null,
+"74613035-02c8-4602-a9d2-7d73321f5ead": null,
+"740148f3-cde5-4cb7-bae3-a818733a0c34": null,
+"73fa4834-131a-43d5-afd1-01f97d005327": null,
+"748a728a-d7d7-4a1b-bae5-97fbdf7fc9ad": null,
+"74c464d5-1621-47ad-aeaf-3bd32b6ff343": null,
+"746729a0-7e11-4da8-af78-fc10bc263b8c": {
+"name": "ExaSPIM CCF Registration Capsule",
+"tags": [
+"SmartSPIM"
+]
+},
+"74be79e9-f37a-40ae-aa95-23d8625b3908": {
+"name": "compute_motion_energy",
+"tags": []
+},
+"750ceba7-0eeb-4bdf-a031-cf7d17803155": null,
+"74d773d2-20a5-42f1-9202-b9e63d23cd14": null,
+"7516dc21-1c9c-4636-a4af-70058137bc9d": {
+"name": "aind-multiplane-ophys-pipeline without splitting v6 extraction",
+"tags": []
+},
+"74cf5765-d490-4ff8-accc-8cca3cbd05ae": {
+"name": "aind-ophys-mesoscope-image-splitter",
+"tags": []
+},
+"752c7740-8156-400e-82d9-83f1703b4a7b": null,
+"75ac4c0e-5b84-4548-b63b-e731982399f2": null,
+"75b66452-cf65-4950-a631-9e502ff5f230": null,
+"75b88175-0887-4d9a-9211-a02d27016cad": null,
+"75df0bde-1329-4c4d-b40d-264f8da2f22f": null,
+"75c2336d-2fec-4096-b1f4-e44a759251ed": null,
+"75f6394c-d72a-479f-82dd-236e8cbbe1ab": null,
+"76236fba-aa94-4856-80bb-39939eff755e": null,
+"765e634b-6d56-430e-ac50-1f0638b38dd9": {
+"name": "Convert Avi to Mp4 FFmpeg 7.1.2",
+"tags": []
+},
+"76980af1-9b87-4fe6-959f-58ad3ac6bf7d": null,
+"769906d3-5620-4ebe-9bfe-da9ae2ec52ec": null,
+"76ae7bcc-2926-403f-962e-7306ec497ead": {
+"name": "Opto Preprocess Ecephys_sueSu",
+"tags": [
+"ecephys"
+]
+},
+"77afcdb3-4373-469b-afc7-ab0457539175": null,
+"7746e288-dacf-4388-9ae9-3d8f7e809aa3": null,
+"77951cc7-7401-4850-a1cb-c5a117b22e0a": null,
+"770edf91-4af7-416b-abe4-a806071fa1e5": null,
+"77b5bb8a-7107-496f-8d79-89fdcb4552a7": null,
+"77d93458-9c61-489b-8efe-0c7c6c20dfda": null,
+"77d3322c-be67-4797-b9e6-c518c56fd248": {
+"name": "Vismo Packaging",
+"tags": [
+"NWB"
+]
+},
+"786131c3-5a02-4556-9fa5-9f4abae185d2": null,
+"7894f425-c9fe-4bc1-9e97-667b520b13f3": null,
+"78723a96-8751-4121-aa79-60fea2f69d73": null,
+"786e8105-92dd-4ad9-9700-0c6a4772cbb1": {
+"name": "Ants_Light_Sheet_000",
+"tags": []
+},
+"78a98214-4044-41d0-98d8-ba996b870d3c": {
+"name": "aind-single-plane-ophys-pipeline",
+"tags": []
+},
+"78ba3793-c698-413e-af0e-5d2359bee1ca": null,
+"78ca5c5e-7a31-447c-99ad-d0848074375c": null,
+"78f080ce-f88d-479a-acb6-e82915c12dad": {
+"name": "Han_pipeline_foraging_behavior_bonsai_V2.0",
+"tags": []
+},
+"7a51267b-18f3-4ca4-9a45-91a9714977f0": null,
+"7a5e794f-0f99-48e7-a38d-4c8c939b682e": null,
+"796934a3-545e-41ba-9c96-7d76b9acc58a": null,
+"7a644a7b-9b41-4212-9000-3d87940286e0": null,
+"794a0d00-0999-4eef-bfad-22432a74b005": null,
+"7aed2059-ab4a-4ee2-a8a5-215b943244d4": null,
+"7b533f70-baa6-48bc-86c9-4f856895638a": null,
+"7b1d25f6-71fb-4a60-b048-4117d3c046b8": null,
+"7b699ef6-9aeb-443b-877e-1fba40fee371": null,
+"7b767ceb-2748-40e9-a4c5-6fb7ed83880d": null,
+"7b7ce27e-c538-4a67-8699-1a5040e60e1e": null,
+"7b5eb46d-91d5-4b60-b08d-edcfbf7b86c5": null,
+"7b56d8ce-3722-4a6a-b6e2-93c9f1f0fd24": {
+"name": "Mouse Processing Pipeline",
+"tags": []
+},
+"7b9dcdd9-4f54-405b-974c-c4c9e405ce26": {
+"name": "aind-ophys-neuropil-correction",
+"tags": []
+},
+"7bafd88a-5cf3-4475-9c1d-4b672a09789e": null,
+"7bd21b03-7136-418d-b4b0-b9cfc0969f8f": {
+"name": "jGCaMP8: Pipeline Evaluation for Cellpose + Suite2p",
+"tags": []
+},
+"7c58d322-4997-451b-b383-366bc57693c2": null,
+"7c575238-14e2-4355-821d-515ecc89c033": null,
+"7c5d1c98-305a-463e-b4a0-497447487dfe": {
+"name": "Fetch & format data from DANDI",
+"tags": []
+},
+"7c11656e-5a0e-4bfb-bc1c-8ec3fcf42ef5": {
+"name": "autoresearch_polars-vec-ops_apr05-memory",
+"tags": []
+},
+"7cfbbf2d-ba78-430c-a1a2-c37549dc7314": null,
+"7d652ded-52a5-4bd8-9341-166f1f572717": null,
+"7d966985-db72-4152-ac96-147deb676360": {
+"name": "Downsample Spot Table (App Panel)",
+"tags": []
+},
+"7d9b9065-7d0c-4027-837c-e7f813965dd8": null,
+"7dc6a4ea-5a52-42e5-a866-b772619a034b": null,
+"7da0d817-93d4-469b-8ab3-2ebba632cc77": null,
+"7e2e8fbf-c92d-4497-8e69-851e760cd743": null,
+"7dc83871-62c6-42b7-9e3d-46ac893f5281": null,
+"7e491ddf-db9b-4a83-a27a-c0f93322273e": null,
+"7ee44fcc-aedc-46e7-97a9-13044626df59": null,
+"7f4616ae-5f50-49c1-b9b8-6553d0ec8c10": null,
+"7f56b844-4562-4307-a743-4663cec9ee8b": null,
+"7f457237-84f5-4e27-b4a1-01787866e0ff": {
+"name": "aind-ephys-pipeline-kilosort25 (dispatch)",
+"tags": []
+},
+"7f58efc9-7eab-407f-855b-7c372f6bf531": {
+"name": "aind-single-plane-ophys-pipeline",
+"tags": []
+},
+"7faf4526-71d0-4bb0-a586-abdf795a061c": null,
+"7fac2e6a-bbfd-4749-adb2-a158d3ad2dfb": null,
+"7f9379a9-8e01-4886-badd-b49c17828a40": null,
+"7f8cbd57-c41a-4e44-8bbe-30056e01965e": {
+"name": "Suite2p - Segmentation of neuronal units",
+"tags": [
+"two-photon",
+"calcium imaging"
+]
+},
+"81369fd3-ada0-4077-8aec-0409f901cc73": null,
+"80784680-916a-477d-875b-d4fa7ea0d358": null,
+"8037b6d8-be9e-49fb-834d-6966bba5005f": {
+"name": "iGluSnFR Bergamo",
+"tags": []
+},
+"8100399d-efe8-4141-9578-0e7bf66311f7": {
+"name": "Stitching QC",
+"tags": []
+},
+"815ca62e-f7c2-43d4-b7ce-b39710da0284": null,
+"81472942-a43a-479a-aa59-4eb9af97f180": {
+"name": "Compress WavPack Ecephys",
+"tags": []
+},
+"813b49fb-a8b5-4768-a990-515273e11460": {
+"name": "Ephys processing pipeline Kilosort2.5 - fork",
+"tags": [
+"spike sorting",
+"electrophysiology"
+]
+},
+"815659b3-1278-461a-b0b5-fa94e49068db": {
+"name": "aind-ephys-pipeline (kilosort25-opto)",
+"tags": []
+},
+"817d9f02-0b96-4f41-9ec3-b5e31e555786": null,
+"817c0b21-0b42-4642-9d1c-d013d00aeb9c": null,
+"81c4c708-733a-4715-ac1a-c6b47d6dce83": null,
+"81ac913f-db31-48dc-8666-0972aebe299c": {
+"name": "Evaluation for Pipeline using Cellpose + CNMF-E",
+"tags": []
+},
+"81a7b60b-eea7-43a1-ad10-ff7131285aae": {
+"name": "Neuromodulators data analysis - Foraging and pavlovian tasks",
+"tags": []
+},
+"818008ab-7cff-4493-8ac6-f1519b588130": {
+"name": "SCALPEL Pipeline",
+"tags": []
+},
+"81e20c92-1ac7-42e4-aa0c-b84f2799dc92": null,
+"81ca99ea-52d8-4399-b14e-0e3129f8fe93": {
+"name": "Segmentation_get_files_merscope",
+"tags": []
+},
+"820ca211-cb9d-4aa6-abb5-09ada73cba6b": null,
+"82743ed8-84d0-4ace-b34e-625627eab196": null,
+"825f963e-2208-496f-a2b1-e42381be4e28": null,
+"82c01849-2244-4ec3-9afd-19a30e0376e2": null,
+"82e5bbfd-5feb-4f31-88d6-7df24bc2ea5e": null,
+"829956a4-8750-4c8e-962c-fc23fbf58c9b": null,
+"83a4a9f3-b361-421d-aa13-c05f178f7a5d": null,
+"82ba5303-0929-4cb9-aa8f-0fd74a9ef4af": {
+"name": "V1DD filter NWB",
+"tags": []
+},
+"8339b3d2-b8bc-47c1-8579-062b73416c58": {
+"name": "ExaSPIM template - Iterate template rounds",
+"tags": []
+},
+"83c29b8f-2141-4104-b601-1995f2b7c8f3": null,
+"84398c87-3639-4a7b-b88f-050202a7d687": null,
+"861666e8-b436-455b-930a-cd2cdf27aba1": null,
+"857e7d88-1439-4655-82ca-0fbfdfb126fa": null,
+"847c20c3-0512-4053-a1e3-a5dc47f3b8bf": null,
+"84c86835-ef51-4303-b449-45067585fc5a": {
+"name": "Processing Pipeline (add clusters from STAligner)",
+"tags": []
+},
+"860d5d7c-a602-474f-9697-c1e0991eec3a": {
+"name": "Leiden Clustering - RAPIDS (internal)",
+"tags": []
+},
+"84e6b3e3-e24b-450e-b275-589fc229087e": {
+"name": "aind-ophys-segmentation-cellpose -- FLATTENED",
+"tags": []
+},
+"8642d348-a6ac-4e28-b2d8-5fb73c30d5cb": null,
+"8650e680-1333-4efd-80be-1dc69d741c4c": null,
+"86d18add-e21e-497c-9045-218dae72523a": null,
+"86babf21-d9e7-42c8-b313-7997c27d28a8": null,
+"86f9b209-55b2-4b20-af18-f0252ca16b10": null,
+"870e57bf-67ab-4fbb-bf1d-f5cbd7706758": null,
+"86d6368d-2a05-4f03-86ee-9490e2e6fdc8": {
+"name": "Macaque & Human MERSCOPE QC and Mapping  Pipeline",
+"tags": [
+"hmba",
+"MERSCOPE",
+"quality control",
+"celltype mapping"
+]
+},
+"8732c547-1336-4261-a682-fd53c9f61786": null,
+"871a11dd-5870-48bb-9e0a-4ec6e1e2fac7": null,
+"87538e4d-e98f-4bb0-8714-a9d0eddea110": {
+"name": "aind-z1-radial-correction-0.0.3",
+"tags": [
+"Z1"
+]
+},
+"87bb04cd-9648-444b-be60-b33ccd401ddd": null,
+"87df88d0-20ea-4aa4-a273-8fde12c036d6": null,
+"87cec3ec-8175-49f1-931b-30c84ad2a839": null,
+"87788ab3-d516-43df-9e5f-e063095eda6d": null,
+"87a6465c-aa30-484b-9509-451846552ede": {
+"name": "aind-DANDI-download-nwb",
+"tags": []
+},
+"88176925-d18a-4869-87a1-63ec17aba8fa": null,
+"88eab38a-790c-45f5-ad73-a4886992b666": null,
+"882b1ae2-bd2a-4575-90ab-8691d6933103": null,
+"891136bb-91c5-47ec-8772-c33da3896b08": null,
+"898f7f9c-71ae-4018-bc4e-8fd7a98a2a29": null,
+"89c931dd-77f8-45ec-a391-6a1804eb1536": null,
+"896e953a-8b17-461a-8528-27c1e06dc1ec": null,
+"8975de38-58c2-440c-8952-cd7ce10948d9": null,
+"89ff24ae-33aa-452a-b8d3-0dfb9e37f40c": null,
+"89e96d52-d364-4c1b-9c86-7a7480394dcb": null,
+"89e486ec-2fc9-43a3-84a7-0e0eef85f7e7": null,
+"8a58e9fd-510d-4973-967e-4d79db163778": null,
+"8a34ec1d-b11e-4f67-84da-fcb058869961": null,
+"8a712310-ab9b-4edc-b255-ee7be40441f8": null,
+"8a16eb43-6718-4427-b7ac-f86dc5f1ce0b": null,
+"8a59647f-9d6b-40c1-979e-a0039f8e0071": {
+"name": "aind-ophys-motion-correction copy single plane test",
+"tags": []
+},
+"8abe4859-e423-4800-8459-d7d034f731ec": null,
+"8abbd068-f29b-447a-a92d-2b5461aea306": null,
+"8a969027-04c0-4692-b6db-b6d0f9bbac79": {
+"name": "HANN Mapping: Build Reference Marker Index",
+"tags": []
+},
+"8b950726-b4d3-49d8-8bcc-580660234488": null,
+"8b3ec9c1-dc5e-4dcc-aba0-11789f5452ae": null,
+"8af59beb-cbb2-428b-924b-b3ebc48643f2": null,
+"8b4c6465-4843-4ebd-8a96-addcc3353a79": {
+"name": "aind-eye-tracking-nwb",
+"tags": []
+},
+"8baa9e01-a3bb-442c-8171-cb144e7ab346": null,
+"8c514093-1344-491a-bec2-16a7b42636cd": null,
+"8c0d352e-2445-4153-8eeb-e8ba381087c6": null,
+"8c676765-3b55-4ed6-8e0f-485b916960ca": null,
+"8c80e3cf-efad-430d-9d41-92c21b8e754f": null,
+"8c949d73-601d-4163-bb5b-6b8aa7dbc04c": null,
+"8c945087-9dcf-4a99-9971-81e2635b3ac6": {
+"name": "Merge Ephy and Behavior NWBs",
+"tags": [
+"NWB"
+]
+},
+"8cc8b205-046e-45f0-8fbf-9dd735994cf9": null,
+"8ce2b6d4-851e-46c2-88bb-cb701c7100d2": null,
+"8d045ee0-c23d-476f-a188-641161a9eb7e": null,
+"8cfdc1ae-3e1c-43f7-b5ca-7e0320c44b59": null,
+"8d401e95-3fd6-4121-975c-319753adf2fd": null,
+"8d98afa2-3157-4b3c-a4cc-e78865587b31": null,
+"8d7e5c5f-a0f4-4587-81b3-2423c37369bf": {
+"name": "Process_dandi_dendritic_segmentation",
+"tags": [
+"imaging",
+"deepinterpolation"
+]
+},
+"8d994435-d8fc-4b55-ab65-51e1eee2457f": null,
+"8e95a509-b301-47ae-9721-f8f43e4e84f5": null,
+"8e41e5ac-cb73-449b-9224-3c7dbd9783db": null,
+"8e84ebbb-1cb1-4720-9cee-286a31c7d4be": {
+"name": "SmartSPIM PNG to Zarr Conversion",
+"tags": []
+},
+"8dd5b576-36bd-4c09-8bc2-e97ead617265": {
+"name": "Whole-brain segmentation analysis",
+"tags": []
+},
+"8f40cba4-5640-413f-95ab-895fc1b19ebe": null,
+"8eebc79e-f67a-4bb3-ae97-6b87b8730fae": null,
+"8e9fb886-21e6-4c00-b756-ad43fc4b1466": {
+"name": "write-dynamic-routing-session-to-cache",
+"tags": []
+},
+"8fabc48d-93b5-4223-a8dd-411a17d6adb4": {
+"name": "hcr_spectral_unmixing_prod",
+"tags": []
+},
+"8ffab10c-567a-4d0d-bc4a-d1e586d36f8b": null,
+"8fd6eaef-f76e-4c42-8844-9ebb20a1de5c": {
+"name": "NWB TESTING aind-multiplane-ophys-pipeline v6 with splitting new extraction",
+"tags": []
+},
+"8fb9075c-dde6-41b7-bdb3-0f2d46a07772": {
+"name": "AIND-Z1-redo-unmixing-pipeline",
+"tags": []
+},
+"8fd903bd-f53d-4878-88dc-6775d2484a02": {
+"name": "Ephys playground",
+"tags": []
+},
+"9007863e-0eb1-4893-8828-b652d24d0842": null,
+"90737279-fb7e-43d6-88f7-8c1d512c42bc": {
+"name": "iGluSnFR-registration-pipeline",
+"tags": []
+},
+"90b9b6c0-1787-4eca-ae06-756e6d8577d4": null,
+"90ff57ed-adb8-456c-aecf-d18a6b8f89d9": {
+"name": "aind-mfish-rounds-registration-pipeline - R1",
+"tags": []
+},
+"910ab6f2-35bc-4799-b6a8-075645666828": null,
+"91385e97-480e-4992-a70d-74591f1902ea": {
+"name": "Motion Correction for SLAP2 Multi-ROI Raster",
+"tags": [
+"motion correction",
+"slap2"
+]
+},
+"91491b50-6012-48c4-94e2-7d86ca869120": {
+"name": "aind-ephys-pipeline-pykilosort",
+"tags": []
+},
+"91771483-79f0-4f65-b8c0-43b59f18bdd1": null,
+"91a8ed4d-3b9a-49c6-9283-3f16ea5482bf": {
+"name": "aind-ophys-motion-correction",
+"tags": []
+},
+"9189648b-fcfc-4b6a-9d29-52b0249ce918": {
+"name": "HCR_pre-processing_pipeline_v4.6_new_processing_loc",
+"tags": []
+},
+"91e46d1c-77a0-4b7d-86ad-04084de26514": null,
+"91cba528-5a80-4f7a-aa37-8a3bfe4fa2f9": {
+"name": "Multi-tile_aind-hcr-spot-detection-pipeline_processed",
+"tags": []
+},
+"92048372-aa6a-4b40-b467-1edb17e782e4": null,
+"92255928-5df9-4699-a737-60717fe7d24b": null,
+"9278022e-4c2c-45f7-acbc-4210e16ac6e8": {
+"name": "aind_exaspim_ccf_registration + soma reg",
+"tags": []
+},
+"929633ec-2344-4eb8-b3c1-6dc92a406178": null,
+"928d17d8-ea53-429d-aab9-f22fde3c4bda": null,
+"92b943ad-b231-40d2-b580-5cc7945e617f": {
+"name": "DR_LP_caspule_face_parts",
+"tags": []
+},
+"92c7b590-204a-413d-b8b4-371d7c3aa9d1": null,
+"930263fe-0ae6-4a7b-8247-b73c64bf6936": null,
+"930f8e6f-9503-49c6-ba7d-cbc296d41cfb": null,
+"931ade83-c729-4b80-9e2b-ed8bbe69a047": null,
+"9378c772-1eb9-41a7-9473-d1316349a487": null,
+"931fc169-decf-48c1-8c2f-dcc68fca4af1": null,
+"934bbe92-820d-471d-a303-f4c023add070": {
+"name": "Ophys pipeline for vsync openscope nwb files",
+"tags": []
+},
+"93b5045b-b77d-4426-97ef-75c22e618798": {
+"name": "Han_pipeline_foraging_behavior_bonsai",
+"tags": []
+},
+"940407e3-2463-4644-818e-07fa4f0a3f93": null,
+"941fb976-83e2-4fed-a11f-5d2c52a64d24": null,
+"951f3079-e3d5-4786-8baa-6168bcf7104c": null,
+"94c30d0c-6855-4520-9356-a53a561837a1": null,
+"95e4ff43-bb7e-458e-8c73-a9fcd34df7a1": null,
+"959977c3-a203-4923-bf20-8de500c0aba8": null,
+"95cb0f3d-14e6-4cac-abec-d8c04ce23d8f": {
+"name": "jGCaMP8: Pipeline Evaluation for Cellpose + Suite2p -- fetch from DANDI",
+"tags": []
+},
+"95986481-2df0-41fa-9bf5-b99cfcd675c0": null,
+"95f3bafd-5108-4507-949a-6074f94bd877": null,
+"95f781e8-9433-41e8-9e28-c816a43442f1": null,
+"9615e6f2-1b39-4937-a965-921c440bd455": null,
+"9617be86-579d-44f0-969d-8dd9004af1e9": null,
+"961775ae-9ec6-472d-889b-9071db09ebcf": {
+"name": "SEA_AD_spatial SpatialDataset",
+"tags": []
+},
+"969b6611-5c3c-4b30-b4de-1e65d0986ad1": null,
+"961a643b-e392-4939-bfdf-1c5d01be1e09": {
+"name": "Jinho's Copy of aind-capsule-eye-tracking",
+"tags": []
+},
+"96191619-86f4-4f28-85c7-4f992fc4b30c": {
+"name": "aind-smartspim-fuse",
+"tags": [
+"smartspim"
+]
+},
+"96a26d1b-0056-40d5-b655-957cae76da39": null,
+"96c92130-cafc-46d0-9c42-1abd2578212e": null,
+"97941972-23e6-4e3c-9959-e32288f3a18b": null,
+"98800f73-cf10-408f-9069-601941bb2172": null,
+"97c55dda-75a5-41c8-a085-7dabb6d05e80": null,
+"97c24a3a-b067-420c-9d38-7a74fbe727ff": null,
+"97e40a8d-a1eb-4d69-9360-8a59b9e735cf": null,
+"984aa5ae-cae0-4c51-acde-0f414d289910": {
+"name": "Update Optotagging NWBs",
+"tags": [
+"NWB"
+]
+},
+"98985180-a386-4911-ab21-658ec6ac6482": null,
+"989eaf2a-f921-4e2f-b18b-a3d0b364c0c4": null,
+"98d830f7-1142-426d-a607-6ca6069418ee": null,
+"991ce988-a30d-4178-bd11-25dd470d56ef": null,
+"99838c7b-9de4-4acb-b9fe-22d4544aeeaf": null,
+"99468862-5194-44f9-9ff8-7f9c17ed34d4": null,
+"98fa5c96-44ca-4812-81b6-ff7f41bc664c": {
+"name": "Multiplane pipeline (v5.0) with file splitting",
+"tags": []
+},
+"99e4ca5f-430a-4770-90c7-b8dc3462b52b": null,
+"99dae6ae-ff2f-4a05-8c82-b978e631e1d4": null,
+"99c1149f-f7c1-495b-bca4-2f4fe099f439": {
+"name": "Xenium-Pipeline - Capsule 4",
+"tags": []
+},
+"99e845ce-9869-4bbe-914d-f26844425f6a": null,
+"9a72e051-fce4-4ad2-83b6-3291530033ac": null,
+"9a259c7b-a46f-4df2-9857-9c741547f3b5": null,
+"9a3a6a7c-b322-4e08-b874-c9eed2e4339e": {
+"name": "M1evo_ATAC",
+"tags": []
+},
+"9aa7a39d-f374-412a-9c62-2dd6fae5f0d0": null,
+"9ade9cdf-5eb7-4d5c-bd34-9178c242a2d6": null,
+"9a86991e-7600-4bfd-b3fa-90d97bc2472d": null,
+"9ad65fa1-1ed6-4e89-9432-5ece3f84b5c3": {
+"name": "old - aind-proteomics-pipeline-0.0.1",
+"tags": []
+},
+"9b100a94-0f6c-4bdb-8f71-87696c5123cd": {
+"name": "ensemble_lightning_pose",
+"tags": [
+"Behavior"
+]
+},
+"9b30d577-0f6e-46ac-8704-29cb179a4698": null,
+"9b10a6c6-cd81-4b7c-9117-15850504bc48": {
+"name": "Rat7m Balloon-Animal Precomputation",
+"tags": []
+},
+"9b41eecc-8f0a-4f5f-ada7-2e62d6858a63": null,
+"9ba0e10c-bf3f-403f-b355-166804426248": null,
+"9bab2a31-0c18-45cf-9d54-63835ad3c518": {
+"name": "Multiplane-pipeline v4.0",
+"tags": []
+},
+"9b7c882f-2710-4185-8c2e-2615c8190bf8": {
+"name": "Galen update to IBL Data Converter GitHub",
+"tags": []
+},
+"9bb3395b-b365-4e76-98ec-2d0b6f09811e": {
+"name": "aind-ephys-hybrid-benchmark (ks25-ks4) - single",
+"tags": []
+},
+"9bd69341-647c-40de-9f24-6037c610466c": null,
+"9c5a17ac-16d6-41f8-bfa9-1e03b8fe35ed": null,
+"9bf87c5f-31b9-4192-b228-9ed4915bdc6e": {
+"name": "ExASPIM Flatfield Correction Pipeline",
+"tags": []
+},
+"9c896b40-6f7a-4fc4-9dee-940659cab103": null,
+"9c69a87b-04e3-4974-a138-90878bd59b08": null,
+"9cb92ea0-c676-4171-ab32-5b8a2c3a3204": null,
+"9cc37cee-86ea-47ef-91ff-a2acc5d77b54": null,
+"9cf1dcac-a350-4faf-bda6-07c4f4d88924": null,
+"9d00b548-114e-45c1-871e-a640b1f015fd": null,
+"9d7b370c-b1b3-4e48-b3fa-fd669a1b5be1": null,
+"9d8c7f23-35a3-43dc-a78a-0327045fd6d9": {
+"name": "aind-disrnn-pipeline",
+"tags": []
+},
+"9db2ae95-8307-4c84-aef9-9442b72b4591": null,
+"9d985f1d-dedf-4349-9b1e-9eacea00cfa1": null,
+"9db67989-5357-428a-86b9-81edd8498920": {
+"name": "SWC Refinement Pipeline",
+"tags": []
+},
+"9e3395c9-2a00-48a5-9aab-18856fce5765": null,
+"9db66dda-9850-48d2-bec4-4f7ba6a14672": {
+"name": "SWC Processing Pipeline",
+"tags": []
+},
+"9e31ab9e-ccbd-48f6-a2ce-5a229c98fde5": {
+"name": "2.0_aind-hcr-spot-detection-pipeline_processed",
+"tags": []
+},
+"9e5a495d-6e3b-463d-8c84-cc831d1e067a": {
+"name": "Anipose capsule automated 3",
+"tags": []
+},
+"9e625b0f-05b0-476e-80ff-6613c35f4037": {
+"name": "SCALPEL Pipeline",
+"tags": []
+},
+"9e702b8d-a615-438e-9389-3070186f50aa": null,
+"9e6cd7e9-e90c-4cad-b61d-3dd0c6ad33f2": null,
+"9ec85995-8407-4f8c-aa8c-67c44c494813": {
+"name": "aind-ephys-chronic-motion",
+"tags": [
+"ecephys"
+]
+},
+"9ee147b6-6995-4938-90de-d4120e041bd3": {
+"name": "IBL Data Converter GitHub",
+"tags": []
+},
+"9f3b0a48-736e-48d9-b49f-0dd5b6e24b99": null,
+"9f4884c3-bc96-441b-9a42-922a6bf83588": null,
+"9f3f332e-bc46-45c1-9dd7-1dcaaf2af826": {
+"name": "TRUNCATED aind-multiplane-ophys-pipeline",
+"tags": []
+},
+"9f8a810d-0dca-4e4e-904a-457fe48bbab4": null,
+"9f841267-13f4-4256-a7fa-36e7a1df1728": null,
+"9fd1edcc-d4ce-4552-8fa4-e4f31f5e3e09": null,
+"9fe6f357-6a76-47de-aac5-b937bca171b2": null,
+"9fe42995-ffff-40ff-9c4c-c8206b8aacb5": {
+"name": "IBL Data Converter",
+"tags": []
+},
+"a034d6d9-b7ea-44e6-90e4-46df4f92a1f0": null,
+"a03bf34f-202d-4a3e-8cfb-97857436cec3": null,
+"a03e1e4b-f2ff-4d3e-a2d4-8bbcb2216365": {
+"name": "aind-z1-fuse-0.0.5-bigstitcher-processed",
+"tags": [
+"smartspim"
+]
+},
+"a0da5c4c-bfe0-46f8-a596-b1e7e2f98e5f": null,
+"a0922198-2d5a-43d3-83b3-ad9e9465d00c": null,
+"a05fc58e-c1f0-4b5b-9bc7-02335ba1d501": null,
+"a0858fda-2325-41dc-898d-ebe80606442b": {
+"name": "Anipose capsule automated 1",
+"tags": []
+},
+"a0cf08c2-e5df-4efe-8f31-6ee10cfbb77a": {
+"name": "iGluSnFR Bergamo NoLoCo",
+"tags": []
+},
+"a0e4937e-36cd-4a5d-8be6-aef61eca56eb": {
+"name": "Macaque_Xenium_rolling_processing",
+"tags": []
+},
+"a11b3122-853e-4259-913b-5a72c31cbb3e": null,
+"a1056ca4-d50c-48e0-8852-3a6798cca3a5": null,
+"a124aaa1-c6cc-49c0-8c74-b7b07ec265ca": null,
+"a186c25e-d240-4ae2-9c53-4bee75c1af95": null,
+"a15fd10a-55a4-45db-bb64-f8bb04593c56": null,
+"a1a6795a-6f4c-4311-87f8-53e93bc90fb5": {
+"name": "aind-licks-rewards-nwb",
+"tags": [
+"NWB"
+]
+},
+"a199b30d-83db-4b8c-9693-e524d2656889": null,
+"a1adcd21-9470-4fb9-83fa-8fd88381cdaf": null,
+"a1b18442-b9dc-4002-a2e6-a3941cafcb8a": {
+"name": "Postprocess Ecephys",
+"tags": [
+"ecephys"
+]
+},
+"a1ca37b6-88c0-48e3-8268-57e0fa7352b7": {
+"name": "Load DR NWBs - decoding",
+"tags": []
+},
+"a2359c6e-f345-45bb-bbde-486799a2323a": null,
+"a1fd44c4-4c84-43ce-a15c-da33abbe3f61": null,
+"a28dd39f-82c2-4184-baab-679579fa255e": null,
+"a2a2470d-05f0-4971-b9bd-641479db5df4": null,
+"a2555be6-70a3-4590-899d-4e13f4cd0db1": null,
+"a29d37cb-a230-46f7-8117-bab5171b504e": {
+"name": "Xenium-Pipeline - Capsule 1",
+"tags": []
+},
+"a2adac95-4a67-4ebf-b28d-3ae4b4fafd1a": null,
+"a2a7bb16-70ca-4716-82c9-b7f23f9c0ea6": null,
+"a2c94161-7183-46ea-8b70-79b82bb77dc0": {
+"name": "aind-single-plane-ophys-pipeline",
+"tags": []
+},
+"a2c8ff06-c9a5-416d-b082-4630f786de86": {
+"name": "Sharmi BigStitcher-Spark - from Stephan Nov 8 2024 - US-West-2 FINAL DEPLOYMENT - recompile - Feb 6 2025",
+"tags": []
+},
+"a2fa4e08-0ca7-4a29-a560-883899ddfa3c": null,
+"a30bf042-db62-45ea-89f2-a51698b3f795": null,
+"a30be57f-06c7-4822-b2d2-7fec10140ec5": null,
+"a31e6c81-49a5-4f1c-b89c-2d47ae3e02b4": {
+"name": "Ephys processing pipeline Kilosort2.5",
+"tags": [
+"spike sorting",
+"electrophysiology"
+]
+},
+"a33ed51b-ff65-4058-877c-98b08290b35a": null,
+"a323ab02-410a-4477-9870-447abbfafc67": null,
+"a3920c27-c19a-4924-b681-6ff3f1e74876": {
+"name": "aind-update-sorted-asset",
+"tags": []
+},
+"a3b778f0-ebec-451d-baf8-db9a726619b1": {
+"name": "iGluSnFR Pipeline Evaluation Pipeline",
+"tags": []
+},
+"a424d6f4-6fe1-42a4-93e3-cbbc785ef7b3": null,
+"a3de7aa4-9a0f-468a-a953-d715f242ed10": null,
+"a3f405ff-5de4-4fd0-8f28-81a0d6b5d420": null,
+"a4eb2c35-18c9-48b3-a6af-a746f0e12c53": null,
+"a47e6442-c66b-4d7f-861d-2b62f669b3cf": null,
+"a497041d-26c6-4ad1-b3c4-115da00212c1": null,
+"a4ffff6d-158d-42f8-9417-8e4f2c0ede40": null,
+"a50a8873-1b0f-45bb-a72d-e5a281d474fa": {
+"name": "Build precomputed annotation indices - CO-EXT - TEMPLATE",
+"tags": []
+},
+"a55df842-bda3-46f8-9553-d82604fcc48a": null,
+"a55f7cac-0745-4072-bb39-195054ed2a89": {
+"name": "Macaque & Human MERSCOPE QC and Mapping  Pipeline",
+"tags": [
+"hmba",
+"MERSCOPE",
+"quality control",
+"celltype mapping"
+]
+},
+"a561aa4c-2066-4ff2-a916-0db86b918cdf": {
+"name": "dlc-face-tracking-capsule",
+"tags": []
+},
+"a591810d-2c30-4299-9c47-f9cceb08ca68": null,
+"a587f495-43af-493b-95d1-80aaa506bee2": null,
+"a5950e60-5652-4edb-8ce1-c8ad8933bc9a": null,
+"a5b497a5-c75e-4682-8c91-1923f3b4f00f": null,
+"a5e67b0d-fc66-4c49-adb2-718b4f5e4252": null,
+"a5a72152-d939-4226-a28d-6efbd90cf980": {
+"name": "aind-ephys-pipeline (lupin-chronic)",
+"tags": [
+"ecephys"
+]
+},
+"a68b71fd-1f52-44c7-b10a-9021e3a4e2ba": null,
+"a6069f16-6049-414e-8099-2ae14c7e55a4": null,
+"a6284bd7-9ff8-4c56-87c4-5a6e5318b705": {
+"name": "aind-dynamic-foraging-pipeline",
+"tags": []
+},
+"a6a61260-5140-4180-b560-f8ff4ab9cb3b": null,
+"a69f3c96-96c5-48fe-b5e4-a6055706806f": null,
+"a6aacf6a-f101-4e5c-a451-bf5c9fae8981": null,
+"a77bc263-1567-4b08-b71d-f41638dbddbc": null,
+"a769a846-4faa-4102-9f4e-112aa734d02a": null,
+"a8180615-a9fc-4c03-a59f-d352177e0f8c": null,
+"a7864503-3c6f-4b1d-afb9-8f6d2caaab0a": null,
+"a83b2137-907b-4e87-9a05-103c011b0cf8": null,
+"a8876b73-5b9f-40dd-90df-1af29add6807": {
+"name": "aind-ophys-bergamo-stitcher",
+"tags": []
+},
+"a87e854d-9183-4fb0-b089-1ddb75975fea": {
+"name": "iGluSnFR-registration",
+"tags": []
+},
+"a8b80a58-e6d8-4135-8fb2-ef09a0f7d2e6": null,
+"a8c3d9c3-4682-40fe-8c7a-53e8d54698e4": null,
+"a8b1d171-c669-4dbe-8f2c-eed8428a6616": null,
+"a98f6723-b2e5-4b63-8e7c-c495cce9ac3d": null,
+"a8eef8d3-d542-464e-afc6-66b6bca0e857": null,
+"a905691e-c46c-47cb-bf71-8d383e881800": {
+"name": "aind-pophys-pipeline",
+"tags": []
+},
+"a8e62148-fe5a-4cda-82e6-09afdc0975fa": {
+"name": "depricated: aind-mfish-rounds-registration-pipeline",
+"tags": []
+},
+"aa1f1936-3262-43f7-ad32-fa90be5c0789": null,
+"aa560f4a-dbcc-43b2-bbb9-1e97eddba4d3": null,
+"a9f2a1fa-c430-415a-868f-47717cb35644": {
+"name": "neuroglancer_precomputation_xenium_machine",
+"tags": []
+},
+"aa1b6f30-0462-435b-af23-772aad14f97d": {
+"name": "aind-Z1-pipeline-0.0.3-dev",
+"tags": [
+"proteomics",
+"HCR"
+]
+},
+"aaab1464-7e35-46d0-89d9-a0e6b81fb72b": null,
+"aafb5498-6dab-4b9c-9d78-a16c1752f182": null,
+"ab1e9b48-3312-49ef-b6ed-75d4d2eccf8a": null,
+"ab2bd30f-a923-4642-8a14-4b4b7639a5c9": null,
+"ab2f8d83-874e-4272-ba67-abf1c57d6a08": null,
+"abad7c09-251a-449a-81b3-97fab79bc26d": null,
+"ac209a39-fc4d-46b1-9d20-346c20d1517f": null,
+"ab7a0799-f6d5-4bc3-9a9d-06e0ba2ea721": {
+"name": "P3 Ecephys NWB Packaging (no CCF)",
+"tags": []
+},
+"ac2d0ed7-56dc-4a54-9705-a240582cc2a5": null,
+"ac785250-8505-49cc-95e4-05914eed72d8": null,
+"aca210c0-b427-446e-8d97-1bdaea5472ae": null,
+"ac80e0d3-689b-43a4-b315-1b944faad346": null,
+"ad0ce8fe-fffa-4be9-837e-637abf0897b7": null,
+"acfd140b-efee-4421-9366-dee0f0930db5": null,
+"acbfca93-ae43-45ac-834b-141fcf04ffd4": {
+"name": "calcium imaging -  CaImAn segmentation",
+"tags": []
+},
+"ad0b56c7-b0d0-451d-9722-27184ecf318c": {
+"name": "NWB-Packaging-Eye-Tracking",
+"tags": []
+},
+"ad77017b-280b-4cd1-b4a0-e4409830e9a4": null,
+"ad7a3722-a471-40e4-b4af-922a52adb45e": null,
+"adca39a7-4404-4bf9-8ca4-14d0d93740e3": null,
+"ad9e2c08-0568-432a-bd18-2de749711871": null,
+"ae44d2b5-b926-4244-ab7e-fba5f7260e09": null,
+"adfb56a2-bd49-4361-a7f0-d5e1399ca079": null,
+"ae34ccf8-2515-4443-87d9-16137e7a238e": null,
+"adfadf5b-a168-4a25-a299-d07819b7d7ee": {
+"name": "Opto Preprocess Ecephys",
+"tags": [
+"ecephys"
+]
+},
+"ae6dbb4e-51f6-4158-9c03-95cd3a8100fc": null,
+"ae94cc88-a160-4aba-ad98-5f923b1e404a": null,
+"aea2a360-4977-4d3d-97d7-0a11c81506d3": null,
+"aee40450-90a7-4c33-8f0c-aac43f459769": null,
+"af0b846f-56c2-4a58-b62e-4ecfb3c8338e": null,
+"af1933a5-0bb4-483c-8e6f-ac1f6f6c528d": null,
+"af186524-801e-4280-8f90-ae1431626618": null,
+"af5cfe3b-3e0f-4fbd-969e-a740be6fce02": null,
+"af24356a-7ec1-4756-812b-3297518508bf": {
+"name": "Cluster STAligner",
+"tags": [
+"hmba"
+]
+},
+"af4fd858-9376-4397-a4bf-bf75a5153633": {
+"name": "Fix Bad IBL App Files",
+"tags": []
+},
+"af61ce9c-8999-4b1c-9156-294a9b559688": null,
+"af66975f-0b6e-446f-9684-b90a4c8b1641": {
+"name": "MRI Conversion and Skull Strip (no registration) - prod",
+"tags": [
+"MRI",
+"Skull Strip",
+"NIfTI",
+"conversion"
+]
+},
+"af8e10d7-7e39-4f12-a31b-ecf5b05bac3d": null,
+"af8c66b6-83d8-40bb-9da9-f9e05072a7cf": null,
+"af80da65-a785-4577-afff-cabb1361e6e3": null,
+"afaa747e-fde6-477f-9d84-6b31a499fd00": null,
+"afc967eb-1e90-4b8d-9a4d-7e4ef5d10439": null,
+"b01da98e-762a-439d-b6f3-3e9935723169": {
+"name": "Segmentation_get_files_merscope",
+"tags": []
+},
+"b098fdd6-009d-4934-b8b7-6ce8e2d1461a": {
+"name": "merfish ccf registration for DR/MR",
+"tags": []
+},
+"b0e96478-eb58-4d09-ad90-41bce21d9b72": null,
+"b1231448-97cc-4590-8acd-2a83747fbdea": null,
+"b139539a-5c77-4db6-9a33-2eeb290f63bb": null,
+"b0f458e3-d261-47e5-8154-b488990994f3": {
+"name": "Convert 2p nwb file to data hdf5",
+"tags": []
+},
+"b1b32a49-2725-408b-9d21-699f2ad3ff11": null,
+"b1bef049-aeeb-4b88-ab22-57dfd918114c": null,
+"b1a6bbf3-b887-4e97-a56a-5d9410c5d4d7": null,
+"b1e15e49-b4eb-4069-b453-4c8f190ec46f": null,
+"b1eec6ee-3107-40df-a856-b8ceca4abad5": null,
+"b23cb4c1-347a-40ab-ad79-4c21b4e61c6b": null,
+"b250a708-d322-4a0f-b52b-184153b647b3": null,
+"b2504186-76c8-47e4-96e9-3ce391882206": {
+"name": "aind-multiplane-ophys-pipeline",
+"tags": []
+},
+"b2c4b06b-512c-4e25-99b5-8db1b0170979": null,
+"b2973d09-d576-4791-b0c3-e3f35e89bd97": null,
+"b299ea78-c986-464e-aa09-1b0eeb385c47": null,
+"b2f548b7-75c9-45b2-824f-4ee9e2a3e8f8": null,
+"b352cb9f-5c5f-4d62-9796-9dc1cc637efb": null,
+"b3af4128-ed40-46da-9598-846e32a0b658": null,
+"b358e2e0-97b7-44ee-b409-ab33a040fb74": null,
+"b36e4c23-883f-4dca-a9f9-feabe6b1a335": null,
+"b4332431-d5a8-42ef-a726-d6d50ad1ac72": null,
+"b443459d-1154-456c-894e-ab67d2759f3d": null,
+"b3cac5db-78ef-4ab0-87cc-c051704209aa": null,
+"b45c16e2-9248-42b8-8a0f-38036d5b377e": null,
+"b4952d32-f407-42e8-bf10-abccd9879692": null,
+"b4cf9ac2-3ce4-4c6f-be30-394d9ecb0809": null,
+"b501a6b2-b3ad-45fd-b6b0-000cc072d298": null,
+"b51648ef-bc1d-4510-8173-746b0bc173cc": null,
+"b52eae25-b630-4bf2-a1e3-f903bd2a8fe4": null,
+"b522bd25-c95e-4e63-84a2-a79a9c48044f": null,
+"b53dbb31-5b56-4e36-be95-c4e22854f02f": null,
+"b551238d-c6b4-4dfc-9326-2a6f0f4a4e38": null,
+"b57de6e2-1f6e-4158-b3ad-e0eb0d6e3ad5": null,
+"b5af3c0e-c3e5-4d1e-8dc2-8aad24b3cc9d": null,
+"b65de473-51fa-42fb-bb8b-8b809c8afe0a": null,
+"b59b10f7-dcda-43fe-ad0e-1a52246a4a88": null,
+"b6b8d93d-4699-4261-84dc-5b561a5d6774": null,
+"b68d23d8-cc49-404a-aa35-39d44edb0f5e": null,
+"b6ab087b-767a-4cf2-b230-713583d433f4": {
+"name": "Build precomputed annotation indices - via git (BROKEN GIT SYNC, ABANDON THIS APPARENTLY UNARCHIVABLE PIPELINE)",
+"tags": []
+},
+"b70049b4-83c2-4c40-aecf-7bae689e4b6a": {
+"name": "aind-ophys-trace-extraction",
+"tags": []
+},
+"b719ca43-238a-45df-9904-7b46f0a222ea": null,
+"b72436a4-505d-4c11-a9c7-dcaf55308b1e": null,
+"b733e216-4447-459a-875f-fe4cbd3fa343": null,
+"b702ca8c-b80b-427b-b642-6fabc1f44a9a": {
+"name": "aind-ophys-trace-extraction-bergamo",
+"tags": []
+},
+"b7dc39c1-aac1-44d1-ba01-9ca3fc237510": null,
+"b762f2f9-b011-4409-befc-f5475576f6d9": null,
+"b74862c3-053b-4783-a365-e0ae119a29b5": null,
+"b741615c-81b7-48fd-b502-a9ad65830945": null,
+"b82c2551-2a63-4446-95b6-3e4beaceeef3": null,
+"b85d2563-a03c-4366-8d8f-95bc29f4d66f": null,
+"b841191c-1bdb-47b1-bfc7-fbab6d8b5a8b": null,
+"b8433146-a3ce-4134-b05b-1b184f3be62b": {
+"name": "aind-multiplane-ophys-pipeline without splitting v6 extraction",
+"tags": []
+},
+"b8928b3e-ef9d-4fef-9a78-4204cd55b0d9": null,
+"b8f89ded-6499-4af8-833e-ac7b211e6346": null,
+"b8e89248-65c8-42a2-8008-41002f20dd6d": null,
+"b8edcbbd-bb6f-45c0-a91d-cba46cd6d144": null,
+"b9c3d6b3-93a8-4e3a-86b6-b350938da235": null,
+"b98b2019-094f-42a1-b30c-fa60666088a9": null,
+"b98f43af-3a44-40ff-8517-4b90849aad0b": null,
+"b8fc0574-e038-401d-865b-0fa837c1aad4": {
+"name": "iGluSnFR Pipeline Evaluation Pipeline",
+"tags": [
+"GIAnT Manuscript"
+]
+},
+"ba3a1005-f985-47aa-b215-e27e3711f3bd": null,
+"b9f20ccb-a30f-4954-91dc-9a81b3b1b087": null,
+"ba42a997-af33-4649-803b-bc7e80ce407e": null,
+"ba1b5b91-e401-4704-a812-4c1490024f1b": {
+"name": "Behavior Video Inference Pipeline",
+"tags": []
+},
+"ba830dc0-3ffb-4c65-8116-37ca926b8f26": null,
+"ba9ec391-6e40-453d-b9ee-65c6fc65a6d2": null,
+"ba600403-9612-4731-a088-5986b1c5cb8a": null,
+"bab3152f-5110-4326-aff0-653c69685f20": null,
+"bab897b7-303d-427a-835d-0a7dc7be27d7": {
+"name": "DEPRICATED_aind-capsule-mfish-registration",
+"tags": []
+},
+"babb7cc0-6ed8-4be2-8919-3dc9a8200a0e": null,
+"bafcc7b9-011c-4e94-911c-fac828a3b755": null,
+"bae66ae9-961e-4846-8ee6-46a1180ebd79": null,
+"bb249791-93ec-4243-9674-51fb0e66554f": null,
+"bb1ddfeb-6fe4-4f2c-8ace-f5fd6a9bad4b": null,
+"bb3c3a8a-1ff8-4836-bf33-9b3e382e28cd": null,
+"bb4e8917-e67b-4921-866f-8db7198812f7": null,
+"bb561566-6868-41b6-975c-8b6a842a2800": null,
+"bb7b63fb-8c99-4668-ae60-ae24aea5f35a": null,
+"bb8a86ee-b3d6-4a4c-8ea5-ac80deae9d0e": null,
+"bbb1f090-6406-4ddb-b1a1-856a53078ca4": {
+"name": "Stitching QC",
+"tags": []
+},
+"bc19f6f7-a57f-4e04-a84e-17a17392f7f1": null,
+"bc4eb59b-9749-47d0-b153-2b711293b945": null,
+"bbbcb136-3509-49a7-82d0-893f48723ab1": {
+"name": "Copy of aind-mfish-rounds-registration-pipeline: single tile ransac",
+"tags": []
+},
+"bc02ffcd-a183-4ac4-8bda-021dc1cf01cb": {
+"name": "Hybrid Generation Ecephys",
+"tags": []
+},
+"bc61a392-60e4-49ab-baf8-9dae94a69354": null,
+"bcac29f4-38d7-41f1-9e22-1ccaddc42725": null,
+"bc803d3d-018d-49c0-918a-a39496ea595b": null,
+"bd9bc5d9-d691-4a8f-8820-b4562c74237b": null,
+"bcd22279-b56a-44df-83ee-7732f5691c1e": {
+"name": "Copy of 260109 DFF calculation dev",
+"tags": []
+},
+"bda1607b-d395-4296-b817-a54370db5bbf": null,
+"bd9ccebb-f7cd-4c90-af3d-45c5144a5d4d": null,
+"bda14406-c86a-4dac-a4b0-dff4738292ef": null,
+"bddf43ab-7a0d-4bcc-87cf-1ff27ff94c7f": null,
+"bdf3d65d-ca6d-4b87-9f9e-16adffa24edb": null,
+"bdd26885-5b39-46e3-a1a5-3c00f9f96add": {
+"name": "aind-ophys-bergamo-stitcher",
+"tags": []
+},
+"be211585-64f0-4599-afca-3ce0f91e5860": null,
+"be3e0992-aa4d-4e45-bee4-f5e54042a5ec": null,
+"bef359ee-1d61-4f04-8040-d96cc5d170e1": null,
+"bf1a6cc1-bef7-4651-b150-87b362a785c2": null,
+"bedfb5fc-bba6-4aac-94bd-291306b0652b": {
+"name": "StripRegistration MATLAB",
+"tags": []
+},
+"bf274cc7-e6d1-43ce-8969-af9b6f279941": null,
+"bf1d0cc9-f1f3-4ada-96cc-e429833a2769": null,
+"bf37944b-38f7-4702-9314-d15f38318f40": {
+"name": "Motion Correction for SLAP2 Multi-ROI Raster",
+"tags": [
+"motion correction",
+"slap2"
+]
+},
+"bf7acaa2-1a16-4a1c-987d-01ff5779996f": null,
+"bf8b7bfc-4e04-4a13-88b7-0accdcb57455": {
+"name": "NWB-Packaging-Raw-Movie-Capsule",
+"tags": []
+},
+"bfb29900-79b4-4d8d-ae4d-2838e09eb6c6": null,
+"bfdf68e6-b060-4dc8-ae81-935c03fbc754": null,
+"bfebd0af-fd2a-44b6-843d-1ec2451032e6": null,
+"c00e5fc3-795f-44b5-ac1f-0a36d0c43995": null,
+"c0333de2-5cd6-4b47-80b8-6d40c1b581e5": null,
+"bffd28e0-4e43-4bb4-8ab1-aaa60e5b1898": null,
+"c0dfc715-6221-4411-a026-59b21eabddc9": null,
+"c08c9c9e-deda-4868-a167-f1ebe5a8075e": null,
+"c058f3b7-40af-47c2-826f-16093a622dad": {
+"name": "Chopin V1.0 (WMB3 multiome) (Fix numerical instabiliy)",
+"tags": []
+},
+"c06b37f4-4b3d-490f-aa6d-670dad820d1d": {
+"name": "aind-curate-sorted-asset_8RAMUP_LC-NE_paper_version",
+"tags": []
+},
+"c12c67f1-1644-46db-a12a-e5a41bb46acf": null,
+"c1a1254c-1c8a-4734-89d8-61787196003d": null,
+"c14a4f10-95cc-46a1-a299-e0e671919966": null,
+"c1aa6258-fed3-4823-a7c2-cb38293e773b": null,
+"c201c98a-d578-4a18-b804-2097d91496fa": null,
+"c2f0716e-297a-473e-b30c-a9536a2bdf47": null,
+"c316faea-355e-45e1-84d8-4d18f7e89cec": null,
+"c2b87ac5-207f-4afc-be09-62f4e7a6b99f": null,
+"c25dd28a-eaf4-45c5-a4db-871ea2f03272": null,
+"c356d18e-0d30-43dd-b468-6a1cd65ff038": null,
+"c33d8ddf-54ac-4ff4-8ade-ecf1ea3e9da8": null,
+"c35f0e76-d657-4e3a-b2d5-f597bd39da19": null,
+"c3a17d97-0009-4155-ab5d-a941cb5a91dc": null,
+"c43f334a-18f3-49ac-aca9-bc2b20b79c13": null,
+"c3c33aa5-a644-42e4-ba40-f52553e7793f": null,
+"c4046230-dcad-45af-aaf6-0d579f65e35e": null,
+"c3710cb2-ce74-4700-b2f1-eded6481cc3b": {
+"name": "aind-video-raw-qm",
+"tags": []
+},
+"c4bdb803-e27b-4c68-9415-4ef9e62b3d40": null,
+"c4859c90-23d4-4267-a147-f1d1c3dca0e4": null,
+"c4a98e93-6957-41a6-bfd3-f8c1a8971d75": null,
+"c514f582-e086-4525-9edd-88052671e3fa": null,
+"c4fda9dd-6d43-4fae-bea2-5dee225e4e63": null,
+"c4cc0976-704c-45bb-8afb-7043d95c0458": {
+"name": "Micro Sam",
+"tags": []
+},
+"c5620676-f0c8-4ac1-b247-51d530558c10": {
+"name": "Align LiveCanvas Active Template CCF Masks To Subject",
+"tags": []
+},
+"c567666c-dd08-45dd-a824-6a570bd4675d": {
+"name": "aind-ophys-mesoscope-image-splitter",
+"tags": []
+},
+"c59f3bd8-f4a5-404a-9bc6-4f6fd9bf7634": null,
+"c57bf36f-318d-4bb4-af52-03dc9f89a833": {
+"name": "LSA_transgenic_lines_analysis",
+"tags": []
+},
+"c59f8ce2-6bc4-467f-89be-fc76381bb809": {
+"name": "Dynamic Foraging Conversion Pipeline",
+"tags": []
+},
+"c5aaa696-6c71-4f45-b5f2-11faa16e88ab": null,
+"c5b55798-5b57-4208-9416-a532ac437668": null,
+"c6f88154-a423-47cb-8657-8c91e0c0dd8e": null,
+"c5b566f7-d5b7-4ad5-a7ea-0781935a96bc": {
+"name": "iGluSnFR NoLoCo",
+"tags": []
+},
+"c72f3953-4913-4cbf-a200-1e3e11c23ac5": {
+"name": "MERSCOPE Segmentation Pipeline (CP_20240611_mousedev)",
+"tags": []
+},
+"c788f4f5-0642-46b8-990e-1979a320a7fc": null,
+"c7a2c0cd-51f1-43ad-a8ac-5f7fff76cf70": null,
+"c7d2c443-c162-40c6-8f88-04f5b83b2120": null,
+"c82583a6-999f-4c13-af2a-67803f0dc7b1": null,
+"c8279b81-754d-44a8-b8d9-146f0cb05bb5": null,
+"c80fd1c7-4ae1-4324-ba3f-5f010d2a24f6": null,
+"c87e724a-de24-4318-839f-b68df9a9db8d": {
+"name": "Convert h5ad to cpq",
+"tags": []
+},
+"c8a2e94a-774a-4ce6-807e-226c2709ceaf": null,
+"c889ba3b-44af-4616-988c-a8434769312a": null,
+"c87ee865-5369-47db-9cc1-694dded45d3d": {
+"name": "MapMyCells_make_compute_files",
+"tags": []
+},
+"c8bca2e5-3b1f-4e1b-b927-a89c7d8e6284": {
+"name": "Chopin V1.0 (scIB M1evo Mouse/Rat: Unsupervised) (Shared)",
+"tags": []
+},
+"c9492b9a-b7cc-4e36-8452-bffbb0b35ae5": null,
+"c962afa1-78c4-45b9-bcd7-ca4eb6f7a135": null,
+"c96a7585-6d24-48f0-aeba-27f0b2474278": null,
+"c8e38fe8-347a-421d-b267-0b18e07a906b": null,
+"c99f7513-8420-4805-be0c-94a6d52e7a53": null,
+"c9c3bb35-dc81-4281-8004-5fe32f393262": null,
+"c975fe83-f91d-457e-9e28-596e1e551790": {
+"name": "ophys-zstack-registration",
+"tags": []
+},
+"c982e0ff-c092-4489-90b7-ec296e0b3da1": {
+"name": "rachel-grouped-aind-analysis-pipeline",
+"tags": []
+},
+"c9f3e993-0194-4fc6-a4fe-45624b59c9da": null,
+"cadd879e-ec45-41fe-85e2-0b25c8daad4a": null,
+"ca6cde8d-4d1f-4168-82bf-7b4fca45ff65": {
+"name": "Time Alignment Ecephys",
+"tags": []
+},
+"c9f20097-1405-4c0b-b841-c5e97975fde6": {
+"name": "exsSPIM CCF channel fusion",
+"tags": []
+},
+"cbb58bae-7e3a-415e-9122-65b3aa51684c": null,
+"cb9d1928-1a91-4021-b756-77d5907e70d5": {
+"name": "Create session_dfs",
+"tags": []
+},
+"cae6cc32-44f9-49c4-aa70-b0236700e8ee": {
+"name": "aind-running-speed-nwb",
+"tags": []
+},
+"cbdeacd9-7fcf-4024-9447-ea76b6d0ff13": null,
+"cbe3b9d1-b1a8-4786-8241-73ef54ffd7ef": null,
+"cc26db38-e751-435b-9176-1d47d05fa035": {
+"name": "GIAnT-MATLAB source extraction for SLAP2 Multi-ROI Raster",
+"tags": []
+},
+"cc7497f3-19b4-4c61-aa3a-4614dda54a66": null,
+"cc75cbb0-ded0-4224-8fa0-288967e590bf": {
+"name": "ExASPIM Flatfield Correction May 7th 2025",
+"tags": []
+},
+"cc776859-b672-4c3d-9e64-88f0d77d3ef6": null,
+"ccb3d117-ecaa-45cd-8058-89d3a39c9991": null,
+"cc83987d-1cff-4c97-9bcb-a0f332b16756": null,
+"ccdc9d4e-c414-4f66-a7ee-96094f2606a5": null,
+"ccb5ac6a-6bbc-4405-8dff-e984c96e04f8": null,
+"cd0c47eb-671b-45f7-85f4-c9fc77df27a4": {
+"name": "IBL Data Converter GitHub",
+"tags": []
+},
+"cd23bfaf-d6dd-4042-aef7-53a3b59b06b6": null,
+"cdcef6b1-34b8-4070-a4cc-fa24668eb886": null,
+"cdb70e4d-dca7-47f4-8091-a8eb0c74d3e1": null,
+"cd3897a2-bc35-4d9a-9bf2-d86fd9c850ab": {
+"name": "Multiplane-ophys pipeline v4.0",
+"tags": []
+},
+"cd485158-aca0-4234-b25b-bc703f9d7fa0": {
+"name": "iGluSnFR-simulation",
+"tags": []
+},
+"cde53179-16ca-42d7-94ff-befca94cf515": null,
+"cde74c83-7f4d-4969-b87e-d4a82a525e6c": {
+"name": "IBL Data Converter GitHub",
+"tags": []
+},
+"ce1fd640-c42a-4adf-8fe0-b9b2b051805b": null,
+"ce09c8a0-e82d-4881-a26f-c8ff90c4a2df": null,
+"ce66eb00-83bd-47cf-9a98-f15228b4b5da": null,
+"cec0c9fe-5a60-432e-8271-53b7fec7e859": null,
+"cee23d7e-91eb-470a-b679-8ce4e1e1ce06": null,
+"cef8f69b-94b5-4c35-8040-39de3c31f8f2": null,
+"cef0dc8f-3d15-4c09-845e-8e6e008d521d": null,
+"cf2ef269-bff6-4d6b-a2dc-39871a08a7f8": null,
+"cf0d2bf3-47ac-491d-9991-7a74ce6d4928": null,
+"cf45f8aa-0094-476b-8aca-b6e479681d60": null,
+"cf4b4644-3e11-4023-b55b-ba9d5377beca": null,
+"cf57ed8f-d46e-4674-a307-7f821c52599d": {
+"name": "Package SmartSPIM and CCF Atlas Assets",
+"tags": []
+},
+"cfb31b4c-b174-4308-b72c-1dc996b720d7": null,
+"cf9c0d8b-005d-4005-918d-593f0059bbde": null,
+"cfe06c10-3605-4811-be51-af8bdc03e19d": {
+"name": "P3 NWB Packaging Meso",
+"tags": [
+"NWB"
+]
+},
+"cfee91bc-03a8-431f-9097-f5c8c1510b42": null,
+"d05f6de4-c0fb-46af-8c9f-a4acb4081497": {
+"name": "aind-pophys-converter-capsule",
+"tags": []
+},
+"d044c3a1-4477-4620-b559-dda384bc8931": {
+"name": "SmartSPIM Zarr Pipeline - PNG to Zarr OLD",
+"tags": []
+},
+"d06e4eed-ae2b-43fa-8fa5-e81fdbdf927f": null,
+"d06d81fa-7dc7-4576-bb39-df653a4f2c8a": null,
+"d07d7955-3e25-483f-9b24-5bc1198bf3de": null,
+"d07c6db1-0289-4215-8611-39378f542da6": null,
+"d0adffb2-709d-40bf-928f-841889f2d181": null,
+"d0b5bbc6-774a-4fa7-aac3-90fb988114b0": null,
+"d0efed4e-8527-43d7-888d-21e4a94aea61": null,
+"d0b66a83-1729-402d-a57c-989f42ba1531": {
+"name": "barseq-mapseq-metadata-generator-for-lc-paper",
+"tags": []
+},
+"d1089471-a501-465f-8789-8df4dc22094a": null,
+"d1a5c3a8-8fb2-4cb0-8e9e-96e6e1d03ff1": {
+"name": "Arjun units with peak channels and spike adjusted times",
+"tags": []
+},
+"d209e149-c3cb-4e86-ac86-9828c9cca079": null,
+"d2026f3a-0382-49b7-9edf-79fabf60ee6a": null,
+"d1d2686f-624e-496e-8acc-d59ad938c0d9": null,
+"d23aa213-4113-4896-acd5-31e4a3aab211": null,
+"d2bc1a5d-ca18-4e5c-a479-7827ad3c8aff": null,
+"d2968df1-cee4-4fc5-bcca-4d04bb0e95f4": null,
+"d26cec2a-6c90-4d1e-aa84-b8483d39043c": null,
+"d35c619a-9152-4ce6-988f-5bf9746897b1": null,
+"d34ea423-9d5b-488d-a574-36404caa1473": null,
+"d3d5a16a-3739-4eb3-a521-bcd3f5096937": null,
+"d3d5349a-d5dd-4d17-a650-1cfb2c5eb543": {
+"name": "aind-exaspim-ccf-registration - pipeline-dev-test",
+"tags": []
+},
+"d2ca77aa-5f39-4f75-8701-6d7764536e18": {
+"name": "Package Brain Atlas Assets",
+"tags": []
+},
+"d479a5d8-a33c-48b1-8842-927c81e49c8f": null,
+"d46e2134-6293-4003-acf9-15fa705011cd": null,
+"d3ebd377-1cd6-497b-8a01-05d77bcf1ff7": {
+"name": "copy of anipose capsule 2 - gpu bad offsets something",
+"tags": []
+},
+"d4d1c126-c28b-4eca-8083-7fad5a2f7960": null,
+"d5111f8b-4f8b-425e-ae72-9dc97fbd747e": null,
+"d4a8eb3b-8606-4f02-9c3e-228087f07734": null,
+"d4cc9d33-7284-45bf-9b96-2639057be120": null,
+"d4dd20f2-48f6-4591-b2f2-4e046b6b0556": null,
+"d53dd9b7-a82e-46da-a00d-7a544bb79fba": null,
+"d51b202c-8dab-49e2-a953-14be6d919faa": null,
+"d57d4611-b49a-41de-ba60-7f28ae5cc05a": {
+"name": "Lightning Pose Inference and Evaluation (PAT rejected)",
+"tags": []
+},
+"d5cedf13-706f-4255-b8d5-643b3c861b95": null,
+"d5a20b5e-3551-4dbf-84e2-34703b6ceca4": null,
+"d5fade01-9d21-4309-8bc1-5a765b74ed3c": null,
+"d5d15cdd-7546-4775-8490-57f534309194": null,
+"d5abd523-0397-40d0-b757-99e68fd55db9": null,
+"d62d8c01-ffd0-4948-a462-3e7add0913d3": null,
+"d65e4615-9586-4583-8775-c7cb44a89742": null,
+"d662a06a-5ff2-47d0-aedd-5269d3af1c7c": null,
+"d6c45cf9-411e-463b-ae1c-731404d7fce9": null,
+"d66cea19-f733-470a-a5c9-f62bba40addb": null,
+"d725ce11-2cd1-45e2-b869-3adb6c08910f": null,
+"d6a2078c-25b4-49e9-b572-ac4f50dc2fe0": null,
+"d71a04ce-cd31-4ae6-91cc-493320c10fd2": null,
+"d663d6c2-2448-4be1-88e6-2134c2caac71": null,
+"d76685e0-cd21-4562-800c-669dfefb5e81": null,
+"d792edde-bb72-44fe-ba40-5434af788c05": {
+"name": "ExaSPIM Template  - Initial Template - 10um",
+"tags": []
+},
+"d8002079-642c-4464-ab6f-ba6fdac2e2f4": null,
+"d84ce30c-eee9-44d6-925d-ba08601a349c": null,
+"d82ced01-5daa-4dd7-98e4-73e1b4d777b3": null,
+"d8d28c67-ca74-4aab-bbe5-34e027808bee": null,
+"d83e7b90-06c1-4e75-8018-c8f291fa1c4e": null,
+"d862fd43-8bbe-4807-8084-d020f293d420": {
+"name": "Yoni Multi-Channel Registration - Register",
+"tags": []
+},
+"d8d362c9-2804-43e9-98c1-9b44174f62d0": null,
+"d8f663b8-d522-4ed8-9467-44e8cf0610e2": {
+"name": "Cell Type Mapping (internal)",
+"tags": []
+},
+"d9c154a3-38ea-4d2f-bec5-8b90b2fa6672": null,
+"d946addc-51e8-4c41-a458-7488ffeb302b": null,
+"d9aba160-ff62-47e3-8e50-73665315ce65": null,
+"d9d817f1-98ed-47d7-a83b-70ca16bd1d6b": null,
+"d90b432c-130e-4fa2-9e78-4adc45d309ce": null,
+"d9ea4034-ab8e-4469-adec-ef905db1e4f6": {
+"name": "Video Analysis",
+"tags": []
+},
+"d8fa238e-1e53-4890-af5e-f1479c1551fc": {
+"name": "DR_Gamma-encoding-test-capsule",
+"tags": []
+},
+"da012723-d83d-4286-aec8-ba177c8c72c6": null,
+"da5e475c-58af-4520-abe3-3846a629013e": null,
+"da140432-6fa4-42b3-bf97-14ebb99b6997": null,
+"da19ecea-0954-42e2-aec8-7dbc8b210ddd": null,
+"dac153cc-1cd6-40eb-bb8a-eecb6d062904": null,
+"dac34de3-66b3-4468-80ad-4426412a2c8c": null,
+"da5db6fe-356a-4373-ae70-2f7ffa625d69": {
+"name": "aind-exaspim-registration",
+"tags": []
+},
+"da8785b1-1597-41c6-af30-5844f52d4947": {
+"name": "aind-vr-foraging-pipeline",
+"tags": []
+},
+"daef0b82-2f12-4122-964d-efa5f608ad69": {
+"name": "aind-ephys-pipeline (kilosort4)",
+"tags": [
+"ecephys"
+]
+},
+"db029f6d-679a-4711-a45d-1a1ad98b83c6": null,
+"db920580-0526-4dd0-9821-844221af1f75": null,
+"db11630f-3a21-4ea1-976b-292e4f0333c6": null,
+"db61c733-5568-410a-8350-8b1522cd5036": null,
+"db3e451b-e5a8-42a5-b4a9-965518d3bc38": null,
+"dbab27c9-7fb8-4212-a749-33fb2906004a": null,
+"dbb3dc21-b2ce-4bac-927c-259024542337": null,
+"dba0c28f-9add-4e9d-b1d5-248cfab90f2d": null,
+"dc101ebe-493b-4774-8001-05c36632fdb4": null,
+"dc43bb93-04c3-427f-a404-f8562a275cec": null,
+"dc171d7d-9a24-4c80-8d0a-2fae069799a1": null,
+"dbdbbcbc-b1bc-4a38-a458-e29214c488b6": {
+"name": "aind-ophys-demixing",
+"tags": []
+},
+"dc6db854-36a3-429e-9df5-34d54f525cbd": null,
+"dc7ed171-6ba8-4509-a046-c7a2118d3ed5": null,
+"dc912a71-142f-46e0-b111-923d3c2eb5ba": null,
+"dcd78898-9d5c-4252-93cc-5348f1813c26": null,
+"dd7ea7d2-6692-4a0b-9b34-a7a75261ec33": null,
+"dd756f38-f0f8-4b87-922c-f4bb4190d97c": null,
+"dd60a154-6812-4d21-ba00-6866616f86f1": null,
+"dd4e3ceb-2cf4-4e62-aef3-a9f85d51da5f": {
+"name": "Mouse Processing Pipeline (map individual sections)",
+"tags": []
+},
+"dd766390-7d20-4cc9-bd6a-76de1e3109ee": {
+"name": "Domain Detection Pipeline",
+"tags": []
+},
+"dda68289-8651-4867-97f0-cc8ae9e13434": null,
+"dd978629-ef08-4416-ae41-fad3714f951a": {
+"name": "merscope_segmentation_pipeline_unlocked",
+"tags": []
+},
+"dd9506da-d43b-4762-8fcd-59e703bcabb4": {
+"name": "aind-z1-spot-detection-pipeline_no-segmentation",
+"tags": []
+},
+"ddb1eb58-6e8f-4d83-9047-cc9a0998328e": null,
+"ddd1b3cb-75e2-4094-8a40-fc4a088c6dde": null,
+"ddc3fc23-546c-455a-9b93-4d388014a4fa": null,
+"ddf584a5-fac3-4dab-93fe-a6575160acc2": null,
+"de0ef7d4-9861-48a5-b4cb-1272a97cca3d": null,
+"de253992-01b8-4c93-9703-a3beaa548c33": null,
+"de2311a5-dfb6-4289-a1d9-e6dafbdc5cb7": null,
+"de2e21c2-f16c-41fd-b8b3-13cc5d44d8e5": {
+"name": "CCF Hackathon (1/19/24) early data evaluation",
+"tags": []
+},
+"de701f74-d481-437d-a671-1815651879f0": null,
+"de6c1681-bae7-4cc4-bee5-d26176926461": null,
+"de33598e-0f8f-423b-bd7f-0855b549179a": null,
+"df0a74e4-d264-4aec-9148-5fe1d1ac1104": null,
+"defa8a83-8e78-462f-a4bd-e7afbf1da28a": {
+"name": "aind-ephys-pipeline-kilosort4",
+"tags": []
+},
+"df6c8a99-6d6b-46c4-932a-96283e98d357": null,
+"df2c055f-7569-431d-bca2-88feb1012563": {
+"name": "process_xenium_spatialdata",
+"tags": []
+},
+"df7580da-6c30-43b9-b0bb-9d5baf48b9c1": null,
+"e05aae6f-ad24-4edb-b520-d4dc687c310c": null,
+"e02ad542-48a2-4ff7-9802-e70825896830": null,
+"dfedc4bb-8a04-46e3-b7c9-4b19a9fcb247": {
+"name": "Yoni Multi-Channel Individual Registration Pipeline",
+"tags": []
+},
+"e0607750-d70b-4a9c-828e-ea449ec99b14": null,
+"e07b53ae-bd82-4d05-a9f6-fb23b1c6e4db": null,
+"e0839436-5821-4fdc-b6bd-e152148e6916": {
+"name": "aind-ephys-pipeline-kilosort25-opto",
+"tags": []
+},
+"e0b7ec68-8e8a-40c1-ab77-e21c9b520942": null,
+"e0ee7823-d410-4b2d-a008-7e748c382f47": null,
+"e0b78dd9-ce6b-4f3b-b46a-b8c6955227dc": null,
+"e0e708eb-58bc-4ae0-8c0f-57135f9bc782": {
+"name": "ExaSPIM template - Preprocess and Register - 10um",
+"tags": []
+},
+"e0c80799-cdd6-40b3-a80d-6c4bc48034b4": {
+"name": "aind-ephys-pipeline-kilosort25 (dev)",
+"tags": []
+},
+"e11a3e4b-5135-480c-9ab2-f35fa1dc780a": null,
+"e16820e1-e67d-4b74-b1dc-bca7b1815081": null,
+"e168867c-38d8-450e-84e9-dd7a3bff361e": null,
+"e17631cd-28db-4a50-9d31-86e2d2ba87b7": null,
+"e17a82e6-284f-4655-ab34-12409d8b0c32": null,
+"e16bc028-30b1-4aa2-89f9-a2cb27aaf844": {
+"name": "aind-ephys-pipeline (kilosort4)",
+"tags": [
+"ecephys"
+]
+},
+"e1aefd26-4c78-4854-ac86-083c3e0406e3": null,
+"e1ac7b75-b652-4fb0-9347-094a49c62ef5": null,
+"e1d1e87d-737f-4051-9bf5-b1b2f8e116e0": null,
+"e1d5a158-f2ba-4a2c-a5df-ed97ee34d53f": {
+"name": "standalone_aind-smartspim-ccf-registration-0.0.34",
+"tags": [
+"SmartSPIM"
+]
+},
+"e209fbd5-066d-4ebd-8d96-3390f902aff3": null,
+"e202e853-c1e0-45db-ba51-311e8f8bef6b": null,
+"e20c32a3-7e80-4589-9b6e-0086aec94115": null,
+"e1ebce1e-9254-4898-8725-602ffbb43f34": {
+"name": "Whole-brain segmentation analysis",
+"tags": []
+},
+"e2650703-c930-4a37-b823-cb26c444c3b8": null,
+"e27d8f1f-f728-4693-af18-6a48992816be": null,
+"e232c0c8-97b6-45ec-b324-e665ccad6889": {
+"name": "run_scrattch_taxonomy_py",
+"tags": []
+},
+"e293fbc2-7370-4be2-a7e5-c8fbe82474d3": null,
+"e2987e16-47c8-48bf-8579-b779f7127917": null,
+"e2ab6f74-db0b-40f3-8d2a-f22635202049": null,
+"e33e00fb-986f-4ff1-a211-de12d1513f8e": null,
+"e33df72f-a505-430f-ab78-0c9ac0b1728f": {
+"name": "Opto Preprocess Ecephys-bandpass",
+"tags": [
+"ecephys"
+]
+},
+"e31983af-935d-40a0-badf-dbe644d770af": {
+"name": "Exaspim Morphology Playground (Not Working)",
+"tags": []
+},
+"e31d29f8-7eee-446b-8f0a-2f027fe6f39b": {
+"name": "aind-ophys-decrosstalk-roi-images",
+"tags": [
+"decrosstalk-roi-images"
+]
+},
+"e3ac6a41-c578-4798-b251-3b316674dce2": {
+"name": "aind-multiplane-ophys-pipeline",
+"tags": []
+},
+"e3b6efcb-9bf9-4dbb-adfb-d798acf2f3bf": null,
+"e4296a80-fc65-453f-a259-063000581cf2": null,
+"e415f892-6b38-4b73-911d-bd5a36d968d9": null,
+"e3c354ff-e7cb-4a95-a826-f4e50b6937c1": null,
+"e43c766a-05a4-420a-a070-2538a238f196": null,
+"e48a1b21-ec76-407d-845d-1c3fc61f6361": null,
+"e471742c-4c4e-47aa-9bf0-da670dcaa564": {
+"name": "Suite2p - Segmentation of neuronal units",
+"tags": []
+},
+"e4dcbd44-dd09-4fd1-92d8-3f420d7bf660": null,
+"e4e40fa5-caf5-453d-818d-6dfc2ca834d9": null,
+"e50b15d9-2345-4b60-b40a-d40188e39058": null,
+"e54ff1b2-71af-4970-8d39-fc082e388407": null,
+"e5a6be14-ae9c-4b1c-97af-e108904dfbf5": null,
+"e4fe84cd-e423-480c-bcb6-d9162206c85a": null,
+"e5135517-c031-4364-a277-5f831ec99ecd": {
+"name": "ExaSPIM Template Pipeline (FireANTs)",
+"tags": [
+"AIND",
+"FideusLabs"
+]
+},
+"e57a52db-abf8-4fa9-afdb-10427897be4d": {
+"name": "aind-brain-segmentation-with-MedSAM2",
+"tags": []
+},
+"e5bb9760-73cc-4b05-9c03-580c44e418f4": null,
+"e5d2ca02-7e92-48f7-a355-13e41146f232": null,
+"e609c911-f7e2-4b33-b89e-66f85bbf1c30": null,
+"e65c87e4-d976-4946-a79d-45666ed7e915": null,
+"e5f42596-95ac-4500-a02c-7ec07b0344e9": null,
+"e5e9c30c-1cf4-483c-8b48-85fa3931c23f": {
+"name": "thalamus-merfish-spaGCN",
+"tags": []
+},
+"e6c6697a-171f-41bb-9e44-6b9280dddfa0": null,
+"e6f7a409-3c7c-4919-a8f8-5e6c42600fc2": null,
+"e6a41689-551f-4c4b-8b56-71be31feab39": {
+"name": "Michael's Copy of iGluSnFR extraction",
+"tags": []
+},
+"e71c8595-da37-4401-869f-997f5437f681": null,
+"e77d3cfa-38ee-41ed-a453-4df26c59f0c5": null,
+"e7441eb3-9989-4cd1-b35b-f09e046f2cea": null,
+"e7866118-da1c-4b46-9e4d-410f87cfe1a7": null,
+"e7d7d951-0810-4c29-8ba0-79e9dbe4834a": null,
+"e80fd037-f691-47c9-a32e-08c01720d21e": null,
+"e8120917-682c-4354-bb2e-7dc55b441dcb": null,
+"e816b616-4885-4363-86c5-3176d26dbf1d": null,
+"e823a831-b654-4947-bb18-da39fe0a5cd4": null,
+"e82f64f9-af26-44e8-add8-d826e6532e2f": null,
+"e8577e1a-fac0-4dc8-b262-61bda600432d": null,
+"e8867505-8dad-4dcb-a14a-42f3d2b9575a": null,
+"e8752278-0e96-4e74-a179-2c838bc0c186": {
+"name": "Hybrid Evaluation Ecephys",
+"tags": []
+},
+"e8dd4f43-f9e6-4e26-a580-9c99bb6b5ef3": null,
+"e8a4b6b8-7e72-4a6e-8deb-d342d218fee5": null,
+"e887812f-1dd8-4d2b-b50b-52cd1c69ddbd": null,
+"e8fa9d00-ff9f-4604-b27c-1c70b73b8144": null,
+"e9a89346-1c0d-4a13-a5ff-3d92b5f06b58": null,
+"e9ab2b3e-2821-45b2-8035-a670e75c95bf": null,
+"e96ff21a-3177-4987-b303-6aae079c28e2": null,
+"ea6a7779-c01d-4f0a-bf7e-948dbe356afb": null,
+"eaa4f2af-33bb-400b-9283-728c55cd61f0": null,
+"ea8061e7-aca5-49ea-be4f-adfdc30b5f3c": null,
+"ea397ab6-97e9-4616-b848-e8d990afb976": null,
+"eaed664c-715e-4f4d-8497-6bff1538cc10": {
+"name": "aind-update-sorted-asset (broken)",
+"tags": []
+},
+"eaff73bb-dc49-49dd-b645-c401f8bec231": null,
+"eb0be7c2-4c77-4dee-bd4f-f24687a9aa6e": null,
+"eafde4db-ed14-49d8-a773-e15408bd0598": {
+"name": "Lightning Pose Inference and Evaluation",
+"tags": []
+},
+"ebb73eea-d678-48aa-bf08-85cfed9e3c23": null,
+"eb43fa3a-6e17-4a49-9caa-b978fdac87c1": null,
+"eb71d9df-e8fd-4880-bd8e-a45a5b9db0eb": {
+"name": "barseq-mapseq-metadata-generator-for-lc-paper",
+"tags": []
+},
+"eb139691-9c90-4e7b-bb41-dcfcee634b67": {
+"name": "Ophys Pipeline Evaluation Pipeline",
+"tags": []
+},
+"ebe6a93d-4e58-4a96-9e21-3749f7de05cb": null,
+"ec29b5a3-1b3f-4cbd-afd2-04abd297b04f": null,
+"ec2887cf-0260-4060-a615-336473cfdfaa": null,
+"ec65662d-bc8b-47d6-8139-9b132cb1d73f": null,
+"ec853b06-a071-4772-b82a-d600e0795924": null,
+"ec7b5a5d-236e-4bad-8d7c-7b5b3288b86a": null,
+"ed01cd86-445e-47a1-a66d-1632d40fe2e1": null,
+"ecc16d0e-a5e4-49f5-9ee9-a70c3fba6aa6": {
+"name": "aind-ophys-suite2p-segmentation",
+"tags": []
+},
+"ed5011c2-2f40-446e-be58-79a3275acf65": null,
+"ed6d9a70-dde8-4fa4-9a57-e594484ef590": {
+"name": "NeuronProofreader: Reconstructing Single Neurons from Whole Brains",
+"tags": []
+},
+"ed9a8d27-3ac2-4334-8481-5f48fa31b3f0": {
+"name": "trailmap-batched",
+"tags": []
+},
+"ee60b597-0e71-4385-9005-e54f61459192": null,
+"edeecdab-6e4d-455d-8aee-34878c410ec9": null,
+"ee1c9cbd-9e2d-455b-bfd8-b94a7b127c32": null,
+"edd81a8b-75fa-46fd-8246-293e3d1d3825": null,
+"ee649e4e-54d0-4260-aa78-e81db0a9cd74": {
+"name": "Mouse Processing Pipeline (v1 w/ increased memory)",
+"tags": []
+},
+"ee7af326-b007-467d-81ce-975d55f5ac54": null,
+"eeadf84c-0ebc-4f16-a546-a1f60410c777": null,
+"eea57c21-a265-4785-8d32-9334b06bbebf": {
+"name": "aind-metadata-validator-capsule-v2",
+"tags": []
+},
+"eeb45299-949e-4d33-8a28-35b35b385a0a": null,
+"efa0d6fb-40cf-4ee4-896c-72db7c0acfeb": null,
+"ef78bde4-2772-4236-969e-dccde212a79b": null,
+"eec53b5c-0be1-4705-a6a3-6b3fdfa00300": {
+"name": "dynamicrouting-encoding-pipeline",
+"tags": []
+},
+"ef7c3643-b775-4723-b42c-9ea08088b9ab": {
+"name": "Convert Xenium Outputs to Anndata",
+"tags": []
+},
+"efb4ed04-4a90-4a09-aba9-c623d2695c5a": null,
+"efcb3145-3dc7-488a-8c83-e8abfd9bbbde": null,
+"effac993-4017-4f4f-8ced-3c884ec52f66": null,
+"eff33700-b879-4cdf-8d75-0a07815f5edd": null,
+"f03ac473-38d9-4b5b-9b18-b4fb394fa2dc": null,
+"f0836781-9e71-47e9-9084-c0ec99e2f64e": null,
+"f0c2c35d-0829-4a17-91c7-6ea47a2a1e4f": null,
+"f0d3f4da-fc4d-44d3-a24e-786cfa616c14": {
+"name": "Jerome - aind-multiplane-ophys-pipeline",
+"tags": []
+},
+"f0e44054-350e-4ae2-a96a-3145815e26cd": null,
+"f0eb619e-fb4d-43cb-a5b0-114e4e5bc6ca": {
+"name": "Multiplane pipeline (v5.0) with file splitting",
+"tags": []
+},
+"f0f0bac5-1472-4c0b-af02-7e7225882be8": null,
+"f1435b3c-1543-487d-a332-b3a96c08c52c": null,
+"f0f4f38b-9822-49a8-9e50-02b470502c28": null,
+"f18c5725-f8bc-40fd-9485-0544d00bce7e": null,
+"f10debdb-4181-4642-ab03-a61f5e9380fb": null,
+"f197ad51-c1ad-45f5-b695-88805637e78e": null,
+"f19681fc-c1e4-42d5-8a0f-f13343429852": null,
+"f1a920c8-8642-4ce1-8898-4c5f352e0028": null,
+"f1fa44d0-d679-48b4-8421-deeab54a4af0": null,
+"f2596502-1cd7-4bd7-a960-f9ae2b9e7328": null,
+"f259b08f-c17d-4a56-b0ec-2155aa0a98b0": null,
+"f1e16d77-8b10-4761-b117-97f385289e73": null,
+"f2417223-f8c9-4514-ab1b-6e0af9c377e4": null,
+"f27b2291-06e4-4a12-8d17-cc24f9d7b77a": null,
+"f2ce856f-82e4-4ee4-a407-71d549015bda": {
+"name": "aind-ophys-motion-correction2",
+"tags": []
+},
+"f2e2bd76-c44d-433d-b7c2-549efde7d976": null,
+"f3c1b277-ef1c-4310-846d-368585d6c668": null,
+"f315479f-285e-4527-8c98-e6894dc858d7": null,
+"f31e8346-e147-4497-8f4a-51a8ee7d48ae": null,
+"f3150b90-da89-4b7c-bb72-efaebe3af755": null,
+"f4d02cd0-d78a-4dba-b5e5-b6ce9f99a2c1": {
+"name": "aind-large-scale-cellpose_multi_tile",
+"tags": []
+},
+"f51ec4e7-a44d-4148-9a94-1938457109d0": null,
+"f5263df0-df38-424a-b452-a523238b6a87": null,
+"f5d97168-f895-44d8-ba59-29be0eb3a47b": null,
+"f6a8c6e2-1386-43a6-b294-e454886ffec5": null,
+"f6358b95-dc52-42f0-8a27-fa65cfb9294c": null,
+"f5e8eca4-4f4e-4b7a-920e-d6b2e8176072": {
+"name": "BICore Solo Execution",
+"tags": []
+},
+"f6f59432-b63f-40fa-8be1-b14bcc84e50e": {
+"name": "Stim Templates DANDI Reupload",
+"tags": []
+},
+"f695f790-0b52-4c82-9f9c-c79e20f50de9": {
+"name": "SEA_AD_CaH_Nebula",
+"tags": []
+},
+"f6f75cbf-af27-4c01-aefd-049f152da573": null,
+"f72b9888-13c7-4da1-81d4-20effd37eea7": null,
+"f709b128-78ff-4011-9046-5bbc160c3b1e": null,
+"f758ee32-62be-457b-b278-3e9be60ea799": null,
+"f74034d4-4dda-4027-abad-e6a4388a9e19": null,
+"f7760b8f-be91-456a-9f56-37c4a347e57c": null,
+"f7b7fbd3-ab07-4903-af1f-354b39aca09c": null,
+"f7987871-17be-4129-b09b-463bf223d263": null,
+"f7760cb1-ed9e-46d5-9480-8b962c867e1f": null,
+"f7c97b05-2c30-4a6a-9c84-55d799b155d1": null,
+"f7b4dee4-34ff-47cc-9e92-ec0ae11a9c2e": null,
+"f8b0a2e6-0daf-48d2-8843-7c829ac71fb3": null,
+"f8224b43-0210-4dd8-9612-a903e9ba140f": null,
+"f91a513c-7006-4800-a820-ed94a28f355c": null,
+"f8f071d9-ad83-4b47-83c3-0cac5947c6db": null,
+"f9038f90-be37-4643-88c3-89d2fcf3e753": null,
+"f960d1c4-8535-4827-9739-a0c6eb7920db": null,
+"f90798b1-7e64-49e1-947e-4c94c07f8bbf": {
+"name": "Collect Results Ecephys (dev)",
+"tags": [
+"ecephys"
+]
+},
+"f8fe29d9-8247-427b-8109-999c86e3ebcc": {
+"name": "aind-behavior-camstim-pipeline",
+"tags": []
+},
+"f97706e5-5299-4a3b-bb55-52808beff5ab": null,
+"f997d6db-4e8e-4b10-ac5f-d34abf8962d5": null,
+"f9db0c02-a7f1-407a-a7cf-0a86b43c9cdc": null,
+"fa5a617a-6afb-4890-a993-2a35b5cf1009": null,
+"fa0293ab-89cd-450d-81f2-c2f9d3869626": null,
+"fa45c596-8c05-4a6e-8482-e99912d7b741": {
+"name": "aind-smartspim-pipeline-v5.0",
+"tags": [
+"SmartSPIM"
+]
+},
+"fa9997a9-6ba4-44a9-8d8b-67a2ad242bd0": null,
+"fac98bb7-2d8e-4539-b4a0-88d98d3a1850": null,
+"fb13940a-4323-4289-9009-6a1a1e19e48d": null,
+"facff99f-d3aa-4ecd-8ef8-a343c38197aa": {
+"name": "dlc-side-tracking-capsule",
+"tags": []
+},
+"fb4aab7e-1081-462c-8306-2072ee47951d": null,
+"fbc3f255-12bb-4577-8f64-d1b8c096c8a7": null,
+"fb451526-f262-4584-9ee9-2940cf91c447": null,
+"fbf48d61-12cc-4571-aa4a-e73e695dc68d": {
+"name": "HANN Mapping: Update Marker Index & Perform Mapping",
+"tags": []
+},
+"fbceb032-27d5-41a3-bf0c-077a26ce367a": {
+"name": "aind-large-scale-cellpose_multi_tile_processed",
+"tags": []
+},
+"fbdaa731-f57c-4006-a9be-a0c379926354": {
+"name": "aind-smartspim-fuse-0.0.3-bigstitcher-HCR-processed",
+"tags": [
+"smartspim"
+]
+},
+"fc452694-655c-4e70-a16f-77e5ab2e120e": null,
+"fc42188b-1b51-4a0b-b27d-4d1137b174f9": null,
+"fccb1e54-712d-4815-884a-795efaf3915d": null,
+"fc55b53b-a2f8-40f9-b3c0-7ee82e25049d": {
+"name": "Exaspim Soma Detection",
+"tags": []
+},
+"fcca3922-bc11-430e-9c63-faa7575af52d": {
+"name": "aind-destripe-shadow-correction",
+"tags": [
+"SmartSPIM"
+]
+},
+"fcebf6ec-b4af-48f5-a5f1-b7d535ca8ccc": null,
+"fcee469f-4d3c-458a-ba7a-abb054f5f80b": null,
+"fccbe1fb-da8f-493d-9dd5-784b1a16a722": {
+"name": "aind-metadata-validator-capsule",
+"tags": []
+},
+"fd45afb2-be20-48b7-bde9-5961f6567d2b": null,
+"fd16835a-0b69-404c-978d-e49fc13feceb": null,
+"fd8bafa2-bc5b-457f-8550-e9d27c30a00a": null,
+"fd8b4afd-a4db-485d-ab98-62dc58936049": null,
+"fdc1721a-af51-44a7-b88f-40ec09da288c": {
+"name": "Yoni Multi-Channel Multi-Resolution Individual Registration Pipeline",
+"tags": []
+},
+"fe680908-c191-4192-b4a5-8f69f377a79f": null,
+"fea5d7a6-5dd8-4df1-a521-f4892974c5b6": null,
+"fe50abff-e7a9-48d4-be83-9f8f38429218": null,
+"feaffa35-673e-4d43-b55d-8dd562021f4d": null,
+"fea6a330-50f9-428d-8503-f78178d95038": null,
+"fee693d9-e487-4690-aaf5-80412e5b9342": null,
+"feea9925-bb8d-4c32-803f-d67798ca792e": {
+"name": "ophys-zstack-to-fov",
+"tags": []
+},
+"ff1b771c-894f-42ae-a5f8-c14a23c4c43a": null,
+"ff459580-00bc-4e17-a43a-b35debbc8ac4": null,
+"ff56c4bb-764e-4dca-a048-fb6b0446af32": null,
+"ff0853fd-06b6-4b50-a99e-b6f3654fdf85": null,
+"ff63e4fc-1de3-4825-b919-a1412b2d1b54": null,
+"ffb7978b-7a5f-413d-bae9-bd4536e2ad7a": null,
+"ffcf7ef7-6422-4a96-9803-bc47cb41263f": null,
+"fff51803-3888-46f0-93e7-4a12c631b59b": null
+}

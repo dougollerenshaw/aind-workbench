@@ -25,6 +25,7 @@ ENV/
 
 # Data
 data/
+*.parquet
 
 # ds_store
 .DS_Store
