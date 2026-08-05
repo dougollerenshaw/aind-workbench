@@ -4,7 +4,7 @@
 
 **Status: complete and deployed.** Milestones M1–M7 (the specified build)
 plus M8–M13 (tool-launcher integration and Doug's review rounds) are built and
-verified; the full pytest suite (146 tests, including headless-browser smoke
+verified; the full pytest suite (150 tests, including headless-browser smoke
 tests) is green, plus 11 launcher tests,
 and each milestone passed an independent verification pass. Nothing is
 blocked. **If you read one more thing, read "Spec corrections found while
@@ -868,6 +868,47 @@ Both were invisible to static tests and are now covered by browser assertions:
   `Database.conn` to the shared connection turns all four red (and the browser
   tests error out with the page never rendering); restoring the fix turns them
   green.
+
+## M15 — Calendar refinements: off-hours/weekend shading, Sunday-first week
+
+Three requests from Doug, all in `template.html`:
+
+- **Day view tints the off-hours columns** (before 8am, after 6pm) with a light
+  `rgba(92,100,112,0.10)` band. The hours stay fully real and scrollable — the
+  tint is background only, drawn *under* the rows (`.col-shade` at `z-index: 0`,
+  `.instrument-row` at `z-index: 1`, `pointer-events: none`), so bars,
+  gridlines, the now-line and text keep their normal contrast and a procedure
+  scheduled at 2am does not look disabled. Verified in a browser: bar opacity
+  stays `1` with no filter.
+- **Week view tints the Saturday and Sunday columns**, same treatment.
+- **Week view is Sunday-first** (Sun → Sat).
+
+The shaded ranges are **derived, never hardcoded twice**:
+`shadedRanges()` builds the day-view bands from `FOCUS_START_HOUR` /
+`FOCUS_END_HOUR`, so the tint and the focus lane cannot disagree, and the
+weekend columns come from `WEEKEND_DAYS` mapped through `WEEK_STARTS_ON`. A
+static test asserts there is no second literal 8 or 18 in that function.
+
+Sunday-first touched everything that encoded the old Monday assumption, all now
+driven by one constant `WEEK_STARTS_ON = 0`:
+
+- `startOfWeek()` — `(getDay() - WEEK_STARTS_ON + 7) % 7`, replacing the
+  Monday-biased `(getDay() + 6) % 7`.
+- The axis labels (generated from `startOfWeek`, so they follow automatically).
+- The block label, which now names the whole span —
+  *"Week of Sun, Aug 2 – Sat, Aug 8"* — so a Sunday-first week is unambiguous
+  rather than just "Week of August 2".
+- "This week" (`isCurrent`), bar day-column placement, and the week now-line
+  offset, all of which route through `startOfWeek`.
+
+Tests: the browser smoke module grew from 9 to 13 tests and asserts the
+**rendered** result, not the CSS text — that each off-hours/weekend axis cell
+carries the `shaded` class *and* a non-transparent computed background, that
+in-hours/weekday cells have neither, that two tint bands with real width are
+drawn per block under the rows, that bars are not dimmed, and that the week
+axis is exactly `[Sun, Mon, Tue, Wed, Thu, Fri, Sat]` with tinting on columns
+0 and 6 only. The static suite's Monday-first assertions were replaced with
+Sunday-first ones.
 
 ### Re-seeding the live database (Doug runs this when ready)
 

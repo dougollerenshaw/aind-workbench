@@ -133,8 +133,14 @@
   .day-header .count { color: var(--muted); font-size: 0.72rem; font-weight: 400; }
 
   .block-body { position: relative; }
-  .instrument-row { display: flex; border-top: 1px solid #edeff2; }
+  /* Rows sit ABOVE the column tint (positioned elements paint over the
+     absolutely-positioned shade), so bars and text keep full contrast. */
+  .instrument-row { display: flex; border-top: 1px solid #edeff2; position: relative; z-index: 1; }
   .instrument-row:first-child { border-top: none; }
+
+  /* Light tint for off-hours (day view) / weekend (week view) columns. */
+  .col-shade { position: absolute; top: 0; bottom: 0; z-index: 0; pointer-events: none; }
+  .axis-unit.shaded { background: rgba(92, 100, 112, 0.10); }
   .instrument-label {
     position: sticky; left: 0; z-index: 3; flex: none;
     background: #fff; border-right: 1px solid var(--border);
@@ -388,6 +394,43 @@ const FOCUS_HOURS = FOCUS_END_HOUR - FOCUS_START_HOUR;   // 10 of 24 hours
 const HOURS_PER_DAY = 24;
 const DAYS_PER_WEEK = 7;
 
+// Which weekday the week view starts on, in JS getDay() numbering
+// (0 = Sunday). Everything that depends on it — startOfWeek, the axis labels,
+// the block label, "this week", and which columns count as the weekend — is
+// derived from this constant, so changing it moves them together.
+const WEEK_STARTS_ON = 0;                 // Sunday-first: Sun -> Sat
+const WEEKEND_DAYS = [0, 6];              // Sunday and Saturday
+
+// Off-hours (day view) and weekend (week view) columns get a light tint so the
+// eye stays on the workday. They remain fully functional and scrollable — this
+// is background only, drawn UNDER the rows, so bars, gridlines, the now-line
+// and text keep their normal appearance on top.
+const SHADED_TINT = 'rgba(92, 100, 112, 0.10)';
+
+// Column indexes of the weekend within the week view, given WEEK_STARTS_ON.
+function weekendColumns() {
+  return WEEKEND_DAYS
+    .map((day) => (day - WEEK_STARTS_ON + DAYS_PER_WEEK) % DAYS_PER_WEEK)
+    .sort((a, b) => a - b);
+}
+
+// [start, end) column ranges to tint for the current view. Day view uses the
+// focus-window constants above, so the shading and the focus lane can never
+// disagree.
+function shadedRanges() {
+  if (viewMode === 'week') {
+    return weekendColumns().map((column) => [column, column + 1]);
+  }
+  const ranges = [];
+  if (FOCUS_START_HOUR > 0) ranges.push([0, FOCUS_START_HOUR]);
+  if (FOCUS_END_HOUR < HOURS_PER_DAY) ranges.push([FOCUS_END_HOUR, HOURS_PER_DAY]);
+  return ranges;
+}
+
+function isShadedColumn(index) {
+  return shadedRanges().some(([from, to]) => index >= from && index < to);
+}
+
 // How much of the calendar exists: today-14 .. today+45. Past days render
 // ABOVE today, so scrolling up reveals them.
 const WINDOW_DAYS_BEFORE = 14;
@@ -559,10 +602,10 @@ function addDays(date, n) {
   return d;
 }
 
-// Monday-based week start, matching the Mon–Sun week view axis.
+// Start of the week containing `date`, honoring WEEK_STARTS_ON (Sunday).
 function startOfWeek(date) {
   const d = startOfDay(date);
-  const shift = (d.getDay() + 6) % 7;   // Sun=0 -> 6, Mon=1 -> 0
+  const shift = (d.getDay() - WEEK_STARTS_ON + DAYS_PER_WEEK) % DAYS_PER_WEEK;
   return addDays(d, -shift);
 }
 
@@ -693,10 +736,14 @@ function blockRange() {
   const blocks = [];
   if (viewMode === 'week') {
     for (let w = startOfWeek(first); w <= last; w = addDays(w, 7)) {
+      // Label the whole span, so a Sunday-first week is unambiguous.
+      const lastDay = addDays(w, DAYS_PER_WEEK - 1);
+      const from = w.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+      const to = lastDay.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
       blocks.push({
         start: w,
-        end: addDays(w, 7),
-        label: `Week of ${w.toLocaleDateString([], { month: 'long', day: 'numeric' })}`,
+        end: addDays(w, DAYS_PER_WEEK),
+        label: `Week of ${from} – ${to}`,
         isCurrent: startOfWeek(today).getTime() === w.getTime(),
       });
     }
@@ -785,6 +832,7 @@ function buildAxisHeader(geo) {
     } else {
       cell.textContent = fmtHourLabel(i);
     }
+    if (isShadedColumn(i)) cell.classList.add('shaded');
     units.appendChild(cell);
   }
   header.appendChild(units);
@@ -823,6 +871,8 @@ function buildBlock(block, rows, records, geo) {
 
   const body = document.createElement('div');
   body.className = 'block-body';
+  // Column tint first, so it sits under the rows appended below.
+  appendColumnShading(body, geo);
   for (const instrument of rows) {
     body.appendChild(buildInstrumentRow(block, instrument, records, geo));
   }
@@ -837,6 +887,20 @@ function buildBlock(block, rows, records, geo) {
   if (block.isCurrent) body.appendChild(buildNowLine(block, geo));
   wrapper.appendChild(body);
   return wrapper;
+}
+
+// One tint band per shaded column range, spanning every instrument row in the
+// block so the shading reads as a continuous column.
+function appendColumnShading(body, geo) {
+  for (const [from, to] of shadedRanges()) {
+    const shade = document.createElement('div');
+    shade.className = viewMode === 'week'
+      ? 'col-shade weekend' : 'col-shade off-hours';
+    shade.style.left = `${LABEL_WIDTH + from * geo.unitWidth}px`;
+    shade.style.width = `${(to - from) * geo.unitWidth}px`;
+    shade.style.background = SHADED_TINT;
+    body.appendChild(shade);
+  }
 }
 
 function buildInstrumentRow(block, instrument, records, geo) {

@@ -131,6 +131,37 @@ DOM_PROBE = """
         var el = document.querySelector('.day-header-label');
         return el ? el.textContent.trim() : '';
       })(),
+      // Rendered axis columns: label, whether they carry the shaded class,
+      // and their COMPUTED background, so the tint is verified as painted.
+      axis: [].map.call(document.querySelectorAll('.axis-unit'), function (el) {
+        return {
+          label: el.textContent.trim(),
+          shaded: el.classList.contains('shaded'),
+          bg: getComputedStyle(el).backgroundColor
+        };
+      }),
+      // Tint bands drawn under the rows of each block.
+      shades: (function () {
+        var bands = document.querySelectorAll('.day-block .col-shade');
+        var first = bands[0];
+        var block = document.querySelector('.day-block');
+        return {
+          count: bands.length,
+          per_block: block ? block.querySelectorAll('.col-shade').length : 0,
+          classes: first ? first.className : '',
+          bg: first ? getComputedStyle(first).backgroundColor : '',
+          zindex: first ? getComputedStyle(first).zIndex : '',
+          width: first ? Math.round(first.getBoundingClientRect().width) : 0
+        };
+      })(),
+      // A bar must not look disabled just because its column is tinted.
+      bar_style: (function () {
+        var bar = document.querySelector('.event-bar');
+        if (!bar) return null;
+        var s = getComputedStyle(bar);
+        return { opacity: s.opacity, filter: s.filter, zindex: getComputedStyle(
+          bar.closest('.instrument-row')).zIndex };
+      })(),
       scroll_left: Math.round(document.getElementById('grid-scroll').scrollLeft),
       overflowing: (function () {
         var found = [];
@@ -396,6 +427,70 @@ def test_sticky_labels_are_visible_while_lanes_are_scrolled(day_view):
         r"(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)",
         day_view["day_header_text"],
     ), day_view["day_header_text"]
+
+
+def _opaque(color: str) -> bool:
+    """True when a computed background colour is actually painted."""
+    return color not in ("", "transparent", "rgba(0, 0, 0, 0)")
+
+
+def test_day_view_shades_off_hours_columns_only(day_view):
+    """Everything before 8am and after 6pm is tinted; the workday is not."""
+    axis = day_view["axis"]
+    assert len(axis) == 24
+    shaded = [i for i, cell in enumerate(axis) if cell["shaded"]]
+    assert shaded == list(range(0, 8)) + list(range(18, 24)), shaded
+
+    # The tint is really painted, and the in-hours columns really aren't.
+    for index in (0, 7, 18, 23):
+        assert _opaque(axis[index]["bg"]), f"hour {index} should be tinted: {axis[index]}"
+    for index in (8, 12, 17):
+        assert not _opaque(axis[index]["bg"]), f"hour {index} must stay clear: {axis[index]}"
+
+    # Tint bands are drawn under the rows of every block.
+    shades = day_view["shades"]
+    assert shades["per_block"] == 2, "before-8am and after-6pm bands"
+    assert "off-hours" in shades["classes"]
+    assert _opaque(shades["bg"])
+    assert shades["zindex"] == "0", "tint must sit under the rows"
+    assert shades["width"] > 20, f"tint band has no width: {shades}"
+
+
+def test_shading_does_not_dim_event_bars(day_view):
+    """A procedure in a tinted column must not look disabled."""
+    bar = day_view["bar_style"]
+    assert bar is not None
+    assert bar["opacity"] == "1", bar
+    assert bar["filter"] in ("none", ""), bar
+    assert bar["zindex"] == "1", "rows paint above the tint"
+
+
+def test_week_view_is_sunday_first_with_weekends_shaded(week_view):
+    labels = [cell["label"] for cell in week_view["axis"]]
+    assert len(labels) == 7
+    assert labels[0].startswith("Sun"), f"leftmost column must be Sunday: {labels}"
+    assert labels[-1].startswith("Sat"), f"rightmost column must be Saturday: {labels}"
+    assert labels == ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], labels
+
+    # Weekend columns are the tinted ones — first and last.
+    shaded = [i for i, cell in enumerate(week_view["axis"]) if cell["shaded"]]
+    assert shaded == [0, 6], shaded
+    for index in shaded:
+        assert _opaque(week_view["axis"][index]["bg"])
+    for index in range(1, 6):
+        assert not _opaque(week_view["axis"][index]["bg"]), labels[index]
+
+    shades = week_view["shades"]
+    assert shades["per_block"] == 2, "Sunday and Saturday bands"
+    assert "weekend" in shades["classes"]
+
+
+def test_week_block_label_names_the_sunday_to_saturday_span(week_view):
+    # e.g. "Week of Sun, Aug 2 – Sat, Aug 8" (the label div also carries the
+    # procedure count, so match a prefix).
+    assert re.match(r"^Week of Sun,? .+ – Sat,? ", week_view["day_header_text"]), (
+        week_view["day_header_text"]
+    )
 
 
 def test_week_view_renders_seven_day_columns(week_view):

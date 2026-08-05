@@ -196,13 +196,39 @@ def test_week_view_uses_seven_day_columns(html):
     assert "unitCount: DAYS_PER_WEEK, laneWidth: available" in week_metrics, (
         "week lane must fit the viewport exactly (no horizontal scrolling)"
     )
-    # Week blocks are weeks, stacked like day blocks, Monday-based.
+    # Week blocks are weeks, stacked like day blocks, SUNDAY-first: every
+    # week-start calculation derives from one constant so they move together.
     assert "function startOfWeek" in js
-    assert "`Week of ${" in js
+    assert "const WEEK_STARTS_ON = 0;" in js, "0 = Sunday"
+    assert "(d.getDay() - WEEK_STARTS_ON + DAYS_PER_WEEK) % DAYS_PER_WEEK" in js
+    assert "`Week of ${from} – ${to}`" in js, "label names the Sun–Sat span"
     # A bar sits in its day's column and carries its local time.
     week_bars = js[js.index("function layoutWeekBars") : js.index("function makeBar")]
     assert "index * geo.unitWidth" in week_bars
     assert "fmtTime(start)" in week_bars
+
+
+def test_column_shading_derives_from_the_focus_constants(html):
+    """Off-hours (day) and weekend (week) columns are tinted. The day-view
+    boundaries must come from FOCUS_START_HOUR/FOCUS_END_HOUR, never a second
+    hardcoded 8/18, so the shading and the focus lane cannot disagree."""
+    js = script_body(html)
+    ranges = js[js.index("function shadedRanges") : js.index("function isShadedColumn")]
+    assert "FOCUS_START_HOUR" in ranges and "FOCUS_END_HOUR" in ranges
+    assert not re.search(r"\[\s*0\s*,\s*8\s*\]", ranges), "no hardcoded 8"
+    assert not re.search(r"\[\s*18\s*,\s*24\s*\]", ranges), "no hardcoded 18"
+    # Weekend columns are derived from the week-start constant too.
+    assert "const WEEKEND_DAYS = [0, 6];" in js
+    assert "(day - WEEK_STARTS_ON + DAYS_PER_WEEK) % DAYS_PER_WEEK" in js
+    # A tint band per range, drawn under the rows (z-index 0 vs the row's 1).
+    assert "function appendColumnShading" in js
+    assert "'col-shade weekend' : 'col-shade off-hours'" in js
+    style = style_body(html)
+    shade_rule = re.search(r"\.col-shade\s*\{([^}]*)\}", style)
+    assert shade_rule and "z-index: 0" in shade_rule.group(1)
+    assert "pointer-events: none" in shade_rule.group(1), "tint must not eat clicks"
+    row_rule = re.search(r"\.instrument-row\s*\{([^}]*)\}", style)
+    assert row_rule and "z-index: 1" in row_rule.group(1), "rows paint above the tint"
 
 
 def test_default_view_is_day(html):
