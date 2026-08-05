@@ -79,7 +79,13 @@
      (Note: `overflow-x: auto` with `overflow-y: visible` would compute to
      `auto` anyway, so make the two-axis container explicit.) */
   #grid-scroll {
-    overflow: auto;
+    overflow-x: auto;
+    /* `scroll`, not `auto`, on purpose: the vertical scrollbar appears only
+       once the blocks are rendered, and if it appears AFTER the lane widths
+       were measured it steals ~15px of clientWidth and pushes the week view
+       into a spurious horizontal scroll. Reserving it keeps clientWidth
+       stable across the measure/render cycle. */
+    overflow-y: scroll;
     max-height: calc(100vh - 14rem);
     min-height: 18rem;
   }
@@ -107,10 +113,18 @@
 
   .day-block { border-bottom: 2px solid var(--border); }
   .day-block.is-today .day-header { background: var(--today); font-weight: 600; }
+  /* The band spans the whole (very wide) lane area, but the LABEL inside it
+     is what sticks: `position: sticky` on a full-width box does nothing,
+     because the box never leaves the scrollport — the text just sits at its
+     far-left edge, scrolled out of sight. So the band is static and
+     .day-header-label is a narrow sticky child. */
   .day-header {
-    position: sticky; left: 0; z-index: 4; padding: 0.3rem 0.6rem;
-    font-size: 0.82rem; background: #fbfcfd; border-bottom: 1px solid var(--border);
-    display: flex; gap: 0.5rem; align-items: baseline;
+    z-index: 4; font-size: 0.82rem; background: #fbfcfd;
+    border-bottom: 1px solid var(--border);
+  }
+  .day-header-label {
+    position: sticky; left: 0; display: inline-flex; gap: 0.5rem;
+    align-items: baseline; padding: 0.3rem 0.6rem; white-space: nowrap;
   }
   .day-header .today-badge {
     font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;
@@ -153,8 +167,21 @@
     content: ''; position: absolute; top: -3px; left: -3px;
     width: 8px; height: 8px; border-radius: 50%; background: var(--now);
   }
-  .empty-note { padding: 0.35rem 0.6rem; font-size: 0.72rem; color: var(--muted); position: sticky; left: 0; }
+  .empty-note {
+    padding: 0.35rem 0.6rem; font-size: 0.72rem; color: var(--muted);
+    position: sticky; left: 0; display: inline-block; white-space: nowrap;
+  }
   #grid-status { padding: 0.6rem 0.8rem; font-size: 0.8rem; color: var(--muted); }
+
+  /* Loud bootstrap-failure banner. A broken page must never look like an
+     empty schedule — that is the worst failure mode for a demo. The
+     :not([hidden]) guard is the M9 lesson: an unguarded `display` rule would
+     defeat the hidden attribute. */
+  #grid-error:not([hidden]) {
+    display: block; margin: 0; padding: 0.6rem 0.8rem;
+    background: #fdeaea; border-bottom: 2px solid #c0392b; color: #8c2f2f;
+    font-size: 0.85rem; font-weight: 600; white-space: pre-wrap;
+  }
 
   /* Detail side panel */
   #detail-panel {
@@ -255,6 +282,7 @@
 
 <div id="layout">
   <div id="calendar">
+    <p id="grid-error" hidden></p>
     <div id="grid-scroll">
       <div id="grid-inner"></div>
     </div>
@@ -382,34 +410,93 @@ let currentDetail = null;       // record shown in the side panel
 let editingId = null;           // scheduled_procedure id when the modal edits
 let nowLineTimer = null;
 
-async function fetchJSON(url) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`${url} -> HTTP ${response.status}`);
-  return response.json();
+// Every read goes through here. One retry, because a single transient hiccup
+// (the tool launcher serves requests one at a time, so a burst can queue and
+// time out) should not cost the page a whole dependency.
+async function fetchJSON(url, attempt = 0) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`${url} -> HTTP ${response.status}`);
+    return await response.json();
+  } catch (err) {
+    if (attempt === 0) {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      return fetchJSON(url, attempt + 1);
+    }
+    throw err;
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Bootstrapping
 // ---------------------------------------------------------------------------
 
+// Show/clear the loud failure banner at the top of the grid area.
+function showBanner(message) {
+  const banner = document.getElementById('grid-error');
+  banner.textContent = message;     // textContent: never treat errors as markup
+  banner.hidden = false;
+}
+
+function clearBanner() {
+  document.getElementById('grid-error').hidden = true;
+}
+
+// Fetch the five lookup tables INDEPENDENTLY. A single Promise.all destructure
+// meant one failing dependency left every array empty and the whole page
+// blank; now each source settles on its own, whatever arrived is used, and the
+// failures are named in the banner.
+async function bootstrap() {
+  const sources = [
+    ['procedure types', `${API}/procedure-types`, (d) => { procedureTypes = d; }],
+    ['instruments', `${API}/instruments`, (d) => { instruments = d; }],
+    ['mice', `${API}/mice`, (d) => { mice = d; }],
+    ['projects', `${API}/projects`, (d) => { projects = d; }],
+    ['users', `${API}/users`, (d) => { users = d; }],
+  ];
+  const settled = await Promise.allSettled(sources.map(([, url]) => fetchJSON(url)));
+  const failures = [];
+  settled.forEach((result, i) => {
+    const [label, , assign] = sources[i];
+    if (result.status === 'fulfilled' && Array.isArray(result.value)) {
+      assign(result.value);
+    } else {
+      const reason = result.reason && result.reason.message
+        ? result.reason.message : String(result.reason);
+      failures.push(`${label} (${reason})`);
+    }
+  });
+  return failures;
+}
+
 async function init() {
-  [procedureTypes, instruments, mice, projects, users] = await Promise.all([
-    fetchJSON(`${API}/procedure-types`),
-    fetchJSON(`${API}/instruments`),
-    fetchJSON(`${API}/mice`),
-    fetchJSON(`${API}/projects`),
-    fetchJSON(`${API}/users`),
-  ]);
+  clearBanner();
+  const failures = await bootstrap();
+
   for (const t of procedureTypes) {
     typeInfoByName[t.name] = {
       sort_order: t.sort_order,
       color: PALETTE[(t.sort_order - 1) % PALETTE.length],
     };
   }
+  // Each step works with whatever loaded; none of them can blank the others.
   buildLegend();
   populateFilters();
   populateFormSelects();
-  await loadEvents();
+
+  try {
+    await loadEvents();
+  } catch (err) {
+    failures.push(`scheduled procedures (${err.message})`);
+    renderGrid();     // still draw the axis/rows so the page is not blank
+  }
+
+  if (failures.length) {
+    showBanner(
+      `Could not load: ${failures.join('; ')}. The page is incomplete — ` +
+      `reload, and check the API is up at /session_schedule/docs.`
+    );
+  }
   scrollToToday();
   startNowLineTicker();
 }
@@ -650,7 +737,12 @@ function renderGrid() {
   }
 
   const status = document.getElementById('grid-status');
-  if (!rows.length) {
+  if (!instruments.length) {
+    // Nothing loaded at all — don't blame the filter for a load failure.
+    status.textContent =
+      'No instruments loaded. If the banner above shows an error, the API '
+      + 'request failed; otherwise the database has no instruments.';
+  } else if (!rows.length) {
     status.textContent = 'No instruments match the current filter.';
   } else if (!shown) {
     status.textContent = 'No procedures match the current filters.';
@@ -707,21 +799,26 @@ function buildBlock(block, rows, records, geo) {
 
   const header = document.createElement('div');
   header.className = 'day-header';
+  // The label is a narrow sticky child so it stays visible when the lanes are
+  // scrolled horizontally (see the .day-header CSS note).
+  const label = document.createElement('div');
+  label.className = 'day-header-label';
   const title = document.createElement('span');
   title.textContent = block.label;
-  header.appendChild(title);
+  label.appendChild(title);
   if (block.isCurrent) {
     const badge = document.createElement('span');
     badge.className = 'today-badge';
     badge.textContent = viewMode === 'week' ? 'This week' : 'Today';
-    header.appendChild(badge);
+    label.appendChild(badge);
   }
   const count = document.createElement('span');
   count.className = 'count';
   count.textContent = records.length
     ? `${records.length} procedure${records.length === 1 ? '' : 's'}`
     : 'no procedures';
-  header.appendChild(count);
+  label.appendChild(count);
+  header.appendChild(label);
   wrapper.appendChild(header);
 
   const body = document.createElement('div');
@@ -732,7 +829,9 @@ function buildBlock(block, rows, records, geo) {
   if (!rows.length) {
     const note = document.createElement('div');
     note.className = 'empty-note';
-    note.textContent = 'No instruments match the filter.';
+    note.textContent = instruments.length
+      ? 'No instruments match the filter.'
+      : 'Instruments could not be loaded — see the error above.';
     body.appendChild(note);
   }
   if (block.isCurrent) body.appendChild(buildNowLine(block, geo));
@@ -1200,13 +1299,18 @@ window.addEventListener('resize', () => {
   resizeDebounce = setTimeout(renderGrid, 150);
 });
 
+// Last-resort handlers: anything that escapes init() still has to be visible,
+// because a silently broken page looks like an empty schedule.
+window.addEventListener('error', (event) => {
+  showBanner(`Page error: ${event.message}. Reload; if it persists, report this text.`);
+});
+window.addEventListener('unhandledrejection', (event) => {
+  const reason = event.reason && event.reason.message ? event.reason.message : event.reason;
+  showBanner(`Unhandled error: ${reason}. Reload; if it persists, report this text.`);
+});
+
 init().catch((err) => {
-  // textContent, not innerHTML: err.message must never be treated as markup
-  // (it could one day include response text).
-  const message = document.createElement('p');
-  message.style.color = '#8c2f2f';
-  message.textContent = `Failed to load the schedule: ${err.message}`;
-  document.getElementById('grid-status').replaceChildren(message);
+  showBanner(`Failed to load the schedule: ${err.message}`);
 });
 </script>
 </body>

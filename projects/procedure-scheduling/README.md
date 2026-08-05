@@ -206,6 +206,13 @@ guardrails section of `DESIGN.md`.
 uv run pytest
 ```
 
-The suite (100+ tests) covers the schema, seed dataset, every API filter,
-both validation rules, `acquisition_type` computation, the admin write
-round-trips, the SPA page contract, and the Parquet round-trip.
+The suite (140+ tests) covers the schema, seed dataset, every API filter, both
+validation rules, `acquisition_type` computation, the admin write round-trips,
+concurrent reads, the SPA page contract, and the Parquet round-trip.
+
+It also includes **headless-browser smoke tests** (`tests/test_browser_smoke.py`)
+that drive real Firefox and assert on the rendered DOM — a blank calendar fails
+the suite. They skip automatically, with a reason, if no `firefox` binary is
+present, so the rest of the suite still runs anywhere. These exist because
+static assertions on page source cannot tell a working calendar from an empty
+box; see BUILD_NOTES.md "M14".

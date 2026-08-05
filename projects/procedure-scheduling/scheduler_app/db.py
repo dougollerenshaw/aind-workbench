@@ -180,11 +180,13 @@ def list_tables(conn: duckdb.DuckDBPyConnection) -> list[str]:
 
 
 class Database:
-    """A single app-level DuckDB connection with serialized writes.
+    """One app-level DuckDB database: serialized writes, per-thread reads.
 
-    DuckDB is single-writer, so the whole app shares one connection and all
-    writes go through the :meth:`write` context manager, which holds a lock
-    and wraps the work in a transaction.
+    DuckDB is single-writer, so all writes go through the :meth:`write` context
+    manager, which holds a lock and wraps the work in a transaction. Reads go
+    through :attr:`conn`, which hands each thread its own cursor onto the same
+    database — see that property for why sharing one connection across threads
+    is not safe.
     """
 
     def __init__(self, db_path: str | Path = DEFAULT_DB_PATH):
@@ -192,12 +194,30 @@ class Database:
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self._conn = duckdb.connect(str(self.db_path))
         self._write_lock = threading.Lock()
+        self._local = threading.local()
         create_schema(self._conn)
 
     @property
     def conn(self) -> duckdb.DuckDBPyConnection:
-        """The shared connection (fine for reads; use write() for writes)."""
-        return self._conn
+        """A connection for reads, private to the calling thread.
+
+        A single DuckDBPyConnection is NOT safe to use from several threads at
+        once: concurrent ``execute``/``fetchall`` calls interleave on the same
+        result state and hand back rows of the wrong shape. FastAPI runs sync
+        endpoints in a threadpool, so the calendar's five concurrent bootstrap
+        requests did exactly that and crashed the API with
+        ``IndexError: tuple index out of range`` — which blanked the page (M14).
+
+        ``cursor()`` returns an independent connection onto the same database,
+        so each thread gets its own result state. They are cached per thread
+        rather than created per query. Writes still go through :meth:`write` on
+        the base connection under the lock.
+        """
+        cursor = getattr(self._local, "cursor", None)
+        if cursor is None:
+            cursor = self._conn.cursor()
+            self._local.cursor = cursor
+        return cursor
 
     @contextmanager
     def write(self) -> Iterator[duckdb.DuckDBPyConnection]:

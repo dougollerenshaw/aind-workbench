@@ -119,8 +119,19 @@ def test_grid_uses_one_shared_scroll_container(html):
     style = style_body(html)
     scroll_rule = re.search(r"#grid-scroll\s*\{([^}]*)\}", style)
     assert scroll_rule, "#grid-scroll must have a style rule"
-    assert re.search(r"overflow\s*:\s*auto", scroll_rule.group(1))
-    assert style.count("overflow: auto") == 1, "only the shared container scrolls"
+    rule = scroll_rule.group(1)
+    assert re.search(r"overflow-x\s*:\s*auto", rule), "blocks share one x-scroller"
+    # `scroll`, not `auto`: a late-appearing vertical scrollbar would shrink
+    # clientWidth after the lane widths were measured (M14 week-view bug).
+    assert re.search(r"overflow-y\s*:\s*scroll", rule)
+    # No grid element of its own may scroll, so blocks can't scroll
+    # independently of each other. (Unrelated scrollers like the detail panel
+    # and the modal are fine.)
+    for grid_class in [".day-block", ".block-body", ".instrument-row", ".lane"]:
+        for match in re.finditer(rf"\{grid_class}[^{{]*\{{([^}}]*)\}}", style):
+            assert "overflow" not in match.group(1), (
+                f"{grid_class} must not scroll on its own: {match.group(1)!r}"
+            )
     # Blocks are appended to that container's inner element, not given their own.
     assert "document.getElementById('grid-inner')" in html
 

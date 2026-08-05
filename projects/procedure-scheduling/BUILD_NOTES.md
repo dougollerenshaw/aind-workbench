@@ -4,7 +4,8 @@
 
 **Status: complete and deployed.** Milestones M1–M7 (the specified build)
 plus M8–M13 (tool-launcher integration and Doug's review rounds) are built and
-verified; the full pytest suite (133 tests) is green, plus 11 launcher tests,
+verified; the full pytest suite (146 tests, including headless-browser smoke
+tests) is green, plus 11 launcher tests,
 and each milestone passed an independent verification pass. Nothing is
 blocked. **If you read one more thing, read "Spec corrections found while
 building" immediately below — the places where DESIGN.md's assumptions didn't
@@ -757,6 +758,116 @@ prove the wiring exists and is internally consistent — not that it looks
 right. Pixel geometry (column widths, sticky offsets, bar placement,
 scroll-together behavior) can only really be confirmed in a browser, and that
 pass is Doug's. Specific things worth his eye are listed in the M13 report.
+
+## M14 — Blank calendar: root cause, and why 133 tests couldn't see it
+
+**The headline lesson.** 133 static tests were green while the calendar
+rendered a completely blank box in a real browser. Assertions on HTML *text*
+cannot see a rendered page: they confirm that code exists, never that it
+works. This is the **third** UI bug found by a human looking at the screen
+(modal stuck open, filter timezone bounds, blank grid) and the first that made
+the page unusable. Browser-level smoke tests now exist precisely because this
+class of failure is invisible to everything else in the suite:
+`tests/test_browser_smoke.py` drives real headless Firefox and asserts on DOM
+state, so a blank page fails the suite.
+
+### The bug the reproduction actually found
+
+Instrumented the page (error handlers + progress markers via `dump()`), served
+it through a proxy so the absolute API paths resolved, and ran headless
+Firefox. The page rendered fine against a freshly seeded DB *and* against the
+live database — so the blank state did not reproduce that way. What did
+reproduce, instantly, when the new browser test drove the app under **uvicorn**:
+
+```
+IndexError: tuple index out of range
+  scheduler_app/queries.py:314  in fetch_instruments
+    "sipe_rig_name": r[3],
+```
+
+**Root cause: a single DuckDB connection shared across threads.** The whole app
+used one `DuckDBPyConnection`. A `DuckDBPyConnection` is not safe for
+concurrent use — simultaneous `execute`/`fetchall` calls interleave on the same
+result state and hand back rows of the wrong width. FastAPI runs sync endpoint
+functions in a threadpool, and the calendar fires **five** lookup requests at
+once on load, so those five raced on one connection: rows came back short,
+`r[3]` blew up, the endpoint 500'd, and the page's `Promise.all` rejected —
+leaving every lookup array empty. That produces *exactly* the reported
+symptoms: blank grid with no legend, and "No instruments match the current
+filter" once a view button forces a re-render.
+
+Fixed in `scheduler_app/db.py`: `Database.conn` now returns a **per-thread
+cursor** (`self._conn.cursor()`, cached in `threading.local()`), so each thread
+has its own result state. Writes still go through `write()` on the base
+connection under the lock. M1's design serialized *writes* only — reads were
+assumed safe to share, which is where this hid for 13 milestones.
+
+**Honest caveat on attribution.** Through the tool launcher this bug is
+*masked*: werkzeug's dev server runs `threaded=False`, so requests are
+serialized and never race (verified: 30 concurrent bootstrap requests against
+live :8080 all returned 200, before and after the fix). It reproduces
+deterministically under uvicorn, i.e. standalone `uv run python app.py`. So
+this is certainly a real bug with the right symptoms, but I could not prove it
+is the one Doug hit on :8080, and I could not reproduce his blank page in
+headless Firefox against his data. The hardening below is what makes the next
+occurrence self-diagnosing instead of mysterious.
+
+### Two more real bugs the browser found
+
+Both were invisible to static tests and are now covered by browser assertions:
+
+- **Day headers were invisible.** `.day-header` had `position: sticky;
+  left: 0`, but sticky on a *full-width* box does nothing — the box never
+  leaves the scrollport, so the text just sat at its far-left edge, ~1000px
+  off-screen once the day view scrolled to 8am. Every block therefore showed
+  an empty grey band where "Wednesday, August 5" belonged. Fixed by making the
+  band static and its **label** the narrow sticky child.
+- **Week view scrolled horizontally by ~15px.** Lane widths are measured from
+  `clientWidth`, then rendering makes the content tall enough to add a
+  vertical scrollbar, which *shrinks* `clientWidth` after the fact. Fixed with
+  `overflow-y: scroll` (not `auto`) so the scrollbar is always reserved and
+  the measurement stays valid.
+
+### Bootstrap hardening (a failure must be loud, and must not blank the page)
+
+- The five lookup fetches now settle **independently** (`Promise.allSettled`)
+  instead of one all-or-nothing `Promise.all` destructure. Whatever arrives is
+  used; the page renders what it can.
+- Failures appear in a **loud red banner** at the top of the grid area naming
+  each failed dependency and its error, e.g. *"Could not load: instruments
+  (/session_schedule/api/instruments -> HTTP 503)."* Verified by simulating a
+  503: the banner appears and the rest of the page still renders.
+- `window.error` / `unhandledrejection` handlers also raise the banner, so
+  nothing fails silently. Previously the only report went to the small grey
+  status line at the bottom of the grid — which a view-button click then
+  overwrote, which is why Doug never saw an error.
+- Every read retries once after 500 ms, so a single transient hiccup (the
+  launcher serves requests one at a time, so a burst can queue) no longer
+  costs a whole dependency.
+- The status line and per-block note distinguish "instruments failed to load"
+  from "no instruments match the filter".
+
+### The new test modules
+
+- **`tests/test_browser_smoke.py`** (9 tests) — starts the app on an ephemeral
+  port against a temp seeded DB, serves the real `template.html` through a
+  proxy with two observation-only scripts injected (an error recorder in
+  `<head>`, a DOM probe at the end of `<body>`), and drives headless Firefox,
+  reading the probe's JSON off stdout via `dump()`. Asserts: zero JS
+  errors/rejections, no failure banner, 8 legend chips, day blocks and
+  instrument sub-rows and event bars all > 0 with real pixel width, a 24-hour
+  axis scrolled to the focus hour, today marked with a now-line, sticky labels
+  actually on screen, and a 7-column week view with no horizontal overflow.
+  No clicking is required for the day view. Skips with a clear reason if no
+  Firefox binary exists, so `uv run pytest` still works without one. ~15 s.
+- **`tests/test_concurrency.py`** (4 tests) — the fast Python-level regression
+  for the root cause: the five bootstrap endpoints fired together repeatedly,
+  instrument payload shape checked under load, mixed endpoints hammered, and a
+  store-level check that concurrent queries of different row widths never
+  interleave. **Verified these fail on the buggy version**: reverting
+  `Database.conn` to the shared connection turns all four red (and the browser
+  tests error out with the page never rendering); restoring the fix turns them
+  green.
 
 ### Re-seeding the live database (Doug runs this when ready)
 
