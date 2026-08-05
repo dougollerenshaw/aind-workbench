@@ -3,22 +3,26 @@
 A working prototype of an acquisition/procedure scheduling system for AIND,
 built to break the logjam on
 [aind-scientific-computing#624](https://github.com/AllenNeuralDynamics/aind-scientific-computing/issues/624).
-It is a **conversation-starter and stopgap**, not the production system: the
-long-term home for this is Microsoft Dataverse, and the schema here
-deliberately mirrors Bruno's proposed Dataverse tables so stakeholders can
-react to something real and the data can be backfilled later with a direct
-field-by-field mapping (see "How this maps to Dataverse" below).
+It is a **conversation-starter and stopgap**, not the production system. The
+point is to break a talking-past-each-other loop in issues and design docs by
+putting something concrete in front of people and asking "is this what you're
+looking for?" — the answers come much faster from a running system than from
+another round of documents. The long-term home for this is Microsoft
+Dataverse, and the schema here deliberately mirrors Bruno's proposed Dataverse
+tables so the data can be backfilled later with a direct field-by-field
+mapping (see "How this maps to Dataverse" below).
 
 What it does: schedule a procedure (mouse, instrument, project, contact,
 experimenters, time window, active platforms) and get back a **persistent
 acquisition token** — a time-sortable UUIDv7 minted at scheduling time,
 before the acquisition exists — intended to be the through-line identifier
 from plan to raw data to every derived asset. Around that: a read-only
-filterable REST API, rig-facing convenience endpoints, an admin write API,
-a FullCalendar timeline UI, and Parquet exports of every table. Entirely
-self-contained: local DuckDB file + synthetic seed data, no auth, no
-external services, and **no contact with production Dataverse or any live
-system**.
+filterable REST API, rig-facing convenience endpoints, an admin write API, a
+calendar UI (hand-rolled: day/week blocks with instrument sub-rows), and
+Parquet exports of every table. Entirely self-contained: local DuckDB file +
+synthetic seed data, no auth, no external services, **no external asset
+requests from the page**, and **no contact with production Dataverse or any
+live system**.
 
 See `DESIGN.md` for the full design and `BUILD_NOTES.md` for build decisions
 and deviations.

@@ -1,10 +1,17 @@
-"""M5 tests: the calendar SPA page is served and wired to the right API.
+"""M13 tests: the hand-rolled calendar grid page.
 
-The page is vanilla JS rendered in the browser, so these tests verify what a
-server-side test can: the route serves HTML, the FullCalendar resource
-timeline + GPL license key are present, and the script's API wiring points at
-the real endpoints (the JS builds URLs from a single `API` constant, so we
-assert the constant and each path fragment).
+The grid is built in the browser by vanilla JS, so these tests verify what a
+server-side test can: the page is served, it requests **no external assets**,
+and its static markup + script source wire up the documented structure
+(day/week blocks, instrument sub-rows, one shared scroll container, the
+8am-6pm focus constants, today-at-top, now-indicator, empty-day toggle) and
+still contain every behavior validated in earlier rounds (modal hidden-CSS
+guard, duration -> scheduled_end, local-day filter bounds, behavior-type
+exclusivity, no echo of server-computed fields, text-only detail rendering).
+
+A static trace is weaker evidence than a browser for a from-scratch layout:
+these tests prove the wiring exists and is internally consistent, not that it
+*looks* right. Visual verification is Doug's.
 """
 
 import re
@@ -37,82 +44,56 @@ def html(client):
     return response.text
 
 
-def test_calendar_mount_and_fullcalendar_cdn(html):
-    assert 'id="calendar"' in html
-    # FullCalendar Scheduler bundle from CDN, resource-timeline view, GPL key.
-    assert "cdn.jsdelivr.net/npm/fullcalendar-scheduler" in html
-    assert "resourceTimelineWeek" in html
-    assert "schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source'" in html
-    # Instruments become the timeline's resource rows.
-    assert "resources: instruments.map" in html
+def script_body(html):
+    """The page's inline <script> source."""
+    return html[html.index("<script>") : html.rindex("</script>")]
 
 
-def test_default_view_is_a_single_day_opening_on_today(html):
-    """The week view rendered 168 hourly columns, so "now" was far off-screen.
-    The default is now one day at hour resolution, opened on today."""
-    assert "initialView: 'resourceTimelineDay'" in html
-    assert "initialDate: new Date()" in html
-    # Live current-time line, and the initial scroll follows it.
-    assert "nowIndicator: true" in html
-    assert "scrollTime: nowScrollTime()" in html
-    assert "function nowScrollTime" in html
-    # The three view buttons are unchanged (no new agenda/list view).
-    assert "resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth" in html
-    assert "listWeek" not in html and "listMonth" not in html
+def style_body(html):
+    return html[html.index("<style>") : html.index("</style>")]
 
 
-def test_working_hours_window_is_a_named_adjustable_constant(html):
-    match = re.search(
-        r"const WORKING_HOURS = \{ start: '([\d:]+)', end: '([\d:]+)' \};", html
+def code_only(html):
+    """The page with HTML/CSS/JS comments stripped.
+
+    Used for "this library is gone" assertions: the comments deliberately
+    explain *why* FullCalendar was removed, so the name legitimately appears
+    in prose while no code may reference it.
+    """
+    without = re.sub(r"<!--.*?-->", "", html, flags=re.S)
+    without = re.sub(r"/\*.*?\*/", "", without, flags=re.S)
+    return re.sub(r"^\s*//.*$", "", without, flags=re.M)
+
+
+# ---------------------------------------------------------------------------
+# Self-contained page (FullCalendar removed in M13)
+# ---------------------------------------------------------------------------
+
+
+def test_page_has_no_external_asset_requests(html):
+    """Zero external requests: the page works with no internet access in the
+    viewer's browser, which was a real demo risk while FullCalendar came from
+    a CDN."""
+    assert not re.search(r"""(?:src|href)\s*=\s*["']\s*(?:https?:)?//""", html), (
+        "no element may load an asset from another host"
     )
-    assert match, "WORKING_HOURS must be a single named constant"
-    start, end = match.groups()
-    assert start < end
-    # Applied to the day view only, so week/month never hide events.
-    day_config = html[html.index("function dayViewConfig") : html.index("function calendarViews")]
-    assert "config.slotMinTime = WORKING_HOURS.start" in day_config
-    assert "config.slotMaxTime = WORKING_HOURS.end" in day_config
-    views = html[html.index("function calendarViews") : html.index("function nowScrollTime")]
-    # No slot-range *assignment* in the week/month configs (comments are fine),
-    # so those views can never clip an event out of existence.
-    assert not re.search(r"slot(Min|Max)Time\s*:", views), "week/month must not clip events"
-
-
-def test_out_of_window_procedures_are_reported_not_silently_hidden(html):
-    """FullCalendar won't draw events outside slotMinTime..slotMaxTime, so the
-    page must both warn about them and offer a way to see them."""
-    assert 'id="window-notice"' in html
-    assert "function updateWindowNotice" in html
-    assert "are not drawn here" in html
-    # The 24-hour escape hatch.
-    assert 'id="full-day-toggle"' in html
-    assert "function toggleFullDay" in html
-    assert "calendar.setOption('views', calendarViews())" in html
-    # Recomputed when the view or date range changes.
-    assert "datesSet: () => updateWindowNotice(lastRecords)" in html
-
-
-def test_week_and_month_use_day_resolution_columns(html):
-    """A week is 7 day-columns, not 168 hour-columns; a month is ~30."""
-    views = html[html.index("function calendarViews") : html.index("function nowScrollTime")]
-    week = views[views.index("resourceTimelineWeek") : views.index("resourceTimelineMonth")]
-    assert "slotDuration: { days: 1 }" in week
-    month = views[views.index("resourceTimelineMonth") :]
-    assert "slotDuration: { days: 1 }" in month
-    # Day view keeps hour resolution.
-    day_config = html[html.index("function dayViewConfig") : html.index("function calendarViews")]
-    assert "slotDuration: '01:00:00'" in day_config
-    # Time-of-day moves into the event label for the day-column views.
-    assert "eventContent: (arg) => ({ text: eventLabel(arg.event) })" in html
-    assert "function eventLabel" in html
-    # Today's column is highlighted.
-    assert ".fc-day-today" in html
+    assert "@import" not in html
+    assert not re.search(r"url\(\s*['\"]?(?:https?:)?//", html), "no remote url() in CSS"
+    # The only href values are same-origin paths (the /docs link).
+    for href in re.findall(r"""href\s*=\s*["']([^"']+)["']""", html):
+        assert href.startswith("/"), href
+    # FullCalendar is gone from the code (the comments still explain why).
+    code = code_only(html)
+    for remnant in [
+        "fullcalendar", "FullCalendar", "schedulerLicenseKey",
+        "resourceTimeline", "slotDuration", "slotMinTime", "nowIndicator",
+        ".fc-", "eventContent", "addEventSource",
+    ]:
+        assert remnant not in code, f"FullCalendar remnant left behind: {remnant}"
 
 
 def test_page_wires_the_real_api_paths(html):
-    # All fetch URLs are built from this constant...
     assert "const API = '/session_schedule/api'" in html
-    # ...and each endpoint the page depends on is referenced.
     for fragment in [
         "${API}/scheduled-procedures",
         "${API}/procedure-types",
@@ -125,20 +106,177 @@ def test_page_wires_the_real_api_paths(html):
         assert fragment in html, f"missing API wiring: {fragment}"
 
 
+# ---------------------------------------------------------------------------
+# Grid structure: day/week blocks with instrument sub-rows
+# ---------------------------------------------------------------------------
+
+
+def test_grid_uses_one_shared_scroll_container(html):
+    """All blocks live in a single scroll container, so scrolling one scrolls
+    them all — no per-block scrollbars."""
+    assert 'id="grid-scroll"' in html
+    assert 'id="grid-inner"' in html
+    style = style_body(html)
+    scroll_rule = re.search(r"#grid-scroll\s*\{([^}]*)\}", style)
+    assert scroll_rule, "#grid-scroll must have a style rule"
+    assert re.search(r"overflow\s*:\s*auto", scroll_rule.group(1))
+    assert style.count("overflow: auto") == 1, "only the shared container scrolls"
+    # Blocks are appended to that container's inner element, not given their own.
+    assert "document.getElementById('grid-inner')" in html
+
+
+def test_day_blocks_contain_instrument_subrows(html):
+    """Vertical nesting is day -> instrument, which is why FullCalendar (one
+    resource axis) was dropped."""
+    js = script_body(html)
+    assert "function buildBlock" in js
+    assert "function buildInstrumentRow" in js
+    block = js[js.index("function buildBlock") : js.index("function buildInstrumentRow")]
+    assert "day-header" in block
+    assert "for (const instrument of rows)" in block
+    assert "buildInstrumentRow(block, instrument, records, geo)" in block
+    row = js[js.index("function buildInstrumentRow") : js.index("function layoutDayBars")]
+    assert "instrument-row" in row
+    assert "instrument-label" in row
+    assert "'lane ruled'" in row
+    # Day header reads like "Wednesday August 5".
+    assert "weekday: 'long', month: 'long', day: 'numeric'" in js
+
+
+def test_day_view_focus_window_constants(html):
+    """8am-6pm fills the viewport by default; the full 24 h still exists and is
+    reachable by scrolling."""
+    js = script_body(html)
+    assert "const FOCUS_START_HOUR = 8;" in js
+    assert "const FOCUS_END_HOUR = 18;" in js
+    assert "const FOCUS_HOURS = FOCUS_END_HOUR - FOCUS_START_HOUR;" in js
+    assert "const HOURS_PER_DAY = 24;" in js
+    # Hour width is sized so FOCUS_HOURS fill the visible lane...
+    assert "const unitWidth = available / FOCUS_HOURS;" in js
+    # ...the lane still spans all 24 hours...
+    assert "laneWidth: unitWidth * HOURS_PER_DAY" in js
+    # ...and the initial scroll lands on the focus start hour.
+    assert (
+        "scroller.scrollLeft = viewMode === 'day' ? FOCUS_START_HOUR * geo.unitWidth : 0;"
+        in js
+    )
+
+
+def test_day_bars_positioned_by_start_and_duration(html):
+    js = script_body(html)
+    layout = js[js.index("function layoutDayBars") : js.index("function layoutWeekBars")]
+    assert "startHours * geo.unitWidth" in layout, "left edge = start time"
+    assert "(endHours - startHours) * geo.unitWidth" in layout, "width = duration"
+    assert "MIN_BAR_WIDTH" in layout, "very short procedures stay clickable"
+    # Bars are colored by primary active platform (existing sort_order palette).
+    assert "primaryTypeColor(record.active_procedure_types)" in js
+    assert "const PALETTE = [" in js
+    # Labels are set as text, never markup.
+    assert "bar.textContent = label;" in js
+
+
+def test_week_view_uses_seven_day_columns(html):
+    """A full week fits with no horizontal scrolling: 7 columns sized to the
+    available width exactly."""
+    js = script_body(html)
+    assert "const DAYS_PER_WEEK = 7;" in js
+    week_metrics = js[js.index("function metrics") : js.index("function blockRange")]
+    assert "const unitWidth = available / DAYS_PER_WEEK;" in week_metrics
+    assert "unitCount: DAYS_PER_WEEK, laneWidth: available" in week_metrics, (
+        "week lane must fit the viewport exactly (no horizontal scrolling)"
+    )
+    # Week blocks are weeks, stacked like day blocks, Monday-based.
+    assert "function startOfWeek" in js
+    assert "`Week of ${" in js
+    # A bar sits in its day's column and carries its local time.
+    week_bars = js[js.index("function layoutWeekBars") : js.index("function makeBar")]
+    assert "index * geo.unitWidth" in week_bars
+    assert "fmtTime(start)" in week_bars
+
+
+def test_default_view_is_day(html):
+    js = script_body(html)
+    assert "let viewMode = 'day';" in js
+    assert 'id="view-day" class="active"' in html
+    assert 'id="view-week"' in html
+    # Month view was dropped (see BUILD_NOTES) — no stray button for it.
+    assert 'id="view-month"' not in html
+
+
+def test_today_at_top_and_now_indicator(html):
+    js = script_body(html)
+    # Today's block is marked and scrolled to the top of the grid.
+    assert "function scrollToToday" in js
+    assert "'.day-block.is-today'" in js
+    assert "scroller.scrollTop = Math.max(0, block.offsetTop - offset);" in js
+    assert "scrollToToday();" in js
+    assert "isCurrent" in js and "classList.add('is-today')" in js
+    # A now-line is drawn on the current block and kept fresh.
+    assert "function buildNowLine" in js
+    assert "'now-line'" in js
+    assert "if (block.isCurrent) body.appendChild(buildNowLine(block, geo));" in js
+    assert "function positionNowLine" in js
+    assert "setInterval(positionNowLine, 60000)" in js
+    # Past blocks exist above today, so scrolling up reveals them.
+    assert "const WINDOW_DAYS_BEFORE = 14;" in js
+    assert "const WINDOW_DAYS_AFTER = 45;" in js
+    assert "addDays(today, -WINDOW_DAYS_BEFORE)" in js
+
+
+def test_sticky_axis_header_and_instrument_labels(html):
+    """The hour/day axis stays visible while scrolling vertically, and the
+    instrument names stay visible while scrolling horizontally."""
+    style = style_body(html)
+    axis = re.search(r"\.axis-header\s*\{([^}]*)\}", style)
+    assert axis and "position: sticky" in axis.group(1) and "top: 0" in axis.group(1)
+    label = re.search(r"\.instrument-label\s*\{([^}]*)\}", style)
+    assert label and "position: sticky" in label.group(1) and "left: 0" in label.group(1)
+
+
+def test_empty_blocks_shown_by_default_with_a_toggle_to_hide(html):
+    js = script_body(html)
+    assert 'id="hide-empty-toggle"' in html
+    # Default shows empty days so gaps read as real calendar gaps.
+    assert "let hideEmpty = false;" in js
+    assert "if (hideEmpty && inBlock.length === 0) continue;" in js
+    # Empty blocks are labelled rather than blank.
+    assert "'no procedures'" in js
+
+
+def test_instrument_filter_removes_subrows(html):
+    """Filtering to a rig should drop the other rows entirely, not leave them
+    empty — Doug's primary interaction."""
+    js = script_body(html)
+    visible = js[js.index("function visibleInstruments") : js.index("function metrics")]
+    assert "document.getElementById('filter-instrument').value" in visible
+    assert "instruments.filter((i) => i.id === selected)" in visible
+    assert "const rows = visibleInstruments();" in js
+
+
+def test_event_click_opens_the_detail_panel(html):
+    js = script_body(html)
+    assert (
+        "bar.addEventListener('click', () => showDetail(record.id).catch(showFetchError));"
+        in js
+    )
+    assert 'id="detail-panel"' in html
+
+
 def test_page_has_filters_legend_detail_panel_and_form(html):
-    # Client-side filters: platform, instrument, date range, subject text.
     for element_id in [
         'id="filter-type"', 'id="filter-instrument"', 'id="filter-start"',
         'id="filter-end"', 'id="filter-subject"', 'id="legend"',
         'id="detail-panel"', 'id="add-btn"', 'id="procedure-form"',
-        'id="active-types"', 'id="form-error"',
+        'id="active-types"', 'id="form-error"', 'id="jump-today"',
     ]:
         assert element_id in html, f"missing element: {element_id}"
-    # Type checkboxes are constrained by the selected instrument's
-    # compatible set (from the instruments endpoint).
     assert "compatible_procedure_types" in html
-    # Color mapping is stable via procedure_types.sort_order.
     assert "sort_order" in html
+
+
+# ---------------------------------------------------------------------------
+# Guards carried forward from earlier rounds
+# ---------------------------------------------------------------------------
 
 
 def test_edit_path_never_echoes_server_computed_fields(html):
@@ -147,15 +285,11 @@ def test_edit_path_never_echoes_server_computed_fields(html):
     match = re.search(r"const body = \{(.*?)\};", html, re.S)
     assert match, "the form submit must build an explicit body object"
     body_block = match.group(1)
-    # No server-computed fields in the constructed body...
     for field in ("acquisition_type", "created_at", "updated_at"):
         assert field not in body_block, f"body must not send {field}"
-    # ...no bare `id:` key (mouse_id/project_id etc. are fine)...
     assert re.search(r"(?<![_a-zA-Z])id\s*:", body_block) is None
-    # ...and no wholesale echo of a fetched record anywhere in the script.
     for echo in ("...currentDetail", "...record", "JSON.stringify(currentDetail)"):
         assert echo not in html
-    # The only stringified request payload is the explicit body.
     assert "JSON.stringify(body)" in html
 
 
@@ -163,37 +297,30 @@ def test_detail_panel_renders_user_content_as_text(html):
     """User-typed fields (notes, protocols, planned_config) must be rendered
     via textContent, never innerHTML, so they can't inject markup."""
     renderer = html[html.index("async function showDetail") : html.index("function closeDetail")]
-    # The only innerHTML use may be the empty-string clear of the <dl>.
     assignments = re.findall(r"innerHTML\s*=\s*([^;]+);", renderer)
     assert assignments and all(a.strip() == "''" for a in assignments)
     assert "textContent" in renderer
 
 
 def test_hidden_toggled_elements_have_no_unguarded_display_rules(html):
-    """Regression for the permanently-open modal (found in the first real
-    browser pass): an author `display:` rule on an element toggled via the
-    `hidden` attribute overrides the UA's `[hidden] { display: none }`, so
-    the element can never be hidden. Every id the JS toggles via `.hidden`
-    must either have no author display rule or guard it with [hidden] /
-    :not([hidden])."""
+    """Regression for the permanently-open modal: an author `display:` rule on
+    an element toggled via the `hidden` attribute overrides the UA's
+    `[hidden] { display: none }`, so the element can never be hidden."""
     toggled = set(re.findall(r"getElementById\('([\w-]+)'\)\.hidden\s*=", html))
     assert {"modal-backdrop", "detail-panel"} <= toggled
 
-    style = html[html.index("<style>") : html.index("</style>")]
+    style = style_body(html)
     rules = re.findall(r"([^{}]+)\{([^{}]*)\}", style)
     for element_id in toggled:
         for selector, body in rules:
             for sel in selector.split(","):
                 sel = sel.strip()
-                # Rules that style the element ITSELF (not descendants — no
-                # combinator), e.g. "#modal-backdrop", "#modal-backdrop:hover".
                 if re.match(rf"#{element_id}(?![\w-])", sel) and " " not in sel:
                     if "display" in body:
                         assert "[hidden]" in sel, (
                             f"`{sel}` sets display without a [hidden] guard; "
                             f"the hidden attribute would stop working"
                         )
-    # And the specific fix is present, so this exact regression can't return.
     assert "#modal-backdrop:not([hidden])" in style
 
 
@@ -202,27 +329,20 @@ def test_form_uses_start_plus_duration(html):
     client-side, keeping the API contract (start + end) unchanged."""
     assert 'id="f-duration"' in html
     assert 'type="number"' in html
-    assert 'id="f-end"' not in html, "explicit end input was replaced by duration"
-    # The submit body still sends a computed scheduled_end.
+    assert 'id="f-end"' not in html
     match = re.search(r"const body = \{(.*?)\};", html, re.S)
     assert match and "scheduled_end: endDate.toISOString()" in match.group(1)
-    # Edit mode derives duration from the record's end - start.
     assert "record.scheduled_end) - new Date(record.scheduled_start)" in html
-    # Live hint shows the computed end time.
     assert 'id="end-hint"' in html
     assert "updateEndHint" in html
 
 
 def test_date_filter_bounds_are_local_calendar_days(html):
-    """The From/To inputs are local calendar dates, so the bounds sent to the
-    API must be local midnight / end-of-day converted to UTC. Sending
-    `${date}T00:00:00Z` shifted the window by the UTC offset and dropped real
-    matches (in Pacific, a "To" date excluded everything after 16:59 local)."""
+    """From/To are local calendar dates, so the bounds sent to the API must be
+    local midnight / end-of-day converted to UTC."""
     assert "params.set('start_after', localDayStart(from).toISOString())" in html
     assert "params.set('start_before', localDayEnd(to).toISOString())" in html
     assert "function localDayStart" in html and "function localDayEnd" in html
-    # No naive-UTC date bound is actually *sent* (the string may still appear
-    # in the explanatory comment).
     assert not re.search(r"params\.set\([^)]*T00:00:00Z", html)
     assert not re.search(r"params\.set\([^)]*T23:59:59Z", html)
 
@@ -235,14 +355,16 @@ def test_behavior_exclusivity_wiring(html):
     renderer = html[
         html.index("function applyBehaviorExclusivity") : html.index("function toLocalInputValue")
     ]
-    # Filters the checkbox list by modality, then disables/mutes the rest.
     assert "dataset.modality === BEHAVIOR_MODALITY" in renderer
     assert "cb.disabled = muted" in renderer
     assert "opacity" in renderer
-    # Modality comes from the API payload, not a hardcoded task list.
     assert "cb.dataset.modality = t.modality_name" in html
-    # Re-applied whenever a checkbox changes and when the list is rebuilt.
     assert "cb.addEventListener('change', applyBehaviorExclusivity)" in html
+
+
+# ---------------------------------------------------------------------------
+# Routing
+# ---------------------------------------------------------------------------
 
 
 def test_trailing_slash_and_root_redirects(client):

@@ -4,16 +4,19 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AIND Procedure Schedule</title>
-<!-- FullCalendar Scheduler (resource-timeline) from CDN. This repo is open
-     source, so the premium plugins run under FullCalendar's GPLv3 license
-     key (schedulerLicenseKey below). No build toolchain — vanilla JS. -->
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js"></script>
+<!-- No external assets: the calendar grid is hand-rolled vanilla JS/CSS.
+     FullCalendar was removed in M13 because its timeline has exactly one
+     resource axis and cannot nest dates ABOVE instruments, which is the
+     layout Doug's mockup asks for. Side benefit: the page has zero external
+     requests, so it works with no internet access in the viewer's browser. -->
 <style>
   :root {
     --border: #d6d9de;
     --muted: #5c6470;
     --accent: #1d4e89;
     --bg: #f7f8fa;
+    --today: rgba(29, 78, 137, 0.07);
+    --now: #d1495b;
   }
   * { box-sizing: border-box; }
   body {
@@ -40,32 +43,125 @@
     font-size: 0.85rem; padding: 0.25rem 0.35rem;
     border: 1px solid var(--border); border-radius: 4px; background: #fff;
   }
+  .filters .inline-check { flex-direction: row; align-items: center; gap: 0.3rem; }
   button {
     font-size: 0.85rem; padding: 0.35rem 0.8rem; border-radius: 4px;
     border: 1px solid var(--border); background: #fff; cursor: pointer;
   }
   button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
   button:hover { filter: brightness(0.96); }
+  .view-switch { display: inline-flex; gap: 0.3rem; }
 
   #legend { display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem; font-size: 0.75rem; color: var(--muted); }
   #legend .chip { display: inline-flex; align-items: center; gap: 0.3rem; }
   #legend .swatch { width: 0.7rem; height: 0.7rem; border-radius: 3px; display: inline-block; }
-
-  #layout { display: flex; gap: 0; }
-  #calendar { flex: 1; padding: 0.8rem 1.2rem; background: #fff; margin: 0.8rem; border: 1px solid var(--border); border-radius: 6px; min-width: 0; }
-  .fc .fc-event { cursor: pointer; font-size: 0.75rem; }
-  /* Highlight today's column in the day-resolution week/month views. */
-  .fc .fc-day-today { background: rgba(29, 78, 137, 0.07); }
-  .fc .fc-timeline-slot.fc-day-today { background: rgba(29, 78, 137, 0.07); }
-
-  .filters .inline-check { flex-direction: row; align-items: center; gap: 0.3rem; }
   .notice { margin: 0.35rem 0 0; font-size: 0.75rem; color: #8c5a2f; min-height: 0.9rem; }
+
+  #layout { display: flex; gap: 0; align-items: flex-start; }
+
+  /* ------------------------------------------------------------------ */
+  /* Hand-rolled schedule grid.                                          */
+  /*                                                                     */
+  /* Structure: ONE horizontally-scrolling container (#grid-scroll) holds  */
+  /* every block, so scrolling any block scrolls them all together — the   */
+  /* blocks share a single scrollbar by construction. Inside it, blocks    */
+  /* stack vertically (day → instrument sub-rows → next day), and the      */
+  /* page itself scrolls vertically for past/future days.                 */
+  /* ------------------------------------------------------------------ */
+  #calendar {
+    flex: 1; min-width: 0; background: #fff; margin: 0.8rem;
+    border: 1px solid var(--border); border-radius: 6px;
+  }
+  /* ONE scroll container for both axes. Horizontal: all blocks share it, so
+     they scroll together. Vertical: blocks stack inside it, so scrolling up
+     reveals past days. Both sticky offsets below are relative to this box.
+     (Note: `overflow-x: auto` with `overflow-y: visible` would compute to
+     `auto` anyway, so make the two-axis container explicit.) */
+  #grid-scroll {
+    overflow: auto;
+    max-height: calc(100vh - 14rem);
+    min-height: 18rem;
+  }
+  #grid-inner { position: relative; }
+
+  /* Sticky time axis: sticks to the top of the viewport while the page
+     scrolls vertically, and scrolls horizontally with the lanes so the hour
+     labels stay aligned with the bars underneath. */
+  .axis-header {
+    position: sticky; top: 0; z-index: 6; display: flex;
+    background: #fff; border-bottom: 1px solid var(--border);
+  }
+  .axis-corner {
+    position: sticky; left: 0; z-index: 7; flex: none;
+    background: #fff; border-right: 1px solid var(--border);
+    font-size: 0.7rem; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.04em; display: flex; align-items: center; padding-left: 0.6rem;
+  }
+  .axis-units { position: relative; flex: none; height: 1.6rem; }
+  .axis-unit {
+    position: absolute; top: 0; bottom: 0; padding-left: 0.25rem;
+    font-size: 0.7rem; color: var(--muted); border-left: 1px solid var(--border);
+    white-space: nowrap; overflow: hidden;
+  }
+
+  .day-block { border-bottom: 2px solid var(--border); }
+  .day-block.is-today .day-header { background: var(--today); font-weight: 600; }
+  .day-header {
+    position: sticky; left: 0; z-index: 4; padding: 0.3rem 0.6rem;
+    font-size: 0.82rem; background: #fbfcfd; border-bottom: 1px solid var(--border);
+    display: flex; gap: 0.5rem; align-items: baseline;
+  }
+  .day-header .today-badge {
+    font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #fff; background: var(--accent); border-radius: 999px; padding: 0.05rem 0.45rem;
+  }
+  .day-header .count { color: var(--muted); font-size: 0.72rem; font-weight: 400; }
+
+  .block-body { position: relative; }
+  .instrument-row { display: flex; border-top: 1px solid #edeff2; }
+  .instrument-row:first-child { border-top: none; }
+  .instrument-label {
+    position: sticky; left: 0; z-index: 3; flex: none;
+    background: #fff; border-right: 1px solid var(--border);
+    font-size: 0.75rem; padding: 0.3rem 0.5rem; display: flex; align-items: center;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .lane { position: relative; flex: none; }
+  /* Hour/day gridlines are a repeating background so there is no per-line DOM. */
+  .lane.ruled {
+    background-image: linear-gradient(to right, #edeff2 0 1px, transparent 1px 100%);
+    background-repeat: repeat-x;
+  }
+  .lane.is-today-col { background-color: var(--today); }
+
+  .event-bar {
+    position: absolute; top: 3px; bottom: 3px; border-radius: 3px;
+    color: #fff; font-size: 0.7rem; line-height: 1.15;
+    padding: 0.1rem 0.3rem; cursor: pointer; overflow: hidden;
+    white-space: nowrap; text-overflow: ellipsis; border: 1px solid rgba(0,0,0,0.15);
+  }
+  .event-bar:hover { filter: brightness(1.08); }
+  .event-bar:focus-visible { outline: 2px solid #1c2128; outline-offset: 1px; }
+
+  /* Live current-time line: one continuous line across today's block. */
+  .now-line {
+    position: absolute; top: 0; bottom: 0; width: 2px; background: var(--now);
+    z-index: 5; pointer-events: none;
+  }
+  .now-line::before {
+    content: ''; position: absolute; top: -3px; left: -3px;
+    width: 8px; height: 8px; border-radius: 50%; background: var(--now);
+  }
+  .empty-note { padding: 0.35rem 0.6rem; font-size: 0.72rem; color: var(--muted); position: sticky; left: 0; }
+  #grid-status { padding: 0.6rem 0.8rem; font-size: 0.8rem; color: var(--muted); }
 
   /* Detail side panel */
   #detail-panel {
     width: 21rem; flex: none; margin: 0.8rem 0.8rem 0.8rem 0; padding: 0.9rem 1rem;
     background: #fff; border: 1px solid var(--border); border-radius: 6px;
     font-size: 0.85rem; align-self: flex-start; max-height: 85vh; overflow-y: auto;
+    position: sticky; top: 0.8rem;
   }
   #detail-panel h2 { margin: 0 0 0.2rem; font-size: 1rem; }
   #detail-panel .close { float: right; border: none; background: none; font-size: 1rem; }
@@ -126,6 +222,11 @@
   </p>
 
   <div class="filters">
+    <span class="view-switch">
+      <button type="button" id="view-day" class="active">Day</button>
+      <button type="button" id="view-week">Week</button>
+    </span>
+    <button type="button" id="jump-today">Jump to today</button>
     <label>Platform
       <select id="filter-type"><option value="">All platforms</option></select>
     </label>
@@ -143,8 +244,8 @@
     </label>
     <button id="clear-filters" type="button">Clear filters</button>
     <button id="add-btn" type="button" class="primary">Add procedure</button>
-    <label class="inline-check" title="Day view normally shows working hours only">
-      <input type="checkbox" id="full-day-toggle"> Show full 24 h
+    <label class="inline-check" title="Hide day/week blocks that have no procedures">
+      <input type="checkbox" id="hide-empty-toggle"> Hide empty days
     </label>
   </div>
 
@@ -153,7 +254,12 @@
 </header>
 
 <div id="layout">
-  <div id="calendar"></div>
+  <div id="calendar">
+    <div id="grid-scroll">
+      <div id="grid-inner"></div>
+    </div>
+    <p id="grid-status"></p>
+  </div>
 
   <aside id="detail-panel" hidden>
     <button class="close" type="button" title="Close" onclick="closeDetail()">&#10005;</button>
@@ -241,16 +347,40 @@ const PALETTE = [
   '#7b6bb2', // 8 Whole-brain axonal imaging
 ];
 
+// ---------------------------------------------------------------------------
+// Grid geometry — the knobs worth adjusting live here.
+// ---------------------------------------------------------------------------
+
+// Day view: this hour range fills the viewport width. The full 24 h is always
+// rendered; hours outside the focus range are simply off-viewport, reachable
+// by scrolling the shared horizontal scrollbar left/right.
+const FOCUS_START_HOUR = 8;
+const FOCUS_END_HOUR = 18;
+const FOCUS_HOURS = FOCUS_END_HOUR - FOCUS_START_HOUR;   // 10 of 24 hours
+const HOURS_PER_DAY = 24;
+const DAYS_PER_WEEK = 7;
+
+// How much of the calendar exists: today-14 .. today+45. Past days render
+// ABOVE today, so scrolling up reveals them.
+const WINDOW_DAYS_BEFORE = 14;
+const WINDOW_DAYS_AFTER = 45;
+
+const LABEL_WIDTH = 150;      // px, instrument-name column (sticky at left)
+const ROW_HEIGHT = 26;        // px, one instrument sub-row
+const MIN_BAR_WIDTH = 10;     // px, so a very short procedure stays clickable
+
 // Lookup caches, filled by init().
 let procedureTypes = [];        // [{id, name, sort_order, ...}]
 let typeInfoByName = {};        // name -> {sort_order, color}
 let instruments = [];           // [{id, name, compatible_procedure_types, ...}]
 let mice = [], projects = [], users = [];
 
-let calendar = null;
-let eventSource = null;
+let viewMode = 'day';           // 'day' | 'week' — day is the default on load
+let hideEmpty = false;
+let lastRecords = [];           // records currently rendered
 let currentDetail = null;       // record shown in the side panel
 let editingId = null;           // scheduled_procedure id when the modal edits
+let nowLineTimer = null;
 
 async function fetchJSON(url) {
   const response = await fetch(url);
@@ -279,8 +409,9 @@ async function init() {
   buildLegend();
   populateFilters();
   populateFormSelects();
-  initCalendar();
   await loadEvents();
+  scrollToToday();
+  startNowLineTicker();
 }
 
 function buildLegend() {
@@ -326,113 +457,37 @@ function populateFormSelects() {
 }
 
 // ---------------------------------------------------------------------------
-// Calendar (resource timeline: instruments as rows)
+// Date helpers (all local-time; the API speaks UTC and we convert at the edge)
 // ---------------------------------------------------------------------------
 
-// Day view shows one working day across the page at hour resolution, so the
-// whole day fits with no horizontal scrolling. Adjust the window here.
-const WORKING_HOURS = { start: '06:00:00', end: '20:00:00' };
-
-// When true the day view shows all 24 hours (the "Show full 24 h" checkbox),
-// so procedures outside working hours are never unreachable.
-let showFullDay = false;
-
-function dayViewConfig() {
-  const config = {
-    slotDuration: '01:00:00',
-    slotLabelFormat: { hour: 'numeric', meridiem: 'short' },
-  };
-  if (!showFullDay) {
-    // FullCalendar does NOT render events lying entirely outside
-    // slotMinTime..slotMaxTime, so the notice under the calendar reports any
-    // that fall outside the window and the checkbox reveals them.
-    config.slotMinTime = WORKING_HOURS.start;
-    config.slotMaxTime = WORKING_HOURS.end;
-  }
-  return config;
+function startOfDay(date) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
 }
 
-function calendarViews() {
-  return {
-    resourceTimelineDay: dayViewConfig(),
-    // Week and month use DAY-resolution columns (7 / ~30 columns that fit on
-    // screen) instead of one column per hour, which made a week 168 columns
-    // wide. Time-of-day is carried in the event label instead. No
-    // slotMinTime/slotMaxTime here, so these views always show every event.
-    resourceTimelineWeek: {
-      slotDuration: { days: 1 },
-      slotLabelFormat: [{ weekday: 'short', month: 'numeric', day: 'numeric' }],
-    },
-    resourceTimelineMonth: {
-      slotDuration: { days: 1 },
-      slotLabelFormat: [{ day: 'numeric' }],
-    },
-  };
+function addDays(date, n) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + n);
+  return d;
 }
 
-// Start the day view scrolled so "now" is in view (a no-op while the whole
-// window fits, but correct if the window is ever widened past the viewport).
-function nowScrollTime() {
-  const now = new Date();
-  const startHour = parseInt(WORKING_HOURS.start, 10);
-  const hour = Math.max(startHour, now.getHours() - 1);
-  return `${String(hour).padStart(2, '0')}:00:00`;
+// Monday-based week start, matching the Mon–Sun week view axis.
+function startOfWeek(date) {
+  const d = startOfDay(date);
+  const shift = (d.getDay() + 6) % 7;   // Sun=0 -> 6, Mon=1 -> 0
+  return addDays(d, -shift);
 }
 
-function initCalendar() {
-  calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
-    schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
-    // One day at hour resolution, opening on today — finding "now" in a
-    // 168-column week was the usability complaint this replaces.
-    initialView: 'resourceTimelineDay',
-    initialDate: new Date(),
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth',
-    },
-    buttonText: { today: 'Today', day: 'Day', week: 'Week', month: 'Month' },
-    views: calendarViews(),
-    resourceAreaHeaderContent: 'Instrument',
-    resourceAreaWidth: '13rem',
-    resources: instruments.map((i) => ({ id: i.id, title: i.name })),
-    resourceOrder: 'title',
-    height: 'auto',
-    nowIndicator: true,          // live current-time line
-    scrollTime: nowScrollTime(),
-    // Local time-of-day in the label, so the week/month day-columns still
-    // tell you when a procedure runs.
-    eventContent: (arg) => ({ text: eventLabel(arg.event) }),
-    datesSet: () => updateWindowNotice(lastRecords),
-    eventClick: (info) => showDetail(info.event.id).catch(showFetchError),
-  });
-  calendar.render();
+function sameDay(a, b) {
+  return a.getFullYear() === b.getFullYear()
+    && a.getMonth() === b.getMonth()
+    && a.getDate() === b.getDate();
 }
 
-function eventLabel(event) {
-  const time = event.start.toLocaleTimeString([], {
-    hour: 'numeric', minute: '2-digit',
-  });
-  return `${time} ${event.title}`;
-}
-
-function showFetchError(err) {
-  // Surface read failures instead of silently doing nothing.
-  alert(`Request failed: ${err.message}`);
-}
-
-function refresh() {
-  loadEvents().catch(showFetchError);
-}
-
-function primaryTypeColor(activeTypeNames) {
-  // "Primary" = the active type with the lowest sort_order (stable mapping).
-  let best = null;
-  for (const name of activeTypeNames) {
-    const info = typeInfoByName[name];
-    if (info && (best === null || info.sort_order < best.sort_order)) best = info;
-  }
-  return best ? best.color : '#8892a0';
+function dayKey(date) {
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
 // "2026-08-05" -> that instant at 00:00:00 LOCAL time. A date string without
@@ -443,6 +498,33 @@ function localDayStart(dateString) {
 
 function localDayEnd(dateString) {
   return new Date(`${dateString}T23:59:59`);
+}
+
+function fmtLocal(iso) {
+  return new Date(iso).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+}
+
+function fmtTime(date) {
+  return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+}
+
+function fmtHourLabel(hour) {
+  const d = new Date(2000, 0, 1, hour);
+  return d.toLocaleTimeString([], { hour: 'numeric' });
+}
+
+// ---------------------------------------------------------------------------
+// Data loading
+// ---------------------------------------------------------------------------
+
+function primaryTypeColor(activeTypeNames) {
+  // "Primary" = the active type with the lowest sort_order (stable mapping).
+  let best = null;
+  for (const name of activeTypeNames) {
+    const info = typeInfoByName[name];
+    if (info && (best === null || info.sort_order < best.sort_order)) best = info;
+  }
+  return best ? best.color : '#8892a0';
 }
 
 async function loadEvents() {
@@ -468,77 +550,332 @@ async function loadEvents() {
     records = records.filter((r) => r.mouse.subject_id.toLowerCase().includes(subjectQuery));
   }
 
-  const events = records.map((r) => ({
-    id: r.id,
-    resourceId: r.instrument.id,
-    title: `${r.mouse.subject_id} · ${r.acquisition_type}`,
-    start: r.scheduled_start,
-    end: r.scheduled_end,
-    backgroundColor: primaryTypeColor(r.active_procedure_types),
-    borderColor: primaryTypeColor(r.active_procedure_types),
-  }));
-
-  if (eventSource) eventSource.remove();
-  eventSource = calendar.addEventSource(events);
-
   lastRecords = records;
-  updateWindowNotice(records);
+  renderGrid();
 }
 
-// Records currently loaded, kept so the notice can be recomputed when the
-// view or date range changes without refetching.
-let lastRecords = [];
-
-function minutesIntoDay(date) {
-  return date.getHours() * 60 + date.getMinutes();
+function refresh() {
+  loadEvents().catch(showFetchError);
 }
 
-function windowMinutes() {
-  const [startHour, startMin] = WORKING_HOURS.start.split(':').map(Number);
-  const [endHour, endMin] = WORKING_HOURS.end.split(':').map(Number);
-  return [startHour * 60 + startMin, endHour * 60 + endMin];
+function showFetchError(err) {
+  // Surface read failures instead of silently doing nothing.
+  alert(`Request failed: ${err.message}`);
 }
 
-// The day view can only draw what's inside the working-hours window, so say
-// so out loud rather than silently dropping procedures.
-function updateWindowNotice(records) {
-  const notice = document.getElementById('window-notice');
-  if (!notice || !calendar) return;
-  if (calendar.view.type !== 'resourceTimelineDay' || showFullDay) {
-    notice.textContent = '';
-    return;
+// Instruments to show as sub-rows. The instrument filter removes rows
+// entirely rather than leaving them empty — most users narrow to a subset of
+// rigs, so an empty row would just be noise.
+function visibleInstruments() {
+  const selected = document.getElementById('filter-instrument').value;
+  const rows = selected ? instruments.filter((i) => i.id === selected) : instruments.slice();
+  return rows.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+// ---------------------------------------------------------------------------
+// The grid: a vertical stack of blocks (day or week), each block containing
+// one sub-row per instrument. All blocks live in ONE horizontal scroll
+// container, so they scroll together and share a single scrollbar.
+// ---------------------------------------------------------------------------
+
+// Horizontal geometry for the current view. Day view: 24 hour-units, sized so
+// FOCUS_HOURS of them fill the viewport (so the rest overflow and scroll).
+// Week view: 7 day-units sized to fit exactly, so a full week needs no
+// horizontal scrolling at all.
+function metrics() {
+  const scroller = document.getElementById('grid-scroll');
+  const available = Math.max(320, scroller.clientWidth - LABEL_WIDTH);
+  if (viewMode === 'week') {
+    const unitWidth = available / DAYS_PER_WEEK;
+    return { unitWidth, unitCount: DAYS_PER_WEEK, laneWidth: available };
   }
-  const [windowStart, windowEnd] = windowMinutes();
-  const viewStart = calendar.view.activeStart;
-  const viewEnd = calendar.view.activeEnd;
-  const outside = records.filter((r) => {
-    const start = new Date(r.scheduled_start);
-    const end = new Date(r.scheduled_end);
-    if (end <= viewStart || start >= viewEnd) return false;  // not this day
-    return minutesIntoDay(end) <= windowStart || minutesIntoDay(start) >= windowEnd;
-  });
-  notice.textContent = outside.length
-    ? `${outside.length} procedure(s) on this day fall outside the ` +
-      `${WORKING_HOURS.start.slice(0, 5)}–${WORKING_HOURS.end.slice(0, 5)} window ` +
-      `and are not drawn here — tick "Show full 24 h", or use the Week view.`
-    : '';
+  const unitWidth = available / FOCUS_HOURS;
+  return { unitWidth, unitCount: HOURS_PER_DAY, laneWidth: unitWidth * HOURS_PER_DAY };
 }
 
-function toggleFullDay(checked) {
-  showFullDay = checked;
-  calendar.setOption('views', calendarViews());
-  updateWindowNotice(lastRecords);
+// The blocks to render: [{start, end, label, isCurrent}], oldest first so
+// today's block sits at the top of the *visible* area with past days above it.
+function blockRange() {
+  const today = startOfDay(new Date());
+  const from = document.getElementById('filter-start').value;
+  const to = document.getElementById('filter-end').value;
+  let first = from ? startOfDay(localDayStart(from)) : addDays(today, -WINDOW_DAYS_BEFORE);
+  let last = to ? startOfDay(localDayEnd(to)) : addDays(today, WINDOW_DAYS_AFTER);
+  if (last < first) last = first;
+
+  const blocks = [];
+  if (viewMode === 'week') {
+    for (let w = startOfWeek(first); w <= last; w = addDays(w, 7)) {
+      blocks.push({
+        start: w,
+        end: addDays(w, 7),
+        label: `Week of ${w.toLocaleDateString([], { month: 'long', day: 'numeric' })}`,
+        isCurrent: startOfWeek(today).getTime() === w.getTime(),
+      });
+    }
+    return blocks;
+  }
+  for (let d = first; d <= last; d = addDays(d, 1)) {
+    blocks.push({
+      start: d,
+      end: addDays(d, 1),
+      label: d.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' }),
+      isCurrent: sameDay(d, today),
+    });
+  }
+  return blocks;
+}
+
+function renderGrid() {
+  const inner = document.getElementById('grid-inner');
+  const geo = metrics();
+  const rows = visibleInstruments();
+  const blocks = blockRange();
+
+  inner.replaceChildren();
+  inner.style.width = `${LABEL_WIDTH + geo.laneWidth}px`;
+  inner.appendChild(buildAxisHeader(geo));
+
+  let shown = 0;
+  let withEvents = 0;
+  for (const block of blocks) {
+    const inBlock = lastRecords.filter((r) => {
+      const start = new Date(r.scheduled_start);
+      return start >= block.start && start < block.end;
+    });
+    if (inBlock.length) withEvents += 1;
+    if (hideEmpty && inBlock.length === 0) continue;
+    inner.appendChild(buildBlock(block, rows, inBlock, geo));
+    shown += 1;
+  }
+
+  const status = document.getElementById('grid-status');
+  if (!rows.length) {
+    status.textContent = 'No instruments match the current filter.';
+  } else if (!shown) {
+    status.textContent = 'No procedures match the current filters.';
+  } else {
+    const unit = viewMode === 'week' ? 'week' : 'day';
+    status.textContent =
+      `${lastRecords.length} procedure(s) across ${withEvents} ${unit}(s) with sessions; ` +
+      `${shown} ${unit} block(s) shown. Scroll up for past ${unit}s, down for future ones.`;
+  }
+
+  // Day view starts at the focus hour; week view has nothing to scroll.
+  const scroller = document.getElementById('grid-scroll');
+  scroller.scrollLeft = viewMode === 'day' ? FOCUS_START_HOUR * geo.unitWidth : 0;
+  positionNowLine();
+}
+
+function buildAxisHeader(geo) {
+  const header = document.createElement('div');
+  header.className = 'axis-header';
+
+  const corner = document.createElement('div');
+  corner.className = 'axis-corner';
+  corner.style.width = `${LABEL_WIDTH}px`;
+  corner.textContent = 'Instrument';
+  header.appendChild(corner);
+
+  const units = document.createElement('div');
+  units.className = 'axis-units';
+  units.style.width = `${geo.laneWidth}px`;
+  for (let i = 0; i < geo.unitCount; i += 1) {
+    const cell = document.createElement('div');
+    cell.className = 'axis-unit';
+    cell.style.left = `${i * geo.unitWidth}px`;
+    cell.style.width = `${geo.unitWidth}px`;
+    if (viewMode === 'week') {
+      // Weekday names are the axis in week view; the date lives in the
+      // block header, since every week block shares the same 7 columns.
+      const day = addDays(startOfWeek(new Date()), i);
+      cell.textContent = day.toLocaleDateString([], { weekday: 'short' });
+    } else {
+      cell.textContent = fmtHourLabel(i);
+    }
+    units.appendChild(cell);
+  }
+  header.appendChild(units);
+  return header;
+}
+
+function buildBlock(block, rows, records, geo) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'day-block';
+  wrapper.dataset.blockStart = dayKey(block.start);
+  if (block.isCurrent) wrapper.classList.add('is-today');
+
+  const header = document.createElement('div');
+  header.className = 'day-header';
+  const title = document.createElement('span');
+  title.textContent = block.label;
+  header.appendChild(title);
+  if (block.isCurrent) {
+    const badge = document.createElement('span');
+    badge.className = 'today-badge';
+    badge.textContent = viewMode === 'week' ? 'This week' : 'Today';
+    header.appendChild(badge);
+  }
+  const count = document.createElement('span');
+  count.className = 'count';
+  count.textContent = records.length
+    ? `${records.length} procedure${records.length === 1 ? '' : 's'}`
+    : 'no procedures';
+  header.appendChild(count);
+  wrapper.appendChild(header);
+
+  const body = document.createElement('div');
+  body.className = 'block-body';
+  for (const instrument of rows) {
+    body.appendChild(buildInstrumentRow(block, instrument, records, geo));
+  }
+  if (!rows.length) {
+    const note = document.createElement('div');
+    note.className = 'empty-note';
+    note.textContent = 'No instruments match the filter.';
+    body.appendChild(note);
+  }
+  if (block.isCurrent) body.appendChild(buildNowLine(block, geo));
+  wrapper.appendChild(body);
+  return wrapper;
+}
+
+function buildInstrumentRow(block, instrument, records, geo) {
+  const row = document.createElement('div');
+  row.className = 'instrument-row';
+  row.dataset.instrumentId = instrument.id;
+
+  const label = document.createElement('div');
+  label.className = 'instrument-label';
+  label.style.width = `${LABEL_WIDTH}px`;
+  label.style.height = `${ROW_HEIGHT}px`;
+  label.title = instrument.name;
+  label.textContent = instrument.name;
+  row.appendChild(label);
+
+  const lane = document.createElement('div');
+  lane.className = 'lane ruled';
+  lane.style.width = `${geo.laneWidth}px`;
+  lane.style.height = `${ROW_HEIGHT}px`;
+  lane.style.backgroundSize = `${geo.unitWidth}px 100%`;
+
+  const mine = records.filter((r) => r.instrument.id === instrument.id);
+  if (viewMode === 'week') {
+    layoutWeekBars(lane, block, mine, geo);
+  } else {
+    layoutDayBars(lane, block, mine, geo);
+  }
+  row.appendChild(lane);
+  return row;
+}
+
+// Day view: left edge = start time, width = duration.
+function layoutDayBars(lane, block, records, geo) {
+  for (const record of records) {
+    const start = new Date(record.scheduled_start);
+    const end = new Date(record.scheduled_end);
+    const startHours = (start - block.start) / 3600000;
+    const endHours = Math.min((end - block.start) / 3600000, HOURS_PER_DAY);
+    const bar = makeBar(record, `${record.mouse.subject_id} · ${record.acquisition_type}`);
+    bar.style.left = `${startHours * geo.unitWidth}px`;
+    bar.style.width = `${Math.max(MIN_BAR_WIDTH, (endHours - startHours) * geo.unitWidth)}px`;
+    bar.title = `${record.mouse.subject_id} — ${record.acquisition_type}\n` +
+                `${fmtTime(start)}–${fmtTime(end)}`;
+    lane.appendChild(bar);
+  }
+}
+
+// Week view: one bar inside its day column, labelled with the local time.
+// Several procedures on the same rig and day share the column side by side.
+function layoutWeekBars(lane, block, records, geo) {
+  const byDay = new Map();
+  for (const record of records) {
+    const start = new Date(record.scheduled_start);
+    const index = Math.floor((startOfDay(start) - block.start) / 86400000);
+    if (index < 0 || index >= DAYS_PER_WEEK) continue;
+    if (!byDay.has(index)) byDay.set(index, []);
+    byDay.get(index).push(record);
+  }
+  for (const [index, dayRecords] of byDay) {
+    dayRecords.sort((a, b) => new Date(a.scheduled_start) - new Date(b.scheduled_start));
+    const slotWidth = geo.unitWidth / dayRecords.length;
+    dayRecords.forEach((record, slot) => {
+      const start = new Date(record.scheduled_start);
+      const label = dayRecords.length > 1
+        ? `${fmtTime(start)}`
+        : `${fmtTime(start)} ${record.mouse.subject_id}`;
+      const bar = makeBar(record, label);
+      bar.style.left = `${index * geo.unitWidth + slot * slotWidth + 1}px`;
+      bar.style.width = `${Math.max(MIN_BAR_WIDTH, slotWidth - 2)}px`;
+      bar.title = `${record.mouse.subject_id} — ${record.acquisition_type}\n` +
+                  `${fmtTime(start)}–${fmtTime(new Date(record.scheduled_end))}`;
+      lane.appendChild(bar);
+    });
+  }
+}
+
+function makeBar(record, label) {
+  const bar = document.createElement('button');
+  bar.type = 'button';
+  bar.className = 'event-bar';
+  bar.dataset.procedureId = record.id;
+  const color = primaryTypeColor(record.active_procedure_types);
+  bar.style.background = color;
+  bar.textContent = label;   // textContent: never treat data as markup
+  if (record.status === 'cancelled') bar.style.textDecoration = 'line-through';
+  if (record.status !== 'scheduled') bar.style.opacity = '0.7';
+  bar.addEventListener('click', () => showDetail(record.id).catch(showFetchError));
+  return bar;
+}
+
+// Live current-time line on today's block (day view) / inside today's column
+// (week view).
+function buildNowLine(block, geo) {
+  const line = document.createElement('div');
+  line.className = 'now-line';
+  line.id = 'now-line';
+  line.style.left = `${LABEL_WIDTH + nowOffsetPx(block, geo)}px`;
+  return line;
+}
+
+function nowOffsetPx(block, geo) {
+  const now = new Date();
+  if (viewMode === 'week') {
+    const dayIndex = Math.floor((startOfDay(now) - block.start) / 86400000);
+    const fraction = (now - startOfDay(now)) / 86400000;
+    return (dayIndex + fraction) * geo.unitWidth;
+  }
+  return ((now - block.start) / 3600000) * geo.unitWidth;
+}
+
+function positionNowLine() {
+  const line = document.getElementById('now-line');
+  if (!line) return;
+  const block = blockRange().find((b) => b.isCurrent);
+  if (!block) return;
+  line.style.left = `${LABEL_WIDTH + nowOffsetPx(block, metrics())}px`;
+}
+
+function startNowLineTicker() {
+  if (nowLineTimer) clearInterval(nowLineTimer);
+  nowLineTimer = setInterval(positionNowLine, 60000);   // once a minute
+}
+
+// Put today's block at the top of the grid's visible area. Past blocks are
+// rendered above it, so scrolling up reveals them.
+function scrollToToday() {
+  const scroller = document.getElementById('grid-scroll');
+  const block = document.querySelector('.day-block.is-today')
+    || document.querySelector('.day-block');
+  if (!scroller || !block) return;
+  const header = document.querySelector('.axis-header');
+  const offset = header ? header.offsetHeight : 0;
+  scroller.scrollTop = Math.max(0, block.offsetTop - offset);
 }
 
 // ---------------------------------------------------------------------------
 // Detail side panel
 // ---------------------------------------------------------------------------
-
-function fmtLocal(iso) {
-  return new Date(iso).toLocaleString([], {
-    dateStyle: 'medium', timeStyle: 'short',
-  });
-}
 
 async function showDetail(id) {
   const record = await fetchJSON(`${API}/scheduled-procedures/${id}`);
@@ -806,6 +1143,24 @@ async function submitForm(event) {
 // Wiring
 // ---------------------------------------------------------------------------
 
+function setViewMode(mode) {
+  viewMode = mode;
+  document.getElementById('view-day').classList.toggle('active', mode === 'day');
+  document.getElementById('view-week').classList.toggle('active', mode === 'week');
+  renderGrid();
+  scrollToToday();
+}
+
+document.getElementById('view-day').addEventListener('click', () => setViewMode('day'));
+document.getElementById('view-week').addEventListener('click', () => setViewMode('week'));
+document.getElementById('jump-today').addEventListener('click', scrollToToday);
+
+document.getElementById('hide-empty-toggle').addEventListener('change', (e) => {
+  hideEmpty = e.target.checked;
+  renderGrid();
+  scrollToToday();
+});
+
 document.getElementById('filter-type').addEventListener('change', refresh);
 document.getElementById('filter-instrument').addEventListener('change', refresh);
 document.getElementById('filter-start').addEventListener('change', refresh);
@@ -824,10 +1179,6 @@ document.getElementById('clear-filters').addEventListener('click', () => {
   refresh();
 });
 
-document.getElementById('full-day-toggle').addEventListener('change', (e) => {
-  toggleFullDay(e.target.checked);
-});
-
 document.getElementById('add-btn').addEventListener('click', () => openModal());
 document.getElementById('edit-btn').addEventListener('click', () => {
   if (currentDetail) openModal(currentDetail);
@@ -842,13 +1193,20 @@ document.getElementById('modal-backdrop').addEventListener('click', (e) => {
   if (e.target.id === 'modal-backdrop') closeModal();
 });
 
+// Bar widths are pixel-computed from the viewport, so re-render on resize.
+let resizeDebounce = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeDebounce);
+  resizeDebounce = setTimeout(renderGrid, 150);
+});
+
 init().catch((err) => {
   // textContent, not innerHTML: err.message must never be treated as markup
   // (it could one day include response text).
   const message = document.createElement('p');
   message.style.color = '#8c2f2f';
   message.textContent = `Failed to load the schedule: ${err.message}`;
-  document.getElementById('calendar').replaceChildren(message);
+  document.getElementById('grid-status').replaceChildren(message);
 });
 </script>
 </body>

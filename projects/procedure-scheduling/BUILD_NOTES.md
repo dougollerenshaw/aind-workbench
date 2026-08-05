@@ -3,11 +3,12 @@
 ## Summary (read this first)
 
 **Status: complete and deployed.** Milestones M1–M7 (the specified build)
-plus M8–M12 (tool-launcher integration and Doug's review rounds) are built and
-verified; the full pytest suite (126 tests) is green, plus 11 launcher tests,
+plus M8–M13 (tool-launcher integration and Doug's review rounds) are built and
+verified; the full pytest suite (133 tests) is green, plus 11 launcher tests,
 and each milestone passed an independent verification pass. Nothing is
-blocked. **If you read one more thing, read "Amendments needed to DESIGN.md"
-immediately below — that's the list for Bruno.**
+blocked. **If you read one more thing, read "Spec corrections found while
+building" immediately below — the places where DESIGN.md's assumptions didn't
+survive contact with a running system.**
 
 **What was built** — the prototype specified in `DESIGN.md`:
 
@@ -23,9 +24,10 @@ immediately below — that's the list for Bruno.**
 - Admin write API under `/session_schedule/api/admin/...` enforcing both
   validation rules and recomputing `acquisition_type`/`updated_at`
   server-side (`app/admin_api.py`, shared rules in `app/store.py`).
-- Calendar SPA at `/session_schedule/` — FullCalendar resource timeline,
-  instruments as rows, color-by-platform legend, filters, detail panel,
-  add/edit modal constrained to instrument compatibility (`template.html`).
+- Calendar SPA at `/session_schedule/` — a hand-rolled grid (M13): day or
+  week blocks stacked vertically, instrument sub-rows inside each block,
+  color-by-platform legend, filters, detail panel, add/edit modal constrained
+  to instrument compatibility (`template.html`). No external assets.
 - Parquet export of every table for the Dataverse backfill
   (`scripts/export_parquet.py`).
 - README with setup, CLI options, VM remote-access, and the Dataverse
@@ -65,12 +67,17 @@ built; the tool launcher (M8) is now the actual deployment vehicle, run
 under tmux per its README, so they're redundant unless someone wants the
 scheduler to survive reboots independently of the launcher.
 
-## Amendments needed to DESIGN.md (the list for Bruno)
+## Spec corrections found while building
 
-`DESIGN.md` was treated as a frozen input spec and never edited. Three
-findings need to go back into it — the first is a documentation
-inconsistency, the other two are Doug's domain corrections of 2026-08-04.
-The prototype implements the corrected behavior in all three cases.
+`DESIGN.md` was treated as a frozen input spec and never edited, so these are
+the places where its assumptions didn't survive contact with a running
+system — for Doug to fold back into the doc. The first is an internal
+inconsistency in the doc; the next two are domain corrections Doug made once
+he could see real behavior (2026-08-04); the fourth is a structural limit of
+the chosen library that only showed up in a browser (2026-08-05). The
+prototype implements the corrected behavior in all four cases. This is the
+prototype doing its job: turning "is this what you're looking for?" into
+answers that a document alone wasn't producing.
 
 1. **Procedure-type name inconsistency (documentation).** The vocabulary and
    modality tables call it `Acute extracellular electrophysiology (modular
@@ -94,12 +101,22 @@ The prototype implements the corrected behavior in all three cases.
    wall-clock (storage stays UTC). The line saying "times UTC" should change.
    Related: the prototype also nudges seeded rows off weekends, so day
    offsets are "first weekday at or after the offset". (Details: M12 notes.)
+4. **The stated frontend stack can't express the wanted layout.** DESIGN.md
+   specifies "vanilla JS + FullCalendar from CDN" with a resource-timeline
+   view. FullCalendar's timeline has exactly ONE resource axis and one time
+   axis, so it structurally cannot nest dates ABOVE instruments — the layout
+   Doug's mockup asks for (day block -> instrument sub-rows, repeated down the
+   page). Every variant was a compromise on that intent, so FullCalendar was
+   dropped for a hand-rolled grid (Doug's 2026-08-05 decision). The tech-stack
+   line should change. Bonus: the page now has zero external asset requests,
+   so it needs no internet access in the viewer's browser. (Details: M13
+   notes.)
 
 **Notable deviations from DESIGN.md** (each detailed in its milestone
 section below): no native DuckDB FK constraints (app-enforced; DuckDB's
 DELETE+INSERT updates would break edits); the full vocabulary name is used
-for the ephys procedure type (DESIGN.md is self-inconsistent — flag to
-Bruno); seed dates are offsets from the run date; detail payloads include
+for the ephys procedure type (DESIGN.md is self-inconsistent there); seed
+dates are offsets from the run date; detail payloads include
 audit fields; `/api/instruments` returns the compatible-type set; write
 models reject (not ignore) server-computed fields; PUT is full-replace;
 Parquet files are written by DuckDB's native writer and verified with
@@ -163,7 +180,7 @@ Decisions / deviations:
   `"Acute extracellular electrophysiology (modular insertion) + Fiber photometry (FIP)"`
   rather than the abbreviated string shown in Example 1. Same for the
   compatibility-error message. This is a doc inconsistency, not a schema
-  choice — flag it to Bruno if the shorter label is preferred.
+  choice — reconcile the doc to one spelling if the shorter label is preferred.
 - **Dates are offsets from the run date.** DESIGN.md's SP-1..SP-4 dates are
   read relative to the document's "today" (2026-08-03): 08-04 -> +1 day,
   08-05 -> +2, 08-07 -> +4, 08-11 -> +8, with the exact UTC times and
@@ -505,10 +522,10 @@ unchanged (the server still receives and validates `scheduled_start` +
 from the record's `end - start`. A live hint under the fields shows the
 computed end time in local time.
 
-## M10 — Domain correction: one behavior task per rig (DESIGN.md amendments needed)
+## M10 — Domain correction: one behavior task per rig
 
-**Doug — this is the list to take to Bruno.** DESIGN.md's seed table and its
-SP-1 example encode a domain error: they put **both** behavior tasks (Patch
+**A domain error in the spec.** DESIGN.md's seed table and its
+SP-1 example encode a mistake: they put **both** behavior tasks (Patch
 foraging *and* Dynamic foraging) on `VR-Foraging-Rig-A`. Per Doug's
 2026-08-04 ruling, a behavior rig runs exactly **one** behavior task, VR
 foraging **is** the patch-foraging paradigm (Bruno's
@@ -666,6 +683,80 @@ clock values are rig-local":
   API. **Recommendation for the real system: reject naive datetimes outright**
   (require an explicit offset) rather than guessing. Flagged rather than
   silently changed.
+
+## M13 — Calendar rebuild: hand-rolled grid, FullCalendar dropped
+
+**Deviation from DESIGN.md's tech stack, deliberately** (see spec correction 4
+above). DESIGN.md says "vanilla JS + FullCalendar from CDN"; the FullCalendar
+part is gone as of Doug's 2026-08-05 decision. Reason: his mockup nests dates
+ABOVE instruments — a day header, then one sub-row per rig, then the next day
+below — and FullCalendar's timeline has exactly one resource axis, so it
+cannot express that. M11/M12 were successive compromises on the same intent;
+this replaces the library rather than the intent. The rest of the stated stack
+(vanilla JS, no build toolchain, no bundler) is unchanged and now more
+literally true.
+
+What the grid does:
+
+- **Vertical stack of blocks.** Day view: one block per day (`Wednesday
+  August 5`, today badged and tinted), each containing one sub-row per
+  instrument. Week view: the same machinery with one block per week.
+- **One shared horizontal scroll container.** Every block lives inside a
+  single `#grid-scroll`, so blocks scroll together by construction and there
+  is exactly one scrollbar — no per-block scrollbars to get out of sync. It
+  scrolls vertically too (blocks stack inside it), which is what lets the
+  hour axis stick to the top and the instrument labels stick to the left in
+  the same box.
+- **Day view horizontal focus:** hour columns are sized so `FOCUS_START_HOUR`
+  (8) to `FOCUS_END_HOUR` (18) exactly fill the visible lane width, with the
+  full 24 h rendered and the initial `scrollLeft` at 8am. Nothing is hidden —
+  early/late hours are off-viewport and scroll into view. (Contrast M11,
+  where FullCalendar's `slotMinTime` genuinely *dropped* out-of-window
+  events; that whole notice/24h-toggle mechanism is now unnecessary and gone.)
+- **Week view:** 7 day columns sized to fit the viewport exactly, so a full
+  week never scrolls horizontally. Bars sit in their day's column labelled
+  with the local start time; several procedures on one rig and day share the
+  column side by side.
+- **Bars** are positioned by start time and sized by duration (day view),
+  colored by primary active platform from the existing `sort_order` palette,
+  and labelled `subject_id · acquisition_type` (day) or `time subject_id`
+  (week), truncated with ellipsis. Non-`scheduled` statuses are dimmed and
+  cancelled ones struck through. Click still opens the unchanged detail panel.
+- **Now-indicator:** one continuous line across today's block, repositioned
+  every minute.
+- **Today at top on load** (`scrollToToday`), with `WINDOW_DAYS_BEFORE = 14`
+  rendered above it, so scrolling up really does reveal past days, and
+  `WINDOW_DAYS_AFTER = 45` below.
+- **Empty blocks show by default** (gaps read as real calendar gaps) with a
+  "Hide empty days" checkbox, since most days have few sessions across four
+  rigs.
+- **Instrument filter removes sub-rows** rather than leaving them empty —
+  Doug's primary interaction.
+
+**Month view dropped.** In this model a month block would be ~30 day columns
+of instrument sub-rows: either cramped to unreadability or horizontally
+scrolling, which is the problem week view was fixed to avoid. Day and week are
+what Doug asked for, so the third button is gone rather than shipping
+something broken. The stacked-block machinery would take a month view cheaply
+if it's ever wanted (one more `blockRange()` branch).
+
+**No external assets.** Verified: the served page contains no `src`/`href` to
+another host, no `@import`, no remote `url()`, and every `href` is a
+same-origin path. The page therefore works with no internet access in the
+viewer's browser — which removes a real demo risk (the CDN bundle was a
+single point of failure on a locked-down or offline machine) and is enforced
+by a test.
+
+**What was preserved unchanged:** all five filters including the M12
+local-day-bounds fix, the legend, the detail side panel, the add/edit modal
+(M9 hidden-attribute CSS fix, duration field, M10 behavior-type exclusivity),
+and the server-computed-fields discipline in the write body.
+
+**Verification honesty.** This is a from-scratch layout, so the static tests
+prove the wiring exists and is internally consistent — not that it looks
+right. Pixel geometry (column widths, sticky offsets, bar placement,
+scroll-together behavior) can only really be confirmed in a browser, and that
+pass is Doug's. Specific things worth his eye are listed in the M13 report.
 
 ### Re-seeding the live database (Doug runs this when ready)
 
