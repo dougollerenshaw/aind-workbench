@@ -910,6 +910,50 @@ axis is exactly `[Sun, Mon, Tue, Wed, Thu, Fri, Sat]` with tinting on columns
 0 and 6 only. The static suite's Monday-first assertions were replaced with
 Sunday-first ones.
 
+## M17 — Incident: a broken working tree took down four unrelated tools
+
+**What happened (2026-08-10).** An in-progress round of work in this project was
+left uncommitted and unimportable: `scheduler_app/read_api.py` referenced a
+`SubjectLookupOut` response model whose definition was never written (the edit
+that would have added it to `schemas.py` never landed). `projects/tool-launcher/
+launcher.py` imported `scheduler_app` **at module scope**, so the NameError
+raised at startup killed the launcher process. Doug's live service at :8080 was
+down — and not just the scheduler: **query_tool, fiber_schematic_viewer,
+upgrader and iacuc_lookup went with it**, four tools with no connection to this
+project. A second fault appeared in the same log: werkzeug's reloader watches
+every `.py` in each mounted project, so editing a test file here
+(`tests/test_browser_smoke.py`) restart-looped his live service.
+
+That work is parked as a git stash and is **not** being resumed — it is
+deliberately left alone.
+
+**The rule this leaves behind, and it is the important part:** the launcher
+imports this project *from the live working tree*, so any moment the tree is
+unimportable is a production outage for every tool on that launcher. Never end
+an edit — let alone a session — with the tree in a non-importable state. After
+touching `scheduler_app/*.py`, check immediately:
+
+```bash
+uv run python -c "from scheduler_app.main import create_app"
+```
+
+**What was added here (M17):**
+
+- `tests/test_imports.py` — walks every module under `scheduler_app` and
+  imports it, plus the launcher's exact mount import, the standalone `app.py`
+  entry, and the scripts. A missing symbol now fails in pytest in ~1.5 s
+  instead of in Doug's browser. 133+ tests had passed with the tree in a state
+  that could not be imported at all, because nothing had ever tried.
+
+The launcher-side hardening (fail-soft mount, scoped reloader) lives in
+`projects/tool-launcher/` and is documented in its README: the scheduler mount
+now defers *and guards* its import, serving a plain-text 503 at
+`/session_schedule/` while the other four tools keep working, retrying after 30
+seconds so a fixed tree recovers without a restart.
+
+**Note on the calendar:** the calendar prototype is preserved at git tag
+`calendar-prototype-v1` (commit 307ea6f) should anyone want it back.
+
 ### Re-seeding the live database (Doug runs this when ready)
 
 **This supersedes the sequences in the M10/M11 notes — one run covers all of
