@@ -8,7 +8,7 @@ This launcher allows you to run multiple Flask apps simultaneously on port 8080 
 
 - `http://your-vm-ip:8080/query_tool`
 - `http://your-vm-ip:8080/fiber_schematic_viewer`
-- `http://your-vm-ip:8080/session_schedule/` (Procedure Scheduler — a FastAPI/ASGI app, bridged in via `a2wsgi`)
+- `http://your-vm-ip:8080/session_schedule/` (Procedure Scheduler — a FastAPI/ASGI app, bridged in via `a2wsgi`, mounted fail-soft)
 - (Future tools can be added easily)
 
 ## Setup
@@ -64,6 +64,48 @@ uv run python launcher.py --host 0.0.0.0 --port 8080
 
 - `--host`: Host address to bind to (default: 0.0.0.0)
 - `--port`: Port to bind to (default: 8080)
+
+## Resilience: one broken tool cannot take down the others
+
+**Incident, 2026-08-10.** `launcher.py` imported the procedure scheduler at
+module scope (`from scheduler_app.main import create_app`). An edit in progress
+left that package referencing an undefined name, the import raised at startup,
+and the launcher process died — so **query_tool, fiber_schematic_viewer,
+upgrader and iacuc_lookup were all offline because of an unrelated project's
+half-finished file**. A second problem showed up in the same log: the reloader
+watches every `.py` in each mounted project, so editing a *test* in
+projects/procedure-scheduling restart-looped the live service.
+
+Two fixes, both in `launcher.py`:
+
+- **Fail-soft scheduler mount.** `LazySchedulerApp` now defers the *import* as
+  well as the app creation, inside a guard. If importing or building the
+  scheduler raises, `/session_schedule/` serves a plain-text **503** naming the
+  exception (as text, never markup) and everything else keeps working. The
+  failure is retried after `RETRY_AFTER_SECONDS` (30 s), so fixing the tree
+  restores the mount without a restart, while a broken tree doesn't spin the
+  log — it reports once per attempt, not once per request.
+- **Scoped reloader.** `run_simple(..., exclude_patterns=RELOADER_EXCLUDE_PATTERNS)`
+  ignores `tests/`, `test_*.py`, `conftest.py`, `.venv/`, `site-packages/`,
+  `__pycache__/`, `*.pyc`, `data/`, `.cache/`, `.pytest_cache/`, `.git/`,
+  `scratch/` and the scheduler's `client/`. Real source edits still trigger a
+  reload; test and data churn no longer does.
+
+### The rule this leaves behind
+
+The launcher imports mounted tools **from the live working tree**, so an
+unimportable tree is a production outage for every tool on the launcher. After
+editing any mounted project's code, verify it still imports before moving on:
+
+```bash
+cd ../procedure-scheduling && uv run python -c "from scheduler_app.main import create_app"
+```
+
+`projects/procedure-scheduling/tests/test_imports.py` enforces this in pytest
+(it walks every `scheduler_app` module), and
+`projects/tool-launcher/tests/test_failsoft.py` asserts the blast radius stays
+at one mount. Adding a new tool? Mount it the same fail-soft way rather than
+importing it at module scope.
 
 ## Architecture
 

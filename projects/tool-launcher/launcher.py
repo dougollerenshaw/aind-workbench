@@ -6,6 +6,8 @@ Mounts multiple Flask apps at different URL paths on a single port.
 import sys
 import os
 import threading
+import time
+import traceback
 from pathlib import Path
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.serving import run_simple
@@ -36,8 +38,15 @@ from iacuc_app import app as iacuc_app
 
 # The procedure scheduler is a FastAPI (ASGI) app; a2wsgi bridges it into
 # this WSGI dispatcher.
+#
+# NOTE: `scheduler_app` is deliberately NOT imported here. It used to be, and on
+# 2026-08-10 a half-finished edit left that package referencing an undefined
+# name — the module-scope import raised at startup and took the WHOLE launcher
+# down, so query_tool, fiber_schematic_viewer, upgrader and iacuc_lookup were
+# all offline because of an unrelated project's broken file. The import now
+# happens inside LazySchedulerApp, guarded, so a broken scheduler can only ever
+# break /session_schedule. See the tool-launcher README.
 from a2wsgi import ASGIMiddleware
-from scheduler_app.main import create_app as create_scheduler_app
 
 # Configure apps to know their mount points
 query_app.config['APPLICATION_ROOT'] = '/query_tool'
@@ -58,23 +67,32 @@ SCHEDULER_DB = Path(os.environ.get(
 
 
 class LazySchedulerApp:
-    """Build the scheduler WSGI app on the first request, not at import.
+    """Import and build the scheduler on first request, and FAIL SOFT.
 
-    Two reasons this must be lazy:
-    - The werkzeug reloader (use_reloader=True) imports this module in BOTH
-      the watcher process and the serving child; DuckDB is single-writer
-      (file lock), so opening the database at import time in both processes
+    Three reasons this is lazy and guarded:
+
+    - **Blast radius.** The scheduler lives in a working tree that people edit.
+      If importing or building it raises, only this mount may break: the other
+      four tools must keep serving. Deferring the *import* (not just the app
+      creation) is the whole point — a module-scope import of a
+      half-finished package is what took the launcher down on 2026-08-10.
+    - **DuckDB is single-writer.** The werkzeug reloader imports this module in
+      both the watcher and the serving child; opening the database in both
       would fail with "Could not set lock". Only the serving child handles
-      requests, so lazy creation opens the DB exactly once, in the right
-      process. create_app is reload-safe: schema creation is idempotent and
-      auto-seeding only runs on an empty database.
-    - DispatcherMiddleware strips the mount prefix out of PATH_INFO and into
+      requests, so first-request creation opens it exactly once, in the right
+      process. create_app is reload-safe (idempotent schema, auto-seed only
+      when empty).
+    - **Prefix.** DispatcherMiddleware strips the mount prefix into
       SCRIPT_NAME, but the scheduler's FastAPI routes are defined WITH the
-      /session_schedule prefix (the app also runs standalone on :8000). The
-      shim below re-prepends the prefix so the ASGI app sees the full path.
+      /session_schedule prefix (it also runs standalone on :8000), so the shim
+      re-prepends it.
     """
 
     PREFIX = '/session_schedule'
+    # After a failure, wait this long before trying to import again. Long
+    # enough that a broken tree doesn't spin the log on every page refresh,
+    # short enough that a fix is picked up without a restart.
+    RETRY_AFTER_SECONDS = 30
 
     def __init__(self):
         self._app = None
@@ -82,15 +100,76 @@ class LazySchedulerApp:
         # sequential today — the lock is cheap insurance so first-request
         # creation stays single-shot if anyone ever flips threaded=True.
         self._lock = threading.Lock()
+        self._error = None          # (message, monotonic timestamp)
+
+    def _build(self):
+        """Import and construct the scheduler. Raises on a broken tree."""
+        from scheduler_app.main import create_app as create_scheduler_app
+
+        return ASGIMiddleware(create_scheduler_app(db_path=SCHEDULER_DB))
+
+    def _ensure_app(self):
+        """The built app, or None if it is currently unavailable."""
+        if self._app is not None:
+            return self._app
+        with self._lock:
+            if self._app is not None:
+                return self._app
+            if self._error is not None:
+                _, failed_at = self._error
+                if time.monotonic() - failed_at < self.RETRY_AFTER_SECONDS:
+                    return None          # still in the backoff window
+            try:
+                self._app = self._build()
+            except Exception as exc:
+                # Log once per attempt (not per request) and keep serving the
+                # other tools. A later request retries after the backoff.
+                self._error = (f"{type(exc).__name__}: {exc}", time.monotonic())
+                print(
+                    f"[launcher] scheduler unavailable: {self._error[0]} "
+                    f"(retrying in {self.RETRY_AFTER_SECONDS}s; other tools unaffected)",
+                    file=sys.stderr,
+                )
+                traceback.print_exc()
+                return None
+            self._error = None
+            return self._app
+
+    def _serve_error(self, environ, start_response):
+        """Plain-text 503 so a broken scheduler is obvious but contained.
+
+        text/plain, not HTML: the exception text is data and must never be
+        rendered as markup.
+        """
+        message, failed_at = self._error or ('not initialised', time.monotonic())
+        retry_in = max(0, int(self.RETRY_AFTER_SECONDS - (time.monotonic() - failed_at)))
+        body = (
+            "Procedure Scheduler unavailable\n"
+            "===============================\n\n"
+            f"The scheduler app could not be loaded:\n\n    {message}\n\n"
+            f"The launcher will retry in about {retry_in}s, so a fix is picked "
+            "up without restarting.\n"
+            "The other tools on this launcher are unaffected — see / for the list.\n\n"
+            "Usual cause: an edit in progress left projects/procedure-scheduling "
+            "unimportable.\nCheck with:\n\n"
+            "    cd projects/procedure-scheduling && "
+            "uv run python -c 'from scheduler_app.main import create_app'\n"
+        ).encode()
+        start_response('503 Service Unavailable', [
+            ('Content-Type', 'text/plain; charset=utf-8'),
+            ('Content-Length', str(len(body))),
+            ('Retry-After', str(self.RETRY_AFTER_SECONDS)),
+            ('Cache-Control', 'no-store'),
+        ])
+        return [body]
 
     def __call__(self, environ, start_response):
-        if self._app is None:
-            with self._lock:
-                if self._app is None:
-                    self._app = ASGIMiddleware(create_scheduler_app(db_path=SCHEDULER_DB))
+        app = self._ensure_app()
+        if app is None:
+            return self._serve_error(environ, start_response)
         environ['PATH_INFO'] = self.PREFIX + environ.get('PATH_INFO', '')
         environ['SCRIPT_NAME'] = ''
-        return self._app(environ, start_response)
+        return app(environ, start_response)
 
 
 scheduler_app_wsgi = LazySchedulerApp()
@@ -121,6 +200,27 @@ application = DispatcherMiddleware(root_app, {
     '/session_schedule': scheduler_app_wsgi,
 })
 
+# The reloader watches every file belonging to an imported module, which means
+# a whole project's tree — so editing a test in projects/procedure-scheduling
+# restart-looped this live service. Keep the reloader (Doug relies on it for
+# real code changes) but stop non-code and test-only edits from triggering it.
+# Patterns are fnmatch-style, matched against absolute file paths.
+RELOADER_EXCLUDE_PATTERNS = [
+    '*/tests/*',              # test edits are not deployments
+    '*/test_*.py',
+    '*/conftest.py',
+    '*/.venv/*',              # dependency trees
+    '*/site-packages/*',
+    '*/__pycache__/*',
+    '*.pyc',
+    '*/data/*',               # DuckDB files and Parquet exports
+    '*/.pytest_cache/*',
+    '*/.cache/*',             # fiber viewer's procedure cache
+    '*/.git/*',
+    '*/scratch/*',
+    '*/client/*',             # the scheduler's client package is not served here
+]
+
 
 if __name__ == '__main__':
     import argparse
@@ -147,5 +247,6 @@ if __name__ == '__main__':
         args.port,
         application,
         use_reloader=True,
-        use_debugger=True
+        use_debugger=True,
+        exclude_patterns=RELOADER_EXCLUDE_PATTERNS,
     )

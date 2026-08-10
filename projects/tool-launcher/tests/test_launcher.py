@@ -19,11 +19,12 @@ from werkzeug.test import Client
 
 LAUNCHER_DIR = Path(__file__).resolve().parent.parent
 
-# Point the scheduler at a throwaway DB *before* launcher is imported
-# (launcher.py reads SCHEDULER_DB at import time). The app itself is created
-# lazily on the first scheduler request, which auto-seeds the empty file.
+# tests/conftest.py already pointed SCHEDULER_DB at a throwaway path before any
+# test module ran (launcher.py reads it at import time, and several modules
+# import launcher — so whoever imports first must not decide the value).
+# setdefault keeps this module runnable on its own without clobbering it.
 _TMP_DIR = tempfile.mkdtemp(prefix="launcher-test-db-")
-os.environ["SCHEDULER_DB"] = str(Path(_TMP_DIR) / "launcher_test.duckdb")
+os.environ.setdefault("SCHEDULER_DB", str(Path(_TMP_DIR) / "launcher_test.duckdb"))
 
 sys.path.insert(0, str(LAUNCHER_DIR))
 import launcher  # noqa: E402  (imports all five tools' apps)
