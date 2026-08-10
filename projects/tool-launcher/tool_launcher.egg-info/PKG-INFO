@@ -12,3 +12,5 @@ Requires-Dist: json5
 Requires-Dist: aind-metadata-service-client
 Requires-Dist: matplotlib>=3.8.0
 Requires-Dist: numpy>=1.24.0
+Requires-Dist: aind-metadata-upgrader
+Requires-Dist: requests>=2.31
