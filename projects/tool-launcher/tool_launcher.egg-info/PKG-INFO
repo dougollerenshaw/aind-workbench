@@ -14,3 +14,9 @@ Requires-Dist: matplotlib>=3.8.0
 Requires-Dist: numpy>=1.24.0
 Requires-Dist: aind-metadata-upgrader
 Requires-Dist: requests>=2.31
+Requires-Dist: a2wsgi
+Requires-Dist: fastapi
+Requires-Dist: pydantic>=2
+Requires-Dist: duckdb>=1.0
+Requires-Dist: uuid-utils
+Requires-Dist: pytz
