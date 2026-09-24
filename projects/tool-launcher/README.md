@@ -55,6 +55,16 @@ When you create a new tool in the future:
 
 That's it! The launcher will automatically serve the new tool.
 
+### A tool that runs as its own server
+
+Some tools are separate projects with their own environment (the session tracker is one). Instead of importing them, the launcher forwards a path to their server on localhost: see `proxy_tool.py`, mounted at `/session_tracker`. The tool runs in its own tmux pane:
+
+```bash
+cd ~/code/session_tracker_prototype && uv run tracker --port 8765     # binds to 127.0.0.1; only the launcher reaches it
+```
+
+and is reachable at `http://your-vm-ip:8080/session_tracker/`. If the tracker is down, that address shows a short message saying how to start it. `SESSION_TRACKER_URL` overrides the forwarding address.
+
 ## Command-line Options
 
 ```bash

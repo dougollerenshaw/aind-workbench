@@ -27,6 +27,8 @@ from query_tool import app as query_app
 from app import app as fiber_app
 from upgrader_app import app as upgrader_app
 from iacuc_app import app as iacuc_app
+# The session tracker runs as its own server (a separate uv project); this forwards to it.
+from proxy_tool import session_tracker_app, TRACKER_URL
 
 # Configure apps to know their mount points
 query_app.config['APPLICATION_ROOT'] = '/query_tool'
@@ -50,6 +52,7 @@ def index():
         <li><a href="/fiber_schematic_viewer">Fiber Schematic Viewer</a> - Visualize fiber implants</li>
         <li><a href="/upgrader">Metadata Upgrader</a> - Test asset metadata upgrade from v1 to v2</li>
         <li><a href="/iacuc_lookup">IACUC Lookup</a> - Look up the IACUC protocol for a mouse (form + JSON API)</li>
+        <li><a href="/session_tracker/">Session Tracker</a> - Where every acquisition session is, from rig to derived asset, and why it is stuck</li>
     </ul>
     '''
 
@@ -59,6 +62,7 @@ application = DispatcherMiddleware(root_app, {
     '/fiber_schematic_viewer': fiber_app,
     '/upgrader': upgrader_app,
     '/iacuc_lookup': iacuc_app,
+    '/session_tracker': session_tracker_app,   # forwarded to the tracker's own server, see proxy_tool.py
 })
 
 
@@ -79,6 +83,7 @@ if __name__ == '__main__':
     print(f"  - Fiber Schematic Viewer: http://localhost:{args.port}/fiber_schematic_viewer")
     print(f"  - Metadata Upgrader: http://localhost:{args.port}/upgrader")
     print(f"  - IACUC Lookup (REST): http://localhost:{args.port}/iacuc_lookup?subject_id=762287")
+    print(f"  - Session Tracker: http://localhost:{args.port}/session_tracker/  (forwarded to {TRACKER_URL}; start it separately)")
     print(f"Fiber Schematic Viewer cache directory: {fiber_app.config['CACHE_DIR']}")
     
     run_simple(
