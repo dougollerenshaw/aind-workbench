@@ -4,7 +4,9 @@ The tracker (github.com/AllenNeuralDynamics/session_tracker_prototype) is a sepa
 project with its own process, so the launcher does not import it; it forwards requests to
 it over localhost and hands the answers back unchanged. The tracker's page works behind a
 path prefix as long as the prefix is stripped (DispatcherMiddleware does that) and the bare
-prefix redirects to the trailing-slash form (done here).
+prefix redirects to the trailing-slash form (done here). The tracker's MCP endpoint
+(`/session_tracker/mcp`, JSON answers, no streaming) works through here too: every method
+and body is relayed, plus the MCP protocol headers.
 
 Start the tracker next to the launcher:  cd session_tracker_prototype && uv run tracker --port 8765
 Override the address with SESSION_TRACKER_URL.
@@ -18,6 +20,7 @@ from urllib.parse import quote
 
 TRACKER_URL = os.environ.get("SESSION_TRACKER_URL", "http://127.0.0.1:8765").rstrip("/")
 TIMEOUT_S = 180  # the tracker's on-demand log fetches can take a while
+_PASS_HEADERS = ("Mcp-Session-Id", "Mcp-Protocol-Version", "Last-Event-ID", "Origin")
 _HOP_BY_HOP = {"connection", "keep-alive", "transfer-encoding", "te", "trailer", "upgrade",
                "proxy-authenticate", "proxy-authorization", "content-length"}
 
@@ -32,15 +35,19 @@ def session_tracker_app(environ, start_response):
         return [b""]
     method = environ.get("REQUEST_METHOD", "GET")
     body = None
-    if method in ("POST", "PUT", "PATCH"):
-        try:
-            length = int(environ.get("CONTENT_LENGTH") or 0)
-        except ValueError:
-            length = 0
+    try:
+        length = int(environ.get("CONTENT_LENGTH") or 0)
+    except ValueError:
+        length = 0
+    if length or method in ("POST", "PUT", "PATCH"):
         body = environ["wsgi.input"].read(length) if length else b""
     headers = {"Accept": environ.get("HTTP_ACCEPT", "*/*"), "Accept-Encoding": "identity"}
     if environ.get("CONTENT_TYPE"):
         headers["Content-Type"] = environ["CONTENT_TYPE"]
+    for name in _PASS_HEADERS:  # the MCP endpoint (/session_tracker/mcp) needs its protocol headers
+        value = environ.get("HTTP_" + name.upper().replace("-", "_"))
+        if value:
+            headers[name] = value
     url = TRACKER_URL + quote(path) + (f"?{query}" if query else "")
     try:
         with urllib.request.urlopen(urllib.request.Request(url, data=body, method=method, headers=headers), timeout=TIMEOUT_S) as resp:
